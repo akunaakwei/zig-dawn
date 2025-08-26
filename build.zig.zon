@@ -1,0 +1,48 @@
+.{
+    .name = .dawn,
+    .version = "0.0.0",
+    .fingerprint = 0x1661bd31d230feb6, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.15.1",
+    .dependencies = .{
+        .dawn = .{
+            .url = "https://github.com/google/dawn/archive/refs/tags/v20250703.200318.tar.gz",
+            .hash = "N-V-__8AACNENAxEXotENrtiG0sSS5NadjF3UmjsIJri-EMP",
+        },
+        .spirv_headers = .{
+            .url = "https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-1.4.313.0.tar.gz",
+            .hash = "N-V-__8AAKpdOgAIPbYXgiad6KL36ClqzxujT_hktyn4JMHM",
+            .lazy = true,
+        },
+        .spirv_tools = .{
+            .url = "https://github.com/akunaakwei/zig-spirv-tools/archive/99d15f75310960af518a17233c8b552549c94380.tar.gz",
+            .hash = "spirv_tools-0.0.0-lHQC6McrDAAWv2S08DrMWBweB2IL8vHS9BABp0ofDhjJ",
+            .lazy = true,
+        },
+        .vulkan_headers = .{
+            .url = "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.321.tar.gz",
+            .hash = "N-V-__8AAI7-AQIsx0GGCNZVZDEQ-EhVjVd915WjwOOiSSA-",
+            .lazy = true,
+        },
+        .vulkan_utility = .{
+            .url = "https://github.com/akunaakwei/zig-vulkan-utility-libraries/archive/de798f109f64b0119117ad7236cabe080f8c0d97.tar.gz",
+            .hash = "vulkan_utility_libraries-0.0.0-z4P-yVAZAABq6zDFDyfDmFigWJPECrgh3qLvnqkJc95i",
+            .lazy = true,
+        },
+        .abseil = .{
+            .url = "https://github.com/akunaakwei/zig-abseil/archive/0a5df01293478998f15e0e67b82c15d962f8ff9e.tar.gz",
+            .hash = "abseil-0.0.0-IbFgeAcmAADmILdHZ8CeR69QKwje-CfU4HNip7ULEK1z",
+        },
+        .glfw = .{
+            .url = "https://github.com/akunaakwei/glfw-zig/archive/4c2580bca9c58cfeddb0664df6518061315d5cbc.tar.gz",
+            .hash = "glfw-3.4.0-a4Mg8-XFBgDF-hM4YiGRL-zwK2-yw8c7GxVuFB9N-pzo",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "include",
+        "src",
+        "webgpu-headers",
+        "LICENSE",
+    },
+}
