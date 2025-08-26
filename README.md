@@ -1,2 +1,2 @@
 # dawn
-This is dawn packaged for the tig build system.
+This is dawn packaged for the zig build system.
