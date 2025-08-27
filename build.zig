@@ -965,6 +965,7 @@ pub fn build(b: *std.Build) void {
         .files = &.{"webgpu_dawn_native_proc.cpp"},
         .flags = &flags,
     });
+    webgpu_dawn.installHeader(b.path("webgpu-headers/webgpu.h"), "webgpu/webgpu.h");
     b.installArtifact(webgpu_dawn);
 
     const translate_webgpu = b.addTranslateC(.{
