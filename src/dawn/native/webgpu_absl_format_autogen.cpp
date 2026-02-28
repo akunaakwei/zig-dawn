@@ -117,6 +117,27 @@ namespace dawn::native {
         return AbslFormatConvert(*value, spec, s);
     }
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+    AbslFormatConvert(const ResourceTableDescriptor* value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s) {
+        if (value == nullptr) {
+            s->Append("[null]");
+            return {true};
+        }
+        s->Append("[ResourceTableDescriptor");
+        if (value->label.data != nullptr) {
+            s->Append(absl::StrFormat(" \"%s\"", value->label));
+        }
+        s->Append("]");
+        return {true};
+    }
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+    AbslFormatConvert(const UnpackedPtr<ResourceTableDescriptor>& value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s) {
+        return AbslFormatConvert(*value, spec, s);
+    }
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
     AbslFormatConvert(const SharedBufferMemoryDescriptor* value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s) {
@@ -1063,26 +1084,6 @@ AbslFormatConvert(DeviceLostReason value,
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
-AbslFormatConvert(DynamicBindingKind value,
-                  const absl::FormatConversionSpec& spec,
-                  absl::FormatSink* s) {
-    if (spec.conversion_char() == absl::FormatConversionChar::s) {
-        s->Append("DynamicBindingKind::");
-        switch (WGPUDynamicBindingKind(value)) {
-        case WGPUDynamicBindingKind_Undefined:
-            s->Append("Undefined");
-            return {true};
-        case WGPUDynamicBindingKind_SampledTexture:
-            s->Append("SampledTexture");
-            return {true};
-        default:
-            break;
-        }
-    }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUDynamicBindingKind>(value)));
-    return {true};
-}
-absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
 AbslFormatConvert(ErrorFilter value,
                   const absl::FormatConversionSpec& spec,
                   absl::FormatSink* s) {
@@ -1292,9 +1293,6 @@ AbslFormatConvert(FeatureName value,
         case WGPUFeatureName_Unorm16TextureFormats:
             s->Append("Unorm16TextureFormats");
             return {true};
-        case WGPUFeatureName_Snorm16TextureFormats:
-            s->Append("Snorm16TextureFormats");
-            return {true};
         case WGPUFeatureName_MultiPlanarFormatExtendedUsages:
             s->Append("MultiPlanarFormatExtendedUsages");
             return {true};
@@ -1325,17 +1323,11 @@ AbslFormatConvert(FeatureName value,
         case WGPUFeatureName_AdapterPropertiesVk:
             s->Append("AdapterPropertiesVk");
             return {true};
-        case WGPUFeatureName_R8UnormStorage:
-            s->Append("R8UnormStorage");
-            return {true};
         case WGPUFeatureName_DawnFormatCapabilities:
             s->Append("DawnFormatCapabilities");
             return {true};
         case WGPUFeatureName_DawnDrmFormatCapabilities:
             s->Append("DawnDrmFormatCapabilities");
-            return {true};
-        case WGPUFeatureName_Norm16TextureFormats:
-            s->Append("Norm16TextureFormats");
             return {true};
         case WGPUFeatureName_MultiPlanarFormatNv16:
             s->Append("MultiPlanarFormatNv16");
@@ -1427,9 +1419,6 @@ AbslFormatConvert(FeatureName value,
         case WGPUFeatureName_DawnDeviceAllocatorControl:
             s->Append("DawnDeviceAllocatorControl");
             return {true};
-        case WGPUFeatureName_ChromiumExperimentalBindless:
-            s->Append("ChromiumExperimentalBindless");
-            return {true};
         case WGPUFeatureName_AdapterPropertiesWGPU:
             s->Append("AdapterPropertiesWGPU");
             return {true};
@@ -1438,6 +1427,15 @@ AbslFormatConvert(FeatureName value,
             return {true};
         case WGPUFeatureName_SharedTextureMemoryD3D12Resource:
             s->Append("SharedTextureMemoryD3D12Resource");
+            return {true};
+        case WGPUFeatureName_ChromiumExperimentalSamplingResourceTable:
+            s->Append("ChromiumExperimentalSamplingResourceTable");
+            return {true};
+        case WGPUFeatureName_ChromiumExperimentalSubgroupSizeControl:
+            s->Append("ChromiumExperimentalSubgroupSizeControl");
+            return {true};
+        case WGPUFeatureName_AtomicVec2uMinMax:
+            s->Append("AtomicVec2uMinMax");
             return {true};
         default:
             break;
@@ -2149,8 +2147,8 @@ AbslFormatConvert(SType value,
         case WGPUSType_RequestAdapterOptionsD3D11Device:
             s->Append("RequestAdapterOptionsD3D11Device");
             return {true};
-        case WGPUSType_DawnRenderPassColorAttachmentRenderToSingleSampled:
-            s->Append("DawnRenderPassColorAttachmentRenderToSingleSampled");
+        case WGPUSType_DawnRenderPassSampleCount:
+            s->Append("DawnRenderPassSampleCount");
             return {true};
         case WGPUSType_RenderPassPixelLocalStorage:
             s->Append("RenderPassPixelLocalStorage");
@@ -2320,15 +2318,6 @@ AbslFormatConvert(SType value,
         case WGPUSType_DawnConsumeAdapterDescriptor:
             s->Append("DawnConsumeAdapterDescriptor");
             return {true};
-        case WGPUSType_BindGroupLayoutDynamicBindingArray:
-            s->Append("BindGroupLayoutDynamicBindingArray");
-            return {true};
-        case WGPUSType_DynamicBindingArrayLimits:
-            s->Append("DynamicBindingArrayLimits");
-            return {true};
-        case WGPUSType_BindGroupDynamicBindingArray:
-            s->Append("BindGroupDynamicBindingArray");
-            return {true};
         case WGPUSType_TexelBufferBindingEntry:
             s->Append("TexelBufferBindingEntry");
             return {true};
@@ -2349,6 +2338,12 @@ AbslFormatConvert(SType value,
             return {true};
         case WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup:
             s->Append("RequestAdapterOptionsAngleVirtualizationGroup");
+            return {true};
+        case WGPUSType_PipelineLayoutResourceTable:
+            s->Append("PipelineLayoutResourceTable");
+            return {true};
+        case WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
+            s->Append("AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
             return {true};
         default:
             break;
@@ -2839,8 +2834,8 @@ AbslFormatConvert(TextureFormat value,
         case WGPUTextureFormat_R10X6BG10X6Biplanar444Unorm:
             s->Append("R10X6BG10X6Biplanar444Unorm");
             return {true};
-        case WGPUTextureFormat_External:
-            s->Append("External");
+        case WGPUTextureFormat_OpaqueYCbCrAndroid:
+            s->Append("OpaqueYCbCrAndroid");
             return {true};
         default:
             break;
@@ -3147,20 +3142,8 @@ AbslFormatConvert(WGSLLanguageFeatureName value,
         case WGPUWGSLLanguageFeatureName_SubgroupId:
             s->Append("SubgroupId");
             return {true};
-        case WGPUWGSLLanguageFeatureName_SizedBindingArray:
-            s->Append("SizedBindingArray");
-            return {true};
-        case WGPUWGSLLanguageFeatureName_TexelBuffers:
-            s->Append("TexelBuffers");
-            return {true};
-        case WGPUWGSLLanguageFeatureName_ChromiumPrint:
-            s->Append("ChromiumPrint");
-            return {true};
-        case WGPUWGSLLanguageFeatureName_FragmentDepth:
-            s->Append("FragmentDepth");
-            return {true};
-        case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
-            s->Append("ImmediateAddressSpace");
+        case WGPUWGSLLanguageFeatureName_TextureAndSamplerLet:
+            s->Append("TextureAndSamplerLet");
             return {true};
         case WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented:
             s->Append("ChromiumTestingUnimplemented");
@@ -3176,6 +3159,36 @@ AbslFormatConvert(WGSLLanguageFeatureName value,
             return {true};
         case WGPUWGSLLanguageFeatureName_ChromiumTestingShipped:
             s->Append("ChromiumTestingShipped");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_SizedBindingArray:
+            s->Append("SizedBindingArray");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_TexelBuffers:
+            s->Append("TexelBuffers");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_ChromiumPrint:
+            s->Append("ChromiumPrint");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_FragmentDepth:
+            s->Append("FragmentDepth");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
+            s->Append("ImmediateAddressSpace");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_SubgroupUniformity:
+            s->Append("SubgroupUniformity");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_BufferView:
+            s->Append("BufferView");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_FilteringParameters:
+            s->Append("FilteringParameters");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_SwizzleAssignment:
+            s->Append("SwizzleAssignment");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_LinearIndexing:
+            s->Append("LinearIndexing");
             return {true};
         default:
             break;

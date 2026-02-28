@@ -304,15 +304,6 @@ namespace dawn::native {
         }
     }
 
-    MaybeError ValidateDynamicBindingKind(wgpu::DynamicBindingKind value) {
-        switch (WGPUDynamicBindingKind(value)) {
-            case WGPUDynamicBindingKind_SampledTexture:
-                return {};
-            default:
-                return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUDynamicBindingKind.", value);
-        }
-    }
-
     MaybeError ValidateErrorFilter(wgpu::ErrorFilter value) {
         switch (WGPUErrorFilter(value)) {
             case WGPUErrorFilter_Validation:
@@ -441,8 +432,6 @@ namespace dawn::native {
                 return {};
             case WGPUFeatureName_Unorm16TextureFormats:
                 return {};
-            case WGPUFeatureName_Snorm16TextureFormats:
-                return {};
             case WGPUFeatureName_MultiPlanarFormatExtendedUsages:
                 return {};
             case WGPUFeatureName_MultiPlanarFormatP010:
@@ -463,13 +452,9 @@ namespace dawn::native {
                 return {};
             case WGPUFeatureName_AdapterPropertiesVk:
                 return {};
-            case WGPUFeatureName_R8UnormStorage:
-                return {};
             case WGPUFeatureName_DawnFormatCapabilities:
                 return {};
             case WGPUFeatureName_DawnDrmFormatCapabilities:
-                return {};
-            case WGPUFeatureName_Norm16TextureFormats:
                 return {};
             case WGPUFeatureName_MultiPlanarFormatNv16:
                 return {};
@@ -531,13 +516,17 @@ namespace dawn::native {
                 return {};
             case WGPUFeatureName_DawnDeviceAllocatorControl:
                 return {};
-            case WGPUFeatureName_ChromiumExperimentalBindless:
-                return {};
             case WGPUFeatureName_AdapterPropertiesWGPU:
                 return {};
             case WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
                 return {};
             case WGPUFeatureName_SharedTextureMemoryD3D12Resource:
+                return {};
+            case WGPUFeatureName_ChromiumExperimentalSamplingResourceTable:
+                return {};
+            case WGPUFeatureName_ChromiumExperimentalSubgroupSizeControl:
+                return {};
+            case WGPUFeatureName_AtomicVec2uMinMax:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUFeatureName.", value);
@@ -950,7 +939,7 @@ namespace dawn::native {
                 return {};
             case WGPUSType_RequestAdapterOptionsD3D11Device:
                 return {};
-            case WGPUSType_DawnRenderPassColorAttachmentRenderToSingleSampled:
+            case WGPUSType_DawnRenderPassSampleCount:
                 return {};
             case WGPUSType_RenderPassPixelLocalStorage:
                 return {};
@@ -1064,12 +1053,6 @@ namespace dawn::native {
                 return {};
             case WGPUSType_DawnConsumeAdapterDescriptor:
                 return {};
-            case WGPUSType_BindGroupLayoutDynamicBindingArray:
-                return {};
-            case WGPUSType_DynamicBindingArrayLimits:
-                return {};
-            case WGPUSType_BindGroupDynamicBindingArray:
-                return {};
             case WGPUSType_TexelBufferBindingEntry:
                 return {};
             case WGPUSType_TexelBufferBindingLayout:
@@ -1083,6 +1066,10 @@ namespace dawn::native {
             case WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor:
                 return {};
             case WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup:
+                return {};
+            case WGPUSType_PipelineLayoutResourceTable:
+                return {};
+            case WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUSType.", value);
@@ -1392,7 +1379,7 @@ namespace dawn::native {
                 return {};
             case WGPUTextureFormat_R10X6BG10X6Biplanar444Unorm:
                 return {};
-            case WGPUTextureFormat_External:
+            case WGPUTextureFormat_OpaqueYCbCrAndroid:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUTextureFormat.", value);
@@ -1579,15 +1566,7 @@ namespace dawn::native {
                 return {};
             case WGPUWGSLLanguageFeatureName_SubgroupId:
                 return {};
-            case WGPUWGSLLanguageFeatureName_SizedBindingArray:
-                return {};
-            case WGPUWGSLLanguageFeatureName_TexelBuffers:
-                return {};
-            case WGPUWGSLLanguageFeatureName_ChromiumPrint:
-                return {};
-            case WGPUWGSLLanguageFeatureName_FragmentDepth:
-                return {};
-            case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
+            case WGPUWGSLLanguageFeatureName_TextureAndSamplerLet:
                 return {};
             case WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented:
                 return {};
@@ -1598,6 +1577,26 @@ namespace dawn::native {
             case WGPUWGSLLanguageFeatureName_ChromiumTestingShippedWithKillswitch:
                 return {};
             case WGPUWGSLLanguageFeatureName_ChromiumTestingShipped:
+                return {};
+            case WGPUWGSLLanguageFeatureName_SizedBindingArray:
+                return {};
+            case WGPUWGSLLanguageFeatureName_TexelBuffers:
+                return {};
+            case WGPUWGSLLanguageFeatureName_ChromiumPrint:
+                return {};
+            case WGPUWGSLLanguageFeatureName_FragmentDepth:
+                return {};
+            case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
+                return {};
+            case WGPUWGSLLanguageFeatureName_SubgroupUniformity:
+                return {};
+            case WGPUWGSLLanguageFeatureName_BufferView:
+                return {};
+            case WGPUWGSLLanguageFeatureName_FilteringParameters:
+                return {};
+            case WGPUWGSLLanguageFeatureName_SwizzleAssignment:
+                return {};
+            case WGPUWGSLLanguageFeatureName_LinearIndexing:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUWGSLLanguageFeatureName.", value);

@@ -149,40 +149,12 @@ static void ThreadDispatchAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPU
     }
     proc(adapterPropertiesSubgroupMatrixConfigs);
 }
-static void ThreadDispatchBindGroupDestroy(WGPUBindGroup bindGroup) {
-    auto* proc = perThreadProcs.bindGroupDestroy;
-    if (!proc) {
-        proc = defaultProc.bindGroupDestroy;
-    }
-    proc(bindGroup);
-}
-static uint32_t ThreadDispatchBindGroupInsertBinding(WGPUBindGroup bindGroup, WGPUBindGroupEntryContents const * contents) {
-    auto* proc = perThreadProcs.bindGroupInsertBinding;
-    if (!proc) {
-        proc = defaultProc.bindGroupInsertBinding;
-    }
-return     proc(bindGroup, contents);
-}
-static WGPUStatus ThreadDispatchBindGroupRemoveBinding(WGPUBindGroup bindGroup, uint32_t binding) {
-    auto* proc = perThreadProcs.bindGroupRemoveBinding;
-    if (!proc) {
-        proc = defaultProc.bindGroupRemoveBinding;
-    }
-return     proc(bindGroup, binding);
-}
 static void ThreadDispatchBindGroupSetLabel(WGPUBindGroup bindGroup, WGPUStringView label) {
     auto* proc = perThreadProcs.bindGroupSetLabel;
     if (!proc) {
         proc = defaultProc.bindGroupSetLabel;
     }
     proc(bindGroup, label);
-}
-static WGPUStatus ThreadDispatchBindGroupUpdate(WGPUBindGroup bindGroup, WGPUBindGroupEntry const * entry) {
-    auto* proc = perThreadProcs.bindGroupUpdate;
-    if (!proc) {
-        proc = defaultProc.bindGroupUpdate;
-    }
-return     proc(bindGroup, entry);
 }
 static void ThreadDispatchBindGroupAddRef(WGPUBindGroup bindGroup) {
     auto* proc = perThreadProcs.bindGroupAddRef;
@@ -534,6 +506,13 @@ static void ThreadDispatchComputePassEncoderSetPipeline(WGPUComputePassEncoder c
     }
     proc(computePassEncoder, pipeline);
 }
+static void ThreadDispatchComputePassEncoderSetResourceTable(WGPUComputePassEncoder computePassEncoder, WGPUResourceTable table) {
+    auto* proc = perThreadProcs.computePassEncoderSetResourceTable;
+    if (!proc) {
+        proc = defaultProc.computePassEncoderSetResourceTable;
+    }
+    proc(computePassEncoder, table);
+}
 static void ThreadDispatchComputePassEncoderWriteTimestamp(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32_t queryIndex) {
     auto* proc = perThreadProcs.computePassEncoderWriteTimestamp;
     if (!proc) {
@@ -701,6 +680,13 @@ static WGPUFuture ThreadDispatchDeviceCreateRenderPipelineAsync(WGPUDevice devic
         proc = defaultProc.deviceCreateRenderPipelineAsync;
     }
 return     proc(device, descriptor, callbackInfo);
+}
+static WGPUResourceTable ThreadDispatchDeviceCreateResourceTable(WGPUDevice device, WGPUResourceTableDescriptor const * descriptor) {
+    auto* proc = perThreadProcs.deviceCreateResourceTable;
+    if (!proc) {
+        proc = defaultProc.deviceCreateResourceTable;
+    }
+return     proc(device, descriptor);
 }
 static WGPUSampler ThreadDispatchDeviceCreateSampler(WGPUDevice device, WGPUSamplerDescriptor const * descriptor) {
     auto* proc = perThreadProcs.deviceCreateSampler;
@@ -1213,6 +1199,13 @@ static void ThreadDispatchRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder
     }
     proc(renderBundleEncoder, pipeline);
 }
+static void ThreadDispatchRenderBundleEncoderSetResourceTable(WGPURenderBundleEncoder renderBundleEncoder, WGPUResourceTable table) {
+    auto* proc = perThreadProcs.renderBundleEncoderSetResourceTable;
+    if (!proc) {
+        proc = defaultProc.renderBundleEncoderSetResourceTable;
+    }
+    proc(renderBundleEncoder, table);
+}
 static void ThreadDispatchRenderBundleEncoderSetVertexBuffer(WGPURenderBundleEncoder renderBundleEncoder, uint32_t slot, WGPUBuffer buffer, uint64_t offset, uint64_t size) {
     auto* proc = perThreadProcs.renderBundleEncoderSetVertexBuffer;
     if (!proc) {
@@ -1374,6 +1367,13 @@ static void ThreadDispatchRenderPassEncoderSetPipeline(WGPURenderPassEncoder ren
     }
     proc(renderPassEncoder, pipeline);
 }
+static void ThreadDispatchRenderPassEncoderSetResourceTable(WGPURenderPassEncoder renderPassEncoder, WGPUResourceTable table) {
+    auto* proc = perThreadProcs.renderPassEncoderSetResourceTable;
+    if (!proc) {
+        proc = defaultProc.renderPassEncoderSetResourceTable;
+    }
+    proc(renderPassEncoder, table);
+}
 static void ThreadDispatchRenderPassEncoderSetScissorRect(WGPURenderPassEncoder renderPassEncoder, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
     auto* proc = perThreadProcs.renderPassEncoderSetScissorRect;
     if (!proc) {
@@ -1450,6 +1450,55 @@ static void ThreadDispatchRenderPipelineRelease(WGPURenderPipeline renderPipelin
         proc = defaultProc.renderPipelineRelease;
     }
     proc(renderPipeline);
+}
+static void ThreadDispatchResourceTableDestroy(WGPUResourceTable resourceTable) {
+    auto* proc = perThreadProcs.resourceTableDestroy;
+    if (!proc) {
+        proc = defaultProc.resourceTableDestroy;
+    }
+    proc(resourceTable);
+}
+static uint32_t ThreadDispatchResourceTableGetSize(WGPUResourceTable resourceTable) {
+    auto* proc = perThreadProcs.resourceTableGetSize;
+    if (!proc) {
+        proc = defaultProc.resourceTableGetSize;
+    }
+return     proc(resourceTable);
+}
+static uint32_t ThreadDispatchResourceTableInsertBinding(WGPUResourceTable resourceTable, WGPUBindingResource const * resource) {
+    auto* proc = perThreadProcs.resourceTableInsertBinding;
+    if (!proc) {
+        proc = defaultProc.resourceTableInsertBinding;
+    }
+return     proc(resourceTable, resource);
+}
+static WGPUStatus ThreadDispatchResourceTableRemoveBinding(WGPUResourceTable resourceTable, uint32_t slot) {
+    auto* proc = perThreadProcs.resourceTableRemoveBinding;
+    if (!proc) {
+        proc = defaultProc.resourceTableRemoveBinding;
+    }
+return     proc(resourceTable, slot);
+}
+static WGPUStatus ThreadDispatchResourceTableUpdate(WGPUResourceTable resourceTable, uint32_t slot, WGPUBindingResource const * resource) {
+    auto* proc = perThreadProcs.resourceTableUpdate;
+    if (!proc) {
+        proc = defaultProc.resourceTableUpdate;
+    }
+return     proc(resourceTable, slot, resource);
+}
+static void ThreadDispatchResourceTableAddRef(WGPUResourceTable resourceTable) {
+    auto* proc = perThreadProcs.resourceTableAddRef;
+    if (!proc) {
+        proc = defaultProc.resourceTableAddRef;
+    }
+    proc(resourceTable);
+}
+static void ThreadDispatchResourceTableRelease(WGPUResourceTable resourceTable) {
+    auto* proc = perThreadProcs.resourceTableRelease;
+    if (!proc) {
+        proc = defaultProc.resourceTableRelease;
+    }
+    proc(resourceTable);
 }
 static void ThreadDispatchSamplerSetLabel(WGPUSampler sampler, WGPUStringView label) {
     auto* proc = perThreadProcs.samplerSetLabel;
@@ -1815,6 +1864,13 @@ static uint32_t ThreadDispatchTextureGetSampleCount(WGPUTexture texture) {
     }
 return     proc(texture);
 }
+static WGPUTextureViewDimension ThreadDispatchTextureGetTextureBindingViewDimension(WGPUTexture texture) {
+    auto* proc = perThreadProcs.textureGetTextureBindingViewDimension;
+    if (!proc) {
+        proc = defaultProc.textureGetTextureBindingViewDimension;
+    }
+return     proc(texture);
+}
 static WGPUTextureUsage ThreadDispatchTextureGetUsage(WGPUTexture texture) {
     auto* proc = perThreadProcs.textureGetUsage;
     if (!proc) {
@@ -1842,6 +1898,13 @@ static void ThreadDispatchTextureSetLabel(WGPUTexture texture, WGPUStringView la
         proc = defaultProc.textureSetLabel;
     }
     proc(texture, label);
+}
+static void ThreadDispatchTextureSetOwnershipForMemoryDump(WGPUTexture texture, uint64_t ownerGuid) {
+    auto* proc = perThreadProcs.textureSetOwnershipForMemoryDump;
+    if (!proc) {
+        proc = defaultProc.textureSetOwnershipForMemoryDump;
+    }
+    proc(texture, ownerGuid);
 }
 static void ThreadDispatchTextureUnpin(WGPUTexture texture) {
     auto* proc = perThreadProcs.textureUnpin;
@@ -1906,11 +1969,7 @@ extern "C" {
         ThreadDispatchAdapterInfoFreeMembers,
         ThreadDispatchAdapterPropertiesMemoryHeapsFreeMembers,
         ThreadDispatchAdapterPropertiesSubgroupMatrixConfigsFreeMembers,
-        ThreadDispatchBindGroupDestroy,
-        ThreadDispatchBindGroupInsertBinding,
-        ThreadDispatchBindGroupRemoveBinding,
         ThreadDispatchBindGroupSetLabel,
-        ThreadDispatchBindGroupUpdate,
         ThreadDispatchBindGroupAddRef,
         ThreadDispatchBindGroupRelease,
         ThreadDispatchBindGroupLayoutSetLabel,
@@ -1961,6 +2020,7 @@ extern "C" {
         ThreadDispatchComputePassEncoderSetImmediates,
         ThreadDispatchComputePassEncoderSetLabel,
         ThreadDispatchComputePassEncoderSetPipeline,
+        ThreadDispatchComputePassEncoderSetResourceTable,
         ThreadDispatchComputePassEncoderWriteTimestamp,
         ThreadDispatchComputePassEncoderAddRef,
         ThreadDispatchComputePassEncoderRelease,
@@ -1985,6 +2045,7 @@ extern "C" {
         ThreadDispatchDeviceCreateRenderBundleEncoder,
         ThreadDispatchDeviceCreateRenderPipeline,
         ThreadDispatchDeviceCreateRenderPipelineAsync,
+        ThreadDispatchDeviceCreateResourceTable,
         ThreadDispatchDeviceCreateSampler,
         ThreadDispatchDeviceCreateShaderModule,
         ThreadDispatchDeviceCreateTexture,
@@ -2058,6 +2119,7 @@ extern "C" {
         ThreadDispatchRenderBundleEncoderSetIndexBuffer,
         ThreadDispatchRenderBundleEncoderSetLabel,
         ThreadDispatchRenderBundleEncoderSetPipeline,
+        ThreadDispatchRenderBundleEncoderSetResourceTable,
         ThreadDispatchRenderBundleEncoderSetVertexBuffer,
         ThreadDispatchRenderBundleEncoderAddRef,
         ThreadDispatchRenderBundleEncoderRelease,
@@ -2081,6 +2143,7 @@ extern "C" {
         ThreadDispatchRenderPassEncoderSetIndexBuffer,
         ThreadDispatchRenderPassEncoderSetLabel,
         ThreadDispatchRenderPassEncoderSetPipeline,
+        ThreadDispatchRenderPassEncoderSetResourceTable,
         ThreadDispatchRenderPassEncoderSetScissorRect,
         ThreadDispatchRenderPassEncoderSetStencilReference,
         ThreadDispatchRenderPassEncoderSetVertexBuffer,
@@ -2092,6 +2155,13 @@ extern "C" {
         ThreadDispatchRenderPipelineSetLabel,
         ThreadDispatchRenderPipelineAddRef,
         ThreadDispatchRenderPipelineRelease,
+        ThreadDispatchResourceTableDestroy,
+        ThreadDispatchResourceTableGetSize,
+        ThreadDispatchResourceTableInsertBinding,
+        ThreadDispatchResourceTableRemoveBinding,
+        ThreadDispatchResourceTableUpdate,
+        ThreadDispatchResourceTableAddRef,
+        ThreadDispatchResourceTableRelease,
         ThreadDispatchSamplerSetLabel,
         ThreadDispatchSamplerAddRef,
         ThreadDispatchSamplerRelease,
@@ -2144,10 +2214,12 @@ extern "C" {
         ThreadDispatchTextureGetHeight,
         ThreadDispatchTextureGetMipLevelCount,
         ThreadDispatchTextureGetSampleCount,
+        ThreadDispatchTextureGetTextureBindingViewDimension,
         ThreadDispatchTextureGetUsage,
         ThreadDispatchTextureGetWidth,
         ThreadDispatchTexturePin,
         ThreadDispatchTextureSetLabel,
+        ThreadDispatchTextureSetOwnershipForMemoryDump,
         ThreadDispatchTextureUnpin,
         ThreadDispatchTextureAddRef,
         ThreadDispatchTextureRelease,

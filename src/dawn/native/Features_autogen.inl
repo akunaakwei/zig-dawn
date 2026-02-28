@@ -97,8 +97,6 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::PixelLocalStorageNonCoherent;
   case Feature::Unorm16TextureFormats:
     return wgpu::FeatureName::Unorm16TextureFormats;
-  case Feature::Snorm16TextureFormats:
-    return wgpu::FeatureName::Snorm16TextureFormats;
   case Feature::MultiPlanarFormatExtendedUsages:
     return wgpu::FeatureName::MultiPlanarFormatExtendedUsages;
   case Feature::MultiPlanarFormatP010:
@@ -119,14 +117,10 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::AdapterPropertiesD3D;
   case Feature::AdapterPropertiesVk:
     return wgpu::FeatureName::AdapterPropertiesVk;
-  case Feature::R8UnormStorage:
-    return wgpu::FeatureName::R8UnormStorage;
   case Feature::DawnFormatCapabilities:
     return wgpu::FeatureName::DawnFormatCapabilities;
   case Feature::DawnDrmFormatCapabilities:
     return wgpu::FeatureName::DawnDrmFormatCapabilities;
-  case Feature::Norm16TextureFormats:
-    return wgpu::FeatureName::Norm16TextureFormats;
   case Feature::MultiPlanarFormatNv16:
     return wgpu::FeatureName::MultiPlanarFormatNv16;
   case Feature::MultiPlanarFormatNv24:
@@ -187,14 +181,18 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::SharedFenceEGLSync;
   case Feature::DawnDeviceAllocatorControl:
     return wgpu::FeatureName::DawnDeviceAllocatorControl;
-  case Feature::ChromiumExperimentalBindless:
-    return wgpu::FeatureName::ChromiumExperimentalBindless;
   case Feature::AdapterPropertiesWGPU:
     return wgpu::FeatureName::AdapterPropertiesWGPU;
   case Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
     return wgpu::FeatureName::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle;
   case Feature::SharedTextureMemoryD3D12Resource:
     return wgpu::FeatureName::SharedTextureMemoryD3D12Resource;
+  case Feature::ChromiumExperimentalSamplingResourceTable:
+    return wgpu::FeatureName::ChromiumExperimentalSamplingResourceTable;
+  case Feature::ChromiumExperimentalSubgroupSizeControl:
+    return wgpu::FeatureName::ChromiumExperimentalSubgroupSizeControl;
+  case Feature::AtomicVec2uMinMax:
+    return wgpu::FeatureName::AtomicVec2uMinMax;
     case Feature::InvalidEnum:
       break;
   }
@@ -271,8 +269,6 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::PixelLocalStorageNonCoherent;
   case wgpu::FeatureName::Unorm16TextureFormats:
   return Feature::Unorm16TextureFormats;
-  case wgpu::FeatureName::Snorm16TextureFormats:
-  return Feature::Snorm16TextureFormats;
   case wgpu::FeatureName::MultiPlanarFormatExtendedUsages:
   return Feature::MultiPlanarFormatExtendedUsages;
   case wgpu::FeatureName::MultiPlanarFormatP010:
@@ -293,14 +289,10 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::AdapterPropertiesD3D;
   case wgpu::FeatureName::AdapterPropertiesVk:
   return Feature::AdapterPropertiesVk;
-  case wgpu::FeatureName::R8UnormStorage:
-  return Feature::R8UnormStorage;
   case wgpu::FeatureName::DawnFormatCapabilities:
   return Feature::DawnFormatCapabilities;
   case wgpu::FeatureName::DawnDrmFormatCapabilities:
   return Feature::DawnDrmFormatCapabilities;
-  case wgpu::FeatureName::Norm16TextureFormats:
-  return Feature::Norm16TextureFormats;
   case wgpu::FeatureName::MultiPlanarFormatNv16:
   return Feature::MultiPlanarFormatNv16;
   case wgpu::FeatureName::MultiPlanarFormatNv24:
@@ -361,14 +353,18 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::SharedFenceEGLSync;
   case wgpu::FeatureName::DawnDeviceAllocatorControl:
   return Feature::DawnDeviceAllocatorControl;
-  case wgpu::FeatureName::ChromiumExperimentalBindless:
-  return Feature::ChromiumExperimentalBindless;
   case wgpu::FeatureName::AdapterPropertiesWGPU:
   return Feature::AdapterPropertiesWGPU;
   case wgpu::FeatureName::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
   return Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle;
   case wgpu::FeatureName::SharedTextureMemoryD3D12Resource:
   return Feature::SharedTextureMemoryD3D12Resource;
+  case wgpu::FeatureName::ChromiumExperimentalSamplingResourceTable:
+  return Feature::ChromiumExperimentalSamplingResourceTable;
+  case wgpu::FeatureName::ChromiumExperimentalSubgroupSizeControl:
+  return Feature::ChromiumExperimentalSubgroupSizeControl;
+  case wgpu::FeatureName::AtomicVec2uMinMax:
+  return Feature::AtomicVec2uMinMax;
     default:
       return Feature::InvalidEnum;
   }
@@ -863,20 +859,6 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
   }
 }
 {
-  static_assert(FeatureInfoIsDefined(Feature::Snorm16TextureFormats),
-                "Please define feature info for Snorm16TextureFormats in Features.cpp");
-  for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::Snorm16TextureFormats) {
-      list[Feature::Snorm16TextureFormats] = {
-        "snorm16texture-formats",
-        kFeatureInfo[i].info.description,
-        kFeatureInfo[i].info.url,
-        kFeatureInfo[i].info.featureState,
-      };
-    }
-  }
-}
-{
   static_assert(FeatureInfoIsDefined(Feature::MultiPlanarFormatExtendedUsages),
                 "Please define feature info for MultiPlanarFormatExtendedUsages in Features.cpp");
   for (size_t i = 0; i < kInfoCount; ++i) {
@@ -1017,20 +999,6 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
   }
 }
 {
-  static_assert(FeatureInfoIsDefined(Feature::R8UnormStorage),
-                "Please define feature info for R8UnormStorage in Features.cpp");
-  for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::R8UnormStorage) {
-      list[Feature::R8UnormStorage] = {
-        "r8unorm-storage",
-        kFeatureInfo[i].info.description,
-        kFeatureInfo[i].info.url,
-        kFeatureInfo[i].info.featureState,
-      };
-    }
-  }
-}
-{
   static_assert(FeatureInfoIsDefined(Feature::DawnFormatCapabilities),
                 "Please define feature info for DawnFormatCapabilities in Features.cpp");
   for (size_t i = 0; i < kInfoCount; ++i) {
@@ -1051,20 +1019,6 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
     if (kFeatureInfo[i].feature == Feature::DawnDrmFormatCapabilities) {
       list[Feature::DawnDrmFormatCapabilities] = {
         "dawn-drm-format-capabilities",
-        kFeatureInfo[i].info.description,
-        kFeatureInfo[i].info.url,
-        kFeatureInfo[i].info.featureState,
-      };
-    }
-  }
-}
-{
-  static_assert(FeatureInfoIsDefined(Feature::Norm16TextureFormats),
-                "Please define feature info for Norm16TextureFormats in Features.cpp");
-  for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::Norm16TextureFormats) {
-      list[Feature::Norm16TextureFormats] = {
-        "norm16texture-formats",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,
@@ -1493,20 +1447,6 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
   }
 }
 {
-  static_assert(FeatureInfoIsDefined(Feature::ChromiumExperimentalBindless),
-                "Please define feature info for ChromiumExperimentalBindless in Features.cpp");
-  for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::ChromiumExperimentalBindless) {
-      list[Feature::ChromiumExperimentalBindless] = {
-        "chromium-experimental-bindless",
-        kFeatureInfo[i].info.description,
-        kFeatureInfo[i].info.url,
-        kFeatureInfo[i].info.featureState,
-      };
-    }
-  }
-}
-{
   static_assert(FeatureInfoIsDefined(Feature::AdapterPropertiesWGPU),
                 "Please define feature info for AdapterPropertiesWGPU in Features.cpp");
   for (size_t i = 0; i < kInfoCount; ++i) {
@@ -1541,6 +1481,48 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
     if (kFeatureInfo[i].feature == Feature::SharedTextureMemoryD3D12Resource) {
       list[Feature::SharedTextureMemoryD3D12Resource] = {
         "shared-texture-memory-d3d12resource",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::ChromiumExperimentalSamplingResourceTable),
+                "Please define feature info for ChromiumExperimentalSamplingResourceTable in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::ChromiumExperimentalSamplingResourceTable) {
+      list[Feature::ChromiumExperimentalSamplingResourceTable] = {
+        "chromium-experimental-sampling-resource-table",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::ChromiumExperimentalSubgroupSizeControl),
+                "Please define feature info for ChromiumExperimentalSubgroupSizeControl in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::ChromiumExperimentalSubgroupSizeControl) {
+      list[Feature::ChromiumExperimentalSubgroupSizeControl] = {
+        "chromium-experimental-subgroup-size-control",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::AtomicVec2uMinMax),
+                "Please define feature info for AtomicVec2uMinMax in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::AtomicVec2uMinMax) {
+      list[Feature::AtomicVec2uMinMax] = {
+        "atomic-vec2u-min-max",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,

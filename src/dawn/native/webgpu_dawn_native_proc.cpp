@@ -49,11 +49,7 @@ extern void NativeAdapterRelease(WGPUAdapter cSelf);
 extern void NativeAdapterInfoFreeMembers(WGPUAdapterInfo cSelf);
 extern void NativeAdapterPropertiesMemoryHeapsFreeMembers(WGPUAdapterPropertiesMemoryHeaps cSelf);
 extern void NativeAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPUAdapterPropertiesSubgroupMatrixConfigs cSelf);
-extern void NativeBindGroupDestroy(WGPUBindGroup cSelf);
-extern uint32_t NativeBindGroupInsertBinding(WGPUBindGroup cSelf, WGPUBindGroupEntryContents const * contents);
-extern WGPUStatus NativeBindGroupRemoveBinding(WGPUBindGroup cSelf, uint32_t binding);
 extern void NativeBindGroupSetLabel(WGPUBindGroup cSelf, WGPUStringView label);
-extern WGPUStatus NativeBindGroupUpdate(WGPUBindGroup cSelf, WGPUBindGroupEntry const * entry);
 extern void NativeBindGroupAddRef(WGPUBindGroup cSelf);
 extern void NativeBindGroupRelease(WGPUBindGroup cSelf);
 extern void NativeBindGroupLayoutSetLabel(WGPUBindGroupLayout cSelf, WGPUStringView label);
@@ -104,6 +100,7 @@ extern void NativeComputePassEncoderSetBindGroup(WGPUComputePassEncoder cSelf, u
 extern void NativeComputePassEncoderSetImmediates(WGPUComputePassEncoder cSelf, uint32_t offset, void const * data, size_t size);
 extern void NativeComputePassEncoderSetLabel(WGPUComputePassEncoder cSelf, WGPUStringView label);
 extern void NativeComputePassEncoderSetPipeline(WGPUComputePassEncoder cSelf, WGPUComputePipeline pipeline);
+extern void NativeComputePassEncoderSetResourceTable(WGPUComputePassEncoder cSelf, WGPUResourceTable table);
 extern void NativeComputePassEncoderWriteTimestamp(WGPUComputePassEncoder cSelf, WGPUQuerySet querySet, uint32_t queryIndex);
 extern void NativeComputePassEncoderAddRef(WGPUComputePassEncoder cSelf);
 extern void NativeComputePassEncoderRelease(WGPUComputePassEncoder cSelf);
@@ -128,6 +125,7 @@ extern WGPUQuerySet NativeDeviceCreateQuerySet(WGPUDevice cSelf, WGPUQuerySetDes
 extern WGPURenderBundleEncoder NativeDeviceCreateRenderBundleEncoder(WGPUDevice cSelf, WGPURenderBundleEncoderDescriptor const * descriptor);
 extern WGPURenderPipeline NativeDeviceCreateRenderPipeline(WGPUDevice cSelf, WGPURenderPipelineDescriptor const * descriptor);
 extern WGPUFuture NativeDeviceCreateRenderPipelineAsync(WGPUDevice cSelf, WGPURenderPipelineDescriptor const * descriptor, WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo);
+extern WGPUResourceTable NativeDeviceCreateResourceTable(WGPUDevice cSelf, WGPUResourceTableDescriptor const * descriptor);
 extern WGPUSampler NativeDeviceCreateSampler(WGPUDevice cSelf, WGPUSamplerDescriptor const * descriptor);
 extern WGPUShaderModule NativeDeviceCreateShaderModule(WGPUDevice cSelf, WGPUShaderModuleDescriptor const * descriptor);
 extern WGPUTexture NativeDeviceCreateTexture(WGPUDevice cSelf, WGPUTextureDescriptor const * descriptor);
@@ -201,6 +199,7 @@ extern void NativeRenderBundleEncoderSetImmediates(WGPURenderBundleEncoder cSelf
 extern void NativeRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size);
 extern void NativeRenderBundleEncoderSetLabel(WGPURenderBundleEncoder cSelf, WGPUStringView label);
 extern void NativeRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder cSelf, WGPURenderPipeline pipeline);
+extern void NativeRenderBundleEncoderSetResourceTable(WGPURenderBundleEncoder cSelf, WGPUResourceTable table);
 extern void NativeRenderBundleEncoderSetVertexBuffer(WGPURenderBundleEncoder cSelf, uint32_t slot, WGPUBuffer buffer, uint64_t offset, uint64_t size);
 extern void NativeRenderBundleEncoderAddRef(WGPURenderBundleEncoder cSelf);
 extern void NativeRenderBundleEncoderRelease(WGPURenderBundleEncoder cSelf);
@@ -224,6 +223,7 @@ extern void NativeRenderPassEncoderSetImmediates(WGPURenderPassEncoder cSelf, ui
 extern void NativeRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size);
 extern void NativeRenderPassEncoderSetLabel(WGPURenderPassEncoder cSelf, WGPUStringView label);
 extern void NativeRenderPassEncoderSetPipeline(WGPURenderPassEncoder cSelf, WGPURenderPipeline pipeline);
+extern void NativeRenderPassEncoderSetResourceTable(WGPURenderPassEncoder cSelf, WGPUResourceTable table);
 extern void NativeRenderPassEncoderSetScissorRect(WGPURenderPassEncoder cSelf, uint32_t x, uint32_t y, uint32_t width, uint32_t height);
 extern void NativeRenderPassEncoderSetStencilReference(WGPURenderPassEncoder cSelf, uint32_t reference);
 extern void NativeRenderPassEncoderSetVertexBuffer(WGPURenderPassEncoder cSelf, uint32_t slot, WGPUBuffer buffer, uint64_t offset, uint64_t size);
@@ -235,6 +235,13 @@ extern WGPUBindGroupLayout NativeRenderPipelineGetBindGroupLayout(WGPURenderPipe
 extern void NativeRenderPipelineSetLabel(WGPURenderPipeline cSelf, WGPUStringView label);
 extern void NativeRenderPipelineAddRef(WGPURenderPipeline cSelf);
 extern void NativeRenderPipelineRelease(WGPURenderPipeline cSelf);
+extern void NativeResourceTableDestroy(WGPUResourceTable cSelf);
+extern uint32_t NativeResourceTableGetSize(WGPUResourceTable cSelf);
+extern uint32_t NativeResourceTableInsertBinding(WGPUResourceTable cSelf, WGPUBindingResource const * resource);
+extern WGPUStatus NativeResourceTableRemoveBinding(WGPUResourceTable cSelf, uint32_t slot);
+extern WGPUStatus NativeResourceTableUpdate(WGPUResourceTable cSelf, uint32_t slot, WGPUBindingResource const * resource);
+extern void NativeResourceTableAddRef(WGPUResourceTable cSelf);
+extern void NativeResourceTableRelease(WGPUResourceTable cSelf);
 extern void NativeSamplerSetLabel(WGPUSampler cSelf, WGPUStringView label);
 extern void NativeSamplerAddRef(WGPUSampler cSelf);
 extern void NativeSamplerRelease(WGPUSampler cSelf);
@@ -287,10 +294,12 @@ extern WGPUTextureFormat NativeTextureGetFormat(WGPUTexture cSelf);
 extern uint32_t NativeTextureGetHeight(WGPUTexture cSelf);
 extern uint32_t NativeTextureGetMipLevelCount(WGPUTexture cSelf);
 extern uint32_t NativeTextureGetSampleCount(WGPUTexture cSelf);
+extern WGPUTextureViewDimension NativeTextureGetTextureBindingViewDimension(WGPUTexture cSelf);
 extern WGPUTextureUsage NativeTextureGetUsage(WGPUTexture cSelf);
 extern uint32_t NativeTextureGetWidth(WGPUTexture cSelf);
 extern void NativeTexturePin(WGPUTexture cSelf, WGPUTextureUsage usage);
 extern void NativeTextureSetLabel(WGPUTexture cSelf, WGPUStringView label);
+extern void NativeTextureSetOwnershipForMemoryDump(WGPUTexture cSelf, uint64_t ownerGuid);
 extern void NativeTextureUnpin(WGPUTexture cSelf);
 extern void NativeTextureAddRef(WGPUTexture cSelf);
 extern void NativeTextureRelease(WGPUTexture cSelf);
@@ -371,25 +380,9 @@ extern "C" {
         return NativeAdapterPropertiesSubgroupMatrixConfigsFreeMembers(
             cSelf);
     }
-    void wgpuBindGroupDestroy(WGPUBindGroup cSelf) {
-        return NativeBindGroupDestroy(
-            cSelf);
-    }
-    uint32_t wgpuBindGroupInsertBinding(WGPUBindGroup cSelf, WGPUBindGroupEntryContents const * contents) {
-        return NativeBindGroupInsertBinding(
-            cSelf, contents);
-    }
-    WGPUStatus wgpuBindGroupRemoveBinding(WGPUBindGroup cSelf, uint32_t binding) {
-        return NativeBindGroupRemoveBinding(
-            cSelf, binding);
-    }
     void wgpuBindGroupSetLabel(WGPUBindGroup cSelf, WGPUStringView label) {
         return NativeBindGroupSetLabel(
             cSelf, label);
-    }
-    WGPUStatus wgpuBindGroupUpdate(WGPUBindGroup cSelf, WGPUBindGroupEntry const * entry) {
-        return NativeBindGroupUpdate(
-            cSelf, entry);
     }
     void wgpuBindGroupAddRef(WGPUBindGroup cSelf) {
         return NativeBindGroupAddRef(
@@ -591,6 +584,10 @@ extern "C" {
         return NativeComputePassEncoderSetPipeline(
             cSelf, pipeline);
     }
+    void wgpuComputePassEncoderSetResourceTable(WGPUComputePassEncoder cSelf, WGPUResourceTable table) {
+        return NativeComputePassEncoderSetResourceTable(
+            cSelf, table);
+    }
     void wgpuComputePassEncoderWriteTimestamp(WGPUComputePassEncoder cSelf, WGPUQuerySet querySet, uint32_t queryIndex) {
         return NativeComputePassEncoderWriteTimestamp(
             cSelf, querySet, queryIndex);
@@ -686,6 +683,10 @@ extern "C" {
     WGPUFuture wgpuDeviceCreateRenderPipelineAsync(WGPUDevice cSelf, WGPURenderPipelineDescriptor const * descriptor, WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo) {
         return NativeDeviceCreateRenderPipelineAsync(
             cSelf, descriptor, callbackInfo);
+    }
+    WGPUResourceTable wgpuDeviceCreateResourceTable(WGPUDevice cSelf, WGPUResourceTableDescriptor const * descriptor) {
+        return NativeDeviceCreateResourceTable(
+            cSelf, descriptor);
     }
     WGPUSampler wgpuDeviceCreateSampler(WGPUDevice cSelf, WGPUSamplerDescriptor const * descriptor) {
         return NativeDeviceCreateSampler(
@@ -979,6 +980,10 @@ extern "C" {
         return NativeRenderBundleEncoderSetPipeline(
             cSelf, pipeline);
     }
+    void wgpuRenderBundleEncoderSetResourceTable(WGPURenderBundleEncoder cSelf, WGPUResourceTable table) {
+        return NativeRenderBundleEncoderSetResourceTable(
+            cSelf, table);
+    }
     void wgpuRenderBundleEncoderSetVertexBuffer(WGPURenderBundleEncoder cSelf, uint32_t slot, WGPUBuffer buffer, uint64_t offset, uint64_t size) {
         return NativeRenderBundleEncoderSetVertexBuffer(
             cSelf, slot, buffer, offset, size);
@@ -1071,6 +1076,10 @@ extern "C" {
         return NativeRenderPassEncoderSetPipeline(
             cSelf, pipeline);
     }
+    void wgpuRenderPassEncoderSetResourceTable(WGPURenderPassEncoder cSelf, WGPUResourceTable table) {
+        return NativeRenderPassEncoderSetResourceTable(
+            cSelf, table);
+    }
     void wgpuRenderPassEncoderSetScissorRect(WGPURenderPassEncoder cSelf, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
         return NativeRenderPassEncoderSetScissorRect(
             cSelf, x, y, width, height);
@@ -1113,6 +1122,34 @@ extern "C" {
     }
     void wgpuRenderPipelineRelease(WGPURenderPipeline cSelf) {
         return NativeRenderPipelineRelease(
+            cSelf);
+    }
+    void wgpuResourceTableDestroy(WGPUResourceTable cSelf) {
+        return NativeResourceTableDestroy(
+            cSelf);
+    }
+    uint32_t wgpuResourceTableGetSize(WGPUResourceTable cSelf) {
+        return NativeResourceTableGetSize(
+            cSelf);
+    }
+    uint32_t wgpuResourceTableInsertBinding(WGPUResourceTable cSelf, WGPUBindingResource const * resource) {
+        return NativeResourceTableInsertBinding(
+            cSelf, resource);
+    }
+    WGPUStatus wgpuResourceTableRemoveBinding(WGPUResourceTable cSelf, uint32_t slot) {
+        return NativeResourceTableRemoveBinding(
+            cSelf, slot);
+    }
+    WGPUStatus wgpuResourceTableUpdate(WGPUResourceTable cSelf, uint32_t slot, WGPUBindingResource const * resource) {
+        return NativeResourceTableUpdate(
+            cSelf, slot, resource);
+    }
+    void wgpuResourceTableAddRef(WGPUResourceTable cSelf) {
+        return NativeResourceTableAddRef(
+            cSelf);
+    }
+    void wgpuResourceTableRelease(WGPUResourceTable cSelf) {
+        return NativeResourceTableRelease(
             cSelf);
     }
     void wgpuSamplerSetLabel(WGPUSampler cSelf, WGPUStringView label) {
@@ -1323,6 +1360,10 @@ extern "C" {
         return NativeTextureGetSampleCount(
             cSelf);
     }
+    WGPUTextureViewDimension wgpuTextureGetTextureBindingViewDimension(WGPUTexture cSelf) {
+        return NativeTextureGetTextureBindingViewDimension(
+            cSelf);
+    }
     WGPUTextureUsage wgpuTextureGetUsage(WGPUTexture cSelf) {
         return NativeTextureGetUsage(
             cSelf);
@@ -1338,6 +1379,10 @@ extern "C" {
     void wgpuTextureSetLabel(WGPUTexture cSelf, WGPUStringView label) {
         return NativeTextureSetLabel(
             cSelf, label);
+    }
+    void wgpuTextureSetOwnershipForMemoryDump(WGPUTexture cSelf, uint64_t ownerGuid) {
+        return NativeTextureSetOwnershipForMemoryDump(
+            cSelf, ownerGuid);
     }
     void wgpuTextureUnpin(WGPUTexture cSelf) {
         return NativeTextureUnpin(

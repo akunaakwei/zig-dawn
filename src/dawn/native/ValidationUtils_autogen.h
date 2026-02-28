@@ -26,7 +26,6 @@ namespace dawn::native {
     MaybeError ValidateCreatePipelineAsyncStatus(wgpu::CreatePipelineAsyncStatus value);
     MaybeError ValidateCullMode(wgpu::CullMode value);
     MaybeError ValidateDeviceLostReason(wgpu::DeviceLostReason value);
-    MaybeError ValidateDynamicBindingKind(wgpu::DynamicBindingKind value);
     MaybeError ValidateErrorFilter(wgpu::ErrorFilter value);
     MaybeError ValidateErrorType(wgpu::ErrorType value);
     MaybeError ValidateExternalTextureRotation(wgpu::ExternalTextureRotation value);

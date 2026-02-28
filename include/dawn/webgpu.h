@@ -125,7 +125,6 @@ typedef struct WGPUBindGroupLayoutImpl* WGPUBindGroupLayout WGPU_OBJECT_ATTRIBUT
 typedef struct WGPUBufferImpl* WGPUBuffer WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUCommandBufferImpl* WGPUCommandBuffer WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUCommandEncoderImpl* WGPUCommandEncoder WGPU_OBJECT_ATTRIBUTE;
-typedef struct WGPUComputePassEncoderImpl* WGPUComputePassEncoder WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUComputePipelineImpl* WGPUComputePipeline WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUDeviceImpl* WGPUDevice WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUExternalTextureImpl* WGPUExternalTexture WGPU_OBJECT_ATTRIBUTE;
@@ -134,9 +133,8 @@ typedef struct WGPUPipelineLayoutImpl* WGPUPipelineLayout WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUQuerySetImpl* WGPUQuerySet WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUQueueImpl* WGPUQueue WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPURenderBundleImpl* WGPURenderBundle WGPU_OBJECT_ATTRIBUTE;
-typedef struct WGPURenderBundleEncoderImpl* WGPURenderBundleEncoder WGPU_OBJECT_ATTRIBUTE;
-typedef struct WGPURenderPassEncoderImpl* WGPURenderPassEncoder WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPURenderPipelineImpl* WGPURenderPipeline WGPU_OBJECT_ATTRIBUTE;
+typedef struct WGPUResourceTableImpl* WGPUResourceTable WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUSamplerImpl* WGPUSampler WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUShaderModuleImpl* WGPUShaderModule WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUSharedBufferMemoryImpl* WGPUSharedBufferMemory WGPU_OBJECT_ATTRIBUTE;
@@ -146,13 +144,16 @@ typedef struct WGPUSurfaceImpl* WGPUSurface WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUTexelBufferViewImpl* WGPUTexelBufferView WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUTextureImpl* WGPUTexture WGPU_OBJECT_ATTRIBUTE;
 typedef struct WGPUTextureViewImpl* WGPUTextureView WGPU_OBJECT_ATTRIBUTE;
+typedef struct WGPUComputePassEncoderImpl* WGPUComputePassEncoder WGPU_OBJECT_ATTRIBUTE;
+typedef struct WGPURenderBundleEncoderImpl* WGPURenderBundleEncoder WGPU_OBJECT_ATTRIBUTE;
+typedef struct WGPURenderPassEncoderImpl* WGPURenderPassEncoder WGPU_OBJECT_ATTRIBUTE;
 
 // Structure forward declarations
 struct WGPUAdapterPropertiesD3D;
+struct WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs;
 struct WGPUAdapterPropertiesVk;
 struct WGPUAdapterPropertiesWGPU;
-struct WGPUBindGroupDynamicBindingArray;
-struct WGPUBindGroupEntryContents;
+struct WGPUBindingResource;
 struct WGPUBlendComponent;
 struct WGPUBufferBindingLayout;
 struct WGPUBufferHostMappedPointer;
@@ -174,15 +175,13 @@ struct WGPUDawnFakeBufferOOMForTesting;
 struct WGPUDawnFakeDeviceInitializeErrorForTesting;
 struct WGPUDawnHostMappedPointerLimits;
 struct WGPUDawnInjectedInvalidSType;
-struct WGPUDawnRenderPassColorAttachmentRenderToSingleSampled;
+struct WGPUDawnRenderPassSampleCount;
 struct WGPUDawnShaderModuleSPIRVOptionsDescriptor;
 struct WGPUDawnTexelCopyBufferRowAlignmentLimits;
 struct WGPUDawnTextureInternalUsageDescriptor;
 struct WGPUDawnTogglesDescriptor;
 struct WGPUDawnWGSLBlocklist;
 struct WGPUDawnWireWGSLControl;
-struct WGPUDynamicBindingArrayLayout;
-struct WGPUDynamicBindingArrayLimits;
 struct WGPUEmscriptenSurfaceSourceCanvasHTMLSelector;
 struct WGPUExtent2D;
 struct WGPUExtent3D;
@@ -196,6 +195,7 @@ struct WGPUMultisampleState;
 struct WGPUOrigin2D;
 struct WGPUOrigin3D;
 struct WGPUPassTimestampWrites;
+struct WGPUPipelineLayoutResourceTable;
 struct WGPUPipelineLayoutStorageAttachment;
 struct WGPUPrimitiveState;
 struct WGPUQuerySetDescriptor;
@@ -208,6 +208,7 @@ struct WGPURenderPassDescriptorResolveRect;
 struct WGPURenderPassMaxDrawCount;
 struct WGPURequestAdapterWebGPUBackendOptions;
 struct WGPURequestAdapterWebXROptions;
+struct WGPUResourceTableDescriptor;
 struct WGPUSamplerBindingLayout;
 struct WGPUShaderModuleCompilationOptions;
 struct WGPUShaderSourceSPIRV;
@@ -273,7 +274,6 @@ struct WGPUAdapterPropertiesMemoryHeaps;
 struct WGPUAdapterPropertiesSubgroupMatrixConfigs;
 struct WGPUAHardwareBufferProperties;
 struct WGPUBindGroupEntry;
-struct WGPUBindGroupLayoutDynamicBindingArray;
 struct WGPUBindGroupLayoutEntry;
 struct WGPUBlendState;
 struct WGPUBufferDescriptor;
@@ -499,12 +499,6 @@ typedef enum WGPUDeviceLostReason {
     WGPUDeviceLostReason_Force32 = 0x7FFFFFFF
 } WGPUDeviceLostReason WGPU_ENUM_ATTRIBUTE;
 
-typedef enum WGPUDynamicBindingKind {
-    WGPUDynamicBindingKind_Undefined = 0x00000000,
-    WGPUDynamicBindingKind_SampledTexture = 0x00000001,
-    WGPUDynamicBindingKind_Force32 = 0x7FFFFFFF
-} WGPUDynamicBindingKind WGPU_ENUM_ATTRIBUTE;
-
 typedef enum WGPUErrorFilter {
     WGPUErrorFilter_Validation = 0x00000001,
     WGPUErrorFilter_OutOfMemory = 0x00000002,
@@ -571,55 +565,54 @@ typedef enum WGPUFeatureName {
     WGPUFeatureName_PixelLocalStorageCoherent = 0x0005000A,
     WGPUFeatureName_PixelLocalStorageNonCoherent = 0x0005000B,
     WGPUFeatureName_Unorm16TextureFormats = 0x0005000C,
-    WGPUFeatureName_Snorm16TextureFormats = 0x0005000D,
-    WGPUFeatureName_MultiPlanarFormatExtendedUsages = 0x0005000E,
-    WGPUFeatureName_MultiPlanarFormatP010 = 0x0005000F,
-    WGPUFeatureName_HostMappedPointer = 0x00050010,
-    WGPUFeatureName_MultiPlanarRenderTargets = 0x00050011,
-    WGPUFeatureName_MultiPlanarFormatNv12a = 0x00050012,
-    WGPUFeatureName_FramebufferFetch = 0x00050013,
-    WGPUFeatureName_BufferMapExtendedUsages = 0x00050014,
-    WGPUFeatureName_AdapterPropertiesMemoryHeaps = 0x00050015,
-    WGPUFeatureName_AdapterPropertiesD3D = 0x00050016,
-    WGPUFeatureName_AdapterPropertiesVk = 0x00050017,
-    WGPUFeatureName_R8UnormStorage = 0x00050018,
-    WGPUFeatureName_DawnFormatCapabilities = 0x00050019,
-    WGPUFeatureName_DawnDrmFormatCapabilities = 0x0005001A,
-    WGPUFeatureName_Norm16TextureFormats = 0x0005001B,
-    WGPUFeatureName_MultiPlanarFormatNv16 = 0x0005001C,
-    WGPUFeatureName_MultiPlanarFormatNv24 = 0x0005001D,
-    WGPUFeatureName_MultiPlanarFormatP210 = 0x0005001E,
-    WGPUFeatureName_MultiPlanarFormatP410 = 0x0005001F,
-    WGPUFeatureName_SharedTextureMemoryVkDedicatedAllocation = 0x00050020,
-    WGPUFeatureName_SharedTextureMemoryAHardwareBuffer = 0x00050021,
-    WGPUFeatureName_SharedTextureMemoryDmaBuf = 0x00050022,
-    WGPUFeatureName_SharedTextureMemoryOpaqueFD = 0x00050023,
-    WGPUFeatureName_SharedTextureMemoryZirconHandle = 0x00050024,
-    WGPUFeatureName_SharedTextureMemoryDXGISharedHandle = 0x00050025,
-    WGPUFeatureName_SharedTextureMemoryD3D11Texture2D = 0x00050026,
-    WGPUFeatureName_SharedTextureMemoryIOSurface = 0x00050027,
-    WGPUFeatureName_SharedTextureMemoryEGLImage = 0x00050028,
-    WGPUFeatureName_SharedFenceVkSemaphoreOpaqueFD = 0x00050029,
-    WGPUFeatureName_SharedFenceSyncFD = 0x0005002A,
-    WGPUFeatureName_SharedFenceVkSemaphoreZirconHandle = 0x0005002B,
-    WGPUFeatureName_SharedFenceDXGISharedHandle = 0x0005002C,
-    WGPUFeatureName_SharedFenceMTLSharedEvent = 0x0005002D,
-    WGPUFeatureName_SharedBufferMemoryD3D12Resource = 0x0005002E,
-    WGPUFeatureName_StaticSamplers = 0x0005002F,
-    WGPUFeatureName_YCbCrVulkanSamplers = 0x00050030,
-    WGPUFeatureName_ShaderModuleCompilationOptions = 0x00050031,
-    WGPUFeatureName_DawnLoadResolveTexture = 0x00050032,
-    WGPUFeatureName_DawnPartialLoadResolveTexture = 0x00050033,
-    WGPUFeatureName_MultiDrawIndirect = 0x00050034,
-    WGPUFeatureName_DawnTexelCopyBufferRowAlignment = 0x00050035,
-    WGPUFeatureName_FlexibleTextureViews = 0x00050036,
-    WGPUFeatureName_ChromiumExperimentalSubgroupMatrix = 0x00050037,
-    WGPUFeatureName_SharedFenceEGLSync = 0x00050038,
-    WGPUFeatureName_DawnDeviceAllocatorControl = 0x00050039,
-    WGPUFeatureName_ChromiumExperimentalBindless = 0x0005003A,
-    WGPUFeatureName_AdapterPropertiesWGPU = 0x0005003B,
-    WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle = 0x0005003C,
-    WGPUFeatureName_SharedTextureMemoryD3D12Resource = 0x0005003D,
+    WGPUFeatureName_MultiPlanarFormatExtendedUsages = 0x0005000D,
+    WGPUFeatureName_MultiPlanarFormatP010 = 0x0005000E,
+    WGPUFeatureName_HostMappedPointer = 0x0005000F,
+    WGPUFeatureName_MultiPlanarRenderTargets = 0x00050010,
+    WGPUFeatureName_MultiPlanarFormatNv12a = 0x00050011,
+    WGPUFeatureName_FramebufferFetch = 0x00050012,
+    WGPUFeatureName_BufferMapExtendedUsages = 0x00050013,
+    WGPUFeatureName_AdapterPropertiesMemoryHeaps = 0x00050014,
+    WGPUFeatureName_AdapterPropertiesD3D = 0x00050015,
+    WGPUFeatureName_AdapterPropertiesVk = 0x00050016,
+    WGPUFeatureName_DawnFormatCapabilities = 0x00050017,
+    WGPUFeatureName_DawnDrmFormatCapabilities = 0x00050018,
+    WGPUFeatureName_MultiPlanarFormatNv16 = 0x00050019,
+    WGPUFeatureName_MultiPlanarFormatNv24 = 0x0005001A,
+    WGPUFeatureName_MultiPlanarFormatP210 = 0x0005001B,
+    WGPUFeatureName_MultiPlanarFormatP410 = 0x0005001C,
+    WGPUFeatureName_SharedTextureMemoryVkDedicatedAllocation = 0x0005001D,
+    WGPUFeatureName_SharedTextureMemoryAHardwareBuffer = 0x0005001E,
+    WGPUFeatureName_SharedTextureMemoryDmaBuf = 0x0005001F,
+    WGPUFeatureName_SharedTextureMemoryOpaqueFD = 0x00050020,
+    WGPUFeatureName_SharedTextureMemoryZirconHandle = 0x00050021,
+    WGPUFeatureName_SharedTextureMemoryDXGISharedHandle = 0x00050022,
+    WGPUFeatureName_SharedTextureMemoryD3D11Texture2D = 0x00050023,
+    WGPUFeatureName_SharedTextureMemoryIOSurface = 0x00050024,
+    WGPUFeatureName_SharedTextureMemoryEGLImage = 0x00050025,
+    WGPUFeatureName_SharedFenceVkSemaphoreOpaqueFD = 0x00050026,
+    WGPUFeatureName_SharedFenceSyncFD = 0x00050027,
+    WGPUFeatureName_SharedFenceVkSemaphoreZirconHandle = 0x00050028,
+    WGPUFeatureName_SharedFenceDXGISharedHandle = 0x00050029,
+    WGPUFeatureName_SharedFenceMTLSharedEvent = 0x0005002A,
+    WGPUFeatureName_SharedBufferMemoryD3D12Resource = 0x0005002B,
+    WGPUFeatureName_StaticSamplers = 0x0005002C,
+    WGPUFeatureName_YCbCrVulkanSamplers = 0x0005002D,
+    WGPUFeatureName_ShaderModuleCompilationOptions = 0x0005002E,
+    WGPUFeatureName_DawnLoadResolveTexture = 0x0005002F,
+    WGPUFeatureName_DawnPartialLoadResolveTexture = 0x00050030,
+    WGPUFeatureName_MultiDrawIndirect = 0x00050031,
+    WGPUFeatureName_DawnTexelCopyBufferRowAlignment = 0x00050032,
+    WGPUFeatureName_FlexibleTextureViews = 0x00050033,
+    WGPUFeatureName_ChromiumExperimentalSubgroupMatrix = 0x00050034,
+    WGPUFeatureName_SharedFenceEGLSync = 0x00050035,
+    WGPUFeatureName_DawnDeviceAllocatorControl = 0x00050036,
+    WGPUFeatureName_AdapterPropertiesWGPU = 0x00050037,
+    WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle = 0x00050038,
+    WGPUFeatureName_SharedTextureMemoryD3D12Resource = 0x00050039,
+    WGPUFeatureName_ChromiumExperimentalSamplingResourceTable = 0x0005003A,
+    WGPUFeatureName_ChromiumExperimentalSubgroupSizeControl = 0x0005003B,
+    WGPUFeatureName_AtomicVec2uMinMax = 0x0005003C,
     WGPUFeatureName_Force32 = 0x7FFFFFFF
 } WGPUFeatureName WGPU_ENUM_ATTRIBUTE;
 
@@ -841,7 +834,7 @@ typedef enum WGPUSType {
     WGPUSType_RequestAdapterOptionsLUID = 0x0005000C,
     WGPUSType_RequestAdapterOptionsGetGLProc = 0x0005000D,
     WGPUSType_RequestAdapterOptionsD3D11Device = 0x0005000E,
-    WGPUSType_DawnRenderPassColorAttachmentRenderToSingleSampled = 0x0005000F,
+    WGPUSType_DawnRenderPassSampleCount = 0x0005000F,
     WGPUSType_RenderPassPixelLocalStorage = 0x00050010,
     WGPUSType_PipelineLayoutPixelLocalStorage = 0x00050011,
     WGPUSType_BufferHostMappedPointer = 0x00050012,
@@ -898,16 +891,15 @@ typedef enum WGPUSType {
     WGPUSType_DawnFakeDeviceInitializeErrorForTesting = 0x00050046,
     WGPUSType_SharedTextureMemoryD3D11BeginState = 0x00050047,
     WGPUSType_DawnConsumeAdapterDescriptor = 0x00050048,
-    WGPUSType_BindGroupLayoutDynamicBindingArray = 0x00050049,
-    WGPUSType_DynamicBindingArrayLimits = 0x0005004A,
-    WGPUSType_BindGroupDynamicBindingArray = 0x0005004B,
-    WGPUSType_TexelBufferBindingEntry = 0x0005004C,
-    WGPUSType_TexelBufferBindingLayout = 0x0005004D,
-    WGPUSType_SharedTextureMemoryMetalEndAccessState = 0x0005004E,
-    WGPUSType_AdapterPropertiesWGPU = 0x0005004F,
-    WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor = 0x00050050,
-    WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor = 0x00050051,
-    WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup = 0x00050052,
+    WGPUSType_TexelBufferBindingEntry = 0x00050049,
+    WGPUSType_TexelBufferBindingLayout = 0x0005004A,
+    WGPUSType_SharedTextureMemoryMetalEndAccessState = 0x0005004B,
+    WGPUSType_AdapterPropertiesWGPU = 0x0005004C,
+    WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor = 0x0005004D,
+    WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor = 0x0005004E,
+    WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup = 0x0005004F,
+    WGPUSType_PipelineLayoutResourceTable = 0x00050050,
+    WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs = 0x00050051,
     WGPUSType_Force32 = 0x7FFFFFFF
 } WGPUSType WGPU_ENUM_ATTRIBUTE;
 
@@ -1060,14 +1052,15 @@ typedef enum WGPUTextureFormat {
     WGPUTextureFormat_ASTC12x10UnormSrgb = 0x00000063,
     WGPUTextureFormat_ASTC12x12Unorm = 0x00000064,
     WGPUTextureFormat_ASTC12x12UnormSrgb = 0x00000065,
-    WGPUTextureFormat_R8BG8Biplanar420Unorm = 0x00050006,
-    WGPUTextureFormat_R10X6BG10X6Biplanar420Unorm = 0x00050007,
-    WGPUTextureFormat_R8BG8A8Triplanar420Unorm = 0x00050008,
-    WGPUTextureFormat_R8BG8Biplanar422Unorm = 0x00050009,
-    WGPUTextureFormat_R8BG8Biplanar444Unorm = 0x0005000A,
-    WGPUTextureFormat_R10X6BG10X6Biplanar422Unorm = 0x0005000B,
-    WGPUTextureFormat_R10X6BG10X6Biplanar444Unorm = 0x0005000C,
-    WGPUTextureFormat_External = 0x0005000D,
+    WGPUTextureFormat_R8BG8Biplanar420Unorm = 0x00050000,
+    WGPUTextureFormat_R10X6BG10X6Biplanar420Unorm = 0x00050001,
+    WGPUTextureFormat_R8BG8A8Triplanar420Unorm = 0x00050002,
+    WGPUTextureFormat_R8BG8Biplanar422Unorm = 0x00050003,
+    WGPUTextureFormat_R8BG8Biplanar444Unorm = 0x00050004,
+    WGPUTextureFormat_R10X6BG10X6Biplanar422Unorm = 0x00050005,
+    WGPUTextureFormat_R10X6BG10X6Biplanar444Unorm = 0x00050006,
+    WGPUTextureFormat_External = 0x00050007,
+    WGPUTextureFormat_OpaqueYCbCrAndroid = 0x00050007,
     WGPUTextureFormat_Force32 = 0x7FFFFFFF
 } WGPUTextureFormat WGPU_ENUM_ATTRIBUTE;
 
@@ -1165,16 +1158,22 @@ typedef enum WGPUWGSLLanguageFeatureName {
     WGPUWGSLLanguageFeatureName_PointerCompositeAccess = 0x00000004,
     WGPUWGSLLanguageFeatureName_UniformBufferStandardLayout = 0x00000005,
     WGPUWGSLLanguageFeatureName_SubgroupId = 0x00000006,
-    WGPUWGSLLanguageFeatureName_SizedBindingArray = 0x00050007,
-    WGPUWGSLLanguageFeatureName_TexelBuffers = 0x00050008,
-    WGPUWGSLLanguageFeatureName_ChromiumPrint = 0x00050009,
-    WGPUWGSLLanguageFeatureName_FragmentDepth = 0x0005000A,
-    WGPUWGSLLanguageFeatureName_ImmediateAddressSpace = 0x0005000B,
+    WGPUWGSLLanguageFeatureName_TextureAndSamplerLet = 0x00000007,
     WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented = 0x00050000,
     WGPUWGSLLanguageFeatureName_ChromiumTestingUnsafeExperimental = 0x00050001,
     WGPUWGSLLanguageFeatureName_ChromiumTestingExperimental = 0x00050002,
     WGPUWGSLLanguageFeatureName_ChromiumTestingShippedWithKillswitch = 0x00050003,
     WGPUWGSLLanguageFeatureName_ChromiumTestingShipped = 0x00050004,
+    WGPUWGSLLanguageFeatureName_SizedBindingArray = 0x00050005,
+    WGPUWGSLLanguageFeatureName_TexelBuffers = 0x00050006,
+    WGPUWGSLLanguageFeatureName_ChromiumPrint = 0x00050007,
+    WGPUWGSLLanguageFeatureName_FragmentDepth = 0x00050008,
+    WGPUWGSLLanguageFeatureName_ImmediateAddressSpace = 0x00050009,
+    WGPUWGSLLanguageFeatureName_SubgroupUniformity = 0x0005000A,
+    WGPUWGSLLanguageFeatureName_BufferView = 0x0005000B,
+    WGPUWGSLLanguageFeatureName_FilteringParameters = 0x0005000C,
+    WGPUWGSLLanguageFeatureName_SwizzleAssignment = 0x0005000D,
+    WGPUWGSLLanguageFeatureName_LinearIndexing = 0x0005000E,
     WGPUWGSLLanguageFeatureName_Force32 = 0x7FFFFFFF
 } WGPUWGSLLanguageFeatureName WGPU_ENUM_ATTRIBUTE;
 
@@ -1449,6 +1448,24 @@ typedef struct WGPUAdapterPropertiesD3D {
 })
 
 // Can be chained in WGPUAdapterInfo
+typedef struct WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs {
+    WGPUChainedStruct chain;
+    uint32_t minExplicitComputeSubgroupSize;
+    uint32_t maxExplicitComputeSubgroupSize;
+    uint32_t maxComputeWorkgroupSubgroups;
+} WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs WGPU_STRUCTURE_ATTRIBUTE;
+
+#define WGPU_ADAPTER_PROPERTIES_EXPLICIT_COMPUTE_SUBGROUP_SIZE_CONFIGS_INIT _wgpu_MAKE_INIT_STRUCT(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, { \
+    /*.chain=*/_wgpu_MAKE_INIT_STRUCT(WGPUChainedStruct, { \
+        /*.next=*/NULL _wgpu_COMMA \
+        /*.sType=*/WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs _wgpu_COMMA \
+    }) _wgpu_COMMA \
+    /*.minExplicitComputeSubgroupSize=*/0 _wgpu_COMMA \
+    /*.maxExplicitComputeSubgroupSize=*/0 _wgpu_COMMA \
+    /*.maxComputeWorkgroupSubgroups=*/0 _wgpu_COMMA \
+})
+
+// Can be chained in WGPUAdapterInfo
 typedef struct WGPUAdapterPropertiesVk {
     WGPUChainedStruct chain;
     uint32_t driverVersion;
@@ -1476,30 +1493,16 @@ typedef struct WGPUAdapterPropertiesWGPU {
     /*.backendType=*/WGPUBackendType_Undefined _wgpu_COMMA \
 })
 
-// Can be chained in WGPUBindGroupDescriptor
-typedef struct WGPUBindGroupDynamicBindingArray {
-    WGPUChainedStruct chain;
-    uint32_t dynamicArraySize;
-} WGPUBindGroupDynamicBindingArray WGPU_STRUCTURE_ATTRIBUTE;
-
-#define WGPU_BIND_GROUP_DYNAMIC_BINDING_ARRAY_INIT _wgpu_MAKE_INIT_STRUCT(WGPUBindGroupDynamicBindingArray, { \
-    /*.chain=*/_wgpu_MAKE_INIT_STRUCT(WGPUChainedStruct, { \
-        /*.next=*/NULL _wgpu_COMMA \
-        /*.sType=*/WGPUSType_BindGroupDynamicBindingArray _wgpu_COMMA \
-    }) _wgpu_COMMA \
-    /*.dynamicArraySize=*/0 _wgpu_COMMA \
-})
-
-typedef struct WGPUBindGroupEntryContents {
+typedef struct WGPUBindingResource {
     WGPUChainedStruct * nextInChain;
     WGPU_NULLABLE WGPUBuffer buffer;
     uint64_t offset;
     uint64_t size;
     WGPU_NULLABLE WGPUSampler sampler;
     WGPU_NULLABLE WGPUTextureView textureView;
-} WGPUBindGroupEntryContents WGPU_STRUCTURE_ATTRIBUTE;
+} WGPUBindingResource WGPU_STRUCTURE_ATTRIBUTE;
 
-#define WGPU_BIND_GROUP_ENTRY_CONTENTS_INIT _wgpu_MAKE_INIT_STRUCT(WGPUBindGroupEntryContents, { \
+#define WGPU_BINDING_RESOURCE_INIT _wgpu_MAKE_INIT_STRUCT(WGPUBindingResource, { \
     /*.nextInChain=*/NULL _wgpu_COMMA \
     /*.buffer=*/NULL _wgpu_COMMA \
     /*.offset=*/0 _wgpu_COMMA \
@@ -1821,18 +1824,18 @@ typedef struct WGPUDawnInjectedInvalidSType {
     /*.invalidSType=*/_wgpu_ENUM_ZERO_INIT(WGPUSType) _wgpu_COMMA \
 })
 
-// Can be chained in WGPURenderPassColorAttachment
-typedef struct WGPUDawnRenderPassColorAttachmentRenderToSingleSampled {
+// Can be chained in WGPURenderPassDescriptor
+typedef struct WGPUDawnRenderPassSampleCount {
     WGPUChainedStruct chain;
-    uint32_t implicitSampleCount;
-} WGPUDawnRenderPassColorAttachmentRenderToSingleSampled WGPU_STRUCTURE_ATTRIBUTE;
+    uint32_t sampleCount;
+} WGPUDawnRenderPassSampleCount WGPU_STRUCTURE_ATTRIBUTE;
 
-#define WGPU_DAWN_RENDER_PASS_COLOR_ATTACHMENT_RENDER_TO_SINGLE_SAMPLED_INIT _wgpu_MAKE_INIT_STRUCT(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled, { \
+#define WGPU_DAWN_RENDER_PASS_SAMPLE_COUNT_INIT _wgpu_MAKE_INIT_STRUCT(WGPUDawnRenderPassSampleCount, { \
     /*.chain=*/_wgpu_MAKE_INIT_STRUCT(WGPUChainedStruct, { \
         /*.next=*/NULL _wgpu_COMMA \
-        /*.sType=*/WGPUSType_DawnRenderPassColorAttachmentRenderToSingleSampled _wgpu_COMMA \
+        /*.sType=*/WGPUSType_DawnRenderPassSampleCount _wgpu_COMMA \
     }) _wgpu_COMMA \
-    /*.implicitSampleCount=*/1 _wgpu_COMMA \
+    /*.sampleCount=*/1 _wgpu_COMMA \
 })
 
 // Can be chained in WGPUShaderModuleDescriptor
@@ -1931,32 +1934,6 @@ typedef struct WGPUDawnWireWGSLControl {
     /*.enableExperimental=*/WGPU_FALSE _wgpu_COMMA \
     /*.enableUnsafe=*/WGPU_FALSE _wgpu_COMMA \
     /*.enableTesting=*/WGPU_FALSE _wgpu_COMMA \
-})
-
-typedef struct WGPUDynamicBindingArrayLayout {
-    WGPUChainedStruct * nextInChain;
-    uint32_t start;
-    WGPUDynamicBindingKind kind;
-} WGPUDynamicBindingArrayLayout WGPU_STRUCTURE_ATTRIBUTE;
-
-#define WGPU_DYNAMIC_BINDING_ARRAY_LAYOUT_INIT _wgpu_MAKE_INIT_STRUCT(WGPUDynamicBindingArrayLayout, { \
-    /*.nextInChain=*/NULL _wgpu_COMMA \
-    /*.start=*/0 _wgpu_COMMA \
-    /*.kind=*/WGPUDynamicBindingKind_Undefined _wgpu_COMMA \
-})
-
-// Can be chained in WGPULimits
-typedef struct WGPUDynamicBindingArrayLimits {
-    WGPUChainedStruct chain;
-    uint32_t maxDynamicBindingArraySize;
-} WGPUDynamicBindingArrayLimits WGPU_STRUCTURE_ATTRIBUTE;
-
-#define WGPU_DYNAMIC_BINDING_ARRAY_LIMITS_INIT _wgpu_MAKE_INIT_STRUCT(WGPUDynamicBindingArrayLimits, { \
-    /*.chain=*/_wgpu_MAKE_INIT_STRUCT(WGPUChainedStruct, { \
-        /*.next=*/NULL _wgpu_COMMA \
-        /*.sType=*/WGPUSType_DynamicBindingArrayLimits _wgpu_COMMA \
-    }) _wgpu_COMMA \
-    /*.maxDynamicBindingArraySize=*/WGPU_LIMIT_U32_UNDEFINED _wgpu_COMMA \
 })
 
 // Can be chained in WGPUSurfaceDescriptor
@@ -2105,6 +2082,20 @@ typedef struct WGPUPassTimestampWrites {
     /*.querySet=*/NULL _wgpu_COMMA \
     /*.beginningOfPassWriteIndex=*/WGPU_QUERY_SET_INDEX_UNDEFINED _wgpu_COMMA \
     /*.endOfPassWriteIndex=*/WGPU_QUERY_SET_INDEX_UNDEFINED _wgpu_COMMA \
+})
+
+// Can be chained in WGPUPipelineLayoutDescriptor
+typedef struct WGPUPipelineLayoutResourceTable {
+    WGPUChainedStruct chain;
+    WGPUBool usesResourceTable;
+} WGPUPipelineLayoutResourceTable WGPU_STRUCTURE_ATTRIBUTE;
+
+#define WGPU_PIPELINE_LAYOUT_RESOURCE_TABLE_INIT _wgpu_MAKE_INIT_STRUCT(WGPUPipelineLayoutResourceTable, { \
+    /*.chain=*/_wgpu_MAKE_INIT_STRUCT(WGPUChainedStruct, { \
+        /*.next=*/NULL _wgpu_COMMA \
+        /*.sType=*/WGPUSType_PipelineLayoutResourceTable _wgpu_COMMA \
+    }) _wgpu_COMMA \
+    /*.usesResourceTable=*/WGPU_FALSE _wgpu_COMMA \
 })
 
 typedef struct WGPUPipelineLayoutStorageAttachment {
@@ -2301,6 +2292,18 @@ typedef struct WGPURequestAdapterWebXROptions {
         /*.sType=*/WGPUSType_RequestAdapterWebXROptions _wgpu_COMMA \
     }) _wgpu_COMMA \
     /*.xrCompatible=*/WGPU_FALSE _wgpu_COMMA \
+})
+
+typedef struct WGPUResourceTableDescriptor {
+    WGPUChainedStruct * nextInChain;
+    WGPUStringView label;
+    uint32_t size;
+} WGPUResourceTableDescriptor WGPU_STRUCTURE_ATTRIBUTE;
+
+#define WGPU_RESOURCE_TABLE_DESCRIPTOR_INIT _wgpu_MAKE_INIT_STRUCT(WGPUResourceTableDescriptor, { \
+    /*.nextInChain=*/NULL _wgpu_COMMA \
+    /*.label=*/WGPU_STRING_VIEW_INIT _wgpu_COMMA \
+    /*.size=*/0 _wgpu_COMMA \
 })
 
 typedef struct WGPUSamplerBindingLayout {
@@ -3276,20 +3279,6 @@ typedef struct WGPUBindGroupEntry {
     /*.textureView=*/NULL _wgpu_COMMA \
 })
 
-// Can be chained in WGPUBindGroupLayoutDescriptor
-typedef struct WGPUBindGroupLayoutDynamicBindingArray {
-    WGPUChainedStruct chain;
-    WGPUDynamicBindingArrayLayout dynamicArray;
-} WGPUBindGroupLayoutDynamicBindingArray WGPU_STRUCTURE_ATTRIBUTE;
-
-#define WGPU_BIND_GROUP_LAYOUT_DYNAMIC_BINDING_ARRAY_INIT _wgpu_MAKE_INIT_STRUCT(WGPUBindGroupLayoutDynamicBindingArray, { \
-    /*.chain=*/_wgpu_MAKE_INIT_STRUCT(WGPUChainedStruct, { \
-        /*.next=*/NULL _wgpu_COMMA \
-        /*.sType=*/WGPUSType_BindGroupLayoutDynamicBindingArray _wgpu_COMMA \
-    }) _wgpu_COMMA \
-    /*.dynamicArray=*/WGPU_DYNAMIC_BINDING_ARRAY_LAYOUT_INIT _wgpu_COMMA \
-})
-
 typedef struct WGPUBindGroupLayoutEntry {
     WGPUChainedStruct * nextInChain;
     uint32_t binding;
@@ -4224,11 +4213,7 @@ typedef void (*WGPUProcAdapterPropertiesMemoryHeapsFreeMembers)(WGPUAdapterPrope
 typedef void (*WGPUProcAdapterPropertiesSubgroupMatrixConfigsFreeMembers)(WGPUAdapterPropertiesSubgroupMatrixConfigs adapterPropertiesSubgroupMatrixConfigs) WGPU_FUNCTION_ATTRIBUTE;
 
 // Procs of BindGroup
-typedef void (*WGPUProcBindGroupDestroy)(WGPUBindGroup bindGroup) WGPU_FUNCTION_ATTRIBUTE;
-typedef uint32_t (*WGPUProcBindGroupInsertBinding)(WGPUBindGroup bindGroup, WGPUBindGroupEntryContents const * contents) WGPU_FUNCTION_ATTRIBUTE;
-typedef WGPUStatus (*WGPUProcBindGroupRemoveBinding)(WGPUBindGroup bindGroup, uint32_t binding) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcBindGroupSetLabel)(WGPUBindGroup bindGroup, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
-typedef WGPUStatus (*WGPUProcBindGroupUpdate)(WGPUBindGroup bindGroup, WGPUBindGroupEntry const * entry) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcBindGroupAddRef)(WGPUBindGroup bindGroup) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcBindGroupRelease)(WGPUBindGroup bindGroup) WGPU_FUNCTION_ATTRIBUTE;
 
@@ -4289,6 +4274,7 @@ typedef void (*WGPUProcComputePassEncoderSetBindGroup)(WGPUComputePassEncoder co
 typedef void (*WGPUProcComputePassEncoderSetImmediates)(WGPUComputePassEncoder computePassEncoder, uint32_t offset, void const * data, size_t size) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcComputePassEncoderSetLabel)(WGPUComputePassEncoder computePassEncoder, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcComputePassEncoderSetPipeline)(WGPUComputePassEncoder computePassEncoder, WGPUComputePipeline pipeline) WGPU_FUNCTION_ATTRIBUTE;
+typedef void (*WGPUProcComputePassEncoderSetResourceTable)(WGPUComputePassEncoder computePassEncoder, WGPU_NULLABLE WGPUResourceTable table) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcComputePassEncoderWriteTimestamp)(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32_t queryIndex) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcComputePassEncoderAddRef)(WGPUComputePassEncoder computePassEncoder) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcComputePassEncoderRelease)(WGPUComputePassEncoder computePassEncoder) WGPU_FUNCTION_ATTRIBUTE;
@@ -4319,6 +4305,7 @@ typedef WGPUQuerySet (*WGPUProcDeviceCreateQuerySet)(WGPUDevice device, WGPUQuer
 typedef WGPURenderBundleEncoder (*WGPUProcDeviceCreateRenderBundleEncoder)(WGPUDevice device, WGPURenderBundleEncoderDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 typedef WGPURenderPipeline (*WGPUProcDeviceCreateRenderPipeline)(WGPUDevice device, WGPURenderPipelineDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 typedef WGPUFuture (*WGPUProcDeviceCreateRenderPipelineAsync)(WGPUDevice device, WGPURenderPipelineDescriptor const * descriptor, WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo) WGPU_FUNCTION_ATTRIBUTE;
+typedef WGPUResourceTable (*WGPUProcDeviceCreateResourceTable)(WGPUDevice device, WGPUResourceTableDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 typedef WGPUSampler (*WGPUProcDeviceCreateSampler)(WGPUDevice device, WGPU_NULLABLE WGPUSamplerDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 typedef WGPUShaderModule (*WGPUProcDeviceCreateShaderModule)(WGPUDevice device, WGPUShaderModuleDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 typedef WGPUTexture (*WGPUProcDeviceCreateTexture)(WGPUDevice device, WGPUTextureDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
@@ -4406,6 +4393,7 @@ typedef void (*WGPUProcRenderBundleEncoderSetImmediates)(WGPURenderBundleEncoder
 typedef void (*WGPUProcRenderBundleEncoderSetIndexBuffer)(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderBundleEncoderSetLabel)(WGPURenderBundleEncoder renderBundleEncoder, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderBundleEncoderSetPipeline)(WGPURenderBundleEncoder renderBundleEncoder, WGPURenderPipeline pipeline) WGPU_FUNCTION_ATTRIBUTE;
+typedef void (*WGPUProcRenderBundleEncoderSetResourceTable)(WGPURenderBundleEncoder renderBundleEncoder, WGPU_NULLABLE WGPUResourceTable table) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderBundleEncoderSetVertexBuffer)(WGPURenderBundleEncoder renderBundleEncoder, uint32_t slot, WGPU_NULLABLE WGPUBuffer buffer, uint64_t offset, uint64_t size) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderBundleEncoderAddRef)(WGPURenderBundleEncoder renderBundleEncoder) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderBundleEncoderRelease)(WGPURenderBundleEncoder renderBundleEncoder) WGPU_FUNCTION_ATTRIBUTE;
@@ -4431,6 +4419,7 @@ typedef void (*WGPUProcRenderPassEncoderSetImmediates)(WGPURenderPassEncoder ren
 typedef void (*WGPUProcRenderPassEncoderSetIndexBuffer)(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderPassEncoderSetLabel)(WGPURenderPassEncoder renderPassEncoder, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderPassEncoderSetPipeline)(WGPURenderPassEncoder renderPassEncoder, WGPURenderPipeline pipeline) WGPU_FUNCTION_ATTRIBUTE;
+typedef void (*WGPUProcRenderPassEncoderSetResourceTable)(WGPURenderPassEncoder renderPassEncoder, WGPU_NULLABLE WGPUResourceTable table) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderPassEncoderSetScissorRect)(WGPURenderPassEncoder renderPassEncoder, uint32_t x, uint32_t y, uint32_t width, uint32_t height) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderPassEncoderSetStencilReference)(WGPURenderPassEncoder renderPassEncoder, uint32_t reference) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderPassEncoderSetVertexBuffer)(WGPURenderPassEncoder renderPassEncoder, uint32_t slot, WGPU_NULLABLE WGPUBuffer buffer, uint64_t offset, uint64_t size) WGPU_FUNCTION_ATTRIBUTE;
@@ -4444,6 +4433,15 @@ typedef WGPUBindGroupLayout (*WGPUProcRenderPipelineGetBindGroupLayout)(WGPURend
 typedef void (*WGPUProcRenderPipelineSetLabel)(WGPURenderPipeline renderPipeline, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderPipelineAddRef)(WGPURenderPipeline renderPipeline) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcRenderPipelineRelease)(WGPURenderPipeline renderPipeline) WGPU_FUNCTION_ATTRIBUTE;
+
+// Procs of ResourceTable
+typedef void (*WGPUProcResourceTableDestroy)(WGPUResourceTable resourceTable) WGPU_FUNCTION_ATTRIBUTE;
+typedef uint32_t (*WGPUProcResourceTableGetSize)(WGPUResourceTable resourceTable) WGPU_FUNCTION_ATTRIBUTE;
+typedef uint32_t (*WGPUProcResourceTableInsertBinding)(WGPUResourceTable resourceTable, WGPUBindingResource const * resource) WGPU_FUNCTION_ATTRIBUTE;
+typedef WGPUStatus (*WGPUProcResourceTableRemoveBinding)(WGPUResourceTable resourceTable, uint32_t slot) WGPU_FUNCTION_ATTRIBUTE;
+typedef WGPUStatus (*WGPUProcResourceTableUpdate)(WGPUResourceTable resourceTable, uint32_t slot, WGPUBindingResource const * resource) WGPU_FUNCTION_ATTRIBUTE;
+typedef void (*WGPUProcResourceTableAddRef)(WGPUResourceTable resourceTable) WGPU_FUNCTION_ATTRIBUTE;
+typedef void (*WGPUProcResourceTableRelease)(WGPUResourceTable resourceTable) WGPU_FUNCTION_ATTRIBUTE;
 
 // Procs of Sampler
 typedef void (*WGPUProcSamplerSetLabel)(WGPUSampler sampler, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
@@ -4524,10 +4522,12 @@ typedef WGPUTextureFormat (*WGPUProcTextureGetFormat)(WGPUTexture texture) WGPU_
 typedef uint32_t (*WGPUProcTextureGetHeight)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 typedef uint32_t (*WGPUProcTextureGetMipLevelCount)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 typedef uint32_t (*WGPUProcTextureGetSampleCount)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
+typedef WGPUTextureViewDimension (*WGPUProcTextureGetTextureBindingViewDimension)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 typedef WGPUTextureUsage (*WGPUProcTextureGetUsage)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 typedef uint32_t (*WGPUProcTextureGetWidth)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcTexturePin)(WGPUTexture texture, WGPUTextureUsage usage) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcTextureSetLabel)(WGPUTexture texture, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
+typedef void (*WGPUProcTextureSetOwnershipForMemoryDump)(WGPUTexture texture, uint64_t ownerGuid) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcTextureUnpin)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcTextureAddRef)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 typedef void (*WGPUProcTextureRelease)(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
@@ -4568,11 +4568,7 @@ WGPU_EXPORT void wgpuAdapterPropertiesMemoryHeapsFreeMembers(WGPUAdapterProperti
 WGPU_EXPORT void wgpuAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPUAdapterPropertiesSubgroupMatrixConfigs adapterPropertiesSubgroupMatrixConfigs) WGPU_FUNCTION_ATTRIBUTE;
 
 // Methods of BindGroup
-WGPU_EXPORT void wgpuBindGroupDestroy(WGPUBindGroup bindGroup) WGPU_FUNCTION_ATTRIBUTE;
-WGPU_EXPORT uint32_t wgpuBindGroupInsertBinding(WGPUBindGroup bindGroup, WGPUBindGroupEntryContents const * contents) WGPU_FUNCTION_ATTRIBUTE;
-WGPU_EXPORT WGPUStatus wgpuBindGroupRemoveBinding(WGPUBindGroup bindGroup, uint32_t binding) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuBindGroupSetLabel(WGPUBindGroup bindGroup, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
-WGPU_EXPORT WGPUStatus wgpuBindGroupUpdate(WGPUBindGroup bindGroup, WGPUBindGroupEntry const * entry) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuBindGroupAddRef(WGPUBindGroup bindGroup) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuBindGroupRelease(WGPUBindGroup bindGroup) WGPU_FUNCTION_ATTRIBUTE;
 
@@ -4633,6 +4629,7 @@ WGPU_EXPORT void wgpuComputePassEncoderSetBindGroup(WGPUComputePassEncoder compu
 WGPU_EXPORT void wgpuComputePassEncoderSetImmediates(WGPUComputePassEncoder computePassEncoder, uint32_t offset, void const * data, size_t size) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuComputePassEncoderSetLabel(WGPUComputePassEncoder computePassEncoder, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuComputePassEncoderSetPipeline(WGPUComputePassEncoder computePassEncoder, WGPUComputePipeline pipeline) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT void wgpuComputePassEncoderSetResourceTable(WGPUComputePassEncoder computePassEncoder, WGPU_NULLABLE WGPUResourceTable table) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuComputePassEncoderWriteTimestamp(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32_t queryIndex) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuComputePassEncoderAddRef(WGPUComputePassEncoder computePassEncoder) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuComputePassEncoderRelease(WGPUComputePassEncoder computePassEncoder) WGPU_FUNCTION_ATTRIBUTE;
@@ -4663,6 +4660,7 @@ WGPU_EXPORT WGPUQuerySet wgpuDeviceCreateQuerySet(WGPUDevice device, WGPUQuerySe
 WGPU_EXPORT WGPURenderBundleEncoder wgpuDeviceCreateRenderBundleEncoder(WGPUDevice device, WGPURenderBundleEncoderDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT WGPURenderPipeline wgpuDeviceCreateRenderPipeline(WGPUDevice device, WGPURenderPipelineDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT WGPUFuture wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, WGPURenderPipelineDescriptor const * descriptor, WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT WGPUResourceTable wgpuDeviceCreateResourceTable(WGPUDevice device, WGPUResourceTableDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT WGPUSampler wgpuDeviceCreateSampler(WGPUDevice device, WGPU_NULLABLE WGPUSamplerDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT WGPUShaderModule wgpuDeviceCreateShaderModule(WGPUDevice device, WGPUShaderModuleDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT WGPUTexture wgpuDeviceCreateTexture(WGPUDevice device, WGPUTextureDescriptor const * descriptor) WGPU_FUNCTION_ATTRIBUTE;
@@ -4750,6 +4748,7 @@ WGPU_EXPORT void wgpuRenderBundleEncoderSetImmediates(WGPURenderBundleEncoder re
 WGPU_EXPORT void wgpuRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderBundleEncoderSetLabel(WGPURenderBundleEncoder renderBundleEncoder, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder renderBundleEncoder, WGPURenderPipeline pipeline) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT void wgpuRenderBundleEncoderSetResourceTable(WGPURenderBundleEncoder renderBundleEncoder, WGPU_NULLABLE WGPUResourceTable table) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderBundleEncoderSetVertexBuffer(WGPURenderBundleEncoder renderBundleEncoder, uint32_t slot, WGPU_NULLABLE WGPUBuffer buffer, uint64_t offset, uint64_t size) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderBundleEncoderAddRef(WGPURenderBundleEncoder renderBundleEncoder) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderBundleEncoderRelease(WGPURenderBundleEncoder renderBundleEncoder) WGPU_FUNCTION_ATTRIBUTE;
@@ -4775,6 +4774,7 @@ WGPU_EXPORT void wgpuRenderPassEncoderSetImmediates(WGPURenderPassEncoder render
 WGPU_EXPORT void wgpuRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderPassEncoderSetLabel(WGPURenderPassEncoder renderPassEncoder, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderPassEncoderSetPipeline(WGPURenderPassEncoder renderPassEncoder, WGPURenderPipeline pipeline) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT void wgpuRenderPassEncoderSetResourceTable(WGPURenderPassEncoder renderPassEncoder, WGPU_NULLABLE WGPUResourceTable table) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderPassEncoderSetScissorRect(WGPURenderPassEncoder renderPassEncoder, uint32_t x, uint32_t y, uint32_t width, uint32_t height) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderPassEncoderSetStencilReference(WGPURenderPassEncoder renderPassEncoder, uint32_t reference) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderPassEncoderSetVertexBuffer(WGPURenderPassEncoder renderPassEncoder, uint32_t slot, WGPU_NULLABLE WGPUBuffer buffer, uint64_t offset, uint64_t size) WGPU_FUNCTION_ATTRIBUTE;
@@ -4788,6 +4788,15 @@ WGPU_EXPORT WGPUBindGroupLayout wgpuRenderPipelineGetBindGroupLayout(WGPURenderP
 WGPU_EXPORT void wgpuRenderPipelineSetLabel(WGPURenderPipeline renderPipeline, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderPipelineAddRef(WGPURenderPipeline renderPipeline) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuRenderPipelineRelease(WGPURenderPipeline renderPipeline) WGPU_FUNCTION_ATTRIBUTE;
+
+// Methods of ResourceTable
+WGPU_EXPORT void wgpuResourceTableDestroy(WGPUResourceTable resourceTable) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT uint32_t wgpuResourceTableGetSize(WGPUResourceTable resourceTable) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT uint32_t wgpuResourceTableInsertBinding(WGPUResourceTable resourceTable, WGPUBindingResource const * resource) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT WGPUStatus wgpuResourceTableRemoveBinding(WGPUResourceTable resourceTable, uint32_t slot) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT WGPUStatus wgpuResourceTableUpdate(WGPUResourceTable resourceTable, uint32_t slot, WGPUBindingResource const * resource) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT void wgpuResourceTableAddRef(WGPUResourceTable resourceTable) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT void wgpuResourceTableRelease(WGPUResourceTable resourceTable) WGPU_FUNCTION_ATTRIBUTE;
 
 // Methods of Sampler
 WGPU_EXPORT void wgpuSamplerSetLabel(WGPUSampler sampler, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
@@ -4868,10 +4877,12 @@ WGPU_EXPORT WGPUTextureFormat wgpuTextureGetFormat(WGPUTexture texture) WGPU_FUN
 WGPU_EXPORT uint32_t wgpuTextureGetHeight(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT uint32_t wgpuTextureGetMipLevelCount(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT uint32_t wgpuTextureGetSampleCount(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT WGPUTextureViewDimension wgpuTextureGetTextureBindingViewDimension(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT WGPUTextureUsage wgpuTextureGetUsage(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT uint32_t wgpuTextureGetWidth(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuTexturePin(WGPUTexture texture, WGPUTextureUsage usage) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuTextureSetLabel(WGPUTexture texture, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
+WGPU_EXPORT void wgpuTextureSetOwnershipForMemoryDump(WGPUTexture texture, uint64_t ownerGuid) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuTextureUnpin(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuTextureAddRef(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;
 WGPU_EXPORT void wgpuTextureRelease(WGPUTexture texture) WGPU_FUNCTION_ATTRIBUTE;

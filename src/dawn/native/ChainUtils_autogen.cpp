@@ -73,18 +73,18 @@ struct AdditionalExtensionUnpacker<Root, UnpackedPtrT, detail::AdditionalExtensi
 // UnpackedPtr chain helpers.
 //
 template <>
-UnpackedPtr<BindGroupEntryContents> Unpack<BindGroupEntryContents>(typename UnpackedPtr<BindGroupEntryContents>::PtrType chain) {
-    UnpackedPtr<BindGroupEntryContents> result(chain);
-    for (typename UnpackedPtr<BindGroupEntryContents>::ChainType next = chain->nextInChain;
+UnpackedPtr<BindingResource> Unpack<BindingResource>(typename UnpackedPtr<BindingResource>::PtrType chain) {
+    UnpackedPtr<BindingResource> result(chain);
+    for (typename UnpackedPtr<BindingResource>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
-                        BindGroupEntryContents,
-                        UnpackedPtr<BindGroupEntryContents>,
-                        detail::AdditionalExtensions<BindGroupEntryContents>::List>;
+                        BindingResource,
+                        UnpackedPtr<BindingResource>,
+                        detail::AdditionalExtensions<BindingResource>::List>;
                 Unpacker::Unpack(result.mUnpacked, result.mBitset, next, nullptr);
                 break;
             }
@@ -93,10 +93,10 @@ UnpackedPtr<BindGroupEntryContents> Unpack<BindGroupEntryContents>(typename Unpa
     return result;
 }
 template <>
-ResultOrError<UnpackedPtr<BindGroupEntryContents>> ValidateAndUnpack<BindGroupEntryContents>(
-    typename UnpackedPtr<BindGroupEntryContents>::PtrType chain) {
-    UnpackedPtr<BindGroupEntryContents> result(chain);
-    for (typename UnpackedPtr<BindGroupEntryContents>::ChainType next = chain->nextInChain;
+ResultOrError<UnpackedPtr<BindingResource>> ValidateAndUnpack<BindingResource>(
+    typename UnpackedPtr<BindingResource>::PtrType chain) {
+    UnpackedPtr<BindingResource> result(chain);
+    for (typename UnpackedPtr<BindingResource>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -104,9 +104,9 @@ ResultOrError<UnpackedPtr<BindGroupEntryContents>> ValidateAndUnpack<BindGroupEn
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
-                        BindGroupEntryContents,
-                        UnpackedPtr<BindGroupEntryContents>,
-                        detail::AdditionalExtensions<BindGroupEntryContents>::List>;
+                        BindingResource,
+                        UnpackedPtr<BindingResource>,
+                        detail::AdditionalExtensions<BindingResource>::List>;
                 if (!Unpacker::Unpack(result.mUnpacked,
                                       result.mBitset,
                                       next,
@@ -117,12 +117,12 @@ ResultOrError<UnpackedPtr<BindGroupEntryContents>> ValidateAndUnpack<BindGroupEn
                         auto* ext = reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(next);
                         return DAWN_VALIDATION_ERROR(
                             "Unexpected chained struct of type %s found on %s chain.",
-                            wgpu::SType(ext->invalidSType), "BindGroupEntryContents"
+                            wgpu::SType(ext->invalidSType), "BindingResource"
                         );
                     } else {
                         return DAWN_VALIDATION_ERROR(
                             "Unexpected chained struct of type %s found on %s chain.",
-                            next->sType, "BindGroupEntryContents"
+                            next->sType, "BindingResource"
                         );
                     }
                 }
@@ -132,7 +132,7 @@ ResultOrError<UnpackedPtr<BindGroupEntryContents>> ValidateAndUnpack<BindGroupEn
         if (duplicate) {
             return DAWN_VALIDATION_ERROR(
                 "Duplicate chained struct of type %s found on %s chain.",
-                next->sType, "BindGroupEntryContents"
+                next->sType, "BindingResource"
             );
         }
     }
@@ -397,72 +397,6 @@ ResultOrError<UnpackedPtr<CopyTextureForBrowserOptions>> ValidateAndUnpack<CopyT
             return DAWN_VALIDATION_ERROR(
                 "Duplicate chained struct of type %s found on %s chain.",
                 next->sType, "CopyTextureForBrowserOptions"
-            );
-        }
-    }
-    return result;
-}
-template <>
-UnpackedPtr<DynamicBindingArrayLayout> Unpack<DynamicBindingArrayLayout>(typename UnpackedPtr<DynamicBindingArrayLayout>::PtrType chain) {
-    UnpackedPtr<DynamicBindingArrayLayout> result(chain);
-    for (typename UnpackedPtr<DynamicBindingArrayLayout>::ChainType next = chain->nextInChain;
-         next != nullptr;
-         next = next->nextInChain) {
-        switch (next->sType) {
-            default: {
-                using Unpacker =
-                    AdditionalExtensionUnpacker<
-                        DynamicBindingArrayLayout,
-                        UnpackedPtr<DynamicBindingArrayLayout>,
-                        detail::AdditionalExtensions<DynamicBindingArrayLayout>::List>;
-                Unpacker::Unpack(result.mUnpacked, result.mBitset, next, nullptr);
-                break;
-            }
-        }
-    }
-    return result;
-}
-template <>
-ResultOrError<UnpackedPtr<DynamicBindingArrayLayout>> ValidateAndUnpack<DynamicBindingArrayLayout>(
-    typename UnpackedPtr<DynamicBindingArrayLayout>::PtrType chain) {
-    UnpackedPtr<DynamicBindingArrayLayout> result(chain);
-    for (typename UnpackedPtr<DynamicBindingArrayLayout>::ChainType next = chain->nextInChain;
-         next != nullptr;
-         next = next->nextInChain) {
-        bool duplicate = false;
-        switch (next->sType) {
-            default: {
-                using Unpacker =
-                    AdditionalExtensionUnpacker<
-                        DynamicBindingArrayLayout,
-                        UnpackedPtr<DynamicBindingArrayLayout>,
-                        detail::AdditionalExtensions<DynamicBindingArrayLayout>::List>;
-                if (!Unpacker::Unpack(result.mUnpacked,
-                                      result.mBitset,
-                                      next,
-                                      &duplicate)) {
-                    if (next->sType == wgpu::SType::DawnInjectedInvalidSType) {
-                        // TODO(crbug.com/399470698): Need to reinterpret cast to base C type
-                        // for now because in/out typing are differentiated in C++ bindings.
-                        auto* ext = reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(next);
-                        return DAWN_VALIDATION_ERROR(
-                            "Unexpected chained struct of type %s found on %s chain.",
-                            wgpu::SType(ext->invalidSType), "DynamicBindingArrayLayout"
-                        );
-                    } else {
-                        return DAWN_VALIDATION_ERROR(
-                            "Unexpected chained struct of type %s found on %s chain.",
-                            next->sType, "DynamicBindingArrayLayout"
-                        );
-                    }
-                }
-                break;
-            }
-        }
-        if (duplicate) {
-            return DAWN_VALIDATION_ERROR(
-                "Duplicate chained struct of type %s found on %s chain.",
-                next->sType, "DynamicBindingArrayLayout"
             );
         }
     }
@@ -1123,6 +1057,72 @@ ResultOrError<UnpackedPtr<RenderPassDepthStencilAttachment>> ValidateAndUnpack<R
             return DAWN_VALIDATION_ERROR(
                 "Duplicate chained struct of type %s found on %s chain.",
                 next->sType, "RenderPassDepthStencilAttachment"
+            );
+        }
+    }
+    return result;
+}
+template <>
+UnpackedPtr<ResourceTableDescriptor> Unpack<ResourceTableDescriptor>(typename UnpackedPtr<ResourceTableDescriptor>::PtrType chain) {
+    UnpackedPtr<ResourceTableDescriptor> result(chain);
+    for (typename UnpackedPtr<ResourceTableDescriptor>::ChainType next = chain->nextInChain;
+         next != nullptr;
+         next = next->nextInChain) {
+        switch (next->sType) {
+            default: {
+                using Unpacker =
+                    AdditionalExtensionUnpacker<
+                        ResourceTableDescriptor,
+                        UnpackedPtr<ResourceTableDescriptor>,
+                        detail::AdditionalExtensions<ResourceTableDescriptor>::List>;
+                Unpacker::Unpack(result.mUnpacked, result.mBitset, next, nullptr);
+                break;
+            }
+        }
+    }
+    return result;
+}
+template <>
+ResultOrError<UnpackedPtr<ResourceTableDescriptor>> ValidateAndUnpack<ResourceTableDescriptor>(
+    typename UnpackedPtr<ResourceTableDescriptor>::PtrType chain) {
+    UnpackedPtr<ResourceTableDescriptor> result(chain);
+    for (typename UnpackedPtr<ResourceTableDescriptor>::ChainType next = chain->nextInChain;
+         next != nullptr;
+         next = next->nextInChain) {
+        bool duplicate = false;
+        switch (next->sType) {
+            default: {
+                using Unpacker =
+                    AdditionalExtensionUnpacker<
+                        ResourceTableDescriptor,
+                        UnpackedPtr<ResourceTableDescriptor>,
+                        detail::AdditionalExtensions<ResourceTableDescriptor>::List>;
+                if (!Unpacker::Unpack(result.mUnpacked,
+                                      result.mBitset,
+                                      next,
+                                      &duplicate)) {
+                    if (next->sType == wgpu::SType::DawnInjectedInvalidSType) {
+                        // TODO(crbug.com/399470698): Need to reinterpret cast to base C type
+                        // for now because in/out typing are differentiated in C++ bindings.
+                        auto* ext = reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(next);
+                        return DAWN_VALIDATION_ERROR(
+                            "Unexpected chained struct of type %s found on %s chain.",
+                            wgpu::SType(ext->invalidSType), "ResourceTableDescriptor"
+                        );
+                    } else {
+                        return DAWN_VALIDATION_ERROR(
+                            "Unexpected chained struct of type %s found on %s chain.",
+                            next->sType, "ResourceTableDescriptor"
+                        );
+                    }
+                }
+                break;
+            }
+        }
+        if (duplicate) {
+            return DAWN_VALIDATION_ERROR(
+                "Duplicate chained struct of type %s found on %s chain.",
+                next->sType, "ResourceTableDescriptor"
             );
         }
     }
@@ -2995,16 +2995,6 @@ UnpackedPtr<Limits> Unpack<Limits>(typename UnpackedPtr<Limits>::PtrType chain) 
                 );
                 break;
             }
-            case STypeFor<DynamicBindingArrayLimits>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<Limits>, DynamicBindingArrayLimits>::Type;
-                std::get<ExtPtrType>(result.mUnpacked) =
-                    static_cast<ExtPtrType>(next);
-                result.mBitset.set(
-                    detail::UnpackedPtrIndexOf<UnpackedPtr<Limits>, ExtPtrType>
-                );
-                break;
-            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -3069,20 +3059,6 @@ ResultOrError<UnpackedPtr<Limits>> ValidateAndUnpack<Limits>(
                 }
                 break;
             }
-            case STypeFor<DynamicBindingArrayLimits>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<Limits>, DynamicBindingArrayLimits>::Type;
-                auto& member = std::get<ExtPtrType>(result.mUnpacked);
-                if (member != nullptr) {
-                    duplicate = true;
-                } else {
-                    member = static_cast<ExtPtrType>(next);
-                    result.mBitset.set(
-                        detail::UnpackedPtrIndexOf<UnpackedPtr<Limits>, ExtPtrType>
-                    );
-                }
-                break;
-            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -3127,16 +3103,6 @@ UnpackedPtr<RenderPassColorAttachment> Unpack<RenderPassColorAttachment>(typenam
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
-            case STypeFor<DawnRenderPassColorAttachmentRenderToSingleSampled>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassColorAttachment>, DawnRenderPassColorAttachmentRenderToSingleSampled>::Type;
-                std::get<ExtPtrType>(result.mUnpacked) =
-                    static_cast<ExtPtrType>(next);
-                result.mBitset.set(
-                    detail::UnpackedPtrIndexOf<UnpackedPtr<RenderPassColorAttachment>, ExtPtrType>
-                );
-                break;
-            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -3159,20 +3125,6 @@ ResultOrError<UnpackedPtr<RenderPassColorAttachment>> ValidateAndUnpack<RenderPa
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
-            case STypeFor<DawnRenderPassColorAttachmentRenderToSingleSampled>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassColorAttachment>, DawnRenderPassColorAttachmentRenderToSingleSampled>::Type;
-                auto& member = std::get<ExtPtrType>(result.mUnpacked);
-                if (member != nullptr) {
-                    duplicate = true;
-                } else {
-                    member = static_cast<ExtPtrType>(next);
-                    result.mBitset.set(
-                        detail::UnpackedPtrIndexOf<UnpackedPtr<RenderPassColorAttachment>, ExtPtrType>
-                    );
-                }
-                break;
-            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -4777,6 +4729,16 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
                 );
                 break;
             }
+            case STypeFor<AdapterPropertiesExplicitComputeSubgroupSizeConfigs>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesExplicitComputeSubgroupSizeConfigs>::Type;
+                std::get<ExtPtrType>(result.mUnpacked) =
+                    static_cast<ExtPtrType>(next);
+                result.mBitset.set(
+                    detail::UnpackedPtrIndexOf<UnpackedPtr<AdapterInfo>, ExtPtrType>
+                );
+                break;
+            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -4883,6 +4845,20 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
                 }
                 break;
             }
+            case STypeFor<AdapterPropertiesExplicitComputeSubgroupSizeConfigs>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesExplicitComputeSubgroupSizeConfigs>::Type;
+                auto& member = std::get<ExtPtrType>(result.mUnpacked);
+                if (member != nullptr) {
+                    duplicate = true;
+                } else {
+                    member = static_cast<ExtPtrType>(next);
+                    result.mBitset.set(
+                        detail::UnpackedPtrIndexOf<UnpackedPtr<AdapterInfo>, ExtPtrType>
+                    );
+                }
+                break;
+            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -4927,16 +4903,6 @@ UnpackedPtr<BindGroupDescriptor> Unpack<BindGroupDescriptor>(typename UnpackedPt
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
-            case STypeFor<BindGroupDynamicBindingArray>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupDescriptor>, BindGroupDynamicBindingArray>::Type;
-                std::get<ExtPtrType>(result.mUnpacked) =
-                    static_cast<ExtPtrType>(next);
-                result.mBitset.set(
-                    detail::UnpackedPtrIndexOf<UnpackedPtr<BindGroupDescriptor>, ExtPtrType>
-                );
-                break;
-            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -4959,20 +4925,6 @@ ResultOrError<UnpackedPtr<BindGroupDescriptor>> ValidateAndUnpack<BindGroupDescr
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
-            case STypeFor<BindGroupDynamicBindingArray>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupDescriptor>, BindGroupDynamicBindingArray>::Type;
-                auto& member = std::get<ExtPtrType>(result.mUnpacked);
-                if (member != nullptr) {
-                    duplicate = true;
-                } else {
-                    member = static_cast<ExtPtrType>(next);
-                    result.mBitset.set(
-                        detail::UnpackedPtrIndexOf<UnpackedPtr<BindGroupDescriptor>, ExtPtrType>
-                    );
-                }
-                break;
-            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -5017,16 +4969,6 @@ UnpackedPtr<BindGroupLayoutDescriptor> Unpack<BindGroupLayoutDescriptor>(typenam
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
-            case STypeFor<BindGroupLayoutDynamicBindingArray>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutDescriptor>, BindGroupLayoutDynamicBindingArray>::Type;
-                std::get<ExtPtrType>(result.mUnpacked) =
-                    static_cast<ExtPtrType>(next);
-                result.mBitset.set(
-                    detail::UnpackedPtrIndexOf<UnpackedPtr<BindGroupLayoutDescriptor>, ExtPtrType>
-                );
-                break;
-            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -5049,20 +4991,6 @@ ResultOrError<UnpackedPtr<BindGroupLayoutDescriptor>> ValidateAndUnpack<BindGrou
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
-            case STypeFor<BindGroupLayoutDynamicBindingArray>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutDescriptor>, BindGroupLayoutDynamicBindingArray>::Type;
-                auto& member = std::get<ExtPtrType>(result.mUnpacked);
-                if (member != nullptr) {
-                    duplicate = true;
-                } else {
-                    member = static_cast<ExtPtrType>(next);
-                    result.mBitset.set(
-                        detail::UnpackedPtrIndexOf<UnpackedPtr<BindGroupLayoutDescriptor>, ExtPtrType>
-                    );
-                }
-                break;
-            }
             default: {
                 using Unpacker =
                     AdditionalExtensionUnpacker<
@@ -5605,6 +5533,16 @@ UnpackedPtr<PipelineLayoutDescriptor> Unpack<PipelineLayoutDescriptor>(typename 
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
+            case STypeFor<PipelineLayoutResourceTable>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutResourceTable>::Type;
+                std::get<ExtPtrType>(result.mUnpacked) =
+                    static_cast<ExtPtrType>(next);
+                result.mBitset.set(
+                    detail::UnpackedPtrIndexOf<UnpackedPtr<PipelineLayoutDescriptor>, ExtPtrType>
+                );
+                break;
+            }
             case STypeFor<PipelineLayoutPixelLocalStorage>: {
                 using ExtPtrType =
                     typename detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutPixelLocalStorage>::Type;
@@ -5637,6 +5575,20 @@ ResultOrError<UnpackedPtr<PipelineLayoutDescriptor>> ValidateAndUnpack<PipelineL
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
+            case STypeFor<PipelineLayoutResourceTable>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutResourceTable>::Type;
+                auto& member = std::get<ExtPtrType>(result.mUnpacked);
+                if (member != nullptr) {
+                    duplicate = true;
+                } else {
+                    member = static_cast<ExtPtrType>(next);
+                    result.mBitset.set(
+                        detail::UnpackedPtrIndexOf<UnpackedPtr<PipelineLayoutDescriptor>, ExtPtrType>
+                    );
+                }
+                break;
+            }
             case STypeFor<PipelineLayoutPixelLocalStorage>: {
                 using ExtPtrType =
                     typename detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutPixelLocalStorage>::Type;
@@ -6403,6 +6355,16 @@ UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(typename Unpacked
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
+            case STypeFor<DawnRenderPassSampleCount>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, DawnRenderPassSampleCount>::Type;
+                std::get<ExtPtrType>(result.mUnpacked) =
+                    static_cast<ExtPtrType>(next);
+                result.mBitset.set(
+                    detail::UnpackedPtrIndexOf<UnpackedPtr<RenderPassDescriptor>, ExtPtrType>
+                );
+                break;
+            }
             case STypeFor<RenderPassMaxDrawCount>: {
                 using ExtPtrType =
                     typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassMaxDrawCount>::Type;
@@ -6465,6 +6427,20 @@ ResultOrError<UnpackedPtr<RenderPassDescriptor>> ValidateAndUnpack<RenderPassDes
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
+            case STypeFor<DawnRenderPassSampleCount>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, DawnRenderPassSampleCount>::Type;
+                auto& member = std::get<ExtPtrType>(result.mUnpacked);
+                if (member != nullptr) {
+                    duplicate = true;
+                } else {
+                    member = static_cast<ExtPtrType>(next);
+                    result.mBitset.set(
+                        detail::UnpackedPtrIndexOf<UnpackedPtr<RenderPassDescriptor>, ExtPtrType>
+                    );
+                }
+                break;
+            }
             case STypeFor<RenderPassMaxDrawCount>: {
                 using ExtPtrType =
                     typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassMaxDrawCount>::Type;

@@ -47,6 +47,33 @@ namespace dawn::native {
     }
 
 
+    static_assert(sizeof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs) == sizeof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs), "sizeof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
+    static_assert(alignof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs) == alignof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs), "alignof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
+
+    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, nextInChain) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, chain) + offsetof(WGPUChainedStruct, next),
+            "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::nextInChain");
+    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, sType) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, chain) + offsetof(WGPUChainedStruct, sType),
+            "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::sType");
+    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, minExplicitComputeSubgroupSize) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, minExplicitComputeSubgroupSize),
+                 "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::minExplicitComputeSubgroupSize");
+    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxExplicitComputeSubgroupSize) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxExplicitComputeSubgroupSize),
+                 "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::maxExplicitComputeSubgroupSize");
+    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxComputeWorkgroupSubgroups) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxComputeWorkgroupSubgroups),
+                 "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::maxComputeWorkgroupSubgroups");
+
+    bool AdapterPropertiesExplicitComputeSubgroupSizeConfigs::operator==(const AdapterPropertiesExplicitComputeSubgroupSizeConfigs& rhs) const {
+        return (nextInChain == rhs.nextInChain) && std::tie(
+            minExplicitComputeSubgroupSize,
+            maxExplicitComputeSubgroupSize,
+            maxComputeWorkgroupSubgroups
+        ) == std::tie(
+            rhs.minExplicitComputeSubgroupSize,
+            rhs.maxExplicitComputeSubgroupSize,
+            rhs.maxComputeWorkgroupSubgroups
+        );
+    }
+
+
     static_assert(sizeof(AdapterPropertiesVk) == sizeof(WGPUAdapterPropertiesVk), "sizeof mismatch for AdapterPropertiesVk");
     static_assert(alignof(AdapterPropertiesVk) == alignof(WGPUAdapterPropertiesVk), "alignof mismatch for AdapterPropertiesVk");
 
@@ -85,42 +112,23 @@ namespace dawn::native {
     }
 
 
-    static_assert(sizeof(BindGroupDynamicBindingArray) == sizeof(WGPUBindGroupDynamicBindingArray), "sizeof mismatch for BindGroupDynamicBindingArray");
-    static_assert(alignof(BindGroupDynamicBindingArray) == alignof(WGPUBindGroupDynamicBindingArray), "alignof mismatch for BindGroupDynamicBindingArray");
+    static_assert(sizeof(BindingResource) == sizeof(WGPUBindingResource), "sizeof mismatch for BindingResource");
+    static_assert(alignof(BindingResource) == alignof(WGPUBindingResource), "alignof mismatch for BindingResource");
 
-    static_assert(offsetof(BindGroupDynamicBindingArray, nextInChain) == offsetof(WGPUBindGroupDynamicBindingArray, chain) + offsetof(WGPUChainedStruct, next),
-            "offsetof mismatch for BindGroupDynamicBindingArray::nextInChain");
-    static_assert(offsetof(BindGroupDynamicBindingArray, sType) == offsetof(WGPUBindGroupDynamicBindingArray, chain) + offsetof(WGPUChainedStruct, sType),
-            "offsetof mismatch for BindGroupDynamicBindingArray::sType");
-    static_assert(offsetof(BindGroupDynamicBindingArray, dynamicArraySize) == offsetof(WGPUBindGroupDynamicBindingArray, dynamicArraySize),
-                 "offsetof mismatch for BindGroupDynamicBindingArray::dynamicArraySize");
+    static_assert(offsetof(BindingResource, nextInChain) == offsetof(WGPUBindingResource, nextInChain),
+            "offsetof mismatch for BindingResource::nextInChain");
+    static_assert(offsetof(BindingResource, buffer) == offsetof(WGPUBindingResource, buffer),
+                 "offsetof mismatch for BindingResource::buffer");
+    static_assert(offsetof(BindingResource, offset) == offsetof(WGPUBindingResource, offset),
+                 "offsetof mismatch for BindingResource::offset");
+    static_assert(offsetof(BindingResource, size) == offsetof(WGPUBindingResource, size),
+                 "offsetof mismatch for BindingResource::size");
+    static_assert(offsetof(BindingResource, sampler) == offsetof(WGPUBindingResource, sampler),
+                 "offsetof mismatch for BindingResource::sampler");
+    static_assert(offsetof(BindingResource, textureView) == offsetof(WGPUBindingResource, textureView),
+                 "offsetof mismatch for BindingResource::textureView");
 
-    bool BindGroupDynamicBindingArray::operator==(const BindGroupDynamicBindingArray& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            dynamicArraySize
-        ) == std::tie(
-            rhs.dynamicArraySize
-        );
-    }
-
-
-    static_assert(sizeof(BindGroupEntryContents) == sizeof(WGPUBindGroupEntryContents), "sizeof mismatch for BindGroupEntryContents");
-    static_assert(alignof(BindGroupEntryContents) == alignof(WGPUBindGroupEntryContents), "alignof mismatch for BindGroupEntryContents");
-
-    static_assert(offsetof(BindGroupEntryContents, nextInChain) == offsetof(WGPUBindGroupEntryContents, nextInChain),
-            "offsetof mismatch for BindGroupEntryContents::nextInChain");
-    static_assert(offsetof(BindGroupEntryContents, buffer) == offsetof(WGPUBindGroupEntryContents, buffer),
-                 "offsetof mismatch for BindGroupEntryContents::buffer");
-    static_assert(offsetof(BindGroupEntryContents, offset) == offsetof(WGPUBindGroupEntryContents, offset),
-                 "offsetof mismatch for BindGroupEntryContents::offset");
-    static_assert(offsetof(BindGroupEntryContents, size) == offsetof(WGPUBindGroupEntryContents, size),
-                 "offsetof mismatch for BindGroupEntryContents::size");
-    static_assert(offsetof(BindGroupEntryContents, sampler) == offsetof(WGPUBindGroupEntryContents, sampler),
-                 "offsetof mismatch for BindGroupEntryContents::sampler");
-    static_assert(offsetof(BindGroupEntryContents, textureView) == offsetof(WGPUBindGroupEntryContents, textureView),
-                 "offsetof mismatch for BindGroupEntryContents::textureView");
-
-    bool BindGroupEntryContents::operator==(const BindGroupEntryContents& rhs) const {
+    bool BindingResource::operator==(const BindingResource& rhs) const {
         return (nextInChain == rhs.nextInChain) && std::tie(
             buffer,
             offset,
@@ -647,21 +655,21 @@ namespace dawn::native {
     }
 
 
-    static_assert(sizeof(DawnRenderPassColorAttachmentRenderToSingleSampled) == sizeof(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled), "sizeof mismatch for DawnRenderPassColorAttachmentRenderToSingleSampled");
-    static_assert(alignof(DawnRenderPassColorAttachmentRenderToSingleSampled) == alignof(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled), "alignof mismatch for DawnRenderPassColorAttachmentRenderToSingleSampled");
+    static_assert(sizeof(DawnRenderPassSampleCount) == sizeof(WGPUDawnRenderPassSampleCount), "sizeof mismatch for DawnRenderPassSampleCount");
+    static_assert(alignof(DawnRenderPassSampleCount) == alignof(WGPUDawnRenderPassSampleCount), "alignof mismatch for DawnRenderPassSampleCount");
 
-    static_assert(offsetof(DawnRenderPassColorAttachmentRenderToSingleSampled, nextInChain) == offsetof(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled, chain) + offsetof(WGPUChainedStruct, next),
-            "offsetof mismatch for DawnRenderPassColorAttachmentRenderToSingleSampled::nextInChain");
-    static_assert(offsetof(DawnRenderPassColorAttachmentRenderToSingleSampled, sType) == offsetof(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled, chain) + offsetof(WGPUChainedStruct, sType),
-            "offsetof mismatch for DawnRenderPassColorAttachmentRenderToSingleSampled::sType");
-    static_assert(offsetof(DawnRenderPassColorAttachmentRenderToSingleSampled, implicitSampleCount) == offsetof(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled, implicitSampleCount),
-                 "offsetof mismatch for DawnRenderPassColorAttachmentRenderToSingleSampled::implicitSampleCount");
+    static_assert(offsetof(DawnRenderPassSampleCount, nextInChain) == offsetof(WGPUDawnRenderPassSampleCount, chain) + offsetof(WGPUChainedStruct, next),
+            "offsetof mismatch for DawnRenderPassSampleCount::nextInChain");
+    static_assert(offsetof(DawnRenderPassSampleCount, sType) == offsetof(WGPUDawnRenderPassSampleCount, chain) + offsetof(WGPUChainedStruct, sType),
+            "offsetof mismatch for DawnRenderPassSampleCount::sType");
+    static_assert(offsetof(DawnRenderPassSampleCount, sampleCount) == offsetof(WGPUDawnRenderPassSampleCount, sampleCount),
+                 "offsetof mismatch for DawnRenderPassSampleCount::sampleCount");
 
-    bool DawnRenderPassColorAttachmentRenderToSingleSampled::operator==(const DawnRenderPassColorAttachmentRenderToSingleSampled& rhs) const {
+    bool DawnRenderPassSampleCount::operator==(const DawnRenderPassSampleCount& rhs) const {
         return (nextInChain == rhs.nextInChain) && std::tie(
-            implicitSampleCount
+            sampleCount
         ) == std::tie(
-            rhs.implicitSampleCount
+            rhs.sampleCount
         );
     }
 
@@ -800,46 +808,6 @@ namespace dawn::native {
             rhs.enableExperimental,
             rhs.enableUnsafe,
             rhs.enableTesting
-        );
-    }
-
-
-    static_assert(sizeof(DynamicBindingArrayLayout) == sizeof(WGPUDynamicBindingArrayLayout), "sizeof mismatch for DynamicBindingArrayLayout");
-    static_assert(alignof(DynamicBindingArrayLayout) == alignof(WGPUDynamicBindingArrayLayout), "alignof mismatch for DynamicBindingArrayLayout");
-
-    static_assert(offsetof(DynamicBindingArrayLayout, nextInChain) == offsetof(WGPUDynamicBindingArrayLayout, nextInChain),
-            "offsetof mismatch for DynamicBindingArrayLayout::nextInChain");
-    static_assert(offsetof(DynamicBindingArrayLayout, start) == offsetof(WGPUDynamicBindingArrayLayout, start),
-                 "offsetof mismatch for DynamicBindingArrayLayout::start");
-    static_assert(offsetof(DynamicBindingArrayLayout, kind) == offsetof(WGPUDynamicBindingArrayLayout, kind),
-                 "offsetof mismatch for DynamicBindingArrayLayout::kind");
-
-    bool DynamicBindingArrayLayout::operator==(const DynamicBindingArrayLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            start,
-            kind
-        ) == std::tie(
-            rhs.start,
-            rhs.kind
-        );
-    }
-
-
-    static_assert(sizeof(DynamicBindingArrayLimits) == sizeof(WGPUDynamicBindingArrayLimits), "sizeof mismatch for DynamicBindingArrayLimits");
-    static_assert(alignof(DynamicBindingArrayLimits) == alignof(WGPUDynamicBindingArrayLimits), "alignof mismatch for DynamicBindingArrayLimits");
-
-    static_assert(offsetof(DynamicBindingArrayLimits, nextInChain) == offsetof(WGPUDynamicBindingArrayLimits, chain) + offsetof(WGPUChainedStruct, next),
-            "offsetof mismatch for DynamicBindingArrayLimits::nextInChain");
-    static_assert(offsetof(DynamicBindingArrayLimits, sType) == offsetof(WGPUDynamicBindingArrayLimits, chain) + offsetof(WGPUChainedStruct, sType),
-            "offsetof mismatch for DynamicBindingArrayLimits::sType");
-    static_assert(offsetof(DynamicBindingArrayLimits, maxDynamicBindingArraySize) == offsetof(WGPUDynamicBindingArrayLimits, maxDynamicBindingArraySize),
-                 "offsetof mismatch for DynamicBindingArrayLimits::maxDynamicBindingArraySize");
-
-    bool DynamicBindingArrayLimits::operator==(const DynamicBindingArrayLimits& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            maxDynamicBindingArraySize
-        ) == std::tie(
-            rhs.maxDynamicBindingArraySize
         );
     }
 
@@ -1059,6 +1027,25 @@ namespace dawn::native {
             rhs.querySet,
             rhs.beginningOfPassWriteIndex,
             rhs.endOfPassWriteIndex
+        );
+    }
+
+
+    static_assert(sizeof(PipelineLayoutResourceTable) == sizeof(WGPUPipelineLayoutResourceTable), "sizeof mismatch for PipelineLayoutResourceTable");
+    static_assert(alignof(PipelineLayoutResourceTable) == alignof(WGPUPipelineLayoutResourceTable), "alignof mismatch for PipelineLayoutResourceTable");
+
+    static_assert(offsetof(PipelineLayoutResourceTable, nextInChain) == offsetof(WGPUPipelineLayoutResourceTable, chain) + offsetof(WGPUChainedStruct, next),
+            "offsetof mismatch for PipelineLayoutResourceTable::nextInChain");
+    static_assert(offsetof(PipelineLayoutResourceTable, sType) == offsetof(WGPUPipelineLayoutResourceTable, chain) + offsetof(WGPUChainedStruct, sType),
+            "offsetof mismatch for PipelineLayoutResourceTable::sType");
+    static_assert(offsetof(PipelineLayoutResourceTable, usesResourceTable) == offsetof(WGPUPipelineLayoutResourceTable, usesResourceTable),
+                 "offsetof mismatch for PipelineLayoutResourceTable::usesResourceTable");
+
+    bool PipelineLayoutResourceTable::operator==(const PipelineLayoutResourceTable& rhs) const {
+        return (nextInChain == rhs.nextInChain) && std::tie(
+            usesResourceTable
+        ) == std::tie(
+            rhs.usesResourceTable
         );
     }
 
@@ -1401,6 +1388,27 @@ namespace dawn::native {
             xrCompatible
         ) == std::tie(
             rhs.xrCompatible
+        );
+    }
+
+
+    static_assert(sizeof(ResourceTableDescriptor) == sizeof(WGPUResourceTableDescriptor), "sizeof mismatch for ResourceTableDescriptor");
+    static_assert(alignof(ResourceTableDescriptor) == alignof(WGPUResourceTableDescriptor), "alignof mismatch for ResourceTableDescriptor");
+
+    static_assert(offsetof(ResourceTableDescriptor, nextInChain) == offsetof(WGPUResourceTableDescriptor, nextInChain),
+            "offsetof mismatch for ResourceTableDescriptor::nextInChain");
+    static_assert(offsetof(ResourceTableDescriptor, label) == offsetof(WGPUResourceTableDescriptor, label),
+                 "offsetof mismatch for ResourceTableDescriptor::label");
+    static_assert(offsetof(ResourceTableDescriptor, size) == offsetof(WGPUResourceTableDescriptor, size),
+                 "offsetof mismatch for ResourceTableDescriptor::size");
+
+    bool ResourceTableDescriptor::operator==(const ResourceTableDescriptor& rhs) const {
+        return (nextInChain == rhs.nextInChain) && std::tie(
+            label,
+            size
+        ) == std::tie(
+            rhs.label,
+            rhs.size
         );
     }
 
@@ -3025,25 +3033,6 @@ namespace dawn::native {
             rhs.size,
             rhs.sampler,
             rhs.textureView
-        );
-    }
-
-
-    static_assert(sizeof(BindGroupLayoutDynamicBindingArray) == sizeof(WGPUBindGroupLayoutDynamicBindingArray), "sizeof mismatch for BindGroupLayoutDynamicBindingArray");
-    static_assert(alignof(BindGroupLayoutDynamicBindingArray) == alignof(WGPUBindGroupLayoutDynamicBindingArray), "alignof mismatch for BindGroupLayoutDynamicBindingArray");
-
-    static_assert(offsetof(BindGroupLayoutDynamicBindingArray, nextInChain) == offsetof(WGPUBindGroupLayoutDynamicBindingArray, chain) + offsetof(WGPUChainedStruct, next),
-            "offsetof mismatch for BindGroupLayoutDynamicBindingArray::nextInChain");
-    static_assert(offsetof(BindGroupLayoutDynamicBindingArray, sType) == offsetof(WGPUBindGroupLayoutDynamicBindingArray, chain) + offsetof(WGPUChainedStruct, sType),
-            "offsetof mismatch for BindGroupLayoutDynamicBindingArray::sType");
-    static_assert(offsetof(BindGroupLayoutDynamicBindingArray, dynamicArray) == offsetof(WGPUBindGroupLayoutDynamicBindingArray, dynamicArray),
-                 "offsetof mismatch for BindGroupLayoutDynamicBindingArray::dynamicArray");
-
-    bool BindGroupLayoutDynamicBindingArray::operator==(const BindGroupLayoutDynamicBindingArray& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            dynamicArray
-        ) == std::tie(
-            rhs.dynamicArray
         );
     }
 

@@ -112,24 +112,8 @@ void wgpuAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPUAdapterProperties
 }
 
 DAWN_NO_SANITIZE("cfi-icall")
-void wgpuBindGroupDestroy(WGPUBindGroup bindGroup) {
-    procs.bindGroupDestroy(bindGroup);
-}
-DAWN_NO_SANITIZE("cfi-icall")
-uint32_t wgpuBindGroupInsertBinding(WGPUBindGroup bindGroup, WGPUBindGroupEntryContents const * contents) {
-return     procs.bindGroupInsertBinding(bindGroup, contents);
-}
-DAWN_NO_SANITIZE("cfi-icall")
-WGPUStatus wgpuBindGroupRemoveBinding(WGPUBindGroup bindGroup, uint32_t binding) {
-return     procs.bindGroupRemoveBinding(bindGroup, binding);
-}
-DAWN_NO_SANITIZE("cfi-icall")
 void wgpuBindGroupSetLabel(WGPUBindGroup bindGroup, WGPUStringView label) {
     procs.bindGroupSetLabel(bindGroup, label);
-}
-DAWN_NO_SANITIZE("cfi-icall")
-WGPUStatus wgpuBindGroupUpdate(WGPUBindGroup bindGroup, WGPUBindGroupEntry const * entry) {
-return     procs.bindGroupUpdate(bindGroup, entry);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuBindGroupAddRef(WGPUBindGroup bindGroup) {
@@ -337,6 +321,10 @@ void wgpuComputePassEncoderSetPipeline(WGPUComputePassEncoder computePassEncoder
     procs.computePassEncoderSetPipeline(computePassEncoder, pipeline);
 }
 DAWN_NO_SANITIZE("cfi-icall")
+void wgpuComputePassEncoderSetResourceTable(WGPUComputePassEncoder computePassEncoder, WGPUResourceTable table) {
+    procs.computePassEncoderSetResourceTable(computePassEncoder, table);
+}
+DAWN_NO_SANITIZE("cfi-icall")
 void wgpuComputePassEncoderWriteTimestamp(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32_t queryIndex) {
     procs.computePassEncoderWriteTimestamp(computePassEncoder, querySet, queryIndex);
 }
@@ -434,6 +422,10 @@ return     procs.deviceCreateRenderPipeline(device, descriptor);
 DAWN_NO_SANITIZE("cfi-icall")
 WGPUFuture wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, WGPURenderPipelineDescriptor const * descriptor, WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo) {
 return     procs.deviceCreateRenderPipelineAsync(device, descriptor, callbackInfo);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+WGPUResourceTable wgpuDeviceCreateResourceTable(WGPUDevice device, WGPUResourceTableDescriptor const * descriptor) {
+return     procs.deviceCreateResourceTable(device, descriptor);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 WGPUSampler wgpuDeviceCreateSampler(WGPUDevice device, WGPUSamplerDescriptor const * descriptor) {
@@ -735,6 +727,10 @@ void wgpuRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder renderBundleEnco
     procs.renderBundleEncoderSetPipeline(renderBundleEncoder, pipeline);
 }
 DAWN_NO_SANITIZE("cfi-icall")
+void wgpuRenderBundleEncoderSetResourceTable(WGPURenderBundleEncoder renderBundleEncoder, WGPUResourceTable table) {
+    procs.renderBundleEncoderSetResourceTable(renderBundleEncoder, table);
+}
+DAWN_NO_SANITIZE("cfi-icall")
 void wgpuRenderBundleEncoderSetVertexBuffer(WGPURenderBundleEncoder renderBundleEncoder, uint32_t slot, WGPUBuffer buffer, uint64_t offset, uint64_t size) {
     procs.renderBundleEncoderSetVertexBuffer(renderBundleEncoder, slot, buffer, offset, size);
 }
@@ -828,6 +824,10 @@ void wgpuRenderPassEncoderSetPipeline(WGPURenderPassEncoder renderPassEncoder, W
     procs.renderPassEncoderSetPipeline(renderPassEncoder, pipeline);
 }
 DAWN_NO_SANITIZE("cfi-icall")
+void wgpuRenderPassEncoderSetResourceTable(WGPURenderPassEncoder renderPassEncoder, WGPUResourceTable table) {
+    procs.renderPassEncoderSetResourceTable(renderPassEncoder, table);
+}
+DAWN_NO_SANITIZE("cfi-icall")
 void wgpuRenderPassEncoderSetScissorRect(WGPURenderPassEncoder renderPassEncoder, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
     procs.renderPassEncoderSetScissorRect(renderPassEncoder, x, y, width, height);
 }
@@ -871,6 +871,35 @@ void wgpuRenderPipelineAddRef(WGPURenderPipeline renderPipeline) {
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuRenderPipelineRelease(WGPURenderPipeline renderPipeline) {
     procs.renderPipelineRelease(renderPipeline);
+}
+
+DAWN_NO_SANITIZE("cfi-icall")
+void wgpuResourceTableDestroy(WGPUResourceTable resourceTable) {
+    procs.resourceTableDestroy(resourceTable);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+uint32_t wgpuResourceTableGetSize(WGPUResourceTable resourceTable) {
+return     procs.resourceTableGetSize(resourceTable);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+uint32_t wgpuResourceTableInsertBinding(WGPUResourceTable resourceTable, WGPUBindingResource const * resource) {
+return     procs.resourceTableInsertBinding(resourceTable, resource);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+WGPUStatus wgpuResourceTableRemoveBinding(WGPUResourceTable resourceTable, uint32_t slot) {
+return     procs.resourceTableRemoveBinding(resourceTable, slot);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+WGPUStatus wgpuResourceTableUpdate(WGPUResourceTable resourceTable, uint32_t slot, WGPUBindingResource const * resource) {
+return     procs.resourceTableUpdate(resourceTable, slot, resource);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+void wgpuResourceTableAddRef(WGPUResourceTable resourceTable) {
+    procs.resourceTableAddRef(resourceTable);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+void wgpuResourceTableRelease(WGPUResourceTable resourceTable) {
+    procs.resourceTableRelease(resourceTable);
 }
 
 DAWN_NO_SANITIZE("cfi-icall")
@@ -1095,6 +1124,10 @@ uint32_t wgpuTextureGetSampleCount(WGPUTexture texture) {
 return     procs.textureGetSampleCount(texture);
 }
 DAWN_NO_SANITIZE("cfi-icall")
+WGPUTextureViewDimension wgpuTextureGetTextureBindingViewDimension(WGPUTexture texture) {
+return     procs.textureGetTextureBindingViewDimension(texture);
+}
+DAWN_NO_SANITIZE("cfi-icall")
 WGPUTextureUsage wgpuTextureGetUsage(WGPUTexture texture) {
 return     procs.textureGetUsage(texture);
 }
@@ -1109,6 +1142,10 @@ void wgpuTexturePin(WGPUTexture texture, WGPUTextureUsage usage) {
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuTextureSetLabel(WGPUTexture texture, WGPUStringView label) {
     procs.textureSetLabel(texture, label);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+void wgpuTextureSetOwnershipForMemoryDump(WGPUTexture texture, uint64_t ownerGuid) {
+    procs.textureSetOwnershipForMemoryDump(texture, ownerGuid);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuTextureUnpin(WGPUTexture texture) {

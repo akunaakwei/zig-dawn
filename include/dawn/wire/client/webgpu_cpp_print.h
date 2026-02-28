@@ -453,20 +453,6 @@ namespace wgpu {
       return o;
   }
   template <typename CharT, typename Traits>
-  std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& o, DynamicBindingKind value) {
-      switch (value) {
-      case DynamicBindingKind::Undefined:
-        o << "DynamicBindingKind::Undefined";
-        break;
-      case DynamicBindingKind::SampledTexture:
-        o << "DynamicBindingKind::SampledTexture";
-        break;
-          default:
-            o << "DynamicBindingKind::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<DynamicBindingKind>::type>(value);
-      }
-      return o;
-  }
-  template <typename CharT, typename Traits>
   std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& o, ErrorFilter value) {
       switch (value) {
       case ErrorFilter::Validation:
@@ -648,9 +634,6 @@ namespace wgpu {
       case FeatureName::Unorm16TextureFormats:
         o << "FeatureName::Unorm16TextureFormats";
         break;
-      case FeatureName::Snorm16TextureFormats:
-        o << "FeatureName::Snorm16TextureFormats";
-        break;
       case FeatureName::MultiPlanarFormatExtendedUsages:
         o << "FeatureName::MultiPlanarFormatExtendedUsages";
         break;
@@ -681,17 +664,11 @@ namespace wgpu {
       case FeatureName::AdapterPropertiesVk:
         o << "FeatureName::AdapterPropertiesVk";
         break;
-      case FeatureName::R8UnormStorage:
-        o << "FeatureName::R8UnormStorage";
-        break;
       case FeatureName::DawnFormatCapabilities:
         o << "FeatureName::DawnFormatCapabilities";
         break;
       case FeatureName::DawnDrmFormatCapabilities:
         o << "FeatureName::DawnDrmFormatCapabilities";
-        break;
-      case FeatureName::Norm16TextureFormats:
-        o << "FeatureName::Norm16TextureFormats";
         break;
       case FeatureName::MultiPlanarFormatNv16:
         o << "FeatureName::MultiPlanarFormatNv16";
@@ -783,9 +760,6 @@ namespace wgpu {
       case FeatureName::DawnDeviceAllocatorControl:
         o << "FeatureName::DawnDeviceAllocatorControl";
         break;
-      case FeatureName::ChromiumExperimentalBindless:
-        o << "FeatureName::ChromiumExperimentalBindless";
-        break;
       case FeatureName::AdapterPropertiesWGPU:
         o << "FeatureName::AdapterPropertiesWGPU";
         break;
@@ -794,6 +768,15 @@ namespace wgpu {
         break;
       case FeatureName::SharedTextureMemoryD3D12Resource:
         o << "FeatureName::SharedTextureMemoryD3D12Resource";
+        break;
+      case FeatureName::ChromiumExperimentalSamplingResourceTable:
+        o << "FeatureName::ChromiumExperimentalSamplingResourceTable";
+        break;
+      case FeatureName::ChromiumExperimentalSubgroupSizeControl:
+        o << "FeatureName::ChromiumExperimentalSubgroupSizeControl";
+        break;
+      case FeatureName::AtomicVec2uMinMax:
+        o << "FeatureName::AtomicVec2uMinMax";
         break;
           default:
             o << "FeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<FeatureName>::type>(value);
@@ -1338,8 +1321,8 @@ namespace wgpu {
       case SType::RequestAdapterOptionsD3D11Device:
         o << "SType::RequestAdapterOptionsD3D11Device";
         break;
-      case SType::DawnRenderPassColorAttachmentRenderToSingleSampled:
-        o << "SType::DawnRenderPassColorAttachmentRenderToSingleSampled";
+      case SType::DawnRenderPassSampleCount:
+        o << "SType::DawnRenderPassSampleCount";
         break;
       case SType::RenderPassPixelLocalStorage:
         o << "SType::RenderPassPixelLocalStorage";
@@ -1509,15 +1492,6 @@ namespace wgpu {
       case SType::DawnConsumeAdapterDescriptor:
         o << "SType::DawnConsumeAdapterDescriptor";
         break;
-      case SType::BindGroupLayoutDynamicBindingArray:
-        o << "SType::BindGroupLayoutDynamicBindingArray";
-        break;
-      case SType::DynamicBindingArrayLimits:
-        o << "SType::DynamicBindingArrayLimits";
-        break;
-      case SType::BindGroupDynamicBindingArray:
-        o << "SType::BindGroupDynamicBindingArray";
-        break;
       case SType::TexelBufferBindingEntry:
         o << "SType::TexelBufferBindingEntry";
         break;
@@ -1538,6 +1512,12 @@ namespace wgpu {
         break;
       case SType::RequestAdapterOptionsAngleVirtualizationGroup:
         o << "SType::RequestAdapterOptionsAngleVirtualizationGroup";
+        break;
+      case SType::PipelineLayoutResourceTable:
+        o << "SType::PipelineLayoutResourceTable";
+        break;
+      case SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
+        o << "SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs";
         break;
           default:
             o << "SType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<SType>::type>(value);
@@ -1992,8 +1972,8 @@ namespace wgpu {
       case TextureFormat::R10X6BG10X6Biplanar444Unorm:
         o << "TextureFormat::R10X6BG10X6Biplanar444Unorm";
         break;
-      case TextureFormat::External:
-        o << "TextureFormat::External";
+      case TextureFormat::OpaqueYCbCrAndroid:
+        o << "TextureFormat::OpaqueYCbCrAndroid";
         break;
           default:
             o << "TextureFormat::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<TextureFormat>::type>(value);
@@ -2258,20 +2238,8 @@ namespace wgpu {
       case WGSLLanguageFeatureName::SubgroupId:
         o << "WGSLLanguageFeatureName::SubgroupId";
         break;
-      case WGSLLanguageFeatureName::SizedBindingArray:
-        o << "WGSLLanguageFeatureName::SizedBindingArray";
-        break;
-      case WGSLLanguageFeatureName::TexelBuffers:
-        o << "WGSLLanguageFeatureName::TexelBuffers";
-        break;
-      case WGSLLanguageFeatureName::ChromiumPrint:
-        o << "WGSLLanguageFeatureName::ChromiumPrint";
-        break;
-      case WGSLLanguageFeatureName::FragmentDepth:
-        o << "WGSLLanguageFeatureName::FragmentDepth";
-        break;
-      case WGSLLanguageFeatureName::ImmediateAddressSpace:
-        o << "WGSLLanguageFeatureName::ImmediateAddressSpace";
+      case WGSLLanguageFeatureName::TextureAndSamplerLet:
+        o << "WGSLLanguageFeatureName::TextureAndSamplerLet";
         break;
       case WGSLLanguageFeatureName::ChromiumTestingUnimplemented:
         o << "WGSLLanguageFeatureName::ChromiumTestingUnimplemented";
@@ -2287,6 +2255,36 @@ namespace wgpu {
         break;
       case WGSLLanguageFeatureName::ChromiumTestingShipped:
         o << "WGSLLanguageFeatureName::ChromiumTestingShipped";
+        break;
+      case WGSLLanguageFeatureName::SizedBindingArray:
+        o << "WGSLLanguageFeatureName::SizedBindingArray";
+        break;
+      case WGSLLanguageFeatureName::TexelBuffers:
+        o << "WGSLLanguageFeatureName::TexelBuffers";
+        break;
+      case WGSLLanguageFeatureName::ChromiumPrint:
+        o << "WGSLLanguageFeatureName::ChromiumPrint";
+        break;
+      case WGSLLanguageFeatureName::FragmentDepth:
+        o << "WGSLLanguageFeatureName::FragmentDepth";
+        break;
+      case WGSLLanguageFeatureName::ImmediateAddressSpace:
+        o << "WGSLLanguageFeatureName::ImmediateAddressSpace";
+        break;
+      case WGSLLanguageFeatureName::SubgroupUniformity:
+        o << "WGSLLanguageFeatureName::SubgroupUniformity";
+        break;
+      case WGSLLanguageFeatureName::BufferView:
+        o << "WGSLLanguageFeatureName::BufferView";
+        break;
+      case WGSLLanguageFeatureName::FilteringParameters:
+        o << "WGSLLanguageFeatureName::FilteringParameters";
+        break;
+      case WGSLLanguageFeatureName::SwizzleAssignment:
+        o << "WGSLLanguageFeatureName::SwizzleAssignment";
+        break;
+      case WGSLLanguageFeatureName::LinearIndexing:
+        o << "WGSLLanguageFeatureName::LinearIndexing";
         break;
           default:
             o << "WGSLLanguageFeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<WGSLLanguageFeatureName>::type>(value);

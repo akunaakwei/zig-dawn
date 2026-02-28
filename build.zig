@@ -1262,7 +1262,7 @@ const tint_core_ir_sources = .{
     "transform/combine_access_instructions.cc",
     "transform/conversion_polyfill.cc",
     "transform/dead_code_elimination.cc",
-    "transform/decompose_uniform_access.cc",
+    "transform/decompose_access.cc",
     "transform/demote_to_helper.cc",
     "transform/direct_variable_access.cc",
     "transform/multiplanar_external_texture.cc",
@@ -1273,8 +1273,6 @@ const tint_core_ir_sources = .{
     "transform/remove_terminator_args.cc",
     "transform/remove_uniform_vector_component_loads.cc",
     "transform/rename_conflicts.cc",
-    "transform/resource_binding.cc",
-    "transform/resource_binding_helper.cc",
     "transform/resource_table.cc",
     "transform/resource_table_helper.cc",
     "transform/robustness.cc",
@@ -1299,6 +1297,7 @@ const tint_core_type_sources = .{
     "atomic.cc",
     "binding_array.cc",
     "bool.cc",
+    "buffer.cc",
     "builtin_structs.cc",
     "depth_multisampled_texture.cc",
     "depth_texture.cc",
@@ -1318,7 +1317,7 @@ const tint_core_type_sources = .{
     "numeric_scalar.cc",
     "pointer.cc",
     "reference.cc",
-    "resource_binding.cc",
+    "resource_table.cc",
     "resource_type.cc",
     "sampled_texture.cc",
     "sampler.cc",
@@ -1328,10 +1327,12 @@ const tint_core_type_sources = .{
     "string.cc",
     "struct.cc",
     "subgroup_matrix.cc",
+    "swizzle_view.cc",
     "texel_buffer.cc",
     "texture.cc",
     "texture_dimension.cc",
     "type.cc",
+    "u16.cc",
     "u32.cc",
     "u64.cc",
     "u8.cc",
@@ -1405,6 +1406,7 @@ const tint_wgsl_ast_sources = .{
     "struct_member.cc",
     "struct_member_align_attribute.cc",
     "struct_member_size_attribute.cc",
+    "subgroup_size_attribute.cc",
     "switch_statement.cc",
     "templated_identifier.cc",
     "type_decl.cc",
@@ -1429,6 +1431,7 @@ const tint_wgsl_intrinsic_sources = .{
 };
 
 const tint_wgsl_ir_sources = .{
+    "atomic_vec2u_to_from_u64.cc",
     "builtin_call.cc",
     "unary.cc",
 };
@@ -1598,7 +1601,6 @@ const tint_spirv_reader_sources = .{
 const tint_spirv_type_sources = .{
     "explicit_layout_array.cc",
     "image.cc",
-    "resource_binding.cc",
     "sampled_image.cc",
 };
 
@@ -1608,6 +1610,7 @@ const tint_spirv_validate_sources = .{
 
 const tint_spirv_writer_sources = .{
     "writer.cc",
+    "analysis/relaxed_precision_decorations.cc",
     "common/binary_writer.cc",
     "common/function.cc",
     "common/instruction.cc",
@@ -1626,9 +1629,9 @@ const tint_spirv_writer_sources = .{
     "raise/pass_matrix_by_pointer.cc",
     "raise/raise.cc",
     "raise/remove_unreachable_in_loop_continuing.cc",
-    "raise/resource_binding.cc",
-    "raise/resource_table.cc",
+    "raise/resource_table_helper.cc",
     "raise/shader_io.cc",
+    "raise/unary_polyfill.cc",
     "raise/var_for_dynamic_index.cc",
 };
 
@@ -1663,7 +1666,6 @@ const dawn_sources = .{
     "CacheRequest.cpp",
     "CachedObject.cpp",
     "CallbackTaskManager.cpp",
-    // "ChainUtilsImpl.inl",
     "CommandAllocator.cpp",
     "CommandBuffer.cpp",
     "CommandBufferStateTracker.cpp",
@@ -1677,7 +1679,6 @@ const dawn_sources = .{
     "CreatePipelineAsyncEvent.cpp",
     "Device.cpp",
     "DeviceGuard.cpp",
-    "DynamicArrayState.cpp",
     "DynamicUploader.cpp",
     "EncodingContext.cpp",
     "Error.cpp",
@@ -1716,6 +1717,7 @@ const dawn_sources = .{
     "RenderPassWorkaroundsHelper.cpp",
     "RenderPipeline.cpp",
     "ResourceMemoryAllocation.cpp",
+    "ResourceTable.cpp",
     "RingBufferAllocator.cpp",
     "Sampler.cpp",
     "ScratchBuffer.cpp",
@@ -1933,6 +1935,7 @@ const dawn_vulkan_sources = .{
     "vulkan/ResolveTextureLoadingUtilsVk.cpp",
     "vulkan/ResourceHeapVk.cpp",
     "vulkan/ResourceMemoryAllocatorVk.cpp",
+    "vulkan/ResourceTableVk.cpp",
     "vulkan/SamplerVk.cpp",
     "vulkan/ShaderModuleVk.cpp",
     "vulkan/SharedFenceVk.cpp",

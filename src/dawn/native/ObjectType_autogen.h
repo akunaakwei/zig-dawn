@@ -15,7 +15,6 @@ namespace dawn::native {
         Buffer,
         CommandBuffer,
         CommandEncoder,
-        ComputePassEncoder,
         ComputePipeline,
         Device,
         ExternalTexture,
@@ -24,9 +23,8 @@ namespace dawn::native {
         QuerySet,
         Queue,
         RenderBundle,
-        RenderBundleEncoder,
-        RenderPassEncoder,
         RenderPipeline,
+        ResourceTable,
         Sampler,
         ShaderModule,
         SharedBufferMemory,
@@ -36,6 +34,9 @@ namespace dawn::native {
         TexelBufferView,
         Texture,
         TextureView,
+        ComputePassEncoder,
+        RenderBundleEncoder,
+        RenderPassEncoder,
 
         // Additional internal object types. Keep kExtraObjectTypes in sync when updating.
         BindGroupLayoutInternal,
@@ -44,7 +45,7 @@ namespace dawn::native {
     constexpr size_t kExtraObjectTypes = 1;
 
     template <typename T>
-    using PerObjectType = ityp::array<ObjectType, T, 27 + kExtraObjectTypes>;
+    using PerObjectType = ityp::array<ObjectType, T, 28 + kExtraObjectTypes>;
 
     const char* ObjectTypeAsString(ObjectType type);
 

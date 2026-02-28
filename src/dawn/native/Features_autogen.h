@@ -68,7 +68,6 @@ ANGLETextureSharing,
 PixelLocalStorageCoherent,
 PixelLocalStorageNonCoherent,
 Unorm16TextureFormats,
-Snorm16TextureFormats,
 MultiPlanarFormatExtendedUsages,
 MultiPlanarFormatP010,
 HostMappedPointer,
@@ -79,10 +78,8 @@ BufferMapExtendedUsages,
 AdapterPropertiesMemoryHeaps,
 AdapterPropertiesD3D,
 AdapterPropertiesVk,
-R8UnormStorage,
 DawnFormatCapabilities,
 DawnDrmFormatCapabilities,
-Norm16TextureFormats,
 MultiPlanarFormatNv16,
 MultiPlanarFormatNv24,
 MultiPlanarFormatP210,
@@ -113,16 +110,18 @@ FlexibleTextureViews,
 ChromiumExperimentalSubgroupMatrix,
 SharedFenceEGLSync,
 DawnDeviceAllocatorControl,
-ChromiumExperimentalBindless,
 AdapterPropertiesWGPU,
 SharedBufferMemoryD3D12SharedMemoryFileMappingHandle,
 SharedTextureMemoryD3D12Resource,
+ChromiumExperimentalSamplingResourceTable,
+ChromiumExperimentalSubgroupSizeControl,
+AtomicVec2uMinMax,
   InvalidEnum,
 };
 
 template<>
 struct EnumCount<Feature> {
-    static constexpr uint32_t value = 83;
+    static constexpr uint32_t value = 82;
 };
 
 }  // namespace dawn::native

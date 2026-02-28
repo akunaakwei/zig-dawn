@@ -17,8 +17,6 @@ namespace dawn::native {
                 return "CommandBuffer";
             case ObjectType::CommandEncoder:
                 return "CommandEncoder";
-            case ObjectType::ComputePassEncoder:
-                return "ComputePassEncoder";
             case ObjectType::ComputePipeline:
                 return "ComputePipeline";
             case ObjectType::Device:
@@ -35,12 +33,10 @@ namespace dawn::native {
                 return "Queue";
             case ObjectType::RenderBundle:
                 return "RenderBundle";
-            case ObjectType::RenderBundleEncoder:
-                return "RenderBundleEncoder";
-            case ObjectType::RenderPassEncoder:
-                return "RenderPassEncoder";
             case ObjectType::RenderPipeline:
                 return "RenderPipeline";
+            case ObjectType::ResourceTable:
+                return "ResourceTable";
             case ObjectType::Sampler:
                 return "Sampler";
             case ObjectType::ShaderModule:
@@ -59,6 +55,12 @@ namespace dawn::native {
                 return "Texture";
             case ObjectType::TextureView:
                 return "TextureView";
+            case ObjectType::ComputePassEncoder:
+                return "ComputePassEncoder";
+            case ObjectType::RenderBundleEncoder:
+                return "RenderBundleEncoder";
+            case ObjectType::RenderPassEncoder:
+                return "RenderPassEncoder";
                 case ObjectType::BindGroupLayoutInternal:
                     return "BindGroupLayoutInternal";
             default:

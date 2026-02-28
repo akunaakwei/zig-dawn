@@ -116,6 +116,20 @@ explicit operator View() const {
 
     };
 
+    struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs : ChainedStructOut {
+        AdapterPropertiesExplicitComputeSubgroupSizeConfigs() {
+            sType = wgpu::SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs;
+        }
+        alignas(wgpu::AdapterPropertiesExplicitComputeSubgroupSizeConfigs::kFirstMemberAlignment) uint32_t minExplicitComputeSubgroupSize;
+        uint32_t maxExplicitComputeSubgroupSize;
+        uint32_t maxComputeWorkgroupSubgroups;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const AdapterPropertiesExplicitComputeSubgroupSizeConfigs& rhs) const;
+
+    };
+
     struct AdapterPropertiesVk : ChainedStructOut {
         AdapterPropertiesVk() {
             sType = wgpu::SType::AdapterPropertiesVk;
@@ -140,19 +154,7 @@ explicit operator View() const {
 
     };
 
-    struct BindGroupDynamicBindingArray : ChainedStruct {
-        BindGroupDynamicBindingArray() {
-            sType = wgpu::SType::BindGroupDynamicBindingArray;
-        }
-        alignas(wgpu::BindGroupDynamicBindingArray::kFirstMemberAlignment) uint32_t dynamicArraySize = 0;
-
-        // Equality operators, mostly for testing. Note that this tests
-        // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const BindGroupDynamicBindingArray& rhs) const;
-
-    };
-
-    struct BindGroupEntryContents {
+    struct BindingResource {
         ChainedStruct const * nextInChain = nullptr;
         BufferBase* buffer = nullptr;
         uint64_t offset = 0;
@@ -162,7 +164,7 @@ explicit operator View() const {
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const BindGroupEntryContents& rhs) const;
+        bool operator==(const BindingResource& rhs) const;
 
     };
 
@@ -440,15 +442,15 @@ explicit operator View() const {
 
     };
 
-    struct DawnRenderPassColorAttachmentRenderToSingleSampled : ChainedStruct {
-        DawnRenderPassColorAttachmentRenderToSingleSampled() {
-            sType = wgpu::SType::DawnRenderPassColorAttachmentRenderToSingleSampled;
+    struct DawnRenderPassSampleCount : ChainedStruct {
+        DawnRenderPassSampleCount() {
+            sType = wgpu::SType::DawnRenderPassSampleCount;
         }
-        alignas(wgpu::DawnRenderPassColorAttachmentRenderToSingleSampled::kFirstMemberAlignment) uint32_t implicitSampleCount = 1;
+        alignas(wgpu::DawnRenderPassSampleCount::kFirstMemberAlignment) uint32_t sampleCount = 1;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const DawnRenderPassColorAttachmentRenderToSingleSampled& rhs) const;
+        bool operator==(const DawnRenderPassSampleCount& rhs) const;
 
     };
 
@@ -527,29 +529,6 @@ explicit operator View() const {
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const DawnWireWGSLControl& rhs) const;
-
-    };
-
-    struct DynamicBindingArrayLayout {
-        ChainedStruct const * nextInChain = nullptr;
-        uint32_t start = 0;
-        wgpu::DynamicBindingKind kind = wgpu::DynamicBindingKind::Undefined;
-
-        // Equality operators, mostly for testing. Note that this tests
-        // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const DynamicBindingArrayLayout& rhs) const;
-
-    };
-
-    struct DynamicBindingArrayLimits : ChainedStructOut {
-        DynamicBindingArrayLimits() {
-            sType = wgpu::SType::DynamicBindingArrayLimits;
-        }
-        alignas(wgpu::DynamicBindingArrayLimits::kFirstMemberAlignment) uint32_t maxDynamicBindingArraySize = wgpu::kLimitU32Undefined;
-
-        // Equality operators, mostly for testing. Note that this tests
-        // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const DynamicBindingArrayLimits& rhs) const;
 
     };
 
@@ -668,6 +647,18 @@ explicit operator View() const {
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const PassTimestampWrites& rhs) const;
+
+    };
+
+    struct PipelineLayoutResourceTable : ChainedStruct {
+        PipelineLayoutResourceTable() {
+            sType = wgpu::SType::PipelineLayoutResourceTable;
+        }
+        alignas(wgpu::PipelineLayoutResourceTable::kFirstMemberAlignment) wgpu::Bool usesResourceTable = false;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const PipelineLayoutResourceTable& rhs) const;
 
     };
 
@@ -832,6 +823,17 @@ explicit operator View() const {
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const RequestAdapterWebXROptions& rhs) const;
+
+    };
+
+    struct ResourceTableDescriptor {
+        ChainedStruct const * nextInChain = nullptr;
+        StringView label;
+        uint32_t size;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const ResourceTableDescriptor& rhs) const;
 
     };
 
@@ -1758,18 +1760,6 @@ explicit operator View() const {
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const BindGroupEntry& rhs) const;
-
-    };
-
-    struct BindGroupLayoutDynamicBindingArray : ChainedStruct {
-        BindGroupLayoutDynamicBindingArray() {
-            sType = wgpu::SType::BindGroupLayoutDynamicBindingArray;
-        }
-        alignas(wgpu::BindGroupLayoutDynamicBindingArray::kFirstMemberAlignment) DynamicBindingArrayLayout dynamicArray;
-
-        // Equality operators, mostly for testing. Note that this tests
-        // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const BindGroupLayoutDynamicBindingArray& rhs) const;
 
     };
 

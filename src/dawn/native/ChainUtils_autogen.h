@@ -119,8 +119,8 @@ template <>
 constexpr inline wgpu::SType STypeForImpl<DawnShaderModuleSPIRVOptionsDescriptor> =
     wgpu::SType::DawnShaderModuleSPIRVOptionsDescriptor;
 template <>
-constexpr inline wgpu::SType STypeForImpl<DawnRenderPassColorAttachmentRenderToSingleSampled> =
-    wgpu::SType::DawnRenderPassColorAttachmentRenderToSingleSampled;
+constexpr inline wgpu::SType STypeForImpl<DawnRenderPassSampleCount> =
+    wgpu::SType::DawnRenderPassSampleCount;
 template <>
 constexpr inline wgpu::SType STypeForImpl<RenderPassPixelLocalStorage> =
     wgpu::SType::RenderPassPixelLocalStorage;
@@ -278,15 +278,6 @@ template <>
 constexpr inline wgpu::SType STypeForImpl<DawnConsumeAdapterDescriptor> =
     wgpu::SType::DawnConsumeAdapterDescriptor;
 template <>
-constexpr inline wgpu::SType STypeForImpl<BindGroupLayoutDynamicBindingArray> =
-    wgpu::SType::BindGroupLayoutDynamicBindingArray;
-template <>
-constexpr inline wgpu::SType STypeForImpl<DynamicBindingArrayLimits> =
-    wgpu::SType::DynamicBindingArrayLimits;
-template <>
-constexpr inline wgpu::SType STypeForImpl<BindGroupDynamicBindingArray> =
-    wgpu::SType::BindGroupDynamicBindingArray;
-template <>
 constexpr inline wgpu::SType STypeForImpl<TexelBufferBindingEntry> =
     wgpu::SType::TexelBufferBindingEntry;
 template <>
@@ -298,6 +289,12 @@ constexpr inline wgpu::SType STypeForImpl<SharedTextureMemoryMetalEndAccessState
 template <>
 constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesWGPU> =
     wgpu::SType::AdapterPropertiesWGPU;
+template <>
+constexpr inline wgpu::SType STypeForImpl<PipelineLayoutResourceTable> =
+    wgpu::SType::PipelineLayoutResourceTable;
+template <>
+constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesExplicitComputeSubgroupSizeConfigs> =
+    wgpu::SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs;
 
 template <typename Arg, typename... Rest>
 std::string STypesToString() {
@@ -351,13 +348,13 @@ template <typename T>
 inline Extensibility ExtensibilityFor;
 
 template <>
-struct UnpackedPtrTypeFor<BindGroupEntryContents> {
+struct UnpackedPtrTypeFor<BindingResource> {
     using Type = UnpackedPtrChain<
-        AdditionalExtensions<BindGroupEntryContents>::List
+        AdditionalExtensions<BindingResource>::List
     >::Type;
 };
 template <>
-constexpr inline Extensibility ExtensibilityFor<BindGroupEntryContents> = Extensibility::In;
+constexpr inline Extensibility ExtensibilityFor<BindingResource> = Extensibility::In;
 
 template <>
 struct UnpackedPtrTypeFor<BufferBindingLayout> {
@@ -394,15 +391,6 @@ struct UnpackedPtrTypeFor<CopyTextureForBrowserOptions> {
 };
 template <>
 constexpr inline Extensibility ExtensibilityFor<CopyTextureForBrowserOptions> = Extensibility::In;
-
-template <>
-struct UnpackedPtrTypeFor<DynamicBindingArrayLayout> {
-    using Type = UnpackedPtrChain<
-        AdditionalExtensions<DynamicBindingArrayLayout>::List
-    >::Type;
-};
-template <>
-constexpr inline Extensibility ExtensibilityFor<DynamicBindingArrayLayout> = Extensibility::In;
 
 template <>
 struct UnpackedPtrTypeFor<InstanceLimits> {
@@ -493,6 +481,15 @@ struct UnpackedPtrTypeFor<RenderPassDepthStencilAttachment> {
 };
 template <>
 constexpr inline Extensibility ExtensibilityFor<RenderPassDepthStencilAttachment> = Extensibility::In;
+
+template <>
+struct UnpackedPtrTypeFor<ResourceTableDescriptor> {
+    using Type = UnpackedPtrChain<
+        AdditionalExtensions<ResourceTableDescriptor>::List
+    >::Type;
+};
+template <>
+constexpr inline Extensibility ExtensibilityFor<ResourceTableDescriptor> = Extensibility::In;
 
 template <>
 struct UnpackedPtrTypeFor<SamplerBindingLayout> {
@@ -721,7 +718,6 @@ struct UnpackedPtrTypeFor<Limits> {
         , CompatibilityModeLimits*
         , DawnTexelCopyBufferRowAlignmentLimits*
         , DawnHostMappedPointerLimits*
-        , DynamicBindingArrayLimits*
     >::Type;
 };
 template <>
@@ -731,7 +727,6 @@ template <>
 struct UnpackedPtrTypeFor<RenderPassColorAttachment> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<RenderPassColorAttachment>::List
-        , const DawnRenderPassColorAttachmentRenderToSingleSampled*
     >::Type;
 };
 template <>
@@ -872,6 +867,7 @@ struct UnpackedPtrTypeFor<AdapterInfo> {
         , AdapterPropertiesVk*
         , AdapterPropertiesWGPU*
         , AdapterPropertiesSubgroupMatrixConfigs*
+        , AdapterPropertiesExplicitComputeSubgroupSizeConfigs*
     >::Type;
 };
 template <>
@@ -881,7 +877,6 @@ template <>
 struct UnpackedPtrTypeFor<BindGroupDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<BindGroupDescriptor>::List
-        , const BindGroupDynamicBindingArray*
     >::Type;
 };
 template <>
@@ -891,7 +886,6 @@ template <>
 struct UnpackedPtrTypeFor<BindGroupLayoutDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<BindGroupLayoutDescriptor>::List
-        , const BindGroupLayoutDynamicBindingArray*
     >::Type;
 };
 template <>
@@ -953,6 +947,7 @@ template <>
 struct UnpackedPtrTypeFor<PipelineLayoutDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<PipelineLayoutDescriptor>::List
+        , const PipelineLayoutResourceTable*
         , const PipelineLayoutPixelLocalStorage*
     >::Type;
 };
@@ -1030,6 +1025,7 @@ template <>
 struct UnpackedPtrTypeFor<RenderPassDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<RenderPassDescriptor>::List
+        , const DawnRenderPassSampleCount*
         , const RenderPassMaxDrawCount*
         , const RenderPassDescriptorExpandResolveRect*
         , const RenderPassDescriptorResolveRect*

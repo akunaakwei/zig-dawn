@@ -241,13 +241,6 @@ enum class DeviceLostReason : uint32_t {
 static_assert(sizeof(DeviceLostReason) == sizeof(WGPUDeviceLostReason), "sizeof mismatch for DeviceLostReason");
 static_assert(alignof(DeviceLostReason) == alignof(WGPUDeviceLostReason), "alignof mismatch for DeviceLostReason");
 
-enum class DynamicBindingKind : uint32_t {
-    Undefined = WGPUDynamicBindingKind_Undefined,
-    SampledTexture = WGPUDynamicBindingKind_SampledTexture,
-};
-static_assert(sizeof(DynamicBindingKind) == sizeof(WGPUDynamicBindingKind), "sizeof mismatch for DynamicBindingKind");
-static_assert(alignof(DynamicBindingKind) == alignof(WGPUDynamicBindingKind), "alignof mismatch for DynamicBindingKind");
-
 enum class ErrorFilter : uint32_t {
     Validation = WGPUErrorFilter_Validation,
     OutOfMemory = WGPUErrorFilter_OutOfMemory,
@@ -318,7 +311,6 @@ enum class FeatureName : uint32_t {
     PixelLocalStorageCoherent = WGPUFeatureName_PixelLocalStorageCoherent,
     PixelLocalStorageNonCoherent = WGPUFeatureName_PixelLocalStorageNonCoherent,
     Unorm16TextureFormats = WGPUFeatureName_Unorm16TextureFormats,
-    Snorm16TextureFormats = WGPUFeatureName_Snorm16TextureFormats,
     MultiPlanarFormatExtendedUsages = WGPUFeatureName_MultiPlanarFormatExtendedUsages,
     MultiPlanarFormatP010 = WGPUFeatureName_MultiPlanarFormatP010,
     HostMappedPointer = WGPUFeatureName_HostMappedPointer,
@@ -329,10 +321,8 @@ enum class FeatureName : uint32_t {
     AdapterPropertiesMemoryHeaps = WGPUFeatureName_AdapterPropertiesMemoryHeaps,
     AdapterPropertiesD3D = WGPUFeatureName_AdapterPropertiesD3D,
     AdapterPropertiesVk = WGPUFeatureName_AdapterPropertiesVk,
-    R8UnormStorage = WGPUFeatureName_R8UnormStorage,
     DawnFormatCapabilities = WGPUFeatureName_DawnFormatCapabilities,
     DawnDrmFormatCapabilities = WGPUFeatureName_DawnDrmFormatCapabilities,
-    Norm16TextureFormats = WGPUFeatureName_Norm16TextureFormats,
     MultiPlanarFormatNv16 = WGPUFeatureName_MultiPlanarFormatNv16,
     MultiPlanarFormatNv24 = WGPUFeatureName_MultiPlanarFormatNv24,
     MultiPlanarFormatP210 = WGPUFeatureName_MultiPlanarFormatP210,
@@ -363,10 +353,12 @@ enum class FeatureName : uint32_t {
     ChromiumExperimentalSubgroupMatrix = WGPUFeatureName_ChromiumExperimentalSubgroupMatrix,
     SharedFenceEGLSync = WGPUFeatureName_SharedFenceEGLSync,
     DawnDeviceAllocatorControl = WGPUFeatureName_DawnDeviceAllocatorControl,
-    ChromiumExperimentalBindless = WGPUFeatureName_ChromiumExperimentalBindless,
     AdapterPropertiesWGPU = WGPUFeatureName_AdapterPropertiesWGPU,
     SharedBufferMemoryD3D12SharedMemoryFileMappingHandle = WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle,
     SharedTextureMemoryD3D12Resource = WGPUFeatureName_SharedTextureMemoryD3D12Resource,
+    ChromiumExperimentalSamplingResourceTable = WGPUFeatureName_ChromiumExperimentalSamplingResourceTable,
+    ChromiumExperimentalSubgroupSizeControl = WGPUFeatureName_ChromiumExperimentalSubgroupSizeControl,
+    AtomicVec2uMinMax = WGPUFeatureName_AtomicVec2uMinMax,
 };
 static_assert(sizeof(FeatureName) == sizeof(WGPUFeatureName), "sizeof mismatch for FeatureName");
 static_assert(alignof(FeatureName) == alignof(WGPUFeatureName), "alignof mismatch for FeatureName");
@@ -605,7 +597,7 @@ enum class SType : uint32_t {
     RequestAdapterOptionsLUID = WGPUSType_RequestAdapterOptionsLUID,
     RequestAdapterOptionsGetGLProc = WGPUSType_RequestAdapterOptionsGetGLProc,
     RequestAdapterOptionsD3D11Device = WGPUSType_RequestAdapterOptionsD3D11Device,
-    DawnRenderPassColorAttachmentRenderToSingleSampled = WGPUSType_DawnRenderPassColorAttachmentRenderToSingleSampled,
+    DawnRenderPassSampleCount = WGPUSType_DawnRenderPassSampleCount,
     RenderPassPixelLocalStorage = WGPUSType_RenderPassPixelLocalStorage,
     PipelineLayoutPixelLocalStorage = WGPUSType_PipelineLayoutPixelLocalStorage,
     BufferHostMappedPointer = WGPUSType_BufferHostMappedPointer,
@@ -662,9 +654,6 @@ enum class SType : uint32_t {
     DawnFakeDeviceInitializeErrorForTesting = WGPUSType_DawnFakeDeviceInitializeErrorForTesting,
     SharedTextureMemoryD3D11BeginState = WGPUSType_SharedTextureMemoryD3D11BeginState,
     DawnConsumeAdapterDescriptor = WGPUSType_DawnConsumeAdapterDescriptor,
-    BindGroupLayoutDynamicBindingArray = WGPUSType_BindGroupLayoutDynamicBindingArray,
-    DynamicBindingArrayLimits = WGPUSType_DynamicBindingArrayLimits,
-    BindGroupDynamicBindingArray = WGPUSType_BindGroupDynamicBindingArray,
     TexelBufferBindingEntry = WGPUSType_TexelBufferBindingEntry,
     TexelBufferBindingLayout = WGPUSType_TexelBufferBindingLayout,
     SharedTextureMemoryMetalEndAccessState = WGPUSType_SharedTextureMemoryMetalEndAccessState,
@@ -672,6 +661,8 @@ enum class SType : uint32_t {
     SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor = WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor,
     SharedTextureMemoryD3D12ResourceDescriptor = WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor,
     RequestAdapterOptionsAngleVirtualizationGroup = WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup,
+    PipelineLayoutResourceTable = WGPUSType_PipelineLayoutResourceTable,
+    AdapterPropertiesExplicitComputeSubgroupSizeConfigs = WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs,
 };
 static_assert(sizeof(SType) == sizeof(WGPUSType), "sizeof mismatch for SType");
 static_assert(alignof(SType) == alignof(WGPUSType), "alignof mismatch for SType");
@@ -838,6 +829,7 @@ enum class TextureFormat : uint32_t {
     R10X6BG10X6Biplanar422Unorm = WGPUTextureFormat_R10X6BG10X6Biplanar422Unorm,
     R10X6BG10X6Biplanar444Unorm = WGPUTextureFormat_R10X6BG10X6Biplanar444Unorm,
     External = WGPUTextureFormat_External,
+    OpaqueYCbCrAndroid = WGPUTextureFormat_OpaqueYCbCrAndroid,
 };
 static_assert(sizeof(TextureFormat) == sizeof(WGPUTextureFormat), "sizeof mismatch for TextureFormat");
 static_assert(alignof(TextureFormat) == alignof(WGPUTextureFormat), "alignof mismatch for TextureFormat");
@@ -942,16 +934,22 @@ enum class WGSLLanguageFeatureName : uint32_t {
     PointerCompositeAccess = WGPUWGSLLanguageFeatureName_PointerCompositeAccess,
     UniformBufferStandardLayout = WGPUWGSLLanguageFeatureName_UniformBufferStandardLayout,
     SubgroupId = WGPUWGSLLanguageFeatureName_SubgroupId,
-    SizedBindingArray = WGPUWGSLLanguageFeatureName_SizedBindingArray,
-    TexelBuffers = WGPUWGSLLanguageFeatureName_TexelBuffers,
-    ChromiumPrint = WGPUWGSLLanguageFeatureName_ChromiumPrint,
-    FragmentDepth = WGPUWGSLLanguageFeatureName_FragmentDepth,
-    ImmediateAddressSpace = WGPUWGSLLanguageFeatureName_ImmediateAddressSpace,
+    TextureAndSamplerLet = WGPUWGSLLanguageFeatureName_TextureAndSamplerLet,
     ChromiumTestingUnimplemented = WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented,
     ChromiumTestingUnsafeExperimental = WGPUWGSLLanguageFeatureName_ChromiumTestingUnsafeExperimental,
     ChromiumTestingExperimental = WGPUWGSLLanguageFeatureName_ChromiumTestingExperimental,
     ChromiumTestingShippedWithKillswitch = WGPUWGSLLanguageFeatureName_ChromiumTestingShippedWithKillswitch,
     ChromiumTestingShipped = WGPUWGSLLanguageFeatureName_ChromiumTestingShipped,
+    SizedBindingArray = WGPUWGSLLanguageFeatureName_SizedBindingArray,
+    TexelBuffers = WGPUWGSLLanguageFeatureName_TexelBuffers,
+    ChromiumPrint = WGPUWGSLLanguageFeatureName_ChromiumPrint,
+    FragmentDepth = WGPUWGSLLanguageFeatureName_FragmentDepth,
+    ImmediateAddressSpace = WGPUWGSLLanguageFeatureName_ImmediateAddressSpace,
+    SubgroupUniformity = WGPUWGSLLanguageFeatureName_SubgroupUniformity,
+    BufferView = WGPUWGSLLanguageFeatureName_BufferView,
+    FilteringParameters = WGPUWGSLLanguageFeatureName_FilteringParameters,
+    SwizzleAssignment = WGPUWGSLLanguageFeatureName_SwizzleAssignment,
+    LinearIndexing = WGPUWGSLLanguageFeatureName_LinearIndexing,
 };
 static_assert(sizeof(WGSLLanguageFeatureName) == sizeof(WGPUWGSLLanguageFeatureName), "sizeof mismatch for WGSLLanguageFeatureName");
 static_assert(alignof(WGSLLanguageFeatureName) == alignof(WGPUWGSLLanguageFeatureName), "alignof mismatch for WGSLLanguageFeatureName");
@@ -1208,7 +1206,6 @@ class BindGroupLayout;
 class Buffer;
 class CommandBuffer;
 class CommandEncoder;
-class ComputePassEncoder;
 class ComputePipeline;
 class Device;
 class ExternalTexture;
@@ -1217,9 +1214,8 @@ class PipelineLayout;
 class QuerySet;
 class Queue;
 class RenderBundle;
-class RenderBundleEncoder;
-class RenderPassEncoder;
 class RenderPipeline;
+class ResourceTable;
 class Sampler;
 class ShaderModule;
 class SharedBufferMemory;
@@ -1229,13 +1225,16 @@ class Surface;
 class TexelBufferView;
 class Texture;
 class TextureView;
+class ComputePassEncoder;
+class RenderBundleEncoder;
+class RenderPassEncoder;
 
 struct StringView;
 struct AdapterPropertiesD3D;
+struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs;
 struct AdapterPropertiesVk;
 struct AdapterPropertiesWGPU;
-struct BindGroupDynamicBindingArray;
-struct BindGroupEntryContents;
+struct BindingResource;
 struct BlendComponent;
 struct BufferBindingLayout;
 struct BufferHostMappedPointer;
@@ -1257,15 +1256,13 @@ struct DawnFakeBufferOOMForTesting;
 struct DawnFakeDeviceInitializeErrorForTesting;
 struct DawnHostMappedPointerLimits;
 struct DawnInjectedInvalidSType;
-struct DawnRenderPassColorAttachmentRenderToSingleSampled;
+struct DawnRenderPassSampleCount;
 struct DawnShaderModuleSPIRVOptionsDescriptor;
 struct DawnTexelCopyBufferRowAlignmentLimits;
 struct DawnTextureInternalUsageDescriptor;
 struct DawnTogglesDescriptor;
 struct DawnWGSLBlocklist;
 struct DawnWireWGSLControl;
-struct DynamicBindingArrayLayout;
-struct DynamicBindingArrayLimits;
 struct EmscriptenSurfaceSourceCanvasHTMLSelector;
 struct Extent2D;
 struct Extent3D;
@@ -1279,6 +1276,7 @@ struct MultisampleState;
 struct Origin2D;
 struct Origin3D;
 struct PassTimestampWrites;
+struct PipelineLayoutResourceTable;
 struct PipelineLayoutStorageAttachment;
 struct PrimitiveState;
 struct QuerySetDescriptor;
@@ -1291,6 +1289,7 @@ struct RenderPassDescriptorResolveRect;
 struct RenderPassMaxDrawCount;
 struct RequestAdapterWebGPUBackendOptions;
 struct RequestAdapterWebXROptions;
+struct ResourceTableDescriptor;
 struct SamplerBindingLayout;
 struct ShaderModuleCompilationOptions;
 struct ShaderSourceSPIRV;
@@ -1356,7 +1355,6 @@ struct AdapterPropertiesMemoryHeaps;
 struct AdapterPropertiesSubgroupMatrixConfigs;
 struct AHardwareBufferProperties;
 struct BindGroupEntry;
-struct BindGroupLayoutDynamicBindingArray;
 struct BindGroupLayoutEntry;
 struct BlendState;
 struct BufferDescriptor;
@@ -1605,11 +1603,7 @@ class BindGroup : public ObjectBase<BindGroup, WGPUBindGroup> {
     using ObjectBase::ObjectBase;
     using ObjectBase::operator=;
 
-    inline void Destroy() const;
-    inline uint32_t InsertBinding(BindGroupEntryContents const * contents) const;
-    inline ConvertibleStatus RemoveBinding(uint32_t binding) const;
     inline void SetLabel(StringView label) const;
-    inline ConvertibleStatus Update(BindGroupEntry const * entry) const;
 
 
   private:
@@ -1709,30 +1703,6 @@ class CommandEncoder : public ObjectBase<CommandEncoder, WGPUCommandEncoder> {
     static inline void WGPURelease(WGPUCommandEncoder handle);
 };
 
-class ComputePassEncoder : public ObjectBase<ComputePassEncoder, WGPUComputePassEncoder> {
-  public:
-    using ObjectBase::ObjectBase;
-    using ObjectBase::operator=;
-
-    inline void DispatchWorkgroups(uint32_t workgroupCountX, uint32_t workgroupCountY = 1, uint32_t workgroupCountZ = 1) const;
-    inline void DispatchWorkgroupsIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
-    inline void End() const;
-    inline void InsertDebugMarker(StringView markerLabel) const;
-    inline void PopDebugGroup() const;
-    inline void PushDebugGroup(StringView groupLabel) const;
-    inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
-    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
-    inline void SetLabel(StringView label) const;
-    inline void SetPipeline(ComputePipeline const& pipeline) const;
-    inline void WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const;
-
-
-  private:
-    friend ObjectBase<ComputePassEncoder, WGPUComputePassEncoder>;
-    static inline void WGPUAddRef(WGPUComputePassEncoder handle);
-    static inline void WGPURelease(WGPUComputePassEncoder handle);
-};
-
 class ComputePipeline : public ObjectBase<ComputePipeline, WGPUComputePipeline> {
   public:
     using ObjectBase::ObjectBase;
@@ -1787,6 +1757,7 @@ class Device : public ObjectBase<Device, WGPUDevice> {
               typename CbChar = std::function<void(CreatePipelineAsyncStatus status, RenderPipeline pipeline, const char* message)>,
               typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
     Future CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode,L callback) const;
+    inline ResourceTable CreateResourceTable(ResourceTableDescriptor const * descriptor) const;
     inline Sampler CreateSampler(SamplerDescriptor const * descriptor = nullptr) const;
     inline ShaderModule CreateShaderModule(ShaderModuleDescriptor const * descriptor) const;
     inline Texture CreateTexture(TextureDescriptor const * descriptor) const;
@@ -1956,71 +1927,6 @@ class RenderBundle : public ObjectBase<RenderBundle, WGPURenderBundle> {
     static inline void WGPURelease(WGPURenderBundle handle);
 };
 
-class RenderBundleEncoder : public ObjectBase<RenderBundleEncoder, WGPURenderBundleEncoder> {
-  public:
-    using ObjectBase::ObjectBase;
-    using ObjectBase::operator=;
-
-    inline void Draw(uint32_t vertexCount, uint32_t instanceCount = 1, uint32_t firstVertex = 0, uint32_t firstInstance = 0) const;
-    inline void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1, uint32_t firstIndex = 0, int32_t baseVertex = 0, uint32_t firstInstance = 0) const;
-    inline void DrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
-    inline void DrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
-    inline RenderBundle Finish(RenderBundleDescriptor const * descriptor = nullptr) const;
-    inline void InsertDebugMarker(StringView markerLabel) const;
-    inline void PopDebugGroup() const;
-    inline void PushDebugGroup(StringView groupLabel) const;
-    inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
-    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
-    inline void SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset = 0, uint64_t size = kWholeSize) const;
-    inline void SetLabel(StringView label) const;
-    inline void SetPipeline(RenderPipeline const& pipeline) const;
-    inline void SetVertexBuffer(uint32_t slot, Buffer const& buffer = nullptr, uint64_t offset = 0, uint64_t size = kWholeSize) const;
-
-
-  private:
-    friend ObjectBase<RenderBundleEncoder, WGPURenderBundleEncoder>;
-    static inline void WGPUAddRef(WGPURenderBundleEncoder handle);
-    static inline void WGPURelease(WGPURenderBundleEncoder handle);
-};
-
-class RenderPassEncoder : public ObjectBase<RenderPassEncoder, WGPURenderPassEncoder> {
-  public:
-    using ObjectBase::ObjectBase;
-    using ObjectBase::operator=;
-
-    inline void BeginOcclusionQuery(uint32_t queryIndex) const;
-    inline void Draw(uint32_t vertexCount, uint32_t instanceCount = 1, uint32_t firstVertex = 0, uint32_t firstInstance = 0) const;
-    inline void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1, uint32_t firstIndex = 0, int32_t baseVertex = 0, uint32_t firstInstance = 0) const;
-    inline void DrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
-    inline void DrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
-    inline void End() const;
-    inline void EndOcclusionQuery() const;
-    inline void ExecuteBundles(size_t bundleCount, RenderBundle const * bundles) const;
-    inline void InsertDebugMarker(StringView markerLabel) const;
-    inline void MultiDrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, Buffer const& drawCountBuffer = nullptr, uint64_t drawCountBufferOffset = 0) const;
-    inline void MultiDrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, Buffer const& drawCountBuffer = nullptr, uint64_t drawCountBufferOffset = 0) const;
-    inline void PixelLocalStorageBarrier() const;
-    inline void PopDebugGroup() const;
-    inline void PushDebugGroup(StringView groupLabel) const;
-    inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
-    inline void SetBlendConstant(Color const * color) const;
-    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
-    inline void SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset = 0, uint64_t size = kWholeSize) const;
-    inline void SetLabel(StringView label) const;
-    inline void SetPipeline(RenderPipeline const& pipeline) const;
-    inline void SetScissorRect(uint32_t x, uint32_t y, uint32_t width, uint32_t height) const;
-    inline void SetStencilReference(uint32_t reference) const;
-    inline void SetVertexBuffer(uint32_t slot, Buffer const& buffer = nullptr, uint64_t offset = 0, uint64_t size = kWholeSize) const;
-    inline void SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth) const;
-    inline void WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const;
-
-
-  private:
-    friend ObjectBase<RenderPassEncoder, WGPURenderPassEncoder>;
-    static inline void WGPUAddRef(WGPURenderPassEncoder handle);
-    static inline void WGPURelease(WGPURenderPassEncoder handle);
-};
-
 class RenderPipeline : public ObjectBase<RenderPipeline, WGPURenderPipeline> {
   public:
     using ObjectBase::ObjectBase;
@@ -2034,6 +1940,24 @@ class RenderPipeline : public ObjectBase<RenderPipeline, WGPURenderPipeline> {
     friend ObjectBase<RenderPipeline, WGPURenderPipeline>;
     static inline void WGPUAddRef(WGPURenderPipeline handle);
     static inline void WGPURelease(WGPURenderPipeline handle);
+};
+
+class ResourceTable : public ObjectBase<ResourceTable, WGPUResourceTable> {
+  public:
+    using ObjectBase::ObjectBase;
+    using ObjectBase::operator=;
+
+    inline void Destroy() const;
+    inline uint32_t GetSize() const;
+    inline uint32_t InsertBinding(BindingResource const * resource) const;
+    inline ConvertibleStatus RemoveBinding(uint32_t slot) const;
+    inline ConvertibleStatus Update(uint32_t slot, BindingResource const * resource) const;
+
+
+  private:
+    friend ObjectBase<ResourceTable, WGPUResourceTable>;
+    static inline void WGPUAddRef(WGPUResourceTable handle);
+    static inline void WGPURelease(WGPUResourceTable handle);
 };
 
 class Sampler : public ObjectBase<Sampler, WGPUSampler> {
@@ -2173,10 +2097,12 @@ class Texture : public ObjectBase<Texture, WGPUTexture> {
     inline uint32_t GetHeight() const;
     inline uint32_t GetMipLevelCount() const;
     inline uint32_t GetSampleCount() const;
+    inline TextureViewDimension GetTextureBindingViewDimension() const;
     inline TextureUsage GetUsage() const;
     inline uint32_t GetWidth() const;
     inline void Pin(TextureUsage usage) const;
     inline void SetLabel(StringView label) const;
+    inline void SetOwnershipForMemoryDump(uint64_t ownerGuid = 0) const;
     inline void Unpin() const;
 
 
@@ -2198,6 +2124,98 @@ class TextureView : public ObjectBase<TextureView, WGPUTextureView> {
     friend ObjectBase<TextureView, WGPUTextureView>;
     static inline void WGPUAddRef(WGPUTextureView handle);
     static inline void WGPURelease(WGPUTextureView handle);
+};
+
+class ComputePassEncoder : public ObjectBase<ComputePassEncoder, WGPUComputePassEncoder> {
+  public:
+    using ObjectBase::ObjectBase;
+    using ObjectBase::operator=;
+
+    inline void DispatchWorkgroups(uint32_t workgroupCountX, uint32_t workgroupCountY = 1, uint32_t workgroupCountZ = 1) const;
+    inline void DispatchWorkgroupsIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
+    inline void End() const;
+    inline void InsertDebugMarker(StringView markerLabel) const;
+    inline void PopDebugGroup() const;
+    inline void PushDebugGroup(StringView groupLabel) const;
+    inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
+    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
+    inline void SetLabel(StringView label) const;
+    inline void SetPipeline(ComputePipeline const& pipeline) const;
+    inline void SetResourceTable(ResourceTable const& table = nullptr) const;
+    inline void WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const;
+
+
+  private:
+    friend ObjectBase<ComputePassEncoder, WGPUComputePassEncoder>;
+    static inline void WGPUAddRef(WGPUComputePassEncoder handle);
+    static inline void WGPURelease(WGPUComputePassEncoder handle);
+};
+
+class RenderBundleEncoder : public ObjectBase<RenderBundleEncoder, WGPURenderBundleEncoder> {
+  public:
+    using ObjectBase::ObjectBase;
+    using ObjectBase::operator=;
+
+    inline void Draw(uint32_t vertexCount, uint32_t instanceCount = 1, uint32_t firstVertex = 0, uint32_t firstInstance = 0) const;
+    inline void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1, uint32_t firstIndex = 0, int32_t baseVertex = 0, uint32_t firstInstance = 0) const;
+    inline void DrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
+    inline void DrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
+    inline RenderBundle Finish(RenderBundleDescriptor const * descriptor = nullptr) const;
+    inline void InsertDebugMarker(StringView markerLabel) const;
+    inline void PopDebugGroup() const;
+    inline void PushDebugGroup(StringView groupLabel) const;
+    inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
+    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
+    inline void SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset = 0, uint64_t size = kWholeSize) const;
+    inline void SetLabel(StringView label) const;
+    inline void SetPipeline(RenderPipeline const& pipeline) const;
+    inline void SetResourceTable(ResourceTable const& table = nullptr) const;
+    inline void SetVertexBuffer(uint32_t slot, Buffer const& buffer = nullptr, uint64_t offset = 0, uint64_t size = kWholeSize) const;
+
+
+  private:
+    friend ObjectBase<RenderBundleEncoder, WGPURenderBundleEncoder>;
+    static inline void WGPUAddRef(WGPURenderBundleEncoder handle);
+    static inline void WGPURelease(WGPURenderBundleEncoder handle);
+};
+
+class RenderPassEncoder : public ObjectBase<RenderPassEncoder, WGPURenderPassEncoder> {
+  public:
+    using ObjectBase::ObjectBase;
+    using ObjectBase::operator=;
+
+    inline void BeginOcclusionQuery(uint32_t queryIndex) const;
+    inline void Draw(uint32_t vertexCount, uint32_t instanceCount = 1, uint32_t firstVertex = 0, uint32_t firstInstance = 0) const;
+    inline void DrawIndexed(uint32_t indexCount, uint32_t instanceCount = 1, uint32_t firstIndex = 0, int32_t baseVertex = 0, uint32_t firstInstance = 0) const;
+    inline void DrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
+    inline void DrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const;
+    inline void End() const;
+    inline void EndOcclusionQuery() const;
+    inline void ExecuteBundles(size_t bundleCount, RenderBundle const * bundles) const;
+    inline void InsertDebugMarker(StringView markerLabel) const;
+    inline void MultiDrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, Buffer const& drawCountBuffer = nullptr, uint64_t drawCountBufferOffset = 0) const;
+    inline void MultiDrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, Buffer const& drawCountBuffer = nullptr, uint64_t drawCountBufferOffset = 0) const;
+    inline void PixelLocalStorageBarrier() const;
+    inline void PopDebugGroup() const;
+    inline void PushDebugGroup(StringView groupLabel) const;
+    inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
+    inline void SetBlendConstant(Color const * color) const;
+    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
+    inline void SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset = 0, uint64_t size = kWholeSize) const;
+    inline void SetLabel(StringView label) const;
+    inline void SetPipeline(RenderPipeline const& pipeline) const;
+    inline void SetResourceTable(ResourceTable const& table = nullptr) const;
+    inline void SetScissorRect(uint32_t x, uint32_t y, uint32_t width, uint32_t height) const;
+    inline void SetStencilReference(uint32_t reference) const;
+    inline void SetVertexBuffer(uint32_t slot, Buffer const& buffer = nullptr, uint64_t offset = 0, uint64_t size = kWholeSize) const;
+    inline void SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth) const;
+    inline void WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const;
+
+
+  private:
+    friend ObjectBase<RenderPassEncoder, WGPURenderPassEncoder>;
+    static inline void WGPUAddRef(WGPURenderPassEncoder handle);
+    static inline void WGPURelease(WGPURenderPassEncoder handle);
 };
 
 
@@ -2225,6 +2243,20 @@ struct AdapterPropertiesD3D : ChainedStructOut {
 };
 
 // Can be chained in AdapterInfo
+struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs : ChainedStructOut {
+    inline AdapterPropertiesExplicitComputeSubgroupSizeConfigs();
+
+    struct Init;
+    inline AdapterPropertiesExplicitComputeSubgroupSizeConfigs(Init&& init);
+    inline operator const WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    alignas(kFirstMemberAlignment) uint32_t minExplicitComputeSubgroupSize;
+    uint32_t maxExplicitComputeSubgroupSize;
+    uint32_t maxComputeWorkgroupSubgroups;
+};
+
+// Can be chained in AdapterInfo
 struct AdapterPropertiesVk : ChainedStructOut {
     inline AdapterPropertiesVk();
 
@@ -2248,20 +2280,8 @@ struct AdapterPropertiesWGPU : ChainedStructOut {
     alignas(kFirstMemberAlignment) BackendType backendType = BackendType::Undefined;
 };
 
-// Can be chained in BindGroupDescriptor
-struct BindGroupDynamicBindingArray : ChainedStruct {
-    inline BindGroupDynamicBindingArray();
-
-    struct Init;
-    inline BindGroupDynamicBindingArray(Init&& init);
-    inline operator const WGPUBindGroupDynamicBindingArray&() const noexcept;
-
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
-    alignas(kFirstMemberAlignment) uint32_t dynamicArraySize = 0;
-};
-
-struct BindGroupEntryContents {
-    inline operator const WGPUBindGroupEntryContents&() const noexcept;
+struct BindingResource {
+    inline operator const WGPUBindingResource&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
     Buffer buffer = nullptr;
@@ -2510,16 +2530,16 @@ struct DawnInjectedInvalidSType : ChainedStruct {
     alignas(kFirstMemberAlignment) SType invalidSType = {};
 };
 
-// Can be chained in RenderPassColorAttachment
-struct DawnRenderPassColorAttachmentRenderToSingleSampled : ChainedStruct {
-    inline DawnRenderPassColorAttachmentRenderToSingleSampled();
+// Can be chained in RenderPassDescriptor
+struct DawnRenderPassSampleCount : ChainedStruct {
+    inline DawnRenderPassSampleCount();
 
     struct Init;
-    inline DawnRenderPassColorAttachmentRenderToSingleSampled(Init&& init);
-    inline operator const WGPUDawnRenderPassColorAttachmentRenderToSingleSampled&() const noexcept;
+    inline DawnRenderPassSampleCount(Init&& init);
+    inline operator const WGPUDawnRenderPassSampleCount&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
-    alignas(kFirstMemberAlignment) uint32_t implicitSampleCount = 1;
+    alignas(kFirstMemberAlignment) uint32_t sampleCount = 1;
 };
 
 // Can be chained in ShaderModuleDescriptor
@@ -2600,26 +2620,6 @@ struct DawnWireWGSLControl : ChainedStruct {
     alignas(kFirstMemberAlignment) Bool enableExperimental = false;
     Bool enableUnsafe = false;
     Bool enableTesting = false;
-};
-
-struct DynamicBindingArrayLayout {
-    inline operator const WGPUDynamicBindingArrayLayout&() const noexcept;
-
-    ChainedStruct const * nextInChain = nullptr;
-    uint32_t start = 0;
-    DynamicBindingKind kind = DynamicBindingKind::Undefined;
-};
-
-// Can be chained in Limits
-struct DynamicBindingArrayLimits : ChainedStructOut {
-    inline DynamicBindingArrayLimits();
-
-    struct Init;
-    inline DynamicBindingArrayLimits(Init&& init);
-    inline operator const WGPUDynamicBindingArrayLimits&() const noexcept;
-
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
-    alignas(kFirstMemberAlignment) uint32_t maxDynamicBindingArraySize = kLimitU32Undefined;
 };
 
 // Can be chained in SurfaceDescriptor
@@ -2728,6 +2728,18 @@ struct PassTimestampWrites {
     QuerySet querySet = nullptr;
     uint32_t beginningOfPassWriteIndex = kQuerySetIndexUndefined;
     uint32_t endOfPassWriteIndex = kQuerySetIndexUndefined;
+};
+
+// Can be chained in PipelineLayoutDescriptor
+struct PipelineLayoutResourceTable : ChainedStruct {
+    inline PipelineLayoutResourceTable();
+
+    struct Init;
+    inline PipelineLayoutResourceTable(Init&& init);
+    inline operator const WGPUPipelineLayoutResourceTable&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
+    alignas(kFirstMemberAlignment) Bool usesResourceTable = false;
 };
 
 struct PipelineLayoutStorageAttachment {
@@ -2864,6 +2876,14 @@ struct RequestAdapterWebXROptions : ChainedStruct {
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
     alignas(kFirstMemberAlignment) Bool xrCompatible;
+};
+
+struct ResourceTableDescriptor {
+    inline operator const WGPUResourceTableDescriptor&() const noexcept;
+
+    ChainedStruct const * nextInChain = nullptr;
+    StringView label = {};
+    uint32_t size;
 };
 
 struct SamplerBindingLayout {
@@ -3680,18 +3700,6 @@ struct BindGroupEntry {
     TextureView textureView = nullptr;
 };
 
-// Can be chained in BindGroupLayoutDescriptor
-struct BindGroupLayoutDynamicBindingArray : ChainedStruct {
-    inline BindGroupLayoutDynamicBindingArray();
-
-    struct Init;
-    inline BindGroupLayoutDynamicBindingArray(Init&& init);
-    inline operator const WGPUBindGroupLayoutDynamicBindingArray&() const noexcept;
-
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(DynamicBindingArrayLayout));
-    alignas(kFirstMemberAlignment) DynamicBindingArrayLayout dynamicArray = {};
-};
-
 struct BindGroupLayoutEntry {
     inline operator const WGPUBindGroupLayoutEntry&() const noexcept;
 
@@ -4349,6 +4357,34 @@ static_assert(alignof(AdapterPropertiesD3D) == alignof(WGPUAdapterPropertiesD3D)
 static_assert(offsetof(AdapterPropertiesD3D, shaderModel) == offsetof(WGPUAdapterPropertiesD3D, shaderModel),
         "offsetof mismatch for AdapterPropertiesD3D::shaderModel");
 
+// AdapterPropertiesExplicitComputeSubgroupSizeConfigs implementation
+AdapterPropertiesExplicitComputeSubgroupSizeConfigs::AdapterPropertiesExplicitComputeSubgroupSizeConfigs()
+  : ChainedStructOut { nullptr, SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs } {}
+struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs::Init {
+    ChainedStructOut *  nextInChain;
+    uint32_t minExplicitComputeSubgroupSize;
+    uint32_t maxExplicitComputeSubgroupSize;
+    uint32_t maxComputeWorkgroupSubgroups;
+};
+AdapterPropertiesExplicitComputeSubgroupSizeConfigs::AdapterPropertiesExplicitComputeSubgroupSizeConfigs(AdapterPropertiesExplicitComputeSubgroupSizeConfigs::Init&& init)
+  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs }, 
+    minExplicitComputeSubgroupSize(std::move(init.minExplicitComputeSubgroupSize)), 
+    maxExplicitComputeSubgroupSize(std::move(init.maxExplicitComputeSubgroupSize)), 
+    maxComputeWorkgroupSubgroups(std::move(init.maxComputeWorkgroupSubgroups)){}
+
+AdapterPropertiesExplicitComputeSubgroupSizeConfigs::operator const WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs&() const noexcept {
+    return *reinterpret_cast<const WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs*>(this);
+}
+
+static_assert(sizeof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs) == sizeof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs), "sizeof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
+static_assert(alignof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs) == alignof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs), "alignof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
+static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, minExplicitComputeSubgroupSize) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, minExplicitComputeSubgroupSize),
+        "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::minExplicitComputeSubgroupSize");
+static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxExplicitComputeSubgroupSize) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxExplicitComputeSubgroupSize),
+        "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::maxExplicitComputeSubgroupSize");
+static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxComputeWorkgroupSubgroups) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxComputeWorkgroupSubgroups),
+        "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::maxComputeWorkgroupSubgroups");
+
 // AdapterPropertiesVk implementation
 AdapterPropertiesVk::AdapterPropertiesVk()
   : ChainedStructOut { nullptr, SType::AdapterPropertiesVk } {}
@@ -4389,46 +4425,26 @@ static_assert(alignof(AdapterPropertiesWGPU) == alignof(WGPUAdapterPropertiesWGP
 static_assert(offsetof(AdapterPropertiesWGPU, backendType) == offsetof(WGPUAdapterPropertiesWGPU, backendType),
         "offsetof mismatch for AdapterPropertiesWGPU::backendType");
 
-// BindGroupDynamicBindingArray implementation
-BindGroupDynamicBindingArray::BindGroupDynamicBindingArray()
-  : ChainedStruct { nullptr, SType::BindGroupDynamicBindingArray } {}
-struct BindGroupDynamicBindingArray::Init {
-    ChainedStruct * const nextInChain;
-    uint32_t dynamicArraySize = 0;
-};
-BindGroupDynamicBindingArray::BindGroupDynamicBindingArray(BindGroupDynamicBindingArray::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::BindGroupDynamicBindingArray }, 
-    dynamicArraySize(std::move(init.dynamicArraySize)){}
+// BindingResource implementation
 
-BindGroupDynamicBindingArray::operator const WGPUBindGroupDynamicBindingArray&() const noexcept {
-    return *reinterpret_cast<const WGPUBindGroupDynamicBindingArray*>(this);
+BindingResource::operator const WGPUBindingResource&() const noexcept {
+    return *reinterpret_cast<const WGPUBindingResource*>(this);
 }
 
-static_assert(sizeof(BindGroupDynamicBindingArray) == sizeof(WGPUBindGroupDynamicBindingArray), "sizeof mismatch for BindGroupDynamicBindingArray");
-static_assert(alignof(BindGroupDynamicBindingArray) == alignof(WGPUBindGroupDynamicBindingArray), "alignof mismatch for BindGroupDynamicBindingArray");
-static_assert(offsetof(BindGroupDynamicBindingArray, dynamicArraySize) == offsetof(WGPUBindGroupDynamicBindingArray, dynamicArraySize),
-        "offsetof mismatch for BindGroupDynamicBindingArray::dynamicArraySize");
-
-// BindGroupEntryContents implementation
-
-BindGroupEntryContents::operator const WGPUBindGroupEntryContents&() const noexcept {
-    return *reinterpret_cast<const WGPUBindGroupEntryContents*>(this);
-}
-
-static_assert(sizeof(BindGroupEntryContents) == sizeof(WGPUBindGroupEntryContents), "sizeof mismatch for BindGroupEntryContents");
-static_assert(alignof(BindGroupEntryContents) == alignof(WGPUBindGroupEntryContents), "alignof mismatch for BindGroupEntryContents");
-static_assert(offsetof(BindGroupEntryContents, nextInChain) == offsetof(WGPUBindGroupEntryContents, nextInChain),
-        "offsetof mismatch for BindGroupEntryContents::nextInChain");
-static_assert(offsetof(BindGroupEntryContents, buffer) == offsetof(WGPUBindGroupEntryContents, buffer),
-        "offsetof mismatch for BindGroupEntryContents::buffer");
-static_assert(offsetof(BindGroupEntryContents, offset) == offsetof(WGPUBindGroupEntryContents, offset),
-        "offsetof mismatch for BindGroupEntryContents::offset");
-static_assert(offsetof(BindGroupEntryContents, size) == offsetof(WGPUBindGroupEntryContents, size),
-        "offsetof mismatch for BindGroupEntryContents::size");
-static_assert(offsetof(BindGroupEntryContents, sampler) == offsetof(WGPUBindGroupEntryContents, sampler),
-        "offsetof mismatch for BindGroupEntryContents::sampler");
-static_assert(offsetof(BindGroupEntryContents, textureView) == offsetof(WGPUBindGroupEntryContents, textureView),
-        "offsetof mismatch for BindGroupEntryContents::textureView");
+static_assert(sizeof(BindingResource) == sizeof(WGPUBindingResource), "sizeof mismatch for BindingResource");
+static_assert(alignof(BindingResource) == alignof(WGPUBindingResource), "alignof mismatch for BindingResource");
+static_assert(offsetof(BindingResource, nextInChain) == offsetof(WGPUBindingResource, nextInChain),
+        "offsetof mismatch for BindingResource::nextInChain");
+static_assert(offsetof(BindingResource, buffer) == offsetof(WGPUBindingResource, buffer),
+        "offsetof mismatch for BindingResource::buffer");
+static_assert(offsetof(BindingResource, offset) == offsetof(WGPUBindingResource, offset),
+        "offsetof mismatch for BindingResource::offset");
+static_assert(offsetof(BindingResource, size) == offsetof(WGPUBindingResource, size),
+        "offsetof mismatch for BindingResource::size");
+static_assert(offsetof(BindingResource, sampler) == offsetof(WGPUBindingResource, sampler),
+        "offsetof mismatch for BindingResource::sampler");
+static_assert(offsetof(BindingResource, textureView) == offsetof(WGPUBindingResource, textureView),
+        "offsetof mismatch for BindingResource::textureView");
 
 // BlendComponent implementation
 
@@ -4871,25 +4887,25 @@ static_assert(alignof(DawnInjectedInvalidSType) == alignof(WGPUDawnInjectedInval
 static_assert(offsetof(DawnInjectedInvalidSType, invalidSType) == offsetof(WGPUDawnInjectedInvalidSType, invalidSType),
         "offsetof mismatch for DawnInjectedInvalidSType::invalidSType");
 
-// DawnRenderPassColorAttachmentRenderToSingleSampled implementation
-DawnRenderPassColorAttachmentRenderToSingleSampled::DawnRenderPassColorAttachmentRenderToSingleSampled()
-  : ChainedStruct { nullptr, SType::DawnRenderPassColorAttachmentRenderToSingleSampled } {}
-struct DawnRenderPassColorAttachmentRenderToSingleSampled::Init {
+// DawnRenderPassSampleCount implementation
+DawnRenderPassSampleCount::DawnRenderPassSampleCount()
+  : ChainedStruct { nullptr, SType::DawnRenderPassSampleCount } {}
+struct DawnRenderPassSampleCount::Init {
     ChainedStruct * const nextInChain;
-    uint32_t implicitSampleCount = 1;
+    uint32_t sampleCount = 1;
 };
-DawnRenderPassColorAttachmentRenderToSingleSampled::DawnRenderPassColorAttachmentRenderToSingleSampled(DawnRenderPassColorAttachmentRenderToSingleSampled::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnRenderPassColorAttachmentRenderToSingleSampled }, 
-    implicitSampleCount(std::move(init.implicitSampleCount)){}
+DawnRenderPassSampleCount::DawnRenderPassSampleCount(DawnRenderPassSampleCount::Init&& init)
+  : ChainedStruct { init.nextInChain, SType::DawnRenderPassSampleCount }, 
+    sampleCount(std::move(init.sampleCount)){}
 
-DawnRenderPassColorAttachmentRenderToSingleSampled::operator const WGPUDawnRenderPassColorAttachmentRenderToSingleSampled&() const noexcept {
-    return *reinterpret_cast<const WGPUDawnRenderPassColorAttachmentRenderToSingleSampled*>(this);
+DawnRenderPassSampleCount::operator const WGPUDawnRenderPassSampleCount&() const noexcept {
+    return *reinterpret_cast<const WGPUDawnRenderPassSampleCount*>(this);
 }
 
-static_assert(sizeof(DawnRenderPassColorAttachmentRenderToSingleSampled) == sizeof(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled), "sizeof mismatch for DawnRenderPassColorAttachmentRenderToSingleSampled");
-static_assert(alignof(DawnRenderPassColorAttachmentRenderToSingleSampled) == alignof(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled), "alignof mismatch for DawnRenderPassColorAttachmentRenderToSingleSampled");
-static_assert(offsetof(DawnRenderPassColorAttachmentRenderToSingleSampled, implicitSampleCount) == offsetof(WGPUDawnRenderPassColorAttachmentRenderToSingleSampled, implicitSampleCount),
-        "offsetof mismatch for DawnRenderPassColorAttachmentRenderToSingleSampled::implicitSampleCount");
+static_assert(sizeof(DawnRenderPassSampleCount) == sizeof(WGPUDawnRenderPassSampleCount), "sizeof mismatch for DawnRenderPassSampleCount");
+static_assert(alignof(DawnRenderPassSampleCount) == alignof(WGPUDawnRenderPassSampleCount), "alignof mismatch for DawnRenderPassSampleCount");
+static_assert(offsetof(DawnRenderPassSampleCount, sampleCount) == offsetof(WGPUDawnRenderPassSampleCount, sampleCount),
+        "offsetof mismatch for DawnRenderPassSampleCount::sampleCount");
 
 // DawnShaderModuleSPIRVOptionsDescriptor implementation
 DawnShaderModuleSPIRVOptionsDescriptor::DawnShaderModuleSPIRVOptionsDescriptor()
@@ -5034,41 +5050,6 @@ static_assert(offsetof(DawnWireWGSLControl, enableUnsafe) == offsetof(WGPUDawnWi
         "offsetof mismatch for DawnWireWGSLControl::enableUnsafe");
 static_assert(offsetof(DawnWireWGSLControl, enableTesting) == offsetof(WGPUDawnWireWGSLControl, enableTesting),
         "offsetof mismatch for DawnWireWGSLControl::enableTesting");
-
-// DynamicBindingArrayLayout implementation
-
-DynamicBindingArrayLayout::operator const WGPUDynamicBindingArrayLayout&() const noexcept {
-    return *reinterpret_cast<const WGPUDynamicBindingArrayLayout*>(this);
-}
-
-static_assert(sizeof(DynamicBindingArrayLayout) == sizeof(WGPUDynamicBindingArrayLayout), "sizeof mismatch for DynamicBindingArrayLayout");
-static_assert(alignof(DynamicBindingArrayLayout) == alignof(WGPUDynamicBindingArrayLayout), "alignof mismatch for DynamicBindingArrayLayout");
-static_assert(offsetof(DynamicBindingArrayLayout, nextInChain) == offsetof(WGPUDynamicBindingArrayLayout, nextInChain),
-        "offsetof mismatch for DynamicBindingArrayLayout::nextInChain");
-static_assert(offsetof(DynamicBindingArrayLayout, start) == offsetof(WGPUDynamicBindingArrayLayout, start),
-        "offsetof mismatch for DynamicBindingArrayLayout::start");
-static_assert(offsetof(DynamicBindingArrayLayout, kind) == offsetof(WGPUDynamicBindingArrayLayout, kind),
-        "offsetof mismatch for DynamicBindingArrayLayout::kind");
-
-// DynamicBindingArrayLimits implementation
-DynamicBindingArrayLimits::DynamicBindingArrayLimits()
-  : ChainedStructOut { nullptr, SType::DynamicBindingArrayLimits } {}
-struct DynamicBindingArrayLimits::Init {
-    ChainedStructOut *  nextInChain;
-    uint32_t maxDynamicBindingArraySize = kLimitU32Undefined;
-};
-DynamicBindingArrayLimits::DynamicBindingArrayLimits(DynamicBindingArrayLimits::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::DynamicBindingArrayLimits }, 
-    maxDynamicBindingArraySize(std::move(init.maxDynamicBindingArraySize)){}
-
-DynamicBindingArrayLimits::operator const WGPUDynamicBindingArrayLimits&() const noexcept {
-    return *reinterpret_cast<const WGPUDynamicBindingArrayLimits*>(this);
-}
-
-static_assert(sizeof(DynamicBindingArrayLimits) == sizeof(WGPUDynamicBindingArrayLimits), "sizeof mismatch for DynamicBindingArrayLimits");
-static_assert(alignof(DynamicBindingArrayLimits) == alignof(WGPUDynamicBindingArrayLimits), "alignof mismatch for DynamicBindingArrayLimits");
-static_assert(offsetof(DynamicBindingArrayLimits, maxDynamicBindingArraySize) == offsetof(WGPUDynamicBindingArrayLimits, maxDynamicBindingArraySize),
-        "offsetof mismatch for DynamicBindingArrayLimits::maxDynamicBindingArraySize");
 
 // EmscriptenSurfaceSourceCanvasHTMLSelector implementation
 EmscriptenSurfaceSourceCanvasHTMLSelector::EmscriptenSurfaceSourceCanvasHTMLSelector()
@@ -5263,6 +5244,26 @@ static_assert(offsetof(PassTimestampWrites, beginningOfPassWriteIndex) == offset
         "offsetof mismatch for PassTimestampWrites::beginningOfPassWriteIndex");
 static_assert(offsetof(PassTimestampWrites, endOfPassWriteIndex) == offsetof(WGPUPassTimestampWrites, endOfPassWriteIndex),
         "offsetof mismatch for PassTimestampWrites::endOfPassWriteIndex");
+
+// PipelineLayoutResourceTable implementation
+PipelineLayoutResourceTable::PipelineLayoutResourceTable()
+  : ChainedStruct { nullptr, SType::PipelineLayoutResourceTable } {}
+struct PipelineLayoutResourceTable::Init {
+    ChainedStruct * const nextInChain;
+    Bool usesResourceTable = false;
+};
+PipelineLayoutResourceTable::PipelineLayoutResourceTable(PipelineLayoutResourceTable::Init&& init)
+  : ChainedStruct { init.nextInChain, SType::PipelineLayoutResourceTable }, 
+    usesResourceTable(std::move(init.usesResourceTable)){}
+
+PipelineLayoutResourceTable::operator const WGPUPipelineLayoutResourceTable&() const noexcept {
+    return *reinterpret_cast<const WGPUPipelineLayoutResourceTable*>(this);
+}
+
+static_assert(sizeof(PipelineLayoutResourceTable) == sizeof(WGPUPipelineLayoutResourceTable), "sizeof mismatch for PipelineLayoutResourceTable");
+static_assert(alignof(PipelineLayoutResourceTable) == alignof(WGPUPipelineLayoutResourceTable), "alignof mismatch for PipelineLayoutResourceTable");
+static_assert(offsetof(PipelineLayoutResourceTable, usesResourceTable) == offsetof(WGPUPipelineLayoutResourceTable, usesResourceTable),
+        "offsetof mismatch for PipelineLayoutResourceTable::usesResourceTable");
 
 // PipelineLayoutStorageAttachment implementation
 
@@ -5524,6 +5525,21 @@ static_assert(sizeof(RequestAdapterWebXROptions) == sizeof(WGPURequestAdapterWeb
 static_assert(alignof(RequestAdapterWebXROptions) == alignof(WGPURequestAdapterWebXROptions), "alignof mismatch for RequestAdapterWebXROptions");
 static_assert(offsetof(RequestAdapterWebXROptions, xrCompatible) == offsetof(WGPURequestAdapterWebXROptions, xrCompatible),
         "offsetof mismatch for RequestAdapterWebXROptions::xrCompatible");
+
+// ResourceTableDescriptor implementation
+
+ResourceTableDescriptor::operator const WGPUResourceTableDescriptor&() const noexcept {
+    return *reinterpret_cast<const WGPUResourceTableDescriptor*>(this);
+}
+
+static_assert(sizeof(ResourceTableDescriptor) == sizeof(WGPUResourceTableDescriptor), "sizeof mismatch for ResourceTableDescriptor");
+static_assert(alignof(ResourceTableDescriptor) == alignof(WGPUResourceTableDescriptor), "alignof mismatch for ResourceTableDescriptor");
+static_assert(offsetof(ResourceTableDescriptor, nextInChain) == offsetof(WGPUResourceTableDescriptor, nextInChain),
+        "offsetof mismatch for ResourceTableDescriptor::nextInChain");
+static_assert(offsetof(ResourceTableDescriptor, label) == offsetof(WGPUResourceTableDescriptor, label),
+        "offsetof mismatch for ResourceTableDescriptor::label");
+static_assert(offsetof(ResourceTableDescriptor, size) == offsetof(WGPUResourceTableDescriptor, size),
+        "offsetof mismatch for ResourceTableDescriptor::size");
 
 // SamplerBindingLayout implementation
 
@@ -7147,26 +7163,6 @@ static_assert(offsetof(BindGroupEntry, sampler) == offsetof(WGPUBindGroupEntry, 
 static_assert(offsetof(BindGroupEntry, textureView) == offsetof(WGPUBindGroupEntry, textureView),
         "offsetof mismatch for BindGroupEntry::textureView");
 
-// BindGroupLayoutDynamicBindingArray implementation
-BindGroupLayoutDynamicBindingArray::BindGroupLayoutDynamicBindingArray()
-  : ChainedStruct { nullptr, SType::BindGroupLayoutDynamicBindingArray } {}
-struct BindGroupLayoutDynamicBindingArray::Init {
-    ChainedStruct * const nextInChain;
-    DynamicBindingArrayLayout dynamicArray = {};
-};
-BindGroupLayoutDynamicBindingArray::BindGroupLayoutDynamicBindingArray(BindGroupLayoutDynamicBindingArray::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::BindGroupLayoutDynamicBindingArray }, 
-    dynamicArray(std::move(init.dynamicArray)){}
-
-BindGroupLayoutDynamicBindingArray::operator const WGPUBindGroupLayoutDynamicBindingArray&() const noexcept {
-    return *reinterpret_cast<const WGPUBindGroupLayoutDynamicBindingArray*>(this);
-}
-
-static_assert(sizeof(BindGroupLayoutDynamicBindingArray) == sizeof(WGPUBindGroupLayoutDynamicBindingArray), "sizeof mismatch for BindGroupLayoutDynamicBindingArray");
-static_assert(alignof(BindGroupLayoutDynamicBindingArray) == alignof(WGPUBindGroupLayoutDynamicBindingArray), "alignof mismatch for BindGroupLayoutDynamicBindingArray");
-static_assert(offsetof(BindGroupLayoutDynamicBindingArray, dynamicArray) == offsetof(WGPUBindGroupLayoutDynamicBindingArray, dynamicArray),
-        "offsetof mismatch for BindGroupLayoutDynamicBindingArray::dynamicArray");
-
 // BindGroupLayoutEntry implementation
 
 BindGroupLayoutEntry::operator const WGPUBindGroupLayoutEntry&() const noexcept {
@@ -8597,23 +8593,8 @@ static_assert(alignof(Adapter) == alignof(WGPUAdapter), "alignof mismatch for Ad
 
 // BindGroup implementation
 
-void BindGroup::Destroy() const {
-    wgpuBindGroupDestroy(Get());
-}
-uint32_t BindGroup::InsertBinding(BindGroupEntryContents const * contents) const {
-    auto result = wgpuBindGroupInsertBinding(Get(), reinterpret_cast<WGPUBindGroupEntryContents const *>(contents));
-    return result;
-}
-ConvertibleStatus BindGroup::RemoveBinding(uint32_t binding) const {
-    auto result = wgpuBindGroupRemoveBinding(Get(), binding);
-    return static_cast<Status>(result);
-}
 void BindGroup::SetLabel(StringView label) const {
     wgpuBindGroupSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
-}
-ConvertibleStatus BindGroup::Update(BindGroupEntry const * entry) const {
-    auto result = wgpuBindGroupUpdate(Get(), reinterpret_cast<WGPUBindGroupEntry const *>(entry));
-    return static_cast<Status>(result);
 }
 
 
@@ -8857,56 +8838,6 @@ void CommandEncoder::WGPURelease(WGPUCommandEncoder handle) {
 static_assert(sizeof(CommandEncoder) == sizeof(WGPUCommandEncoder), "sizeof mismatch for CommandEncoder");
 static_assert(alignof(CommandEncoder) == alignof(WGPUCommandEncoder), "alignof mismatch for CommandEncoder");
 
-// ComputePassEncoder implementation
-
-void ComputePassEncoder::DispatchWorkgroups(uint32_t workgroupCountX, uint32_t workgroupCountY, uint32_t workgroupCountZ) const {
-    wgpuComputePassEncoderDispatchWorkgroups(Get(), workgroupCountX, workgroupCountY, workgroupCountZ);
-}
-void ComputePassEncoder::DispatchWorkgroupsIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
-    wgpuComputePassEncoderDispatchWorkgroupsIndirect(Get(), indirectBuffer.Get(), indirectOffset);
-}
-void ComputePassEncoder::End() const {
-    wgpuComputePassEncoderEnd(Get());
-}
-void ComputePassEncoder::InsertDebugMarker(StringView markerLabel) const {
-    wgpuComputePassEncoderInsertDebugMarker(Get(), *reinterpret_cast<WGPUStringView const*>(&markerLabel));
-}
-void ComputePassEncoder::PopDebugGroup() const {
-    wgpuComputePassEncoderPopDebugGroup(Get());
-}
-void ComputePassEncoder::PushDebugGroup(StringView groupLabel) const {
-    wgpuComputePassEncoderPushDebugGroup(Get(), *reinterpret_cast<WGPUStringView const*>(&groupLabel));
-}
-void ComputePassEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) const {
-    wgpuComputePassEncoderSetBindGroup(Get(), groupIndex, group.Get(), dynamicOffsetCount, reinterpret_cast<uint32_t const *>(dynamicOffsets));
-}
-void ComputePassEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
-    wgpuComputePassEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
-}
-void ComputePassEncoder::SetLabel(StringView label) const {
-    wgpuComputePassEncoderSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
-}
-void ComputePassEncoder::SetPipeline(ComputePipeline const& pipeline) const {
-    wgpuComputePassEncoderSetPipeline(Get(), pipeline.Get());
-}
-void ComputePassEncoder::WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const {
-    wgpuComputePassEncoderWriteTimestamp(Get(), querySet.Get(), queryIndex);
-}
-
-
-void ComputePassEncoder::WGPUAddRef(WGPUComputePassEncoder handle) {
-    if (handle != nullptr) {
-        wgpuComputePassEncoderAddRef(handle);
-    }
-}
-void ComputePassEncoder::WGPURelease(WGPUComputePassEncoder handle) {
-    if (handle != nullptr) {
-        wgpuComputePassEncoderRelease(handle);
-    }
-}
-static_assert(sizeof(ComputePassEncoder) == sizeof(WGPUComputePassEncoder), "sizeof mismatch for ComputePassEncoder");
-static_assert(alignof(ComputePassEncoder) == alignof(WGPUComputePassEncoder), "alignof mismatch for ComputePassEncoder");
-
 // ComputePipeline implementation
 
 BindGroupLayout ComputePipeline::GetBindGroupLayout(uint32_t groupIndex) const {
@@ -9110,6 +9041,10 @@ Future Device::CreateRenderPipelineAsync(RenderPipelineDescriptor const * descri
     return Future {
             result.id
         };
+}
+ResourceTable Device::CreateResourceTable(ResourceTableDescriptor const * descriptor) const {
+    auto result = wgpuDeviceCreateResourceTable(Get(), reinterpret_cast<WGPUResourceTableDescriptor const *>(descriptor));
+    return ResourceTable::Acquire(result);
 }
 Sampler Device::CreateSampler(SamplerDescriptor const * descriptor) const {
     auto result = wgpuDeviceCreateSampler(Get(), reinterpret_cast<WGPUSamplerDescriptor const *>(descriptor));
@@ -9617,158 +9552,6 @@ void RenderBundle::WGPURelease(WGPURenderBundle handle) {
 static_assert(sizeof(RenderBundle) == sizeof(WGPURenderBundle), "sizeof mismatch for RenderBundle");
 static_assert(alignof(RenderBundle) == alignof(WGPURenderBundle), "alignof mismatch for RenderBundle");
 
-// RenderBundleEncoder implementation
-
-void RenderBundleEncoder::Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) const {
-    wgpuRenderBundleEncoderDraw(Get(), vertexCount, instanceCount, firstVertex, firstInstance);
-}
-void RenderBundleEncoder::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t baseVertex, uint32_t firstInstance) const {
-    wgpuRenderBundleEncoderDrawIndexed(Get(), indexCount, instanceCount, firstIndex, baseVertex, firstInstance);
-}
-void RenderBundleEncoder::DrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
-    wgpuRenderBundleEncoderDrawIndexedIndirect(Get(), indirectBuffer.Get(), indirectOffset);
-}
-void RenderBundleEncoder::DrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
-    wgpuRenderBundleEncoderDrawIndirect(Get(), indirectBuffer.Get(), indirectOffset);
-}
-RenderBundle RenderBundleEncoder::Finish(RenderBundleDescriptor const * descriptor) const {
-    auto result = wgpuRenderBundleEncoderFinish(Get(), reinterpret_cast<WGPURenderBundleDescriptor const *>(descriptor));
-    return RenderBundle::Acquire(result);
-}
-void RenderBundleEncoder::InsertDebugMarker(StringView markerLabel) const {
-    wgpuRenderBundleEncoderInsertDebugMarker(Get(), *reinterpret_cast<WGPUStringView const*>(&markerLabel));
-}
-void RenderBundleEncoder::PopDebugGroup() const {
-    wgpuRenderBundleEncoderPopDebugGroup(Get());
-}
-void RenderBundleEncoder::PushDebugGroup(StringView groupLabel) const {
-    wgpuRenderBundleEncoderPushDebugGroup(Get(), *reinterpret_cast<WGPUStringView const*>(&groupLabel));
-}
-void RenderBundleEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) const {
-    wgpuRenderBundleEncoderSetBindGroup(Get(), groupIndex, group.Get(), dynamicOffsetCount, reinterpret_cast<uint32_t const *>(dynamicOffsets));
-}
-void RenderBundleEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
-    wgpuRenderBundleEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
-}
-void RenderBundleEncoder::SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset, uint64_t size) const {
-    wgpuRenderBundleEncoderSetIndexBuffer(Get(), buffer.Get(), static_cast<WGPUIndexFormat>(format), offset, size);
-}
-void RenderBundleEncoder::SetLabel(StringView label) const {
-    wgpuRenderBundleEncoderSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
-}
-void RenderBundleEncoder::SetPipeline(RenderPipeline const& pipeline) const {
-    wgpuRenderBundleEncoderSetPipeline(Get(), pipeline.Get());
-}
-void RenderBundleEncoder::SetVertexBuffer(uint32_t slot, Buffer const& buffer, uint64_t offset, uint64_t size) const {
-    wgpuRenderBundleEncoderSetVertexBuffer(Get(), slot, buffer.Get(), offset, size);
-}
-
-
-void RenderBundleEncoder::WGPUAddRef(WGPURenderBundleEncoder handle) {
-    if (handle != nullptr) {
-        wgpuRenderBundleEncoderAddRef(handle);
-    }
-}
-void RenderBundleEncoder::WGPURelease(WGPURenderBundleEncoder handle) {
-    if (handle != nullptr) {
-        wgpuRenderBundleEncoderRelease(handle);
-    }
-}
-static_assert(sizeof(RenderBundleEncoder) == sizeof(WGPURenderBundleEncoder), "sizeof mismatch for RenderBundleEncoder");
-static_assert(alignof(RenderBundleEncoder) == alignof(WGPURenderBundleEncoder), "alignof mismatch for RenderBundleEncoder");
-
-// RenderPassEncoder implementation
-
-void RenderPassEncoder::BeginOcclusionQuery(uint32_t queryIndex) const {
-    wgpuRenderPassEncoderBeginOcclusionQuery(Get(), queryIndex);
-}
-void RenderPassEncoder::Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) const {
-    wgpuRenderPassEncoderDraw(Get(), vertexCount, instanceCount, firstVertex, firstInstance);
-}
-void RenderPassEncoder::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t baseVertex, uint32_t firstInstance) const {
-    wgpuRenderPassEncoderDrawIndexed(Get(), indexCount, instanceCount, firstIndex, baseVertex, firstInstance);
-}
-void RenderPassEncoder::DrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
-    wgpuRenderPassEncoderDrawIndexedIndirect(Get(), indirectBuffer.Get(), indirectOffset);
-}
-void RenderPassEncoder::DrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
-    wgpuRenderPassEncoderDrawIndirect(Get(), indirectBuffer.Get(), indirectOffset);
-}
-void RenderPassEncoder::End() const {
-    wgpuRenderPassEncoderEnd(Get());
-}
-void RenderPassEncoder::EndOcclusionQuery() const {
-    wgpuRenderPassEncoderEndOcclusionQuery(Get());
-}
-void RenderPassEncoder::ExecuteBundles(size_t bundleCount, RenderBundle const * bundles) const {
-    wgpuRenderPassEncoderExecuteBundles(Get(), bundleCount, reinterpret_cast<WGPURenderBundle const *>(bundles));
-}
-void RenderPassEncoder::InsertDebugMarker(StringView markerLabel) const {
-    wgpuRenderPassEncoderInsertDebugMarker(Get(), *reinterpret_cast<WGPUStringView const*>(&markerLabel));
-}
-void RenderPassEncoder::MultiDrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, Buffer const& drawCountBuffer, uint64_t drawCountBufferOffset) const {
-    wgpuRenderPassEncoderMultiDrawIndexedIndirect(Get(), indirectBuffer.Get(), indirectOffset, maxDrawCount, drawCountBuffer.Get(), drawCountBufferOffset);
-}
-void RenderPassEncoder::MultiDrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, Buffer const& drawCountBuffer, uint64_t drawCountBufferOffset) const {
-    wgpuRenderPassEncoderMultiDrawIndirect(Get(), indirectBuffer.Get(), indirectOffset, maxDrawCount, drawCountBuffer.Get(), drawCountBufferOffset);
-}
-void RenderPassEncoder::PixelLocalStorageBarrier() const {
-    wgpuRenderPassEncoderPixelLocalStorageBarrier(Get());
-}
-void RenderPassEncoder::PopDebugGroup() const {
-    wgpuRenderPassEncoderPopDebugGroup(Get());
-}
-void RenderPassEncoder::PushDebugGroup(StringView groupLabel) const {
-    wgpuRenderPassEncoderPushDebugGroup(Get(), *reinterpret_cast<WGPUStringView const*>(&groupLabel));
-}
-void RenderPassEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) const {
-    wgpuRenderPassEncoderSetBindGroup(Get(), groupIndex, group.Get(), dynamicOffsetCount, reinterpret_cast<uint32_t const *>(dynamicOffsets));
-}
-void RenderPassEncoder::SetBlendConstant(Color const * color) const {
-    wgpuRenderPassEncoderSetBlendConstant(Get(), reinterpret_cast<WGPUColor const *>(color));
-}
-void RenderPassEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
-    wgpuRenderPassEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
-}
-void RenderPassEncoder::SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset, uint64_t size) const {
-    wgpuRenderPassEncoderSetIndexBuffer(Get(), buffer.Get(), static_cast<WGPUIndexFormat>(format), offset, size);
-}
-void RenderPassEncoder::SetLabel(StringView label) const {
-    wgpuRenderPassEncoderSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
-}
-void RenderPassEncoder::SetPipeline(RenderPipeline const& pipeline) const {
-    wgpuRenderPassEncoderSetPipeline(Get(), pipeline.Get());
-}
-void RenderPassEncoder::SetScissorRect(uint32_t x, uint32_t y, uint32_t width, uint32_t height) const {
-    wgpuRenderPassEncoderSetScissorRect(Get(), x, y, width, height);
-}
-void RenderPassEncoder::SetStencilReference(uint32_t reference) const {
-    wgpuRenderPassEncoderSetStencilReference(Get(), reference);
-}
-void RenderPassEncoder::SetVertexBuffer(uint32_t slot, Buffer const& buffer, uint64_t offset, uint64_t size) const {
-    wgpuRenderPassEncoderSetVertexBuffer(Get(), slot, buffer.Get(), offset, size);
-}
-void RenderPassEncoder::SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth) const {
-    wgpuRenderPassEncoderSetViewport(Get(), x, y, width, height, minDepth, maxDepth);
-}
-void RenderPassEncoder::WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const {
-    wgpuRenderPassEncoderWriteTimestamp(Get(), querySet.Get(), queryIndex);
-}
-
-
-void RenderPassEncoder::WGPUAddRef(WGPURenderPassEncoder handle) {
-    if (handle != nullptr) {
-        wgpuRenderPassEncoderAddRef(handle);
-    }
-}
-void RenderPassEncoder::WGPURelease(WGPURenderPassEncoder handle) {
-    if (handle != nullptr) {
-        wgpuRenderPassEncoderRelease(handle);
-    }
-}
-static_assert(sizeof(RenderPassEncoder) == sizeof(WGPURenderPassEncoder), "sizeof mismatch for RenderPassEncoder");
-static_assert(alignof(RenderPassEncoder) == alignof(WGPURenderPassEncoder), "alignof mismatch for RenderPassEncoder");
-
 // RenderPipeline implementation
 
 BindGroupLayout RenderPipeline::GetBindGroupLayout(uint32_t groupIndex) const {
@@ -9792,6 +9575,42 @@ void RenderPipeline::WGPURelease(WGPURenderPipeline handle) {
 }
 static_assert(sizeof(RenderPipeline) == sizeof(WGPURenderPipeline), "sizeof mismatch for RenderPipeline");
 static_assert(alignof(RenderPipeline) == alignof(WGPURenderPipeline), "alignof mismatch for RenderPipeline");
+
+// ResourceTable implementation
+
+void ResourceTable::Destroy() const {
+    wgpuResourceTableDestroy(Get());
+}
+uint32_t ResourceTable::GetSize() const {
+    auto result = wgpuResourceTableGetSize(Get());
+    return result;
+}
+uint32_t ResourceTable::InsertBinding(BindingResource const * resource) const {
+    auto result = wgpuResourceTableInsertBinding(Get(), reinterpret_cast<WGPUBindingResource const *>(resource));
+    return result;
+}
+ConvertibleStatus ResourceTable::RemoveBinding(uint32_t slot) const {
+    auto result = wgpuResourceTableRemoveBinding(Get(), slot);
+    return static_cast<Status>(result);
+}
+ConvertibleStatus ResourceTable::Update(uint32_t slot, BindingResource const * resource) const {
+    auto result = wgpuResourceTableUpdate(Get(), slot, reinterpret_cast<WGPUBindingResource const *>(resource));
+    return static_cast<Status>(result);
+}
+
+
+void ResourceTable::WGPUAddRef(WGPUResourceTable handle) {
+    if (handle != nullptr) {
+        wgpuResourceTableAddRef(handle);
+    }
+}
+void ResourceTable::WGPURelease(WGPUResourceTable handle) {
+    if (handle != nullptr) {
+        wgpuResourceTableRelease(handle);
+    }
+}
+static_assert(sizeof(ResourceTable) == sizeof(WGPUResourceTable), "sizeof mismatch for ResourceTable");
+static_assert(alignof(ResourceTable) == alignof(WGPUResourceTable), "alignof mismatch for ResourceTable");
 
 // Sampler implementation
 
@@ -10085,6 +9904,10 @@ uint32_t Texture::GetSampleCount() const {
     auto result = wgpuTextureGetSampleCount(Get());
     return result;
 }
+TextureViewDimension Texture::GetTextureBindingViewDimension() const {
+    auto result = wgpuTextureGetTextureBindingViewDimension(Get());
+    return static_cast<TextureViewDimension>(result);
+}
 TextureUsage Texture::GetUsage() const {
     auto result = wgpuTextureGetUsage(Get());
     return static_cast<TextureUsage>(result);
@@ -10098,6 +9921,9 @@ void Texture::Pin(TextureUsage usage) const {
 }
 void Texture::SetLabel(StringView label) const {
     wgpuTextureSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+}
+void Texture::SetOwnershipForMemoryDump(uint64_t ownerGuid) const {
+    wgpuTextureSetOwnershipForMemoryDump(Get(), ownerGuid);
 }
 void Texture::Unpin() const {
     wgpuTextureUnpin(Get());
@@ -10136,6 +9962,217 @@ void TextureView::WGPURelease(WGPUTextureView handle) {
 }
 static_assert(sizeof(TextureView) == sizeof(WGPUTextureView), "sizeof mismatch for TextureView");
 static_assert(alignof(TextureView) == alignof(WGPUTextureView), "alignof mismatch for TextureView");
+
+// ComputePassEncoder implementation
+
+void ComputePassEncoder::DispatchWorkgroups(uint32_t workgroupCountX, uint32_t workgroupCountY, uint32_t workgroupCountZ) const {
+    wgpuComputePassEncoderDispatchWorkgroups(Get(), workgroupCountX, workgroupCountY, workgroupCountZ);
+}
+void ComputePassEncoder::DispatchWorkgroupsIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
+    wgpuComputePassEncoderDispatchWorkgroupsIndirect(Get(), indirectBuffer.Get(), indirectOffset);
+}
+void ComputePassEncoder::End() const {
+    wgpuComputePassEncoderEnd(Get());
+}
+void ComputePassEncoder::InsertDebugMarker(StringView markerLabel) const {
+    wgpuComputePassEncoderInsertDebugMarker(Get(), *reinterpret_cast<WGPUStringView const*>(&markerLabel));
+}
+void ComputePassEncoder::PopDebugGroup() const {
+    wgpuComputePassEncoderPopDebugGroup(Get());
+}
+void ComputePassEncoder::PushDebugGroup(StringView groupLabel) const {
+    wgpuComputePassEncoderPushDebugGroup(Get(), *reinterpret_cast<WGPUStringView const*>(&groupLabel));
+}
+void ComputePassEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) const {
+    wgpuComputePassEncoderSetBindGroup(Get(), groupIndex, group.Get(), dynamicOffsetCount, reinterpret_cast<uint32_t const *>(dynamicOffsets));
+}
+void ComputePassEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
+    wgpuComputePassEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
+}
+void ComputePassEncoder::SetLabel(StringView label) const {
+    wgpuComputePassEncoderSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+}
+void ComputePassEncoder::SetPipeline(ComputePipeline const& pipeline) const {
+    wgpuComputePassEncoderSetPipeline(Get(), pipeline.Get());
+}
+void ComputePassEncoder::SetResourceTable(ResourceTable const& table) const {
+    wgpuComputePassEncoderSetResourceTable(Get(), table.Get());
+}
+void ComputePassEncoder::WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const {
+    wgpuComputePassEncoderWriteTimestamp(Get(), querySet.Get(), queryIndex);
+}
+
+
+void ComputePassEncoder::WGPUAddRef(WGPUComputePassEncoder handle) {
+    if (handle != nullptr) {
+        wgpuComputePassEncoderAddRef(handle);
+    }
+}
+void ComputePassEncoder::WGPURelease(WGPUComputePassEncoder handle) {
+    if (handle != nullptr) {
+        wgpuComputePassEncoderRelease(handle);
+    }
+}
+static_assert(sizeof(ComputePassEncoder) == sizeof(WGPUComputePassEncoder), "sizeof mismatch for ComputePassEncoder");
+static_assert(alignof(ComputePassEncoder) == alignof(WGPUComputePassEncoder), "alignof mismatch for ComputePassEncoder");
+
+// RenderBundleEncoder implementation
+
+void RenderBundleEncoder::Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) const {
+    wgpuRenderBundleEncoderDraw(Get(), vertexCount, instanceCount, firstVertex, firstInstance);
+}
+void RenderBundleEncoder::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t baseVertex, uint32_t firstInstance) const {
+    wgpuRenderBundleEncoderDrawIndexed(Get(), indexCount, instanceCount, firstIndex, baseVertex, firstInstance);
+}
+void RenderBundleEncoder::DrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
+    wgpuRenderBundleEncoderDrawIndexedIndirect(Get(), indirectBuffer.Get(), indirectOffset);
+}
+void RenderBundleEncoder::DrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
+    wgpuRenderBundleEncoderDrawIndirect(Get(), indirectBuffer.Get(), indirectOffset);
+}
+RenderBundle RenderBundleEncoder::Finish(RenderBundleDescriptor const * descriptor) const {
+    auto result = wgpuRenderBundleEncoderFinish(Get(), reinterpret_cast<WGPURenderBundleDescriptor const *>(descriptor));
+    return RenderBundle::Acquire(result);
+}
+void RenderBundleEncoder::InsertDebugMarker(StringView markerLabel) const {
+    wgpuRenderBundleEncoderInsertDebugMarker(Get(), *reinterpret_cast<WGPUStringView const*>(&markerLabel));
+}
+void RenderBundleEncoder::PopDebugGroup() const {
+    wgpuRenderBundleEncoderPopDebugGroup(Get());
+}
+void RenderBundleEncoder::PushDebugGroup(StringView groupLabel) const {
+    wgpuRenderBundleEncoderPushDebugGroup(Get(), *reinterpret_cast<WGPUStringView const*>(&groupLabel));
+}
+void RenderBundleEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) const {
+    wgpuRenderBundleEncoderSetBindGroup(Get(), groupIndex, group.Get(), dynamicOffsetCount, reinterpret_cast<uint32_t const *>(dynamicOffsets));
+}
+void RenderBundleEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
+    wgpuRenderBundleEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
+}
+void RenderBundleEncoder::SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset, uint64_t size) const {
+    wgpuRenderBundleEncoderSetIndexBuffer(Get(), buffer.Get(), static_cast<WGPUIndexFormat>(format), offset, size);
+}
+void RenderBundleEncoder::SetLabel(StringView label) const {
+    wgpuRenderBundleEncoderSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+}
+void RenderBundleEncoder::SetPipeline(RenderPipeline const& pipeline) const {
+    wgpuRenderBundleEncoderSetPipeline(Get(), pipeline.Get());
+}
+void RenderBundleEncoder::SetResourceTable(ResourceTable const& table) const {
+    wgpuRenderBundleEncoderSetResourceTable(Get(), table.Get());
+}
+void RenderBundleEncoder::SetVertexBuffer(uint32_t slot, Buffer const& buffer, uint64_t offset, uint64_t size) const {
+    wgpuRenderBundleEncoderSetVertexBuffer(Get(), slot, buffer.Get(), offset, size);
+}
+
+
+void RenderBundleEncoder::WGPUAddRef(WGPURenderBundleEncoder handle) {
+    if (handle != nullptr) {
+        wgpuRenderBundleEncoderAddRef(handle);
+    }
+}
+void RenderBundleEncoder::WGPURelease(WGPURenderBundleEncoder handle) {
+    if (handle != nullptr) {
+        wgpuRenderBundleEncoderRelease(handle);
+    }
+}
+static_assert(sizeof(RenderBundleEncoder) == sizeof(WGPURenderBundleEncoder), "sizeof mismatch for RenderBundleEncoder");
+static_assert(alignof(RenderBundleEncoder) == alignof(WGPURenderBundleEncoder), "alignof mismatch for RenderBundleEncoder");
+
+// RenderPassEncoder implementation
+
+void RenderPassEncoder::BeginOcclusionQuery(uint32_t queryIndex) const {
+    wgpuRenderPassEncoderBeginOcclusionQuery(Get(), queryIndex);
+}
+void RenderPassEncoder::Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) const {
+    wgpuRenderPassEncoderDraw(Get(), vertexCount, instanceCount, firstVertex, firstInstance);
+}
+void RenderPassEncoder::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t baseVertex, uint32_t firstInstance) const {
+    wgpuRenderPassEncoderDrawIndexed(Get(), indexCount, instanceCount, firstIndex, baseVertex, firstInstance);
+}
+void RenderPassEncoder::DrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
+    wgpuRenderPassEncoderDrawIndexedIndirect(Get(), indirectBuffer.Get(), indirectOffset);
+}
+void RenderPassEncoder::DrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset) const {
+    wgpuRenderPassEncoderDrawIndirect(Get(), indirectBuffer.Get(), indirectOffset);
+}
+void RenderPassEncoder::End() const {
+    wgpuRenderPassEncoderEnd(Get());
+}
+void RenderPassEncoder::EndOcclusionQuery() const {
+    wgpuRenderPassEncoderEndOcclusionQuery(Get());
+}
+void RenderPassEncoder::ExecuteBundles(size_t bundleCount, RenderBundle const * bundles) const {
+    wgpuRenderPassEncoderExecuteBundles(Get(), bundleCount, reinterpret_cast<WGPURenderBundle const *>(bundles));
+}
+void RenderPassEncoder::InsertDebugMarker(StringView markerLabel) const {
+    wgpuRenderPassEncoderInsertDebugMarker(Get(), *reinterpret_cast<WGPUStringView const*>(&markerLabel));
+}
+void RenderPassEncoder::MultiDrawIndexedIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, Buffer const& drawCountBuffer, uint64_t drawCountBufferOffset) const {
+    wgpuRenderPassEncoderMultiDrawIndexedIndirect(Get(), indirectBuffer.Get(), indirectOffset, maxDrawCount, drawCountBuffer.Get(), drawCountBufferOffset);
+}
+void RenderPassEncoder::MultiDrawIndirect(Buffer const& indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, Buffer const& drawCountBuffer, uint64_t drawCountBufferOffset) const {
+    wgpuRenderPassEncoderMultiDrawIndirect(Get(), indirectBuffer.Get(), indirectOffset, maxDrawCount, drawCountBuffer.Get(), drawCountBufferOffset);
+}
+void RenderPassEncoder::PixelLocalStorageBarrier() const {
+    wgpuRenderPassEncoderPixelLocalStorageBarrier(Get());
+}
+void RenderPassEncoder::PopDebugGroup() const {
+    wgpuRenderPassEncoderPopDebugGroup(Get());
+}
+void RenderPassEncoder::PushDebugGroup(StringView groupLabel) const {
+    wgpuRenderPassEncoderPushDebugGroup(Get(), *reinterpret_cast<WGPUStringView const*>(&groupLabel));
+}
+void RenderPassEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) const {
+    wgpuRenderPassEncoderSetBindGroup(Get(), groupIndex, group.Get(), dynamicOffsetCount, reinterpret_cast<uint32_t const *>(dynamicOffsets));
+}
+void RenderPassEncoder::SetBlendConstant(Color const * color) const {
+    wgpuRenderPassEncoderSetBlendConstant(Get(), reinterpret_cast<WGPUColor const *>(color));
+}
+void RenderPassEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
+    wgpuRenderPassEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
+}
+void RenderPassEncoder::SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset, uint64_t size) const {
+    wgpuRenderPassEncoderSetIndexBuffer(Get(), buffer.Get(), static_cast<WGPUIndexFormat>(format), offset, size);
+}
+void RenderPassEncoder::SetLabel(StringView label) const {
+    wgpuRenderPassEncoderSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+}
+void RenderPassEncoder::SetPipeline(RenderPipeline const& pipeline) const {
+    wgpuRenderPassEncoderSetPipeline(Get(), pipeline.Get());
+}
+void RenderPassEncoder::SetResourceTable(ResourceTable const& table) const {
+    wgpuRenderPassEncoderSetResourceTable(Get(), table.Get());
+}
+void RenderPassEncoder::SetScissorRect(uint32_t x, uint32_t y, uint32_t width, uint32_t height) const {
+    wgpuRenderPassEncoderSetScissorRect(Get(), x, y, width, height);
+}
+void RenderPassEncoder::SetStencilReference(uint32_t reference) const {
+    wgpuRenderPassEncoderSetStencilReference(Get(), reference);
+}
+void RenderPassEncoder::SetVertexBuffer(uint32_t slot, Buffer const& buffer, uint64_t offset, uint64_t size) const {
+    wgpuRenderPassEncoderSetVertexBuffer(Get(), slot, buffer.Get(), offset, size);
+}
+void RenderPassEncoder::SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth) const {
+    wgpuRenderPassEncoderSetViewport(Get(), x, y, width, height, minDepth, maxDepth);
+}
+void RenderPassEncoder::WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const {
+    wgpuRenderPassEncoderWriteTimestamp(Get(), querySet.Get(), queryIndex);
+}
+
+
+void RenderPassEncoder::WGPUAddRef(WGPURenderPassEncoder handle) {
+    if (handle != nullptr) {
+        wgpuRenderPassEncoderAddRef(handle);
+    }
+}
+void RenderPassEncoder::WGPURelease(WGPURenderPassEncoder handle) {
+    if (handle != nullptr) {
+        wgpuRenderPassEncoderRelease(handle);
+    }
+}
+static_assert(sizeof(RenderPassEncoder) == sizeof(WGPURenderPassEncoder), "sizeof mismatch for RenderPassEncoder");
+static_assert(alignof(RenderPassEncoder) == alignof(WGPURenderPassEncoder), "alignof mismatch for RenderPassEncoder");
 
 
 

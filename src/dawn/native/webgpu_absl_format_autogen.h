@@ -55,6 +55,14 @@ namespace dawn::native {
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+        AbslFormatConvert(const ResourceTableDescriptor* value,
+                          const absl::FormatConversionSpec& spec,
+                          absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+        AbslFormatConvert(const UnpackedPtr<ResourceTableDescriptor>& value,
+                          const absl::FormatConversionSpec& spec,
+                          absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
         AbslFormatConvert(const SharedBufferMemoryDescriptor* value,
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
@@ -289,10 +297,6 @@ namespace wgpu {
                       absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
     AbslFormatConvert(DeviceLostReason value,
-                      const absl::FormatConversionSpec& spec,
-                      absl::FormatSink* s);
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
-    AbslFormatConvert(DynamicBindingKind value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>

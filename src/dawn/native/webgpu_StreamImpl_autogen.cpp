@@ -79,4 +79,34 @@ void stream::Stream<Extent3D>::Write(stream::Sink* sink, const Extent3D& t) {
 
 }
 
+template <>
+MaybeError stream::Stream<SubgroupMatrixConfig>::Read(stream::Source* source, SubgroupMatrixConfig* t) {
+
+    DAWN_TRY(StreamOut(source, &t->componentType));
+
+    DAWN_TRY(StreamOut(source, &t->resultComponentType));
+
+    DAWN_TRY(StreamOut(source, &t->M));
+
+    DAWN_TRY(StreamOut(source, &t->N));
+
+    DAWN_TRY(StreamOut(source, &t->K));
+
+    return {};
+}
+template <>
+void stream::Stream<SubgroupMatrixConfig>::Write(stream::Sink* sink, const SubgroupMatrixConfig& t) {
+
+    StreamIn(sink, t.componentType);
+
+    StreamIn(sink, t.resultComponentType);
+
+    StreamIn(sink, t.M);
+
+    StreamIn(sink, t.N);
+
+    StreamIn(sink, t.K);
+
+}
+
 } // namespace dawn::native
