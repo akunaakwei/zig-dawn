@@ -112,8 +112,24 @@ void wgpuAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPUAdapterProperties
 }
 
 DAWN_NO_SANITIZE("cfi-icall")
+void wgpuBindGroupDestroy(WGPUBindGroup bindGroup) {
+    procs.bindGroupDestroy(bindGroup);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+uint32_t wgpuBindGroupInsertBinding(WGPUBindGroup bindGroup, WGPUBindGroupEntryContents const * contents) {
+return     procs.bindGroupInsertBinding(bindGroup, contents);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+WGPUStatus wgpuBindGroupRemoveBinding(WGPUBindGroup bindGroup, uint32_t binding) {
+return     procs.bindGroupRemoveBinding(bindGroup, binding);
+}
+DAWN_NO_SANITIZE("cfi-icall")
 void wgpuBindGroupSetLabel(WGPUBindGroup bindGroup, WGPUStringView label) {
     procs.bindGroupSetLabel(bindGroup, label);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+WGPUStatus wgpuBindGroupUpdate(WGPUBindGroup bindGroup, WGPUBindGroupEntry const * entry) {
+return     procs.bindGroupUpdate(bindGroup, entry);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuBindGroupAddRef(WGPUBindGroup bindGroup) {
@@ -137,6 +153,10 @@ void wgpuBindGroupLayoutRelease(WGPUBindGroupLayout bindGroupLayout) {
     procs.bindGroupLayoutRelease(bindGroupLayout);
 }
 
+DAWN_NO_SANITIZE("cfi-icall")
+WGPUTexelBufferView wgpuBufferCreateTexelView(WGPUBuffer buffer, WGPUTexelBufferViewDescriptor const * descriptor) {
+return     procs.bufferCreateTexelView(buffer, descriptor);
+}
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuBufferDestroy(WGPUBuffer buffer) {
     procs.bufferDestroy(buffer);
@@ -305,8 +325,8 @@ void wgpuComputePassEncoderSetBindGroup(WGPUComputePassEncoder computePassEncode
     procs.computePassEncoderSetBindGroup(computePassEncoder, groupIndex, group, dynamicOffsetCount, dynamicOffsets);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-void wgpuComputePassEncoderSetImmediateData(WGPUComputePassEncoder computePassEncoder, uint32_t offset, void const * data, size_t size) {
-    procs.computePassEncoderSetImmediateData(computePassEncoder, offset, data, size);
+void wgpuComputePassEncoderSetImmediates(WGPUComputePassEncoder computePassEncoder, uint32_t offset, void const * data, size_t size) {
+    procs.computePassEncoderSetImmediates(computePassEncoder, offset, data, size);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuComputePassEncoderSetLabel(WGPUComputePassEncoder computePassEncoder, WGPUStringView label) {
@@ -546,8 +566,8 @@ WGPUSurface wgpuInstanceCreateSurface(WGPUInstance instance, WGPUSurfaceDescript
 return     procs.instanceCreateSurface(instance, descriptor);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-WGPUStatus wgpuInstanceGetWGSLLanguageFeatures(WGPUInstance instance, WGPUSupportedWGSLLanguageFeatures * features) {
-return     procs.instanceGetWGSLLanguageFeatures(instance, features);
+void wgpuInstanceGetWGSLLanguageFeatures(WGPUInstance instance, WGPUSupportedWGSLLanguageFeatures * features) {
+    procs.instanceGetWGSLLanguageFeatures(instance, features);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 WGPUBool wgpuInstanceHasWGSLLanguageFeature(WGPUInstance instance, WGPUWGSLLanguageFeatureName feature) {
@@ -699,8 +719,8 @@ void wgpuRenderBundleEncoderSetBindGroup(WGPURenderBundleEncoder renderBundleEnc
     procs.renderBundleEncoderSetBindGroup(renderBundleEncoder, groupIndex, group, dynamicOffsetCount, dynamicOffsets);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-void wgpuRenderBundleEncoderSetImmediateData(WGPURenderBundleEncoder renderBundleEncoder, uint32_t offset, void const * data, size_t size) {
-    procs.renderBundleEncoderSetImmediateData(renderBundleEncoder, offset, data, size);
+void wgpuRenderBundleEncoderSetImmediates(WGPURenderBundleEncoder renderBundleEncoder, uint32_t offset, void const * data, size_t size) {
+    procs.renderBundleEncoderSetImmediates(renderBundleEncoder, offset, data, size);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) {
@@ -792,8 +812,8 @@ void wgpuRenderPassEncoderSetBlendConstant(WGPURenderPassEncoder renderPassEncod
     procs.renderPassEncoderSetBlendConstant(renderPassEncoder, color);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-void wgpuRenderPassEncoderSetImmediateData(WGPURenderPassEncoder renderPassEncoder, uint32_t offset, void const * data, size_t size) {
-    procs.renderPassEncoderSetImmediateData(renderPassEncoder, offset, data, size);
+void wgpuRenderPassEncoderSetImmediates(WGPURenderPassEncoder renderPassEncoder, uint32_t offset, void const * data, size_t size) {
+    procs.renderPassEncoderSetImmediates(renderPassEncoder, offset, data, size);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) {
@@ -1026,6 +1046,19 @@ void wgpuSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities surfaceCapabilit
 }
 
 DAWN_NO_SANITIZE("cfi-icall")
+void wgpuTexelBufferViewSetLabel(WGPUTexelBufferView texelBufferView, WGPUStringView label) {
+    procs.texelBufferViewSetLabel(texelBufferView, label);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+void wgpuTexelBufferViewAddRef(WGPUTexelBufferView texelBufferView) {
+    procs.texelBufferViewAddRef(texelBufferView);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+void wgpuTexelBufferViewRelease(WGPUTexelBufferView texelBufferView) {
+    procs.texelBufferViewRelease(texelBufferView);
+}
+
+DAWN_NO_SANITIZE("cfi-icall")
 WGPUTextureView wgpuTextureCreateErrorView(WGPUTexture texture, WGPUTextureViewDescriptor const * descriptor) {
 return     procs.textureCreateErrorView(texture, descriptor);
 }
@@ -1070,8 +1103,16 @@ uint32_t wgpuTextureGetWidth(WGPUTexture texture) {
 return     procs.textureGetWidth(texture);
 }
 DAWN_NO_SANITIZE("cfi-icall")
+void wgpuTexturePin(WGPUTexture texture, WGPUTextureUsage usage) {
+    procs.texturePin(texture, usage);
+}
+DAWN_NO_SANITIZE("cfi-icall")
 void wgpuTextureSetLabel(WGPUTexture texture, WGPUStringView label) {
     procs.textureSetLabel(texture, label);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+void wgpuTextureUnpin(WGPUTexture texture) {
+    procs.textureUnpin(texture);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuTextureAddRef(WGPUTexture texture) {

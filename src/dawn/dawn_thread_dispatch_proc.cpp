@@ -149,12 +149,40 @@ static void ThreadDispatchAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPU
     }
     proc(adapterPropertiesSubgroupMatrixConfigs);
 }
+static void ThreadDispatchBindGroupDestroy(WGPUBindGroup bindGroup) {
+    auto* proc = perThreadProcs.bindGroupDestroy;
+    if (!proc) {
+        proc = defaultProc.bindGroupDestroy;
+    }
+    proc(bindGroup);
+}
+static uint32_t ThreadDispatchBindGroupInsertBinding(WGPUBindGroup bindGroup, WGPUBindGroupEntryContents const * contents) {
+    auto* proc = perThreadProcs.bindGroupInsertBinding;
+    if (!proc) {
+        proc = defaultProc.bindGroupInsertBinding;
+    }
+return     proc(bindGroup, contents);
+}
+static WGPUStatus ThreadDispatchBindGroupRemoveBinding(WGPUBindGroup bindGroup, uint32_t binding) {
+    auto* proc = perThreadProcs.bindGroupRemoveBinding;
+    if (!proc) {
+        proc = defaultProc.bindGroupRemoveBinding;
+    }
+return     proc(bindGroup, binding);
+}
 static void ThreadDispatchBindGroupSetLabel(WGPUBindGroup bindGroup, WGPUStringView label) {
     auto* proc = perThreadProcs.bindGroupSetLabel;
     if (!proc) {
         proc = defaultProc.bindGroupSetLabel;
     }
     proc(bindGroup, label);
+}
+static WGPUStatus ThreadDispatchBindGroupUpdate(WGPUBindGroup bindGroup, WGPUBindGroupEntry const * entry) {
+    auto* proc = perThreadProcs.bindGroupUpdate;
+    if (!proc) {
+        proc = defaultProc.bindGroupUpdate;
+    }
+return     proc(bindGroup, entry);
 }
 static void ThreadDispatchBindGroupAddRef(WGPUBindGroup bindGroup) {
     auto* proc = perThreadProcs.bindGroupAddRef;
@@ -190,6 +218,13 @@ static void ThreadDispatchBindGroupLayoutRelease(WGPUBindGroupLayout bindGroupLa
         proc = defaultProc.bindGroupLayoutRelease;
     }
     proc(bindGroupLayout);
+}
+static WGPUTexelBufferView ThreadDispatchBufferCreateTexelView(WGPUBuffer buffer, WGPUTexelBufferViewDescriptor const * descriptor) {
+    auto* proc = perThreadProcs.bufferCreateTexelView;
+    if (!proc) {
+        proc = defaultProc.bufferCreateTexelView;
+    }
+return     proc(buffer, descriptor);
 }
 static void ThreadDispatchBufferDestroy(WGPUBuffer buffer) {
     auto* proc = perThreadProcs.bufferDestroy;
@@ -478,10 +513,10 @@ static void ThreadDispatchComputePassEncoderSetBindGroup(WGPUComputePassEncoder 
     }
     proc(computePassEncoder, groupIndex, group, dynamicOffsetCount, dynamicOffsets);
 }
-static void ThreadDispatchComputePassEncoderSetImmediateData(WGPUComputePassEncoder computePassEncoder, uint32_t offset, void const * data, size_t size) {
-    auto* proc = perThreadProcs.computePassEncoderSetImmediateData;
+static void ThreadDispatchComputePassEncoderSetImmediates(WGPUComputePassEncoder computePassEncoder, uint32_t offset, void const * data, size_t size) {
+    auto* proc = perThreadProcs.computePassEncoderSetImmediates;
     if (!proc) {
-        proc = defaultProc.computePassEncoderSetImmediateData;
+        proc = defaultProc.computePassEncoderSetImmediates;
     }
     proc(computePassEncoder, offset, data, size);
 }
@@ -891,12 +926,12 @@ static WGPUSurface ThreadDispatchInstanceCreateSurface(WGPUInstance instance, WG
     }
 return     proc(instance, descriptor);
 }
-static WGPUStatus ThreadDispatchInstanceGetWGSLLanguageFeatures(WGPUInstance instance, WGPUSupportedWGSLLanguageFeatures * features) {
+static void ThreadDispatchInstanceGetWGSLLanguageFeatures(WGPUInstance instance, WGPUSupportedWGSLLanguageFeatures * features) {
     auto* proc = perThreadProcs.instanceGetWGSLLanguageFeatures;
     if (!proc) {
         proc = defaultProc.instanceGetWGSLLanguageFeatures;
     }
-return     proc(instance, features);
+    proc(instance, features);
 }
 static WGPUBool ThreadDispatchInstanceHasWGSLLanguageFeature(WGPUInstance instance, WGPUWGSLLanguageFeatureName feature) {
     auto* proc = perThreadProcs.instanceHasWGSLLanguageFeature;
@@ -1150,10 +1185,10 @@ static void ThreadDispatchRenderBundleEncoderSetBindGroup(WGPURenderBundleEncode
     }
     proc(renderBundleEncoder, groupIndex, group, dynamicOffsetCount, dynamicOffsets);
 }
-static void ThreadDispatchRenderBundleEncoderSetImmediateData(WGPURenderBundleEncoder renderBundleEncoder, uint32_t offset, void const * data, size_t size) {
-    auto* proc = perThreadProcs.renderBundleEncoderSetImmediateData;
+static void ThreadDispatchRenderBundleEncoderSetImmediates(WGPURenderBundleEncoder renderBundleEncoder, uint32_t offset, void const * data, size_t size) {
+    auto* proc = perThreadProcs.renderBundleEncoderSetImmediates;
     if (!proc) {
-        proc = defaultProc.renderBundleEncoderSetImmediateData;
+        proc = defaultProc.renderBundleEncoderSetImmediates;
     }
     proc(renderBundleEncoder, offset, data, size);
 }
@@ -1311,10 +1346,10 @@ static void ThreadDispatchRenderPassEncoderSetBlendConstant(WGPURenderPassEncode
     }
     proc(renderPassEncoder, color);
 }
-static void ThreadDispatchRenderPassEncoderSetImmediateData(WGPURenderPassEncoder renderPassEncoder, uint32_t offset, void const * data, size_t size) {
-    auto* proc = perThreadProcs.renderPassEncoderSetImmediateData;
+static void ThreadDispatchRenderPassEncoderSetImmediates(WGPURenderPassEncoder renderPassEncoder, uint32_t offset, void const * data, size_t size) {
+    auto* proc = perThreadProcs.renderPassEncoderSetImmediates;
     if (!proc) {
-        proc = defaultProc.renderPassEncoderSetImmediateData;
+        proc = defaultProc.renderPassEncoderSetImmediates;
     }
     proc(renderPassEncoder, offset, data, size);
 }
@@ -1696,6 +1731,27 @@ static void ThreadDispatchSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities
     }
     proc(surfaceCapabilities);
 }
+static void ThreadDispatchTexelBufferViewSetLabel(WGPUTexelBufferView texelBufferView, WGPUStringView label) {
+    auto* proc = perThreadProcs.texelBufferViewSetLabel;
+    if (!proc) {
+        proc = defaultProc.texelBufferViewSetLabel;
+    }
+    proc(texelBufferView, label);
+}
+static void ThreadDispatchTexelBufferViewAddRef(WGPUTexelBufferView texelBufferView) {
+    auto* proc = perThreadProcs.texelBufferViewAddRef;
+    if (!proc) {
+        proc = defaultProc.texelBufferViewAddRef;
+    }
+    proc(texelBufferView);
+}
+static void ThreadDispatchTexelBufferViewRelease(WGPUTexelBufferView texelBufferView) {
+    auto* proc = perThreadProcs.texelBufferViewRelease;
+    if (!proc) {
+        proc = defaultProc.texelBufferViewRelease;
+    }
+    proc(texelBufferView);
+}
 static WGPUTextureView ThreadDispatchTextureCreateErrorView(WGPUTexture texture, WGPUTextureViewDescriptor const * descriptor) {
     auto* proc = perThreadProcs.textureCreateErrorView;
     if (!proc) {
@@ -1773,12 +1829,26 @@ static uint32_t ThreadDispatchTextureGetWidth(WGPUTexture texture) {
     }
 return     proc(texture);
 }
+static void ThreadDispatchTexturePin(WGPUTexture texture, WGPUTextureUsage usage) {
+    auto* proc = perThreadProcs.texturePin;
+    if (!proc) {
+        proc = defaultProc.texturePin;
+    }
+    proc(texture, usage);
+}
 static void ThreadDispatchTextureSetLabel(WGPUTexture texture, WGPUStringView label) {
     auto* proc = perThreadProcs.textureSetLabel;
     if (!proc) {
         proc = defaultProc.textureSetLabel;
     }
     proc(texture, label);
+}
+static void ThreadDispatchTextureUnpin(WGPUTexture texture) {
+    auto* proc = perThreadProcs.textureUnpin;
+    if (!proc) {
+        proc = defaultProc.textureUnpin;
+    }
+    proc(texture);
 }
 static void ThreadDispatchTextureAddRef(WGPUTexture texture) {
     auto* proc = perThreadProcs.textureAddRef;
@@ -1836,12 +1906,17 @@ extern "C" {
         ThreadDispatchAdapterInfoFreeMembers,
         ThreadDispatchAdapterPropertiesMemoryHeapsFreeMembers,
         ThreadDispatchAdapterPropertiesSubgroupMatrixConfigsFreeMembers,
+        ThreadDispatchBindGroupDestroy,
+        ThreadDispatchBindGroupInsertBinding,
+        ThreadDispatchBindGroupRemoveBinding,
         ThreadDispatchBindGroupSetLabel,
+        ThreadDispatchBindGroupUpdate,
         ThreadDispatchBindGroupAddRef,
         ThreadDispatchBindGroupRelease,
         ThreadDispatchBindGroupLayoutSetLabel,
         ThreadDispatchBindGroupLayoutAddRef,
         ThreadDispatchBindGroupLayoutRelease,
+        ThreadDispatchBufferCreateTexelView,
         ThreadDispatchBufferDestroy,
         ThreadDispatchBufferGetConstMappedRange,
         ThreadDispatchBufferGetMappedRange,
@@ -1883,7 +1958,7 @@ extern "C" {
         ThreadDispatchComputePassEncoderPopDebugGroup,
         ThreadDispatchComputePassEncoderPushDebugGroup,
         ThreadDispatchComputePassEncoderSetBindGroup,
-        ThreadDispatchComputePassEncoderSetImmediateData,
+        ThreadDispatchComputePassEncoderSetImmediates,
         ThreadDispatchComputePassEncoderSetLabel,
         ThreadDispatchComputePassEncoderSetPipeline,
         ThreadDispatchComputePassEncoderWriteTimestamp,
@@ -1979,7 +2054,7 @@ extern "C" {
         ThreadDispatchRenderBundleEncoderPopDebugGroup,
         ThreadDispatchRenderBundleEncoderPushDebugGroup,
         ThreadDispatchRenderBundleEncoderSetBindGroup,
-        ThreadDispatchRenderBundleEncoderSetImmediateData,
+        ThreadDispatchRenderBundleEncoderSetImmediates,
         ThreadDispatchRenderBundleEncoderSetIndexBuffer,
         ThreadDispatchRenderBundleEncoderSetLabel,
         ThreadDispatchRenderBundleEncoderSetPipeline,
@@ -2002,7 +2077,7 @@ extern "C" {
         ThreadDispatchRenderPassEncoderPushDebugGroup,
         ThreadDispatchRenderPassEncoderSetBindGroup,
         ThreadDispatchRenderPassEncoderSetBlendConstant,
-        ThreadDispatchRenderPassEncoderSetImmediateData,
+        ThreadDispatchRenderPassEncoderSetImmediates,
         ThreadDispatchRenderPassEncoderSetIndexBuffer,
         ThreadDispatchRenderPassEncoderSetLabel,
         ThreadDispatchRenderPassEncoderSetPipeline,
@@ -2057,6 +2132,9 @@ extern "C" {
         ThreadDispatchSurfaceAddRef,
         ThreadDispatchSurfaceRelease,
         ThreadDispatchSurfaceCapabilitiesFreeMembers,
+        ThreadDispatchTexelBufferViewSetLabel,
+        ThreadDispatchTexelBufferViewAddRef,
+        ThreadDispatchTexelBufferViewRelease,
         ThreadDispatchTextureCreateErrorView,
         ThreadDispatchTextureCreateView,
         ThreadDispatchTextureDestroy,
@@ -2068,7 +2146,9 @@ extern "C" {
         ThreadDispatchTextureGetSampleCount,
         ThreadDispatchTextureGetUsage,
         ThreadDispatchTextureGetWidth,
+        ThreadDispatchTexturePin,
         ThreadDispatchTextureSetLabel,
+        ThreadDispatchTextureUnpin,
         ThreadDispatchTextureAddRef,
         ThreadDispatchTextureRelease,
         ThreadDispatchTextureViewSetLabel,

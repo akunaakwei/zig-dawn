@@ -33,6 +33,7 @@ namespace dawn::native {
         SharedFence,
         SharedTextureMemory,
         Surface,
+        TexelBufferView,
         Texture,
         TextureView,
 
@@ -43,7 +44,7 @@ namespace dawn::native {
     constexpr size_t kExtraObjectTypes = 1;
 
     template <typename T>
-    using PerObjectType = ityp::array<ObjectType, T, 26 + kExtraObjectTypes>;
+    using PerObjectType = ityp::array<ObjectType, T, 27 + kExtraObjectTypes>;
 
     const char* ObjectTypeAsString(ObjectType type);
 

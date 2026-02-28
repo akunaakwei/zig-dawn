@@ -69,6 +69,10 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::TextureFormatsTier1;
   case Feature::TextureFormatsTier2:
     return wgpu::FeatureName::TextureFormatsTier2;
+  case Feature::PrimitiveIndex:
+    return wgpu::FeatureName::PrimitiveIndex;
+  case Feature::TextureComponentSwizzle:
+    return wgpu::FeatureName::TextureComponentSwizzle;
   case Feature::DawnInternalUsages:
     return wgpu::FeatureName::DawnInternalUsages;
   case Feature::DawnMultiPlanarFormats:
@@ -183,8 +187,14 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::SharedFenceEGLSync;
   case Feature::DawnDeviceAllocatorControl:
     return wgpu::FeatureName::DawnDeviceAllocatorControl;
-  case Feature::TextureComponentSwizzle:
-    return wgpu::FeatureName::TextureComponentSwizzle;
+  case Feature::ChromiumExperimentalBindless:
+    return wgpu::FeatureName::ChromiumExperimentalBindless;
+  case Feature::AdapterPropertiesWGPU:
+    return wgpu::FeatureName::AdapterPropertiesWGPU;
+  case Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
+    return wgpu::FeatureName::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle;
+  case Feature::SharedTextureMemoryD3D12Resource:
+    return wgpu::FeatureName::SharedTextureMemoryD3D12Resource;
     case Feature::InvalidEnum:
       break;
   }
@@ -233,6 +243,10 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::TextureFormatsTier1;
   case wgpu::FeatureName::TextureFormatsTier2:
   return Feature::TextureFormatsTier2;
+  case wgpu::FeatureName::PrimitiveIndex:
+  return Feature::PrimitiveIndex;
+  case wgpu::FeatureName::TextureComponentSwizzle:
+  return Feature::TextureComponentSwizzle;
   case wgpu::FeatureName::DawnInternalUsages:
   return Feature::DawnInternalUsages;
   case wgpu::FeatureName::DawnMultiPlanarFormats:
@@ -347,8 +361,14 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::SharedFenceEGLSync;
   case wgpu::FeatureName::DawnDeviceAllocatorControl:
   return Feature::DawnDeviceAllocatorControl;
-  case wgpu::FeatureName::TextureComponentSwizzle:
-  return Feature::TextureComponentSwizzle;
+  case wgpu::FeatureName::ChromiumExperimentalBindless:
+  return Feature::ChromiumExperimentalBindless;
+  case wgpu::FeatureName::AdapterPropertiesWGPU:
+  return Feature::AdapterPropertiesWGPU;
+  case wgpu::FeatureName::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
+  return Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle;
+  case wgpu::FeatureName::SharedTextureMemoryD3D12Resource:
+  return Feature::SharedTextureMemoryD3D12Resource;
     default:
       return Feature::InvalidEnum;
   }
@@ -639,6 +659,34 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
     if (kFeatureInfo[i].feature == Feature::TextureFormatsTier2) {
       list[Feature::TextureFormatsTier2] = {
         "texture-formats-tier2",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::PrimitiveIndex),
+                "Please define feature info for PrimitiveIndex in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::PrimitiveIndex) {
+      list[Feature::PrimitiveIndex] = {
+        "primitive-index",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::TextureComponentSwizzle),
+                "Please define feature info for TextureComponentSwizzle in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::TextureComponentSwizzle) {
+      list[Feature::TextureComponentSwizzle] = {
+        "texture-component-swizzle",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,
@@ -1445,12 +1493,54 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
   }
 }
 {
-  static_assert(FeatureInfoIsDefined(Feature::TextureComponentSwizzle),
-                "Please define feature info for TextureComponentSwizzle in Features.cpp");
+  static_assert(FeatureInfoIsDefined(Feature::ChromiumExperimentalBindless),
+                "Please define feature info for ChromiumExperimentalBindless in Features.cpp");
   for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::TextureComponentSwizzle) {
-      list[Feature::TextureComponentSwizzle] = {
-        "texture-component-swizzle",
+    if (kFeatureInfo[i].feature == Feature::ChromiumExperimentalBindless) {
+      list[Feature::ChromiumExperimentalBindless] = {
+        "chromium-experimental-bindless",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::AdapterPropertiesWGPU),
+                "Please define feature info for AdapterPropertiesWGPU in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::AdapterPropertiesWGPU) {
+      list[Feature::AdapterPropertiesWGPU] = {
+        "adapter-properties-wgpu",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle),
+                "Please define feature info for SharedBufferMemoryD3D12SharedMemoryFileMappingHandle in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle) {
+      list[Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle] = {
+        "shared-buffer-memory-d3d12shared-memory-file-mapping-handle",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::SharedTextureMemoryD3D12Resource),
+                "Please define feature info for SharedTextureMemoryD3D12Resource in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::SharedTextureMemoryD3D12Resource) {
+      list[Feature::SharedTextureMemoryD3D12Resource] = {
+        "shared-texture-memory-d3d12resource",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,

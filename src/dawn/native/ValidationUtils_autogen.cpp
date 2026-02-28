@@ -304,6 +304,15 @@ namespace dawn::native {
         }
     }
 
+    MaybeError ValidateDynamicBindingKind(wgpu::DynamicBindingKind value) {
+        switch (WGPUDynamicBindingKind(value)) {
+            case WGPUDynamicBindingKind_SampledTexture:
+                return {};
+            default:
+                return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUDynamicBindingKind.", value);
+        }
+    }
+
     MaybeError ValidateErrorFilter(wgpu::ErrorFilter value) {
         switch (WGPUErrorFilter(value)) {
             case WGPUErrorFilter_Validation:
@@ -403,6 +412,10 @@ namespace dawn::native {
             case WGPUFeatureName_TextureFormatsTier1:
                 return {};
             case WGPUFeatureName_TextureFormatsTier2:
+                return {};
+            case WGPUFeatureName_PrimitiveIndex:
+                return {};
+            case WGPUFeatureName_TextureComponentSwizzle:
                 return {};
             case WGPUFeatureName_DawnInternalUsages:
                 return {};
@@ -518,7 +531,13 @@ namespace dawn::native {
                 return {};
             case WGPUFeatureName_DawnDeviceAllocatorControl:
                 return {};
-            case WGPUFeatureName_TextureComponentSwizzle:
+            case WGPUFeatureName_ChromiumExperimentalBindless:
+                return {};
+            case WGPUFeatureName_AdapterPropertiesWGPU:
+                return {};
+            case WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
+                return {};
+            case WGPUFeatureName_SharedTextureMemoryD3D12Resource:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUFeatureName.", value);
@@ -567,6 +586,10 @@ namespace dawn::native {
     MaybeError ValidateInstanceFeatureName(wgpu::InstanceFeatureName value) {
         switch (WGPUInstanceFeatureName(value)) {
             case WGPUInstanceFeatureName_TimedWaitAny:
+                return {};
+            case WGPUInstanceFeatureName_ShaderSourceSPIRV:
+                return {};
+            case WGPUInstanceFeatureName_MultipleDevicesPerAdapter:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUInstanceFeatureName.", value);
@@ -891,6 +914,8 @@ namespace dawn::native {
                 return {};
             case WGPUSType_RequestAdapterWebXROptions:
                 return {};
+            case WGPUSType_TextureComponentSwizzleDescriptor:
+                return {};
             case WGPUSType_CompatibilityModeLimits:
                 return {};
             case WGPUSType_TextureBindingViewDimensionDescriptor:
@@ -1035,7 +1060,29 @@ namespace dawn::native {
                 return {};
             case WGPUSType_DawnFakeDeviceInitializeErrorForTesting:
                 return {};
-            case WGPUSType_TextureComponentSwizzleDescriptor:
+            case WGPUSType_SharedTextureMemoryD3D11BeginState:
+                return {};
+            case WGPUSType_DawnConsumeAdapterDescriptor:
+                return {};
+            case WGPUSType_BindGroupLayoutDynamicBindingArray:
+                return {};
+            case WGPUSType_DynamicBindingArrayLimits:
+                return {};
+            case WGPUSType_BindGroupDynamicBindingArray:
+                return {};
+            case WGPUSType_TexelBufferBindingEntry:
+                return {};
+            case WGPUSType_TexelBufferBindingLayout:
+                return {};
+            case WGPUSType_SharedTextureMemoryMetalEndAccessState:
+                return {};
+            case WGPUSType_AdapterPropertiesWGPU:
+                return {};
+            case WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor:
+                return {};
+            case WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor:
+                return {};
+            case WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUSType.", value);
@@ -1077,6 +1124,17 @@ namespace dawn::native {
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUSurfaceGetCurrentTextureStatus.", value);
+        }
+    }
+
+    MaybeError ValidateTexelBufferAccess(wgpu::TexelBufferAccess value) {
+        switch (WGPUTexelBufferAccess(value)) {
+            case WGPUTexelBufferAccess_ReadOnly:
+                return {};
+            case WGPUTexelBufferAccess_ReadWrite:
+                return {};
+            default:
+                return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUTexelBufferAccess.", value);
         }
     }
 
@@ -1126,6 +1184,10 @@ namespace dawn::native {
                 return {};
             case WGPUTextureFormat_R8Sint:
                 return {};
+            case WGPUTextureFormat_R16Unorm:
+                return {};
+            case WGPUTextureFormat_R16Snorm:
+                return {};
             case WGPUTextureFormat_R16Uint:
                 return {};
             case WGPUTextureFormat_R16Sint:
@@ -1145,6 +1207,10 @@ namespace dawn::native {
             case WGPUTextureFormat_R32Uint:
                 return {};
             case WGPUTextureFormat_R32Sint:
+                return {};
+            case WGPUTextureFormat_RG16Unorm:
+                return {};
+            case WGPUTextureFormat_RG16Snorm:
                 return {};
             case WGPUTextureFormat_RG16Uint:
                 return {};
@@ -1179,6 +1245,10 @@ namespace dawn::native {
             case WGPUTextureFormat_RG32Uint:
                 return {};
             case WGPUTextureFormat_RG32Sint:
+                return {};
+            case WGPUTextureFormat_RGBA16Unorm:
+                return {};
+            case WGPUTextureFormat_RGBA16Snorm:
                 return {};
             case WGPUTextureFormat_RGBA16Uint:
                 return {};
@@ -1307,18 +1377,6 @@ namespace dawn::native {
             case WGPUTextureFormat_ASTC12x12Unorm:
                 return {};
             case WGPUTextureFormat_ASTC12x12UnormSrgb:
-                return {};
-            case WGPUTextureFormat_R16Unorm:
-                return {};
-            case WGPUTextureFormat_RG16Unorm:
-                return {};
-            case WGPUTextureFormat_RGBA16Unorm:
-                return {};
-            case WGPUTextureFormat_R16Snorm:
-                return {};
-            case WGPUTextureFormat_RG16Snorm:
-                return {};
-            case WGPUTextureFormat_RGBA16Snorm:
                 return {};
             case WGPUTextureFormat_R8BG8Biplanar420Unorm:
                 return {};
@@ -1517,9 +1575,19 @@ namespace dawn::native {
                 return {};
             case WGPUWGSLLanguageFeatureName_PointerCompositeAccess:
                 return {};
+            case WGPUWGSLLanguageFeatureName_UniformBufferStandardLayout:
+                return {};
+            case WGPUWGSLLanguageFeatureName_SubgroupId:
+                return {};
             case WGPUWGSLLanguageFeatureName_SizedBindingArray:
                 return {};
             case WGPUWGSLLanguageFeatureName_TexelBuffers:
+                return {};
+            case WGPUWGSLLanguageFeatureName_ChromiumPrint:
+                return {};
+            case WGPUWGSLLanguageFeatureName_FragmentDepth:
+                return {};
+            case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
                 return {};
             case WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented:
                 return {};
@@ -1538,7 +1606,7 @@ namespace dawn::native {
 
 
     MaybeError ValidateBufferUsage(wgpu::BufferUsage value) {
-        if ((value & static_cast<wgpu::BufferUsage>(~1023)) == 0) {
+        if ((value & static_cast<wgpu::BufferUsage>(~2047)) == 0) {
             return {};
         }
         return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUBufferUsage.", value);

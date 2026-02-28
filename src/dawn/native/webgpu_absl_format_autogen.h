@@ -63,6 +63,14 @@ namespace dawn::native {
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+        AbslFormatConvert(const TexelBufferViewDescriptor* value,
+                          const absl::FormatConversionSpec& spec,
+                          absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+        AbslFormatConvert(const UnpackedPtr<TexelBufferViewDescriptor>& value,
+                          const absl::FormatConversionSpec& spec,
+                          absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
         AbslFormatConvert(const BufferDescriptor* value,
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
@@ -284,6 +292,10 @@ namespace wgpu {
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+    AbslFormatConvert(DynamicBindingKind value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
     AbslFormatConvert(ErrorFilter value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s);
@@ -409,6 +421,10 @@ namespace wgpu {
                       absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
     AbslFormatConvert(SurfaceGetCurrentTextureStatus value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+    AbslFormatConvert(TexelBufferAccess value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>

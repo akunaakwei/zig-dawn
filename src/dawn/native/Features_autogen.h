@@ -54,6 +54,8 @@ DualSourceBlending,
 Subgroups,
 TextureFormatsTier1,
 TextureFormatsTier2,
+PrimitiveIndex,
+TextureComponentSwizzle,
 DawnInternalUsages,
 DawnMultiPlanarFormats,
 DawnNative,
@@ -111,13 +113,16 @@ FlexibleTextureViews,
 ChromiumExperimentalSubgroupMatrix,
 SharedFenceEGLSync,
 DawnDeviceAllocatorControl,
-TextureComponentSwizzle,
+ChromiumExperimentalBindless,
+AdapterPropertiesWGPU,
+SharedBufferMemoryD3D12SharedMemoryFileMappingHandle,
+SharedTextureMemoryD3D12Resource,
   InvalidEnum,
 };
 
 template<>
 struct EnumCount<Feature> {
-    static constexpr uint32_t value = 78;
+    static constexpr uint32_t value = 83;
 };
 
 }  // namespace dawn::native

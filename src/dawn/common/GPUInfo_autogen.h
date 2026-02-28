@@ -47,8 +47,8 @@ static constexpr PCIVendorID kVendorID_Intel = 0x8086;
 static constexpr PCIVendorID kVendorID_Mesa = 0x10005;
 static constexpr PCIVendorID kVendorID_Microsoft = 0x1414;
 static constexpr PCIVendorID kVendorID_Nvidia = 0x10DE;
-static constexpr PCIVendorID kVendorID_Qualcomm_PCI = 0x5143;
-static constexpr PCIVendorID kVendorID_Qualcomm_ACPI = 0x4D4F4351;
+static constexpr PCIVendorID kVendorID_QualcommPCI = 0x5143;
+static constexpr PCIVendorID kVendorID_QualcommACPI = 0x4D4F4351;
 static constexpr PCIVendorID kVendorID_Samsung = 0x144d;
 static constexpr PCIVendorID kVendorID_Huawei = 0x19e5;
 
@@ -63,8 +63,8 @@ bool IsIntel(PCIVendorID vendorId);
 bool IsMesa(PCIVendorID vendorId);
 bool IsMicrosoft(PCIVendorID vendorId);
 bool IsNvidia(PCIVendorID vendorId);
-bool IsQualcomm_PCI(PCIVendorID vendorId);
-bool IsQualcomm_ACPI(PCIVendorID vendorId);
+bool IsQualcommPCI(PCIVendorID vendorId);
+bool IsQualcommACPI(PCIVendorID vendorId);
 bool IsSamsung(PCIVendorID vendorId);
 bool IsHuawei(PCIVendorID vendorId);
 
@@ -128,15 +128,16 @@ bool IsNvidiaLovelace(PCIVendorID vendorId, PCIDeviceID deviceId);
 bool IsNvidiaBlackwell(PCIVendorID vendorId, PCIDeviceID deviceId);
 bool IsNvidiaVolta(PCIVendorID vendorId, PCIDeviceID deviceId);
 
-// Qualcomm_PCI architectures
-bool IsQualcomm_PCIAdreno4xx(PCIVendorID vendorId, PCIDeviceID deviceId);
-bool IsQualcomm_PCIAdreno5xx(PCIVendorID vendorId, PCIDeviceID deviceId);
-bool IsQualcomm_PCIAdreno6xx(PCIVendorID vendorId, PCIDeviceID deviceId);
-bool IsQualcomm_PCIAdreno7xx(PCIVendorID vendorId, PCIDeviceID deviceId);
-bool IsQualcomm_PCIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId);
+// QualcommPCI architectures
+bool IsQualcommPCIAdreno4xx(PCIVendorID vendorId, PCIDeviceID deviceId);
+bool IsQualcommPCIAdreno5xx(PCIVendorID vendorId, PCIDeviceID deviceId);
+bool IsQualcommPCIAdreno6xx(PCIVendorID vendorId, PCIDeviceID deviceId);
+bool IsQualcommPCIAdreno7xx(PCIVendorID vendorId, PCIDeviceID deviceId);
+bool IsQualcommPCIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId);
 
-// Qualcomm_ACPI architectures
-bool IsQualcomm_ACPIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId);
+// QualcommACPI architectures
+bool IsQualcommACPIAdreno6xx(PCIVendorID vendorId, PCIDeviceID deviceId);
+bool IsQualcommACPIAdreno7xx(PCIVendorID vendorId, PCIDeviceID deviceId);
 
 // Samsung architectures
 bool IsSamsungRDNA2(PCIVendorID vendorId, PCIDeviceID deviceId);

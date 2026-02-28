@@ -77,6 +77,9 @@ template <>
 constexpr inline wgpu::SType STypeForImpl<RequestAdapterWebXROptions> =
     wgpu::SType::RequestAdapterWebXROptions;
 template <>
+constexpr inline wgpu::SType STypeForImpl<TextureComponentSwizzleDescriptor> =
+    wgpu::SType::TextureComponentSwizzleDescriptor;
+template <>
 constexpr inline wgpu::SType STypeForImpl<CompatibilityModeLimits> =
     wgpu::SType::CompatibilityModeLimits;
 template <>
@@ -269,8 +272,32 @@ template <>
 constexpr inline wgpu::SType STypeForImpl<DawnFakeDeviceInitializeErrorForTesting> =
     wgpu::SType::DawnFakeDeviceInitializeErrorForTesting;
 template <>
-constexpr inline wgpu::SType STypeForImpl<TextureComponentSwizzleDescriptor> =
-    wgpu::SType::TextureComponentSwizzleDescriptor;
+constexpr inline wgpu::SType STypeForImpl<SharedTextureMemoryD3D11BeginState> =
+    wgpu::SType::SharedTextureMemoryD3D11BeginState;
+template <>
+constexpr inline wgpu::SType STypeForImpl<DawnConsumeAdapterDescriptor> =
+    wgpu::SType::DawnConsumeAdapterDescriptor;
+template <>
+constexpr inline wgpu::SType STypeForImpl<BindGroupLayoutDynamicBindingArray> =
+    wgpu::SType::BindGroupLayoutDynamicBindingArray;
+template <>
+constexpr inline wgpu::SType STypeForImpl<DynamicBindingArrayLimits> =
+    wgpu::SType::DynamicBindingArrayLimits;
+template <>
+constexpr inline wgpu::SType STypeForImpl<BindGroupDynamicBindingArray> =
+    wgpu::SType::BindGroupDynamicBindingArray;
+template <>
+constexpr inline wgpu::SType STypeForImpl<TexelBufferBindingEntry> =
+    wgpu::SType::TexelBufferBindingEntry;
+template <>
+constexpr inline wgpu::SType STypeForImpl<TexelBufferBindingLayout> =
+    wgpu::SType::TexelBufferBindingLayout;
+template <>
+constexpr inline wgpu::SType STypeForImpl<SharedTextureMemoryMetalEndAccessState> =
+    wgpu::SType::SharedTextureMemoryMetalEndAccessState;
+template <>
+constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesWGPU> =
+    wgpu::SType::AdapterPropertiesWGPU;
 
 template <typename Arg, typename... Rest>
 std::string STypesToString() {
@@ -324,6 +351,15 @@ template <typename T>
 inline Extensibility ExtensibilityFor;
 
 template <>
+struct UnpackedPtrTypeFor<BindGroupEntryContents> {
+    using Type = UnpackedPtrChain<
+        AdditionalExtensions<BindGroupEntryContents>::List
+    >::Type;
+};
+template <>
+constexpr inline Extensibility ExtensibilityFor<BindGroupEntryContents> = Extensibility::In;
+
+template <>
 struct UnpackedPtrTypeFor<BufferBindingLayout> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<BufferBindingLayout>::List
@@ -358,6 +394,15 @@ struct UnpackedPtrTypeFor<CopyTextureForBrowserOptions> {
 };
 template <>
 constexpr inline Extensibility ExtensibilityFor<CopyTextureForBrowserOptions> = Extensibility::In;
+
+template <>
+struct UnpackedPtrTypeFor<DynamicBindingArrayLayout> {
+    using Type = UnpackedPtrChain<
+        AdditionalExtensions<DynamicBindingArrayLayout>::List
+    >::Type;
+};
+template <>
+constexpr inline Extensibility ExtensibilityFor<DynamicBindingArrayLayout> = Extensibility::In;
 
 template <>
 struct UnpackedPtrTypeFor<InstanceLimits> {
@@ -531,6 +576,15 @@ template <>
 constexpr inline Extensibility ExtensibilityFor<SurfaceTexture> = Extensibility::Out;
 
 template <>
+struct UnpackedPtrTypeFor<TexelBufferViewDescriptor> {
+    using Type = UnpackedPtrChain<
+        AdditionalExtensions<TexelBufferViewDescriptor>::List
+    >::Type;
+};
+template <>
+constexpr inline Extensibility ExtensibilityFor<TexelBufferViewDescriptor> = Extensibility::In;
+
+template <>
 struct UnpackedPtrTypeFor<TextureBindingLayout> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<TextureBindingLayout>::List
@@ -553,6 +607,7 @@ struct UnpackedPtrTypeFor<BindGroupEntry> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<BindGroupEntry>::List
         , const ExternalTextureBindingEntry*
+        , const TexelBufferBindingEntry*
     >::Type;
 };
 template <>
@@ -564,6 +619,7 @@ struct UnpackedPtrTypeFor<BindGroupLayoutEntry> {
         AdditionalExtensions<BindGroupLayoutEntry>::List
         , const StaticSamplerBindingLayout*
         , const ExternalTextureBindingLayout*
+        , const TexelBufferBindingLayout*
     >::Type;
 };
 template <>
@@ -665,6 +721,7 @@ struct UnpackedPtrTypeFor<Limits> {
         , CompatibilityModeLimits*
         , DawnTexelCopyBufferRowAlignmentLimits*
         , DawnHostMappedPointerLimits*
+        , DynamicBindingArrayLimits*
     >::Type;
 };
 template <>
@@ -760,20 +817,11 @@ struct UnpackedPtrTypeFor<SharedTextureMemoryBeginAccessDescriptor> {
         AdditionalExtensions<SharedTextureMemoryBeginAccessDescriptor>::List
         , const SharedTextureMemoryVkImageLayoutBeginState*
         , const SharedTextureMemoryD3DSwapchainBeginState*
+        , const SharedTextureMemoryD3D11BeginState*
     >::Type;
 };
 template <>
 constexpr inline Extensibility ExtensibilityFor<SharedTextureMemoryBeginAccessDescriptor> = Extensibility::In;
-
-template <>
-struct UnpackedPtrTypeFor<SharedTextureMemoryEndAccessState> {
-    using Type = UnpackedPtrChain<
-        AdditionalExtensions<SharedTextureMemoryEndAccessState>::List
-        , SharedTextureMemoryVkImageLayoutEndState*
-    >::Type;
-};
-template <>
-constexpr inline Extensibility ExtensibilityFor<SharedTextureMemoryEndAccessState> = Extensibility::Out;
 
 template <>
 struct UnpackedPtrTypeFor<SurfaceDescriptor> {
@@ -822,6 +870,7 @@ struct UnpackedPtrTypeFor<AdapterInfo> {
         , AdapterPropertiesMemoryHeaps*
         , AdapterPropertiesD3D*
         , AdapterPropertiesVk*
+        , AdapterPropertiesWGPU*
         , AdapterPropertiesSubgroupMatrixConfigs*
     >::Type;
 };
@@ -832,6 +881,7 @@ template <>
 struct UnpackedPtrTypeFor<BindGroupDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<BindGroupDescriptor>::List
+        , const BindGroupDynamicBindingArray*
     >::Type;
 };
 template <>
@@ -841,6 +891,7 @@ template <>
 struct UnpackedPtrTypeFor<BindGroupLayoutDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<BindGroupLayoutDescriptor>::List
+        , const BindGroupLayoutDynamicBindingArray*
     >::Type;
 };
 template <>
@@ -888,6 +939,7 @@ template <>
 struct UnpackedPtrTypeFor<DeviceDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<DeviceDescriptor>::List
+        , const DawnConsumeAdapterDescriptor*
         , const DawnTogglesDescriptor*
         , const DawnCacheDeviceDescriptor*
         , const DawnDeviceAllocatorControl*
@@ -923,6 +975,17 @@ struct UnpackedPtrTypeFor<SharedTextureMemoryDescriptor> {
 };
 template <>
 constexpr inline Extensibility ExtensibilityFor<SharedTextureMemoryDescriptor> = Extensibility::In;
+
+template <>
+struct UnpackedPtrTypeFor<SharedTextureMemoryEndAccessState> {
+    using Type = UnpackedPtrChain<
+        AdditionalExtensions<SharedTextureMemoryEndAccessState>::List
+        , SharedTextureMemoryMetalEndAccessState*
+        , SharedTextureMemoryVkImageLayoutEndState*
+    >::Type;
+};
+template <>
+constexpr inline Extensibility ExtensibilityFor<SharedTextureMemoryEndAccessState> = Extensibility::Out;
 
 template <>
 struct UnpackedPtrTypeFor<SharedTextureMemoryProperties> {

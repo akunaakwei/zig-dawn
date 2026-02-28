@@ -80,12 +80,13 @@ enum class Architecture {
     Nvidia_Lovelace,
     Nvidia_Blackwell,
     Nvidia_Volta,
-    Qualcomm_PCI_Adreno4xx,
-    Qualcomm_PCI_Adreno5xx,
-    Qualcomm_PCI_Adreno6xx,
-    Qualcomm_PCI_Adreno7xx,
-    Qualcomm_PCI_Adreno8xx,
-    Qualcomm_ACPI_Adreno8xx,
+    QualcommPCI_Adreno4xx,
+    QualcommPCI_Adreno5xx,
+    QualcommPCI_Adreno6xx,
+    QualcommPCI_Adreno7xx,
+    QualcommPCI_Adreno8xx,
+    QualcommACPI_Adreno6xx,
+    QualcommACPI_Adreno7xx,
     Samsung_RDNA2,
     Samsung_RDNA3,
 };
@@ -319,27 +320,33 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                     return Architecture::Nvidia_Volta;
             }
         } break;
-        case kVendorID_Qualcomm_PCI: {
+        case kVendorID_QualcommPCI: {
             switch (deviceId & 0xFF000000) {
                 case 0x04000000:
-                    return Architecture::Qualcomm_PCI_Adreno4xx;
+                    return Architecture::QualcommPCI_Adreno4xx;
                 case 0x05000000:
-                    return Architecture::Qualcomm_PCI_Adreno5xx;
+                    return Architecture::QualcommPCI_Adreno5xx;
                 case 0x06000000:
-                    return Architecture::Qualcomm_PCI_Adreno6xx;
+                    return Architecture::QualcommPCI_Adreno6xx;
                 case 0x07000000:
                 case 0x43000000:
                 case 0x36000000:
                 case 0x37000000:
-                    return Architecture::Qualcomm_PCI_Adreno7xx;
+                    return Architecture::QualcommPCI_Adreno7xx;
                 case 0x44000000:
-                    return Architecture::Qualcomm_PCI_Adreno8xx;
+                    return Architecture::QualcommPCI_Adreno8xx;
             }
         } break;
-        case kVendorID_Qualcomm_ACPI: {
-            switch (deviceId & 0xFF000000) {
-                case 0x36000000:
-                    return Architecture::Qualcomm_ACPI_Adreno8xx;
+        case kVendorID_QualcommACPI: {
+            switch (deviceId & 0xFFFFFF00) {
+                case 0x41333800:
+                case 0x36334100:
+                case 0x41333400:
+                case 0x36333600:
+                    return Architecture::QualcommACPI_Adreno6xx;
+                case 0x37314400:
+                case 0x36334300:
+                    return Architecture::QualcommACPI_Adreno7xx;
             }
         } break;
         case kVendorID_Samsung: {
@@ -394,11 +401,11 @@ bool IsMicrosoft(PCIVendorID vendorId) {
 bool IsNvidia(PCIVendorID vendorId) {
     return vendorId == kVendorID_Nvidia;
 }
-bool IsQualcomm_PCI(PCIVendorID vendorId) {
-    return vendorId == kVendorID_Qualcomm_PCI;
+bool IsQualcommPCI(PCIVendorID vendorId) {
+    return vendorId == kVendorID_QualcommPCI;
 }
-bool IsQualcomm_ACPI(PCIVendorID vendorId) {
-    return vendorId == kVendorID_Qualcomm_ACPI;
+bool IsQualcommACPI(PCIVendorID vendorId) {
+    return vendorId == kVendorID_QualcommACPI;
 }
 bool IsSamsung(PCIVendorID vendorId) {
     return vendorId == kVendorID_Samsung;
@@ -538,25 +545,28 @@ bool IsNvidiaBlackwell(PCIVendorID vendorId, PCIDeviceID deviceId) {
 bool IsNvidiaVolta(PCIVendorID vendorId, PCIDeviceID deviceId) {
     return GetArchitecture(vendorId, deviceId) == Architecture::Nvidia_Volta;
 }
-// Qualcomm_PCI architectures
-bool IsQualcomm_PCIAdreno4xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
-    return GetArchitecture(vendorId, deviceId) == Architecture::Qualcomm_PCI_Adreno4xx;
+// QualcommPCI architectures
+bool IsQualcommPCIAdreno4xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::QualcommPCI_Adreno4xx;
 }
-bool IsQualcomm_PCIAdreno5xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
-    return GetArchitecture(vendorId, deviceId) == Architecture::Qualcomm_PCI_Adreno5xx;
+bool IsQualcommPCIAdreno5xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::QualcommPCI_Adreno5xx;
 }
-bool IsQualcomm_PCIAdreno6xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
-    return GetArchitecture(vendorId, deviceId) == Architecture::Qualcomm_PCI_Adreno6xx;
+bool IsQualcommPCIAdreno6xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::QualcommPCI_Adreno6xx;
 }
-bool IsQualcomm_PCIAdreno7xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
-    return GetArchitecture(vendorId, deviceId) == Architecture::Qualcomm_PCI_Adreno7xx;
+bool IsQualcommPCIAdreno7xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::QualcommPCI_Adreno7xx;
 }
-bool IsQualcomm_PCIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
-    return GetArchitecture(vendorId, deviceId) == Architecture::Qualcomm_PCI_Adreno8xx;
+bool IsQualcommPCIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::QualcommPCI_Adreno8xx;
 }
-// Qualcomm_ACPI architectures
-bool IsQualcomm_ACPIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
-    return GetArchitecture(vendorId, deviceId) == Architecture::Qualcomm_ACPI_Adreno8xx;
+// QualcommACPI architectures
+bool IsQualcommACPIAdreno6xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::QualcommACPI_Adreno6xx;
+}
+bool IsQualcommACPIAdreno7xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::QualcommACPI_Adreno7xx;
 }
 // Samsung architectures
 bool IsSamsungRDNA2(PCIVendorID vendorId, PCIDeviceID deviceId) {
@@ -589,9 +599,9 @@ std::string GetVendorName(PCIVendorID vendorId) {
             return "microsoft";
         case kVendorID_Nvidia:
             return "nvidia";
-        case kVendorID_Qualcomm_PCI:
+        case kVendorID_QualcommPCI:
             return "qualcomm";
-        case kVendorID_Qualcomm_ACPI:
+        case kVendorID_QualcommACPI:
             return "qualcomm";
         case kVendorID_Samsung:
             return "samsung";
@@ -687,18 +697,20 @@ std::string GetArchitectureName(PCIVendorID vendorId, PCIDeviceID deviceId) {
             return "blackwell";
         case Architecture::Nvidia_Volta:
             return "volta";
-        case Architecture::Qualcomm_PCI_Adreno4xx:
+        case Architecture::QualcommPCI_Adreno4xx:
             return "adreno-4xx";
-        case Architecture::Qualcomm_PCI_Adreno5xx:
+        case Architecture::QualcommPCI_Adreno5xx:
             return "adreno-5xx";
-        case Architecture::Qualcomm_PCI_Adreno6xx:
+        case Architecture::QualcommPCI_Adreno6xx:
             return "adreno-6xx";
-        case Architecture::Qualcomm_PCI_Adreno7xx:
+        case Architecture::QualcommPCI_Adreno7xx:
             return "adreno-7xx";
-        case Architecture::Qualcomm_PCI_Adreno8xx:
+        case Architecture::QualcommPCI_Adreno8xx:
             return "adreno-8xx";
-        case Architecture::Qualcomm_ACPI_Adreno8xx:
-            return "adreno-8xx";
+        case Architecture::QualcommACPI_Adreno6xx:
+            return "adreno-6xx";
+        case Architecture::QualcommACPI_Adreno7xx:
+            return "adreno-7xx";
         case Architecture::Samsung_RDNA2:
             return "rdna-2";
         case Architecture::Samsung_RDNA3:

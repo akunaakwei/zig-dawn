@@ -29,7 +29,11 @@ typedef struct DawnProcTable {
 
     WGPUProcAdapterPropertiesSubgroupMatrixConfigsFreeMembers adapterPropertiesSubgroupMatrixConfigsFreeMembers;
 
+    WGPUProcBindGroupDestroy bindGroupDestroy;
+    WGPUProcBindGroupInsertBinding bindGroupInsertBinding;
+    WGPUProcBindGroupRemoveBinding bindGroupRemoveBinding;
     WGPUProcBindGroupSetLabel bindGroupSetLabel;
+    WGPUProcBindGroupUpdate bindGroupUpdate;
     WGPUProcBindGroupAddRef bindGroupAddRef;
     WGPUProcBindGroupRelease bindGroupRelease;
 
@@ -37,6 +41,7 @@ typedef struct DawnProcTable {
     WGPUProcBindGroupLayoutAddRef bindGroupLayoutAddRef;
     WGPUProcBindGroupLayoutRelease bindGroupLayoutRelease;
 
+    WGPUProcBufferCreateTexelView bufferCreateTexelView;
     WGPUProcBufferDestroy bufferDestroy;
     WGPUProcBufferGetConstMappedRange bufferGetConstMappedRange;
     WGPUProcBufferGetMappedRange bufferGetMappedRange;
@@ -81,7 +86,7 @@ typedef struct DawnProcTable {
     WGPUProcComputePassEncoderPopDebugGroup computePassEncoderPopDebugGroup;
     WGPUProcComputePassEncoderPushDebugGroup computePassEncoderPushDebugGroup;
     WGPUProcComputePassEncoderSetBindGroup computePassEncoderSetBindGroup;
-    WGPUProcComputePassEncoderSetImmediateData computePassEncoderSetImmediateData;
+    WGPUProcComputePassEncoderSetImmediates computePassEncoderSetImmediates;
     WGPUProcComputePassEncoderSetLabel computePassEncoderSetLabel;
     WGPUProcComputePassEncoderSetPipeline computePassEncoderSetPipeline;
     WGPUProcComputePassEncoderWriteTimestamp computePassEncoderWriteTimestamp;
@@ -187,7 +192,7 @@ typedef struct DawnProcTable {
     WGPUProcRenderBundleEncoderPopDebugGroup renderBundleEncoderPopDebugGroup;
     WGPUProcRenderBundleEncoderPushDebugGroup renderBundleEncoderPushDebugGroup;
     WGPUProcRenderBundleEncoderSetBindGroup renderBundleEncoderSetBindGroup;
-    WGPUProcRenderBundleEncoderSetImmediateData renderBundleEncoderSetImmediateData;
+    WGPUProcRenderBundleEncoderSetImmediates renderBundleEncoderSetImmediates;
     WGPUProcRenderBundleEncoderSetIndexBuffer renderBundleEncoderSetIndexBuffer;
     WGPUProcRenderBundleEncoderSetLabel renderBundleEncoderSetLabel;
     WGPUProcRenderBundleEncoderSetPipeline renderBundleEncoderSetPipeline;
@@ -211,7 +216,7 @@ typedef struct DawnProcTable {
     WGPUProcRenderPassEncoderPushDebugGroup renderPassEncoderPushDebugGroup;
     WGPUProcRenderPassEncoderSetBindGroup renderPassEncoderSetBindGroup;
     WGPUProcRenderPassEncoderSetBlendConstant renderPassEncoderSetBlendConstant;
-    WGPUProcRenderPassEncoderSetImmediateData renderPassEncoderSetImmediateData;
+    WGPUProcRenderPassEncoderSetImmediates renderPassEncoderSetImmediates;
     WGPUProcRenderPassEncoderSetIndexBuffer renderPassEncoderSetIndexBuffer;
     WGPUProcRenderPassEncoderSetLabel renderPassEncoderSetLabel;
     WGPUProcRenderPassEncoderSetPipeline renderPassEncoderSetPipeline;
@@ -280,6 +285,10 @@ typedef struct DawnProcTable {
 
     WGPUProcSurfaceCapabilitiesFreeMembers surfaceCapabilitiesFreeMembers;
 
+    WGPUProcTexelBufferViewSetLabel texelBufferViewSetLabel;
+    WGPUProcTexelBufferViewAddRef texelBufferViewAddRef;
+    WGPUProcTexelBufferViewRelease texelBufferViewRelease;
+
     WGPUProcTextureCreateErrorView textureCreateErrorView;
     WGPUProcTextureCreateView textureCreateView;
     WGPUProcTextureDestroy textureDestroy;
@@ -291,7 +300,9 @@ typedef struct DawnProcTable {
     WGPUProcTextureGetSampleCount textureGetSampleCount;
     WGPUProcTextureGetUsage textureGetUsage;
     WGPUProcTextureGetWidth textureGetWidth;
+    WGPUProcTexturePin texturePin;
     WGPUProcTextureSetLabel textureSetLabel;
+    WGPUProcTextureUnpin textureUnpin;
     WGPUProcTextureAddRef textureAddRef;
     WGPUProcTextureRelease textureRelease;
 

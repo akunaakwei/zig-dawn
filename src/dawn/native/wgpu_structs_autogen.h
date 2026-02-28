@@ -128,6 +128,44 @@ explicit operator View() const {
 
     };
 
+    struct AdapterPropertiesWGPU : ChainedStructOut {
+        AdapterPropertiesWGPU() {
+            sType = wgpu::SType::AdapterPropertiesWGPU;
+        }
+        alignas(wgpu::AdapterPropertiesWGPU::kFirstMemberAlignment) wgpu::BackendType backendType = wgpu::BackendType::Undefined;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const AdapterPropertiesWGPU& rhs) const;
+
+    };
+
+    struct BindGroupDynamicBindingArray : ChainedStruct {
+        BindGroupDynamicBindingArray() {
+            sType = wgpu::SType::BindGroupDynamicBindingArray;
+        }
+        alignas(wgpu::BindGroupDynamicBindingArray::kFirstMemberAlignment) uint32_t dynamicArraySize = 0;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const BindGroupDynamicBindingArray& rhs) const;
+
+    };
+
+    struct BindGroupEntryContents {
+        ChainedStruct const * nextInChain = nullptr;
+        BufferBase* buffer = nullptr;
+        uint64_t offset = 0;
+        uint64_t size = wgpu::kWholeSize;
+        SamplerBase* sampler = nullptr;
+        TextureViewBase* textureView = nullptr;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const BindGroupEntryContents& rhs) const;
+
+    };
+
     struct BlendComponent {
         wgpu::BlendOperation operation = wgpu::BlendOperation::Add;
         wgpu::BlendFactor srcFactor = wgpu::BlendFactor::One;
@@ -307,6 +345,18 @@ explicit operator View() const {
 
     };
 
+    struct DawnConsumeAdapterDescriptor : ChainedStruct {
+        DawnConsumeAdapterDescriptor() {
+            sType = wgpu::SType::DawnConsumeAdapterDescriptor;
+        }
+        alignas(wgpu::DawnConsumeAdapterDescriptor::kFirstMemberAlignment) wgpu::Bool consumeAdapter = false;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const DawnConsumeAdapterDescriptor& rhs) const;
+
+    };
+
     struct DawnDeviceAllocatorControl : ChainedStruct {
         DawnDeviceAllocatorControl() {
             sType = wgpu::SType::DawnDeviceAllocatorControl;
@@ -477,6 +527,29 @@ explicit operator View() const {
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const DawnWireWGSLControl& rhs) const;
+
+    };
+
+    struct DynamicBindingArrayLayout {
+        ChainedStruct const * nextInChain = nullptr;
+        uint32_t start = 0;
+        wgpu::DynamicBindingKind kind = wgpu::DynamicBindingKind::Undefined;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const DynamicBindingArrayLayout& rhs) const;
+
+    };
+
+    struct DynamicBindingArrayLimits : ChainedStructOut {
+        DynamicBindingArrayLimits() {
+            sType = wgpu::SType::DynamicBindingArrayLimits;
+        }
+        alignas(wgpu::DynamicBindingArrayLimits::kFirstMemberAlignment) uint32_t maxDynamicBindingArraySize = wgpu::kLimitU32Undefined;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const DynamicBindingArrayLimits& rhs) const;
 
     };
 
@@ -1028,6 +1101,18 @@ explicit operator View() const {
 
     };
 
+    struct SharedTextureMemoryD3D11BeginState : ChainedStruct {
+        SharedTextureMemoryD3D11BeginState() {
+            sType = wgpu::SType::SharedTextureMemoryD3D11BeginState;
+        }
+        alignas(wgpu::SharedTextureMemoryD3D11BeginState::kFirstMemberAlignment) wgpu::Bool requiresEndAccessFence = true;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const SharedTextureMemoryD3D11BeginState& rhs) const;
+
+    };
+
     struct SharedTextureMemoryD3DSwapchainBeginState : ChainedStruct {
         SharedTextureMemoryD3DSwapchainBeginState() {
             sType = wgpu::SType::SharedTextureMemoryD3DSwapchainBeginState;
@@ -1460,6 +1545,50 @@ explicit operator View() const {
 
     };
 
+    struct TexelBufferBindingEntry : ChainedStruct {
+        TexelBufferBindingEntry() {
+            sType = wgpu::SType::TexelBufferBindingEntry;
+        }
+        alignas(wgpu::TexelBufferBindingEntry::kFirstMemberAlignment) TexelBufferViewBase* texelBufferView;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const TexelBufferBindingEntry& rhs) const;
+
+    };
+
+    struct TexelBufferBindingLayout : ChainedStruct {
+        TexelBufferBindingLayout() {
+            sType = wgpu::SType::TexelBufferBindingLayout;
+        }
+        alignas(wgpu::TexelBufferBindingLayout::kFirstMemberAlignment) wgpu::TexelBufferAccess access = wgpu::TexelBufferAccess::ReadWrite;
+        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
+
+        // This method makes a copy of the struct, then, for any enum members with trivial
+        // defaulting (where something like "Undefined" is replaced with a default), applies
+        // all of the defaults for the struct, and recursively its by-value substructs (but
+        // NOT by-pointer substructs since they are const*). It must be called in an
+        // appropriate place in Dawn.
+        [[nodiscard]] TexelBufferBindingLayout WithTrivialFrontendDefaults() const;
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const TexelBufferBindingLayout& rhs) const;
+
+    };
+
+    struct TexelBufferViewDescriptor {
+        ChainedStruct const * nextInChain = nullptr;
+        StringView label;
+        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
+        uint64_t offset = 0;
+        uint64_t size = wgpu::kWholeSize;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const TexelBufferViewDescriptor& rhs) const;
+
+    };
+
     struct TexelCopyBufferLayout {
         uint64_t offset = 0;
         uint32_t bytesPerRow = wgpu::kCopyStrideUndefined;
@@ -1629,6 +1758,18 @@ explicit operator View() const {
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const BindGroupEntry& rhs) const;
+
+    };
+
+    struct BindGroupLayoutDynamicBindingArray : ChainedStruct {
+        BindGroupLayoutDynamicBindingArray() {
+            sType = wgpu::SType::BindGroupLayoutDynamicBindingArray;
+        }
+        alignas(wgpu::BindGroupLayoutDynamicBindingArray::kFirstMemberAlignment) DynamicBindingArrayLayout dynamicArray;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const BindGroupLayoutDynamicBindingArray& rhs) const;
 
     };
 
@@ -2042,26 +2183,16 @@ explicit operator View() const {
 
     };
 
-    struct SharedTextureMemoryEndAccessState {
-        SharedTextureMemoryEndAccessState() = default;
-        ~SharedTextureMemoryEndAccessState();
-        SharedTextureMemoryEndAccessState(const SharedTextureMemoryEndAccessState&) = delete;
-        SharedTextureMemoryEndAccessState& operator=(const SharedTextureMemoryEndAccessState&) = delete;
-        SharedTextureMemoryEndAccessState(SharedTextureMemoryEndAccessState&&);
-        SharedTextureMemoryEndAccessState& operator=(SharedTextureMemoryEndAccessState&&);
-
-        ChainedStructOut * nextInChain = nullptr;
-        wgpu::Bool initialized;
-        size_t fenceCount;
-        SharedFenceBase* const * fences = nullptr;
-        uint64_t const * signaledValues = nullptr;
+    struct SharedTextureMemoryMetalEndAccessState : ChainedStructOut {
+        SharedTextureMemoryMetalEndAccessState() {
+            sType = wgpu::SType::SharedTextureMemoryMetalEndAccessState;
+        }
+        alignas(wgpu::SharedTextureMemoryMetalEndAccessState::kFirstMemberAlignment) Future commandsScheduledFuture;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const SharedTextureMemoryEndAccessState& rhs) const;
+        bool operator==(const SharedTextureMemoryMetalEndAccessState& rhs) const;
 
-      private:
-        inline void FreeMembers();
     };
 
     struct SurfaceDescriptor {
@@ -2189,7 +2320,7 @@ explicit operator View() const {
         ChainedStruct const * nextInChain = nullptr;
         StringView label;
         BindGroupLayoutBase* layout;
-        size_t entryCount;
+        size_t entryCount = 0;
         BindGroupEntry const * entries = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
@@ -2201,7 +2332,7 @@ explicit operator View() const {
     struct BindGroupLayoutDescriptor {
         ChainedStruct const * nextInChain = nullptr;
         StringView label;
-        size_t entryCount;
+        size_t entryCount = 0;
         BindGroupLayoutEntry const * entries = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
@@ -2305,6 +2436,28 @@ explicit operator View() const {
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const SharedTextureMemoryDescriptor& rhs) const;
 
+    };
+
+    struct SharedTextureMemoryEndAccessState {
+        SharedTextureMemoryEndAccessState() = default;
+        ~SharedTextureMemoryEndAccessState();
+        SharedTextureMemoryEndAccessState(const SharedTextureMemoryEndAccessState&) = delete;
+        SharedTextureMemoryEndAccessState& operator=(const SharedTextureMemoryEndAccessState&) = delete;
+        SharedTextureMemoryEndAccessState(SharedTextureMemoryEndAccessState&&);
+        SharedTextureMemoryEndAccessState& operator=(SharedTextureMemoryEndAccessState&&);
+
+        ChainedStructOut * nextInChain = nullptr;
+        wgpu::Bool initialized;
+        size_t fenceCount;
+        SharedFenceBase* const * fences = nullptr;
+        uint64_t const * signaledValues = nullptr;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const SharedTextureMemoryEndAccessState& rhs) const;
+
+      private:
+        inline void FreeMembers();
     };
 
     struct SharedTextureMemoryProperties {
@@ -2411,15 +2564,6 @@ explicit operator View() const {
     };
 
 
-    using RenderPassDescriptorMaxDrawCount = RenderPassMaxDrawCount;
-    using ShaderModuleSPIRVDescriptor = ShaderSourceSPIRV;
-    using ShaderModuleWGSLDescriptor = ShaderSourceWGSL;
-    using SurfaceDescriptorFromAndroidNativeWindow = SurfaceSourceAndroidNativeWindow;
-    using SurfaceDescriptorFromMetalLayer = SurfaceSourceMetalLayer;
-    using SurfaceDescriptorFromWaylandSurface = SurfaceSourceWaylandSurface;
-    using SurfaceDescriptorFromWindowsHWND = SurfaceSourceWindowsHWND;
-    using SurfaceDescriptorFromXcbWindow = SurfaceSourceXCBWindow;
-    using SurfaceDescriptorFromXlibWindow = SurfaceSourceXlibWindow;
 
     // SharedBufferMemoryEndAccessState
     void APISharedBufferMemoryEndAccessStateFreeMembers(WGPUSharedBufferMemoryEndAccessState);
@@ -2437,10 +2581,10 @@ explicit operator View() const {
     void APIAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPUAdapterPropertiesSubgroupMatrixConfigs);
     // DawnDrmFormatCapabilities
     void APIDawnDrmFormatCapabilitiesFreeMembers(WGPUDawnDrmFormatCapabilities);
-    // SharedTextureMemoryEndAccessState
-    void APISharedTextureMemoryEndAccessStateFreeMembers(WGPUSharedTextureMemoryEndAccessState);
     // AdapterInfo
     void APIAdapterInfoFreeMembers(WGPUAdapterInfo);
+    // SharedTextureMemoryEndAccessState
+    void APISharedTextureMemoryEndAccessStateFreeMembers(WGPUSharedTextureMemoryEndAccessState);
 
 } // namespace dawn::native
 

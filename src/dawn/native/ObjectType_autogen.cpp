@@ -53,6 +53,8 @@ namespace dawn::native {
                 return "SharedTextureMemory";
             case ObjectType::Surface:
                 return "Surface";
+            case ObjectType::TexelBufferView:
+                return "TexelBufferView";
             case ObjectType::Texture:
                 return "Texture";
             case ObjectType::TextureView:

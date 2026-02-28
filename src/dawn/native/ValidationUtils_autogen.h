@@ -26,6 +26,7 @@ namespace dawn::native {
     MaybeError ValidateCreatePipelineAsyncStatus(wgpu::CreatePipelineAsyncStatus value);
     MaybeError ValidateCullMode(wgpu::CullMode value);
     MaybeError ValidateDeviceLostReason(wgpu::DeviceLostReason value);
+    MaybeError ValidateDynamicBindingKind(wgpu::DynamicBindingKind value);
     MaybeError ValidateErrorFilter(wgpu::ErrorFilter value);
     MaybeError ValidateErrorType(wgpu::ErrorType value);
     MaybeError ValidateExternalTextureRotation(wgpu::ExternalTextureRotation value);
@@ -58,6 +59,7 @@ namespace dawn::native {
     MaybeError ValidateSType(wgpu::SType value);
     MaybeError ValidateSubgroupMatrixComponentType(wgpu::SubgroupMatrixComponentType value);
     MaybeError ValidateSurfaceGetCurrentTextureStatus(wgpu::SurfaceGetCurrentTextureStatus value);
+    MaybeError ValidateTexelBufferAccess(wgpu::TexelBufferAccess value);
     MaybeError ValidateTextureAspect(wgpu::TextureAspect value);
     MaybeError ValidateTextureDimension(wgpu::TextureDimension value);
     MaybeError ValidateTextureFormat(wgpu::TextureFormat value);

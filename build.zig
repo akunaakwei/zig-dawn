@@ -29,6 +29,7 @@ pub fn build(b: *std.Build) void {
     const tint_build_msl_writer = b.option(bool, "TINT_BUILD_MSL_WRITER", "Build the MSL output writer") orelse dawn_enable_metal;
     const tint_build_spirv_writer = b.option(bool, "TINT_BUILD_SPV_WRITER", "Build the SPIR-V output writer") orelse dawn_enable_vulkan;
     const tint_build_wgsl_writer = b.option(bool, "TINT_BUILD_WGSL_WRITER", "Build the WGSL output writer") orelse true;
+    const tint_build_null_writer = b.option(bool, "TINT_BUILD_NULL_WRITER", "Build the NULL output writer") orelse dawn_enable_null;
     const tint_build_syntax_tree_writer = b.option(bool, "TINT_BUILD_SYNTAX_TREE_WRITER", "Build the syntax tree writer") orelse false;
 
     const dawn_dep = b.dependency("dawn", .{});
@@ -73,6 +74,7 @@ pub fn build(b: *std.Build) void {
         if (tint_build_msl_writer) "-DTINT_BUILD_MSL_WRITER=1" else "-DTINT_BUILD_MSL_WRITER=0",
         if (tint_build_spirv_writer) "-DTINT_BUILD_SPV_WRITER=1" else "-DTINT_BUILD_SPV_WRITER=0",
         if (tint_build_wgsl_writer) "-DTINT_BUILD_WGSL_WRITER=1" else "-DTINT_BUILD_WGSL_WRITER=0",
+        if (tint_build_null_writer) "-DTINT_BUILD_NULL_WRITER=1" else "-DTINT_BUILD_NULL_WRITER=0",
         if (tint_build_syntax_tree_writer) "-DTINT_BUILD_SYNTAX_TREE_WRITER=1" else "-DTINT_BUILD_SYNTAX_TREE_WRITER=0",
     };
 
@@ -81,10 +83,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    tint_utils.linkLibCpp();
     tint_utils.linkLibrary(abseil);
     tint_utils.addIncludePath(dawn_dep.path("."));
     inline for (tint_bytes_sources) |src| {
@@ -223,7 +224,6 @@ pub fn build(b: *std.Build) void {
     tint_utils.addCSourceFiles(.{
         .root = dawn_dep.path("src/tint/utils"),
         .files = &.{
-            "generation_id.cc",
             "reflection.cc",
             "result.cc",
         },
@@ -235,10 +235,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    tint_core.linkLibCpp();
     tint_core.linkLibrary(tint_utils);
     tint_core.addIncludePath(dawn_dep.path("."));
     inline for (tint_core_constant_sources) |src| {
@@ -281,10 +280,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    tint_wgsl.linkLibCpp();
     tint_wgsl.linkLibrary(tint_utils);
     tint_wgsl.addIncludePath(dawn_dep.path("."));
     inline for (tint_wgsl_ast_sources) |src| {
@@ -362,10 +360,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    tint_hlsl.linkLibCpp();
     tint_hlsl.linkLibrary(tint_utils);
     tint_hlsl.addIncludePath(dawn_dep.path("."));
     tint_hlsl.addCSourceFiles(.{
@@ -402,10 +399,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    tint_spirv.linkLibCpp();
     tint_spirv.linkLibrary(tint_utils);
     tint_spirv.addIncludePath(dawn_dep.path("."));
     if (maybe_spirv_headers_dep) |spirv_headers_dep| {
@@ -457,15 +453,30 @@ pub fn build(b: *std.Build) void {
         .flags = &flags,
     });
 
+    const tint_null = b.addLibrary(.{
+        .name = "tint_null",
+        .root_module = b.createModule(.{
+            .target = target,
+            .optimize = optimize,
+            .link_libcpp = true,
+        }),
+    });
+    tint_null.linkLibrary(tint_utils);
+    tint_null.addIncludePath(dawn_dep.path("."));
+    tint_null.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "null", "writer" })),
+        .files = &tint_null_writer_sources,
+        .flags = &flags,
+    });
+
     const tint_api = b.addLibrary(.{
         .name = "tint_api",
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    tint_api.linkLibCpp();
     tint_api.linkLibrary(tint_utils);
     tint_api.addIncludePath(dawn_dep.path("."));
     tint_api.addCSourceFiles(.{
@@ -478,15 +489,20 @@ pub fn build(b: *std.Build) void {
         .files = &.{"vertex_pulling_config.cc"},
         .flags = &flags,
     });
+    tint_api.addCSourceFiles(.{
+        .root = dawn_dep.path("src/tint/api/helpers"),
+        .files = &.{"generate_bindings.cc"},
+        .flags = &flags,
+    });
 
     const tint_exe = b.addExecutable(.{
         .name = "tint",
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
     });
-    tint_exe.linkLibCpp();
     tint_exe.linkLibrary(tint_utils);
     tint_exe.linkLibrary(tint_api);
     tint_exe.linkLibrary(tint_core);
@@ -495,6 +511,7 @@ pub fn build(b: *std.Build) void {
         tint_exe.linkLibrary(tint_spirv);
         tint_exe.linkLibrary(spirv_tools_dep.artifact("spvtools"));
     }
+    tint_exe.linkLibrary(tint_null);
     tint_exe.addIncludePath(dawn_dep.path("."));
     tint_exe.addCSourceFiles(.{
         .root = dawn_dep.path("src/tint/cmd"),
@@ -511,10 +528,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    dawn_common.linkLibCpp();
     dawn_common.linkLibrary(abseil);
     dawn_common.addIncludePath(dawn_dep.path("."));
     dawn_common.addIncludePath(dawn_dep.path("include"));
@@ -554,10 +570,10 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    wgpu_utils.linkLibCpp();
+    wgpu_utils.linkLibrary(abseil);
     wgpu_utils.linkLibrary(dawn_common);
     wgpu_utils.addIncludePath(dawn_dep.path("."));
     wgpu_utils.addIncludePath(dawn_dep.path("include"));
@@ -584,10 +600,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    platform.linkLibCpp();
     platform.linkLibrary(dawn_common);
     platform.addIncludePath(dawn_dep.path("."));
     platform.addIncludePath(dawn_dep.path("include"));
@@ -607,10 +622,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    native_utils.linkLibCpp();
     native_utils.linkLibrary(abseil);
     native_utils.addIncludePath(dawn_dep.path("."));
     native_utils.addIncludePath(dawn_dep.path("include"));
@@ -630,10 +644,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    system_utils.linkLibCpp();
     system_utils.linkLibrary(abseil);
     system_utils.addIncludePath(dawn_dep.path("."));
     system_utils.addIncludePath(dawn_dep.path("include"));
@@ -645,6 +658,7 @@ pub fn build(b: *std.Build) void {
         .root = dawn_dep.path("src/dawn/utils"),
         .files = &.{
             "CommandLineParser.cpp",
+            "SystemHandle.cpp",
             "SystemUtils.cpp",
         },
         .flags = &flags,
@@ -697,10 +711,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    proc.linkLibCpp();
     proc.addIncludePath(dawn_dep.path("."));
     proc.addIncludePath(dawn_dep.path("include"));
     proc.addIncludePath(dawn_dep.path("src"));
@@ -721,10 +734,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    native.linkLibCpp();
     native.linkLibrary(abseil);
     native.linkLibrary(tint_core);
     native.linkLibrary(tint_api);
@@ -734,6 +746,9 @@ pub fn build(b: *std.Build) void {
     }
     if (dawn_enable_vulkan) {
         native.linkLibrary(tint_spirv);
+    }
+    if (dawn_enable_null) {
+        native.linkLibrary(tint_null);
     }
     native.linkLibrary(dawn_common);
     native.linkLibrary(platform);
@@ -943,18 +958,17 @@ pub fn build(b: *std.Build) void {
         }
     }
     native.installHeadersDirectory(b.path("include"), ".", .{});
-    // native.installHeadersDirectory(b.path("webgpu-headers"), "webgpu", .{});
-    b.installArtifact(native);
+    // b.installArtifact(native);
 
     const webgpu_dawn = b.addLibrary(.{
         .name = "webgpu_dawn",
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
         .linkage = linkage,
     });
-    webgpu_dawn.linkLibCpp();
     webgpu_dawn.linkLibrary(native);
     webgpu_dawn.addIncludePath(b.path("include"));
     webgpu_dawn.addIncludePath(b.path("src"));
@@ -990,10 +1004,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    dawn_glfw.linkLibCpp();
     dawn_glfw.linkLibrary(glfw);
     dawn_glfw.addIncludePath(dawn_dep.path("include"));
     dawn_glfw.addIncludePath(dawn_dep.path("src"));
@@ -1011,10 +1024,9 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
-        .linkage = linkage,
     });
-    sample_utils.linkLibCpp();
     sample_utils.linkLibrary(glfw);
     sample_utils.linkLibrary(dawn_glfw);
     sample_utils.linkLibrary(abseil);
@@ -1035,12 +1047,13 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .target = target,
             .optimize = optimize,
+            .link_libcpp = true,
         }),
     });
-    hello_triangle.linkLibCpp();
     hello_triangle.linkLibrary(sample_utils);
     hello_triangle.linkLibrary(native);
     hello_triangle.linkLibrary(glfw);
+    hello_triangle.linkLibrary(abseil);
     hello_triangle.addIncludePath(dawn_dep.path("."));
     hello_triangle.addIncludePath(dawn_dep.path("include"));
     hello_triangle.addIncludePath(dawn_dep.path("src"));
@@ -1133,6 +1146,7 @@ const tint_strconv_sources = .{
 };
 
 const tint_symbol_sources = .{
+    "generation_id.cc",
     "symbol.cc",
     "symbol_table.cc",
 };
@@ -1161,6 +1175,7 @@ const tint_core_constant_sources = .{
     "node.cc",
     "scalar.cc",
     "splat.cc",
+    "string.cc",
     "value.cc",
 };
 
@@ -1229,11 +1244,13 @@ const tint_core_ir_sources = .{
     "validator.cc",
     "value.cc",
     "var.cc",
+    "analysis/for_loop_analysis.cc",
     "analysis/integer_range_analysis.cc",
     "analysis/loop_analysis.cc",
+    "analysis/subgroup_matrix.cc",
     // "binary/decode.cc",
     // "binary/encode.cc",
-    "transform/add_empty_entry_point.cc",
+    "transform/array_length_from_immediate.cc",
     "transform/array_length_from_uniform.cc",
     "transform/bgra8unorm_polyfill.cc",
     "transform/binary_polyfill.cc",
@@ -1241,9 +1258,11 @@ const tint_core_ir_sources = .{
     "transform/block_decorated_structs.cc",
     "transform/builtin_polyfill.cc",
     "transform/builtin_scalarize.cc",
+    "transform/change_immediate_to_uniform.cc",
     "transform/combine_access_instructions.cc",
     "transform/conversion_polyfill.cc",
     "transform/dead_code_elimination.cc",
+    "transform/decompose_uniform_access.cc",
     "transform/demote_to_helper.cc",
     "transform/direct_variable_access.cc",
     "transform/multiplanar_external_texture.cc",
@@ -1252,9 +1271,15 @@ const tint_core_ir_sources = .{
     "transform/prevent_infinite_loops.cc",
     "transform/remove_continue_in_switch.cc",
     "transform/remove_terminator_args.cc",
+    "transform/remove_uniform_vector_component_loads.cc",
     "transform/rename_conflicts.cc",
+    "transform/resource_binding.cc",
+    "transform/resource_binding_helper.cc",
+    "transform/resource_table.cc",
+    "transform/resource_table_helper.cc",
     "transform/robustness.cc",
     "transform/shader_io.cc",
+    "transform/signed_integer_polyfill.cc",
     "transform/single_entry_point.cc",
     "transform/std140.cc",
     "transform/substitute_overrides.cc",
@@ -1293,11 +1318,14 @@ const tint_core_type_sources = .{
     "numeric_scalar.cc",
     "pointer.cc",
     "reference.cc",
+    "resource_binding.cc",
+    "resource_type.cc",
     "sampled_texture.cc",
     "sampler.cc",
     "sampler_kind.cc",
     "scalar.cc",
     "storage_texture.cc",
+    "string.cc",
     "struct.cc",
     "subgroup_matrix.cc",
     "texel_buffer.cc",
@@ -1330,7 +1358,6 @@ const tint_wgsl_ast_sources = .{
     "call_statement.cc",
     "case_selector.cc",
     "case_statement.cc",
-    "clone_context.cc",
     "color_attribute.cc",
     "compound_assignment_statement.cc",
     "const.cc",
@@ -1340,7 +1367,6 @@ const tint_wgsl_ast_sources = .{
     "diagnostic_control.cc",
     "diagnostic_directive.cc",
     "diagnostic_rule_name.cc",
-    "disable_validation_attribute.cc",
     "discard_statement.cc",
     "enable.cc",
     "expression.cc",
@@ -1357,7 +1383,6 @@ const tint_wgsl_ast_sources = .{
     "index_accessor_expression.cc",
     "input_attachment_index_attribute.cc",
     "int_literal_expression.cc",
-    "internal_attribute.cc",
     "interpolate_attribute.cc",
     "invariant_attribute.cc",
     "let.cc",
@@ -1374,18 +1399,14 @@ const tint_wgsl_ast_sources = .{
     "pipeline_stage.cc",
     "requires.cc",
     "return_statement.cc",
-    "row_major_attribute.cc",
     "stage_attribute.cc",
     "statement.cc",
-    "stride_attribute.cc",
     "struct.cc",
     "struct_member.cc",
     "struct_member_align_attribute.cc",
-    "struct_member_offset_attribute.cc",
     "struct_member_size_attribute.cc",
     "switch_statement.cc",
     "templated_identifier.cc",
-    "type.cc",
     "type_decl.cc",
     "unary_op_expression.cc",
     "var.cc",
@@ -1436,7 +1457,6 @@ const tint_wgsl_ls_sources = .{
 };
 
 const tint_wgsl_program_sources = .{
-    "clone_context.cc",
     "program.cc",
     "program_builder.cc",
 };
@@ -1498,7 +1518,6 @@ const tint_wgsl_sem_sources = .{
 };
 
 const tint_wgsl_writer_sources = .{
-    "options.cc",
     "output.cc",
     "writer.cc",
     "ast_printer/ast_printer.cc",
@@ -1506,7 +1525,118 @@ const tint_wgsl_writer_sources = .{
     "raise/ptr_to_ref.cc",
     "raise/raise.cc",
     "raise/value_to_let.cc",
-    "syntax_tree_printer/syntax_tree_printer.cc",
+};
+
+const tint_hlsl_intrinsic_sources = .{
+    "data.cc",
+};
+
+const tint_hlsl_ir_sources = .{
+    "builtin_call.cc",
+    "member_builtin_call.cc",
+    "ternary.cc",
+};
+
+const tint_hlsl_type_sources = .{
+    "byte_address_buffer.cc",
+    "int8_t4_packed.cc",
+    "rasterizer_ordered_texture_2d.cc",
+    "uint8_t4_packed.cc",
+};
+
+const tint_hlsl_validate_sources = .{
+    "validate.cc",
+};
+
+const tint_hlsl_writer_sources = .{
+    "writer.cc",
+    "common/option_helpers.cc",
+    "common/options.cc",
+    "common/output.cc",
+    "helpers/generate_bindings.cc",
+    "printer/printer.cc",
+    "raise/binary_polyfill.cc",
+    "raise/builtin_polyfill.cc",
+    "raise/change_immediate_to_uniform.cc",
+    "raise/decompose_storage_access.cc",
+    "raise/decompose_uniform_access.cc",
+    "raise/localize_struct_array_assignment.cc",
+    "raise/pixel_local.cc",
+    "raise/promote_initializers.cc",
+    "raise/raise.cc",
+    "raise/replace_default_only_switch.cc",
+    "raise/replace_non_indexable_mat_vec_stores.cc",
+    "raise/shader_io.cc",
+};
+
+const tint_spirv_intrinsic_sources = .{
+    "data.cc",
+};
+
+const tint_spirv_ir_sources = .{
+    "binary.cc",
+    "builtin_call.cc",
+    "copy_logical.cc",
+    "literal_operand.cc",
+};
+
+const tint_spirv_reader_sources = .{
+    "reader.cc",
+    "common/common.cc",
+    "lower/atomics.cc",
+    "lower/builtins.cc",
+    "lower/decompose_strided_array.cc",
+    "lower/decompose_strided_matrix.cc",
+    "lower/lower.cc",
+    "lower/shader_io.cc",
+    "lower/texture.cc",
+    "lower/transpose_row_major.cc",
+    "lower/vector_element_pointer.cc",
+    "parser/parser.cc",
+};
+
+const tint_spirv_type_sources = .{
+    "explicit_layout_array.cc",
+    "image.cc",
+    "resource_binding.cc",
+    "sampled_image.cc",
+};
+
+const tint_spirv_validate_sources = .{
+    "validate.cc",
+};
+
+const tint_spirv_writer_sources = .{
+    "writer.cc",
+    "common/binary_writer.cc",
+    "common/function.cc",
+    "common/instruction.cc",
+    "common/module.cc",
+    "common/operand.cc",
+    "common/option_helper.cc",
+    "common/output.cc",
+    "printer/printer.cc",
+    "raise/builtin_polyfill.cc",
+    "raise/case_switch_to_if_else.cc",
+    "raise/expand_implicit_splats.cc",
+    "raise/fork_explicit_layout_types.cc",
+    "raise/handle_matrix_arithmetic.cc",
+    "raise/keep_binding_array_as_pointer.cc",
+    "raise/merge_return.cc",
+    "raise/pass_matrix_by_pointer.cc",
+    "raise/raise.cc",
+    "raise/remove_unreachable_in_loop_continuing.cc",
+    "raise/resource_binding.cc",
+    "raise/resource_table.cc",
+    "raise/shader_io.cc",
+    "raise/var_for_dynamic_index.cc",
+};
+
+const tint_null_writer_sources = .{
+    "writer.cc",
+    "common/options.cc",
+    "common/output.cc",
+    "raise/raise.cc",
 };
 
 const dawn_sources = .{
@@ -1547,6 +1677,7 @@ const dawn_sources = .{
     "CreatePipelineAsyncEvent.cpp",
     "Device.cpp",
     "DeviceGuard.cpp",
+    "DynamicArrayState.cpp",
     "DynamicUploader.cpp",
     "EncodingContext.cpp",
     "Error.cpp",
@@ -1598,12 +1729,13 @@ const dawn_sources = .{
     "Surface.cpp",
     "SwapChain.cpp",
     "SystemEvent.cpp",
-    "SystemHandle.cpp",
+    "TexelBufferView.cpp",
     "Texture.cpp",
     "TintUtils.cpp",
     "Toggles.cpp",
     "ValidationUtils.cpp",
     "WaitListEvent.cpp",
+    "dawn_platform.cpp",
     "stream/BlobSource.cpp",
     "stream/ByteVectorSink.cpp",
     "stream/Stream.cpp",
@@ -1724,11 +1856,24 @@ const dawn_null_sources = .{
 
 const dawn_webgpu_sources = .{
     "webgpu/BackendWGPU.cpp",
+    "webgpu/BindGroupLayoutWGPU.cpp",
+    "webgpu/BindGroupWGPU.cpp",
     "webgpu/BufferWGPU.cpp",
+    "webgpu/CaptureContext.cpp",
     "webgpu/CommandBufferWGPU.cpp",
+    "webgpu/ComputePipelineWGPU.cpp",
     "webgpu/DeviceWGPU.cpp",
     "webgpu/PhysicalDeviceWGPU.cpp",
+    "webgpu/PipelineLayoutWGPU.cpp",
+    "webgpu/QuerySetWGPU.cpp",
     "webgpu/QueueWGPU.cpp",
+    "webgpu/RecordableObject.cpp",
+    "webgpu/RenderPipelineWGPU.cpp",
+    "webgpu/SamplerWGPU.cpp",
+    "webgpu/Serialization.cpp",
+    "webgpu/ShaderModuleWGPU.cpp",
+    "webgpu/TextureWGPU.cpp",
+    "webgpu/ToWGPU.cpp",
 };
 
 const dawn_opengl_sources = .{
@@ -1776,6 +1921,7 @@ const dawn_vulkan_sources = .{
     "vulkan/DeviceVk.cpp",
     "vulkan/FencedDeleter.cpp",
     "vulkan/FramebufferCache.cpp",
+    "vulkan/MemoryTypeSelector.cpp",
     "vulkan/PhysicalDeviceVk.cpp",
     "vulkan/PipelineCacheVk.cpp",
     "vulkan/PipelineLayoutVk.cpp",
@@ -1846,124 +1992,4 @@ const native_utils_sources = .{
     "webgpu_absl_format_autogen.cpp",
     "webgpu_StreamImpl_autogen.cpp",
     "ObjectType_autogen.cpp",
-};
-
-const tint_hlsl_intrinsic_sources = .{
-    "data.cc",
-};
-
-const tint_hlsl_ir_sources = .{
-    "builtin_call.cc",
-    "member_builtin_call.cc",
-    "ternary.cc",
-};
-
-const tint_hlsl_type_sources = .{
-    "byte_address_buffer.cc",
-    "int8_t4_packed.cc",
-    "rasterizer_ordered_texture_2d.cc",
-    "uint8_t4_packed.cc",
-};
-
-const tint_hlsl_validate_sources = .{
-    "validate.cc",
-};
-
-const tint_hlsl_writer_sources = .{
-    "writer.cc",
-    "common/option_helpers.cc",
-    "common/options.cc",
-    "common/output.cc",
-    "helpers/generate_bindings.cc",
-    "printer/printer.cc",
-    "raise/binary_polyfill.cc",
-    "raise/builtin_polyfill.cc",
-    "raise/change_immediate_to_uniform.cc",
-    "raise/decompose_storage_access.cc",
-    "raise/decompose_uniform_access.cc",
-    "raise/localize_struct_array_assignment.cc",
-    "raise/pixel_local.cc",
-    "raise/promote_initializers.cc",
-    "raise/raise.cc",
-    "raise/replace_default_only_switch.cc",
-    "raise/replace_non_indexable_mat_vec_stores.cc",
-    "raise/shader_io.cc",
-};
-
-const tint_spirv_intrinsic_sources = .{
-    "data.cc",
-};
-
-const tint_spirv_ir_sources = .{
-    "builtin_call.cc",
-    "copy_logical.cc",
-    "literal_operand.cc",
-};
-
-const tint_spirv_reader_sources = .{
-    "reader.cc",
-    "ast_lower/atomics.cc",
-    "ast_lower/data.cc",
-    "ast_lower/decompose_strided_array.cc",
-    "ast_lower/decompose_strided_matrix.cc",
-    "ast_lower/fold_trivial_lets.cc",
-    "ast_lower/manager.cc",
-    "ast_lower/pass_workgroup_id_as_argument.cc",
-    "ast_lower/remove_unreachable_statements.cc",
-    "ast_lower/simplify_pointers.cc",
-    "ast_lower/transform.cc",
-    "ast_lower/transpose_row_major.cc",
-    "ast_lower/unshadow.cc",
-    "ast_parser/ast_parser.cc",
-    "ast_parser/construct.cc",
-    "ast_parser/entry_point_info.cc",
-    "ast_parser/enum_converter.cc",
-    "ast_parser/function.cc",
-    "ast_parser/namer.cc",
-    "ast_parser/parse.cc",
-    "ast_parser/type.cc",
-    "ast_parser/usage.cc",
-    "common/common.cc",
-    "lower/atomics.cc",
-    "lower/builtins.cc",
-    "lower/decompose_strided_array.cc",
-    "lower/lower.cc",
-    "lower/shader_io.cc",
-    "lower/texture.cc",
-    "lower/vector_element_pointer.cc",
-    "parser/parser.cc",
-};
-
-const tint_spirv_type_sources = .{
-    "explicit_layout_array.cc",
-    "image.cc",
-    "sampled_image.cc",
-};
-
-const tint_spirv_validate_sources = .{
-    "validate.cc",
-};
-
-const tint_spirv_writer_sources = .{
-    "writer.cc",
-    "common/binary_writer.cc",
-    "common/function.cc",
-    "common/instruction.cc",
-    "common/module.cc",
-    "common/operand.cc",
-    "common/option_helper.cc",
-    "common/output.cc",
-    "helpers/generate_bindings.cc",
-    "printer/printer.cc",
-    "raise/builtin_polyfill.cc",
-    "raise/expand_implicit_splats.cc",
-    "raise/fork_explicit_layout_types.cc",
-    "raise/handle_matrix_arithmetic.cc",
-    "raise/keep_binding_array_as_pointer.cc",
-    "raise/merge_return.cc",
-    "raise/pass_matrix_by_pointer.cc",
-    "raise/raise.cc",
-    "raise/remove_unreachable_in_loop_continuing.cc",
-    "raise/shader_io.cc",
-    "raise/var_for_dynamic_index.cc",
 };

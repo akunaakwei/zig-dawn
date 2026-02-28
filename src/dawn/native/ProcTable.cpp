@@ -29,6 +29,7 @@
 #include "dawn/native/SharedFence.h"
 #include "dawn/native/SharedTextureMemory.h"
 #include "dawn/native/Surface.h"
+#include "dawn/native/TexelBufferView.h"
 #include "dawn/native/Texture.h"
 
 namespace dawn::native {
@@ -150,6 +151,37 @@ namespace dawn::native {
         APIAdapterPropertiesSubgroupMatrixConfigsFreeMembers(cSelf);
     }
 
+    void NativeBindGroupDestroy(WGPUBindGroup cSelf) {
+        auto self = FromAPI(cSelf);
+
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        self->APIDestroy();
+    }
+
+    uint32_t NativeBindGroupInsertBinding(WGPUBindGroup cSelf, WGPUBindGroupEntryContents const * contents) {
+        auto self = FromAPI(cSelf);
+
+        auto contents_ = reinterpret_cast<BindGroupEntryContents const *>(contents);
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        auto result =        self->APIInsertBinding(contents_);
+        return result;
+    }
+
+    WGPUStatus NativeBindGroupRemoveBinding(WGPUBindGroup cSelf, uint32_t binding) {
+        auto self = FromAPI(cSelf);
+
+        auto binding_ = binding;
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        auto result =        self->APIRemoveBinding(binding_);
+        return ToAPI(result);
+    }
+
     void NativeBindGroupSetLabel(WGPUBindGroup cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
@@ -158,6 +190,17 @@ namespace dawn::native {
         auto deviceGuard = device->GetGuard();
 
         self->APISetLabel(label_);
+    }
+
+    WGPUStatus NativeBindGroupUpdate(WGPUBindGroup cSelf, WGPUBindGroupEntry const * entry) {
+        auto self = FromAPI(cSelf);
+
+        auto entry_ = reinterpret_cast<BindGroupEntry const *>(entry);
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        auto result =        self->APIUpdate(entry_);
+        return ToAPI(result);
     }
 
     void NativeBindGroupAddRef(WGPUBindGroup cSelf) {
@@ -202,6 +245,17 @@ namespace dawn::native {
         self->APIRelease();
     }
 
+    WGPUTexelBufferView NativeBufferCreateTexelView(WGPUBuffer cSelf, WGPUTexelBufferViewDescriptor const * descriptor) {
+        auto self = FromAPI(cSelf);
+
+        auto descriptor_ = reinterpret_cast<TexelBufferViewDescriptor const *>(descriptor);
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        auto result =        self->APICreateTexelView(descriptor_);
+        return ToAPI(result);
+    }
+
     void NativeBufferDestroy(WGPUBuffer cSelf) {
         auto self = FromAPI(cSelf);
 
@@ -236,8 +290,7 @@ namespace dawn::native {
     WGPUBufferMapState NativeBufferGetMapState(WGPUBuffer cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetMapState();
         return ToAPI(result);
@@ -608,7 +661,7 @@ namespace dawn::native {
         self->APISetBindGroup(groupIndex_, group_, dynamicOffsetCount_, dynamicOffsets_);
     }
 
-    void NativeComputePassEncoderSetImmediateData(WGPUComputePassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
+    void NativeComputePassEncoderSetImmediates(WGPUComputePassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
         auto offset_ = offset;
@@ -616,7 +669,7 @@ namespace dawn::native {
         auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetImmediateData(offset_, data_, size_);
+        self->APISetImmediates(offset_, data_, size_);
     }
 
     void NativeComputePassEncoderSetLabel(WGPUComputePassEncoder cSelf, WGPUStringView label) {
@@ -667,8 +720,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto groupIndex_ = groupIndex;
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetBindGroupLayout(groupIndex_);
         return ToAPI(result);
@@ -935,8 +987,7 @@ namespace dawn::native {
     WGPUAdapter NativeDeviceGetAdapter(WGPUDevice cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self;
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetAdapter();
         return ToAPI(result);
@@ -946,8 +997,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto adapterInfo_ = reinterpret_cast<AdapterInfo *>(adapterInfo);
-        auto device = self;
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetAdapterInfo(adapterInfo_);
         return ToAPI(result);
@@ -969,8 +1019,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto features_ = reinterpret_cast<SupportedFeatures *>(features);
-        auto device = self;
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APIGetFeatures(features_);
     }
@@ -979,8 +1028,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto limits_ = reinterpret_cast<Limits *>(limits);
-        auto device = self;
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetLimits(limits_);
         return ToAPI(result);
@@ -998,8 +1046,7 @@ namespace dawn::native {
     WGPUQueue NativeDeviceGetQueue(WGPUDevice cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self;
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetQueue();
         return ToAPI(result);
@@ -1009,8 +1056,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto feature_ = static_cast<wgpu::FeatureName>(feature);
-        auto device = self;
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIHasFeature(feature_);
         return result;
@@ -1196,14 +1242,13 @@ namespace dawn::native {
         return ToAPI(result);
     }
 
-    WGPUStatus NativeInstanceGetWGSLLanguageFeatures(WGPUInstance cSelf, WGPUSupportedWGSLLanguageFeatures * features) {
+    void NativeInstanceGetWGSLLanguageFeatures(WGPUInstance cSelf, WGPUSupportedWGSLLanguageFeatures * features) {
         auto self = FromAPI(cSelf);
 
         auto features_ = reinterpret_cast<SupportedWGSLLanguageFeatures *>(features);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetWGSLLanguageFeatures(features_);
-        return ToAPI(result);
+        self->APIGetWGSLLanguageFeatures(features_);
     }
 
     WGPUBool NativeInstanceHasWGSLLanguageFeature(WGPUInstance cSelf, WGPUWGSLLanguageFeatureName feature) {
@@ -1563,7 +1608,7 @@ namespace dawn::native {
         self->APISetBindGroup(groupIndex_, group_, dynamicOffsetCount_, dynamicOffsets_);
     }
 
-    void NativeRenderBundleEncoderSetImmediateData(WGPURenderBundleEncoder cSelf, uint32_t offset, void const * data, size_t size) {
+    void NativeRenderBundleEncoderSetImmediates(WGPURenderBundleEncoder cSelf, uint32_t offset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
         auto offset_ = offset;
@@ -1571,7 +1616,7 @@ namespace dawn::native {
         auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetImmediateData(offset_, data_, size_);
+        self->APISetImmediates(offset_, data_, size_);
     }
 
     void NativeRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) {
@@ -1793,7 +1838,7 @@ namespace dawn::native {
         self->APISetBlendConstant(color_);
     }
 
-    void NativeRenderPassEncoderSetImmediateData(WGPURenderPassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
+    void NativeRenderPassEncoderSetImmediates(WGPURenderPassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
         auto offset_ = offset;
@@ -1801,7 +1846,7 @@ namespace dawn::native {
         auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetImmediateData(offset_, data_, size_);
+        self->APISetImmediates(offset_, data_, size_);
     }
 
     void NativeRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) {
@@ -1911,8 +1956,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto groupIndex_ = groupIndex;
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetBindGroupLayout(groupIndex_);
         return ToAPI(result);
@@ -2309,6 +2353,32 @@ namespace dawn::native {
         APISurfaceCapabilitiesFreeMembers(cSelf);
     }
 
+    void NativeTexelBufferViewSetLabel(WGPUTexelBufferView cSelf, WGPUStringView label) {
+        auto self = FromAPI(cSelf);
+
+        auto label_ = *reinterpret_cast<StringView*>(&label);
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        self->APISetLabel(label_);
+    }
+
+    void NativeTexelBufferViewAddRef(WGPUTexelBufferView cSelf) {
+        auto self = FromAPI(cSelf);
+
+        // This method is specified to not use AutoLock in json script or it returns a future.
+
+        self->APIAddRef();
+    }
+
+    void NativeTexelBufferViewRelease(WGPUTexelBufferView cSelf) {
+        auto self = FromAPI(cSelf);
+
+        // This method is specified to not use AutoLock in json script or it returns a future.
+
+        self->APIRelease();
+    }
+
     WGPUTextureView NativeTextureCreateErrorView(WGPUTexture cSelf, WGPUTextureViewDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
@@ -2324,8 +2394,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto descriptor_ = reinterpret_cast<TextureViewDescriptor const *>(descriptor);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APICreateView(descriptor_);
         return ToAPI(result);
@@ -2343,8 +2412,7 @@ namespace dawn::native {
     uint32_t NativeTextureGetDepthOrArrayLayers(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetDepthOrArrayLayers();
         return result;
@@ -2353,8 +2421,7 @@ namespace dawn::native {
     WGPUTextureDimension NativeTextureGetDimension(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetDimension();
         return ToAPI(result);
@@ -2363,8 +2430,7 @@ namespace dawn::native {
     WGPUTextureFormat NativeTextureGetFormat(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetFormat();
         return ToAPI(result);
@@ -2373,8 +2439,7 @@ namespace dawn::native {
     uint32_t NativeTextureGetHeight(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetHeight();
         return result;
@@ -2383,8 +2448,7 @@ namespace dawn::native {
     uint32_t NativeTextureGetMipLevelCount(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetMipLevelCount();
         return result;
@@ -2393,8 +2457,7 @@ namespace dawn::native {
     uint32_t NativeTextureGetSampleCount(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetSampleCount();
         return result;
@@ -2403,8 +2466,7 @@ namespace dawn::native {
     WGPUTextureUsage NativeTextureGetUsage(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetUsage();
         return ToAPI(result);
@@ -2413,11 +2475,20 @@ namespace dawn::native {
     uint32_t NativeTextureGetWidth(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         auto result =        self->APIGetWidth();
         return result;
+    }
+
+    void NativeTexturePin(WGPUTexture cSelf, WGPUTextureUsage usage) {
+        auto self = FromAPI(cSelf);
+
+        auto usage_ = static_cast<wgpu::TextureUsage>(usage);
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        self->APIPin(usage_);
     }
 
     void NativeTextureSetLabel(WGPUTexture cSelf, WGPUStringView label) {
@@ -2428,6 +2499,15 @@ namespace dawn::native {
         auto deviceGuard = device->GetGuard();
 
         self->APISetLabel(label_);
+    }
+
+    void NativeTextureUnpin(WGPUTexture cSelf) {
+        auto self = FromAPI(cSelf);
+
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        self->APIUnpin();
     }
 
     void NativeTextureAddRef(WGPUTexture cSelf) {
@@ -2513,12 +2593,17 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeAdapterRelease), "wgpuAdapterRelease" },
             { reinterpret_cast<WGPUProc>(NativeAdapterRequestDevice), "wgpuAdapterRequestDevice" },
             { reinterpret_cast<WGPUProc>(NativeBindGroupAddRef), "wgpuBindGroupAddRef" },
+            { reinterpret_cast<WGPUProc>(NativeBindGroupDestroy), "wgpuBindGroupDestroy" },
+            { reinterpret_cast<WGPUProc>(NativeBindGroupInsertBinding), "wgpuBindGroupInsertBinding" },
             { reinterpret_cast<WGPUProc>(NativeBindGroupLayoutAddRef), "wgpuBindGroupLayoutAddRef" },
             { reinterpret_cast<WGPUProc>(NativeBindGroupLayoutRelease), "wgpuBindGroupLayoutRelease" },
             { reinterpret_cast<WGPUProc>(NativeBindGroupLayoutSetLabel), "wgpuBindGroupLayoutSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeBindGroupRelease), "wgpuBindGroupRelease" },
+            { reinterpret_cast<WGPUProc>(NativeBindGroupRemoveBinding), "wgpuBindGroupRemoveBinding" },
             { reinterpret_cast<WGPUProc>(NativeBindGroupSetLabel), "wgpuBindGroupSetLabel" },
+            { reinterpret_cast<WGPUProc>(NativeBindGroupUpdate), "wgpuBindGroupUpdate" },
             { reinterpret_cast<WGPUProc>(NativeBufferAddRef), "wgpuBufferAddRef" },
+            { reinterpret_cast<WGPUProc>(NativeBufferCreateTexelView), "wgpuBufferCreateTexelView" },
             { reinterpret_cast<WGPUProc>(NativeBufferDestroy), "wgpuBufferDestroy" },
             { reinterpret_cast<WGPUProc>(NativeBufferGetConstMappedRange), "wgpuBufferGetConstMappedRange" },
             { reinterpret_cast<WGPUProc>(NativeBufferGetMapState), "wgpuBufferGetMapState" },
@@ -2561,7 +2646,7 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeComputePassEncoderPushDebugGroup), "wgpuComputePassEncoderPushDebugGroup" },
             { reinterpret_cast<WGPUProc>(NativeComputePassEncoderRelease), "wgpuComputePassEncoderRelease" },
             { reinterpret_cast<WGPUProc>(NativeComputePassEncoderSetBindGroup), "wgpuComputePassEncoderSetBindGroup" },
-            { reinterpret_cast<WGPUProc>(NativeComputePassEncoderSetImmediateData), "wgpuComputePassEncoderSetImmediateData" },
+            { reinterpret_cast<WGPUProc>(NativeComputePassEncoderSetImmediates), "wgpuComputePassEncoderSetImmediates" },
             { reinterpret_cast<WGPUProc>(NativeComputePassEncoderSetLabel), "wgpuComputePassEncoderSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeComputePassEncoderSetPipeline), "wgpuComputePassEncoderSetPipeline" },
             { reinterpret_cast<WGPUProc>(NativeComputePassEncoderWriteTimestamp), "wgpuComputePassEncoderWriteTimestamp" },
@@ -2655,7 +2740,7 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderPushDebugGroup), "wgpuRenderBundleEncoderPushDebugGroup" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderRelease), "wgpuRenderBundleEncoderRelease" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetBindGroup), "wgpuRenderBundleEncoderSetBindGroup" },
-            { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetImmediateData), "wgpuRenderBundleEncoderSetImmediateData" },
+            { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetImmediates), "wgpuRenderBundleEncoderSetImmediates" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetIndexBuffer), "wgpuRenderBundleEncoderSetIndexBuffer" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetLabel), "wgpuRenderBundleEncoderSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetPipeline), "wgpuRenderBundleEncoderSetPipeline" },
@@ -2680,7 +2765,7 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeRenderPassEncoderRelease), "wgpuRenderPassEncoderRelease" },
             { reinterpret_cast<WGPUProc>(NativeRenderPassEncoderSetBindGroup), "wgpuRenderPassEncoderSetBindGroup" },
             { reinterpret_cast<WGPUProc>(NativeRenderPassEncoderSetBlendConstant), "wgpuRenderPassEncoderSetBlendConstant" },
-            { reinterpret_cast<WGPUProc>(NativeRenderPassEncoderSetImmediateData), "wgpuRenderPassEncoderSetImmediateData" },
+            { reinterpret_cast<WGPUProc>(NativeRenderPassEncoderSetImmediates), "wgpuRenderPassEncoderSetImmediates" },
             { reinterpret_cast<WGPUProc>(NativeRenderPassEncoderSetIndexBuffer), "wgpuRenderPassEncoderSetIndexBuffer" },
             { reinterpret_cast<WGPUProc>(NativeRenderPassEncoderSetLabel), "wgpuRenderPassEncoderSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeRenderPassEncoderSetPipeline), "wgpuRenderPassEncoderSetPipeline" },
@@ -2733,6 +2818,9 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeSurfaceRelease), "wgpuSurfaceRelease" },
             { reinterpret_cast<WGPUProc>(NativeSurfaceSetLabel), "wgpuSurfaceSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeSurfaceUnconfigure), "wgpuSurfaceUnconfigure" },
+            { reinterpret_cast<WGPUProc>(NativeTexelBufferViewAddRef), "wgpuTexelBufferViewAddRef" },
+            { reinterpret_cast<WGPUProc>(NativeTexelBufferViewRelease), "wgpuTexelBufferViewRelease" },
+            { reinterpret_cast<WGPUProc>(NativeTexelBufferViewSetLabel), "wgpuTexelBufferViewSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeTextureAddRef), "wgpuTextureAddRef" },
             { reinterpret_cast<WGPUProc>(NativeTextureCreateErrorView), "wgpuTextureCreateErrorView" },
             { reinterpret_cast<WGPUProc>(NativeTextureCreateView), "wgpuTextureCreateView" },
@@ -2745,8 +2833,10 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeTextureGetSampleCount), "wgpuTextureGetSampleCount" },
             { reinterpret_cast<WGPUProc>(NativeTextureGetUsage), "wgpuTextureGetUsage" },
             { reinterpret_cast<WGPUProc>(NativeTextureGetWidth), "wgpuTextureGetWidth" },
+            { reinterpret_cast<WGPUProc>(NativeTexturePin), "wgpuTexturePin" },
             { reinterpret_cast<WGPUProc>(NativeTextureRelease), "wgpuTextureRelease" },
             { reinterpret_cast<WGPUProc>(NativeTextureSetLabel), "wgpuTextureSetLabel" },
+            { reinterpret_cast<WGPUProc>(NativeTextureUnpin), "wgpuTextureUnpin" },
             { reinterpret_cast<WGPUProc>(NativeTextureViewAddRef), "wgpuTextureViewAddRef" },
             { reinterpret_cast<WGPUProc>(NativeTextureViewRelease), "wgpuTextureViewRelease" },
             { reinterpret_cast<WGPUProc>(NativeTextureViewSetLabel), "wgpuTextureViewSetLabel" },
@@ -2826,12 +2916,17 @@ namespace dawn::native {
         procs.adapterInfoFreeMembers = NativeAdapterInfoFreeMembers;
         procs.adapterPropertiesMemoryHeapsFreeMembers = NativeAdapterPropertiesMemoryHeapsFreeMembers;
         procs.adapterPropertiesSubgroupMatrixConfigsFreeMembers = NativeAdapterPropertiesSubgroupMatrixConfigsFreeMembers;
+        procs.bindGroupDestroy = NativeBindGroupDestroy;
+        procs.bindGroupInsertBinding = NativeBindGroupInsertBinding;
+        procs.bindGroupRemoveBinding = NativeBindGroupRemoveBinding;
         procs.bindGroupSetLabel = NativeBindGroupSetLabel;
+        procs.bindGroupUpdate = NativeBindGroupUpdate;
         procs.bindGroupAddRef = NativeBindGroupAddRef;
         procs.bindGroupRelease = NativeBindGroupRelease;
         procs.bindGroupLayoutSetLabel = NativeBindGroupLayoutSetLabel;
         procs.bindGroupLayoutAddRef = NativeBindGroupLayoutAddRef;
         procs.bindGroupLayoutRelease = NativeBindGroupLayoutRelease;
+        procs.bufferCreateTexelView = NativeBufferCreateTexelView;
         procs.bufferDestroy = NativeBufferDestroy;
         procs.bufferGetConstMappedRange = NativeBufferGetConstMappedRange;
         procs.bufferGetMappedRange = NativeBufferGetMappedRange;
@@ -2873,7 +2968,7 @@ namespace dawn::native {
         procs.computePassEncoderPopDebugGroup = NativeComputePassEncoderPopDebugGroup;
         procs.computePassEncoderPushDebugGroup = NativeComputePassEncoderPushDebugGroup;
         procs.computePassEncoderSetBindGroup = NativeComputePassEncoderSetBindGroup;
-        procs.computePassEncoderSetImmediateData = NativeComputePassEncoderSetImmediateData;
+        procs.computePassEncoderSetImmediates = NativeComputePassEncoderSetImmediates;
         procs.computePassEncoderSetLabel = NativeComputePassEncoderSetLabel;
         procs.computePassEncoderSetPipeline = NativeComputePassEncoderSetPipeline;
         procs.computePassEncoderWriteTimestamp = NativeComputePassEncoderWriteTimestamp;
@@ -2969,7 +3064,7 @@ namespace dawn::native {
         procs.renderBundleEncoderPopDebugGroup = NativeRenderBundleEncoderPopDebugGroup;
         procs.renderBundleEncoderPushDebugGroup = NativeRenderBundleEncoderPushDebugGroup;
         procs.renderBundleEncoderSetBindGroup = NativeRenderBundleEncoderSetBindGroup;
-        procs.renderBundleEncoderSetImmediateData = NativeRenderBundleEncoderSetImmediateData;
+        procs.renderBundleEncoderSetImmediates = NativeRenderBundleEncoderSetImmediates;
         procs.renderBundleEncoderSetIndexBuffer = NativeRenderBundleEncoderSetIndexBuffer;
         procs.renderBundleEncoderSetLabel = NativeRenderBundleEncoderSetLabel;
         procs.renderBundleEncoderSetPipeline = NativeRenderBundleEncoderSetPipeline;
@@ -2992,7 +3087,7 @@ namespace dawn::native {
         procs.renderPassEncoderPushDebugGroup = NativeRenderPassEncoderPushDebugGroup;
         procs.renderPassEncoderSetBindGroup = NativeRenderPassEncoderSetBindGroup;
         procs.renderPassEncoderSetBlendConstant = NativeRenderPassEncoderSetBlendConstant;
-        procs.renderPassEncoderSetImmediateData = NativeRenderPassEncoderSetImmediateData;
+        procs.renderPassEncoderSetImmediates = NativeRenderPassEncoderSetImmediates;
         procs.renderPassEncoderSetIndexBuffer = NativeRenderPassEncoderSetIndexBuffer;
         procs.renderPassEncoderSetLabel = NativeRenderPassEncoderSetLabel;
         procs.renderPassEncoderSetPipeline = NativeRenderPassEncoderSetPipeline;
@@ -3047,6 +3142,9 @@ namespace dawn::native {
         procs.surfaceAddRef = NativeSurfaceAddRef;
         procs.surfaceRelease = NativeSurfaceRelease;
         procs.surfaceCapabilitiesFreeMembers = NativeSurfaceCapabilitiesFreeMembers;
+        procs.texelBufferViewSetLabel = NativeTexelBufferViewSetLabel;
+        procs.texelBufferViewAddRef = NativeTexelBufferViewAddRef;
+        procs.texelBufferViewRelease = NativeTexelBufferViewRelease;
         procs.textureCreateErrorView = NativeTextureCreateErrorView;
         procs.textureCreateView = NativeTextureCreateView;
         procs.textureDestroy = NativeTextureDestroy;
@@ -3058,7 +3156,9 @@ namespace dawn::native {
         procs.textureGetSampleCount = NativeTextureGetSampleCount;
         procs.textureGetUsage = NativeTextureGetUsage;
         procs.textureGetWidth = NativeTextureGetWidth;
+        procs.texturePin = NativeTexturePin;
         procs.textureSetLabel = NativeTextureSetLabel;
+        procs.textureUnpin = NativeTextureUnpin;
         procs.textureAddRef = NativeTextureAddRef;
         procs.textureRelease = NativeTextureRelease;
         procs.textureViewSetLabel = NativeTextureViewSetLabel;

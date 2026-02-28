@@ -54,6 +54,7 @@ static constexpr uint32_t kArrayLayerCountUndefined = WGPU_ARRAY_LAYER_COUNT_UND
 static constexpr uint32_t kCopyStrideUndefined = WGPU_COPY_STRIDE_UNDEFINED;
 static constexpr float kDepthClearValueUndefined = std::numeric_limits<float>::quiet_NaN();
 static constexpr uint32_t kDepthSliceUndefined = WGPU_DEPTH_SLICE_UNDEFINED;
+static constexpr uint32_t kInvalidBinding = WGPU_INVALID_BINDING;
 static constexpr uint32_t kLimitU32Undefined = WGPU_LIMIT_U32_UNDEFINED;
 static constexpr uint64_t kLimitU64Undefined = WGPU_LIMIT_U64_UNDEFINED;
 static constexpr uint32_t kMipLevelCountUndefined = WGPU_MIP_LEVEL_COUNT_UNDEFINED;
@@ -240,6 +241,13 @@ enum class DeviceLostReason : uint32_t {
 static_assert(sizeof(DeviceLostReason) == sizeof(WGPUDeviceLostReason), "sizeof mismatch for DeviceLostReason");
 static_assert(alignof(DeviceLostReason) == alignof(WGPUDeviceLostReason), "alignof mismatch for DeviceLostReason");
 
+enum class DynamicBindingKind : uint32_t {
+    Undefined = WGPUDynamicBindingKind_Undefined,
+    SampledTexture = WGPUDynamicBindingKind_SampledTexture,
+};
+static_assert(sizeof(DynamicBindingKind) == sizeof(WGPUDynamicBindingKind), "sizeof mismatch for DynamicBindingKind");
+static_assert(alignof(DynamicBindingKind) == alignof(WGPUDynamicBindingKind), "alignof mismatch for DynamicBindingKind");
+
 enum class ErrorFilter : uint32_t {
     Validation = WGPUErrorFilter_Validation,
     OutOfMemory = WGPUErrorFilter_OutOfMemory,
@@ -296,6 +304,8 @@ enum class FeatureName : uint32_t {
     Subgroups = WGPUFeatureName_Subgroups,
     TextureFormatsTier1 = WGPUFeatureName_TextureFormatsTier1,
     TextureFormatsTier2 = WGPUFeatureName_TextureFormatsTier2,
+    PrimitiveIndex = WGPUFeatureName_PrimitiveIndex,
+    TextureComponentSwizzle = WGPUFeatureName_TextureComponentSwizzle,
     DawnInternalUsages = WGPUFeatureName_DawnInternalUsages,
     DawnMultiPlanarFormats = WGPUFeatureName_DawnMultiPlanarFormats,
     DawnNative = WGPUFeatureName_DawnNative,
@@ -353,7 +363,10 @@ enum class FeatureName : uint32_t {
     ChromiumExperimentalSubgroupMatrix = WGPUFeatureName_ChromiumExperimentalSubgroupMatrix,
     SharedFenceEGLSync = WGPUFeatureName_SharedFenceEGLSync,
     DawnDeviceAllocatorControl = WGPUFeatureName_DawnDeviceAllocatorControl,
-    TextureComponentSwizzle = WGPUFeatureName_TextureComponentSwizzle,
+    ChromiumExperimentalBindless = WGPUFeatureName_ChromiumExperimentalBindless,
+    AdapterPropertiesWGPU = WGPUFeatureName_AdapterPropertiesWGPU,
+    SharedBufferMemoryD3D12SharedMemoryFileMappingHandle = WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle,
+    SharedTextureMemoryD3D12Resource = WGPUFeatureName_SharedTextureMemoryD3D12Resource,
 };
 static_assert(sizeof(FeatureName) == sizeof(WGPUFeatureName), "sizeof mismatch for FeatureName");
 static_assert(alignof(FeatureName) == alignof(WGPUFeatureName), "alignof mismatch for FeatureName");
@@ -384,6 +397,8 @@ static_assert(alignof(IndexFormat) == alignof(WGPUIndexFormat), "alignof mismatc
 
 enum class InstanceFeatureName : uint32_t {
     TimedWaitAny = WGPUInstanceFeatureName_TimedWaitAny,
+    ShaderSourceSPIRV = WGPUInstanceFeatureName_ShaderSourceSPIRV,
+    MultipleDevicesPerAdapter = WGPUInstanceFeatureName_MultipleDevicesPerAdapter,
 };
 static_assert(sizeof(InstanceFeatureName) == sizeof(WGPUInstanceFeatureName), "sizeof mismatch for InstanceFeatureName");
 static_assert(alignof(InstanceFeatureName) == alignof(WGPUInstanceFeatureName), "alignof mismatch for InstanceFeatureName");
@@ -571,6 +586,7 @@ enum class SType : uint32_t {
     SurfaceSourceXCBWindow = WGPUSType_SurfaceSourceXCBWindow,
     SurfaceColorManagement = WGPUSType_SurfaceColorManagement,
     RequestAdapterWebXROptions = WGPUSType_RequestAdapterWebXROptions,
+    TextureComponentSwizzleDescriptor = WGPUSType_TextureComponentSwizzleDescriptor,
     CompatibilityModeLimits = WGPUSType_CompatibilityModeLimits,
     TextureBindingViewDimensionDescriptor = WGPUSType_TextureBindingViewDimensionDescriptor,
     EmscriptenSurfaceSourceCanvasHTMLSelector = WGPUSType_EmscriptenSurfaceSourceCanvasHTMLSelector,
@@ -644,7 +660,18 @@ enum class SType : uint32_t {
     RenderPassDescriptorResolveRect = WGPUSType_RenderPassDescriptorResolveRect,
     RequestAdapterWebGPUBackendOptions = WGPUSType_RequestAdapterWebGPUBackendOptions,
     DawnFakeDeviceInitializeErrorForTesting = WGPUSType_DawnFakeDeviceInitializeErrorForTesting,
-    TextureComponentSwizzleDescriptor = WGPUSType_TextureComponentSwizzleDescriptor,
+    SharedTextureMemoryD3D11BeginState = WGPUSType_SharedTextureMemoryD3D11BeginState,
+    DawnConsumeAdapterDescriptor = WGPUSType_DawnConsumeAdapterDescriptor,
+    BindGroupLayoutDynamicBindingArray = WGPUSType_BindGroupLayoutDynamicBindingArray,
+    DynamicBindingArrayLimits = WGPUSType_DynamicBindingArrayLimits,
+    BindGroupDynamicBindingArray = WGPUSType_BindGroupDynamicBindingArray,
+    TexelBufferBindingEntry = WGPUSType_TexelBufferBindingEntry,
+    TexelBufferBindingLayout = WGPUSType_TexelBufferBindingLayout,
+    SharedTextureMemoryMetalEndAccessState = WGPUSType_SharedTextureMemoryMetalEndAccessState,
+    AdapterPropertiesWGPU = WGPUSType_AdapterPropertiesWGPU,
+    SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor = WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor,
+    SharedTextureMemoryD3D12ResourceDescriptor = WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor,
+    RequestAdapterOptionsAngleVirtualizationGroup = WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup,
 };
 static_assert(sizeof(SType) == sizeof(WGPUSType), "sizeof mismatch for SType");
 static_assert(alignof(SType) == alignof(WGPUSType), "alignof mismatch for SType");
@@ -670,6 +697,14 @@ enum class SurfaceGetCurrentTextureStatus : uint32_t {
 };
 static_assert(sizeof(SurfaceGetCurrentTextureStatus) == sizeof(WGPUSurfaceGetCurrentTextureStatus), "sizeof mismatch for SurfaceGetCurrentTextureStatus");
 static_assert(alignof(SurfaceGetCurrentTextureStatus) == alignof(WGPUSurfaceGetCurrentTextureStatus), "alignof mismatch for SurfaceGetCurrentTextureStatus");
+
+enum class TexelBufferAccess : uint32_t {
+    Undefined = WGPUTexelBufferAccess_Undefined,
+    ReadOnly = WGPUTexelBufferAccess_ReadOnly,
+    ReadWrite = WGPUTexelBufferAccess_ReadWrite,
+};
+static_assert(sizeof(TexelBufferAccess) == sizeof(WGPUTexelBufferAccess), "sizeof mismatch for TexelBufferAccess");
+static_assert(alignof(TexelBufferAccess) == alignof(WGPUTexelBufferAccess), "alignof mismatch for TexelBufferAccess");
 
 enum class TextureAspect : uint32_t {
     Undefined = WGPUTextureAspect_Undefined,
@@ -698,6 +733,8 @@ enum class TextureFormat : uint32_t {
     R8Snorm = WGPUTextureFormat_R8Snorm,
     R8Uint = WGPUTextureFormat_R8Uint,
     R8Sint = WGPUTextureFormat_R8Sint,
+    R16Unorm = WGPUTextureFormat_R16Unorm,
+    R16Snorm = WGPUTextureFormat_R16Snorm,
     R16Uint = WGPUTextureFormat_R16Uint,
     R16Sint = WGPUTextureFormat_R16Sint,
     R16Float = WGPUTextureFormat_R16Float,
@@ -708,6 +745,8 @@ enum class TextureFormat : uint32_t {
     R32Float = WGPUTextureFormat_R32Float,
     R32Uint = WGPUTextureFormat_R32Uint,
     R32Sint = WGPUTextureFormat_R32Sint,
+    RG16Unorm = WGPUTextureFormat_RG16Unorm,
+    RG16Snorm = WGPUTextureFormat_RG16Snorm,
     RG16Uint = WGPUTextureFormat_RG16Uint,
     RG16Sint = WGPUTextureFormat_RG16Sint,
     RG16Float = WGPUTextureFormat_RG16Float,
@@ -725,6 +764,8 @@ enum class TextureFormat : uint32_t {
     RG32Float = WGPUTextureFormat_RG32Float,
     RG32Uint = WGPUTextureFormat_RG32Uint,
     RG32Sint = WGPUTextureFormat_RG32Sint,
+    RGBA16Unorm = WGPUTextureFormat_RGBA16Unorm,
+    RGBA16Snorm = WGPUTextureFormat_RGBA16Snorm,
     RGBA16Uint = WGPUTextureFormat_RGBA16Uint,
     RGBA16Sint = WGPUTextureFormat_RGBA16Sint,
     RGBA16Float = WGPUTextureFormat_RGBA16Float,
@@ -789,12 +830,6 @@ enum class TextureFormat : uint32_t {
     ASTC12x10UnormSrgb = WGPUTextureFormat_ASTC12x10UnormSrgb,
     ASTC12x12Unorm = WGPUTextureFormat_ASTC12x12Unorm,
     ASTC12x12UnormSrgb = WGPUTextureFormat_ASTC12x12UnormSrgb,
-    R16Unorm = WGPUTextureFormat_R16Unorm,
-    RG16Unorm = WGPUTextureFormat_RG16Unorm,
-    RGBA16Unorm = WGPUTextureFormat_RGBA16Unorm,
-    R16Snorm = WGPUTextureFormat_R16Snorm,
-    RG16Snorm = WGPUTextureFormat_RG16Snorm,
-    RGBA16Snorm = WGPUTextureFormat_RGBA16Snorm,
     R8BG8Biplanar420Unorm = WGPUTextureFormat_R8BG8Biplanar420Unorm,
     R10X6BG10X6Biplanar420Unorm = WGPUTextureFormat_R10X6BG10X6Biplanar420Unorm,
     R8BG8A8Triplanar420Unorm = WGPUTextureFormat_R8BG8A8Triplanar420Unorm,
@@ -905,8 +940,13 @@ enum class WGSLLanguageFeatureName : uint32_t {
     Packed4x8IntegerDotProduct = WGPUWGSLLanguageFeatureName_Packed4x8IntegerDotProduct,
     UnrestrictedPointerParameters = WGPUWGSLLanguageFeatureName_UnrestrictedPointerParameters,
     PointerCompositeAccess = WGPUWGSLLanguageFeatureName_PointerCompositeAccess,
+    UniformBufferStandardLayout = WGPUWGSLLanguageFeatureName_UniformBufferStandardLayout,
+    SubgroupId = WGPUWGSLLanguageFeatureName_SubgroupId,
     SizedBindingArray = WGPUWGSLLanguageFeatureName_SizedBindingArray,
     TexelBuffers = WGPUWGSLLanguageFeatureName_TexelBuffers,
+    ChromiumPrint = WGPUWGSLLanguageFeatureName_ChromiumPrint,
+    FragmentDepth = WGPUWGSLLanguageFeatureName_FragmentDepth,
+    ImmediateAddressSpace = WGPUWGSLLanguageFeatureName_ImmediateAddressSpace,
     ChromiumTestingUnimplemented = WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented,
     ChromiumTestingUnsafeExperimental = WGPUWGSLLanguageFeatureName_ChromiumTestingUnsafeExperimental,
     ChromiumTestingExperimental = WGPUWGSLLanguageFeatureName_ChromiumTestingExperimental,
@@ -929,6 +969,7 @@ enum class BufferUsage : uint64_t {
     Storage = WGPUBufferUsage_Storage,
     Indirect = WGPUBufferUsage_Indirect,
     QueryResolve = WGPUBufferUsage_QueryResolve,
+    TexelBuffer = WGPUBufferUsage_TexelBuffer,
 };
 static_assert(sizeof(BufferUsage) == sizeof(WGPUBufferUsage), "sizeof mismatch for BufferUsage");
 static_assert(alignof(BufferUsage) == alignof(WGPUBufferUsage), "alignof mismatch for BufferUsage");
@@ -1185,12 +1226,16 @@ class SharedBufferMemory;
 class SharedFence;
 class SharedTextureMemory;
 class Surface;
+class TexelBufferView;
 class Texture;
 class TextureView;
 
 struct StringView;
 struct AdapterPropertiesD3D;
 struct AdapterPropertiesVk;
+struct AdapterPropertiesWGPU;
+struct BindGroupDynamicBindingArray;
+struct BindGroupEntryContents;
 struct BlendComponent;
 struct BufferBindingLayout;
 struct BufferHostMappedPointer;
@@ -1204,6 +1249,7 @@ struct DawnAdapterPropertiesPowerPreference;
 struct DawnBufferDescriptorErrorInfoFromWireClient;
 struct DawnCacheDeviceDescriptor;
 struct DawnCompilationMessageUtf16;
+struct DawnConsumeAdapterDescriptor;
 struct DawnDeviceAllocatorControl;
 struct DawnDrmFormatProperties;
 struct DawnEncoderInternalUsageDescriptor;
@@ -1218,6 +1264,8 @@ struct DawnTextureInternalUsageDescriptor;
 struct DawnTogglesDescriptor;
 struct DawnWGSLBlocklist;
 struct DawnWireWGSLControl;
+struct DynamicBindingArrayLayout;
+struct DynamicBindingArrayLimits;
 struct EmscriptenSurfaceSourceCanvasHTMLSelector;
 struct Extent2D;
 struct Extent3D;
@@ -1264,6 +1312,7 @@ struct SharedFenceVkSemaphoreOpaqueFDExportInfo;
 struct SharedFenceVkSemaphoreZirconHandleDescriptor;
 struct SharedFenceVkSemaphoreZirconHandleExportInfo;
 struct SharedTextureMemoryAHardwareBufferDescriptor;
+struct SharedTextureMemoryD3D11BeginState;
 struct SharedTextureMemoryD3DSwapchainBeginState;
 struct SharedTextureMemoryDmaBufPlane;
 struct SharedTextureMemoryDXGISharedHandleDescriptor;
@@ -1294,6 +1343,9 @@ struct SurfaceSourceWindowsHWND;
 struct SurfaceSourceXCBWindow;
 struct SurfaceSourceXlibWindow;
 struct SurfaceTexture;
+struct TexelBufferBindingEntry;
+struct TexelBufferBindingLayout;
+struct TexelBufferViewDescriptor;
 struct TexelCopyBufferLayout;
 struct TextureBindingLayout;
 struct TextureBindingViewDimensionDescriptor;
@@ -1304,6 +1356,7 @@ struct AdapterPropertiesMemoryHeaps;
 struct AdapterPropertiesSubgroupMatrixConfigs;
 struct AHardwareBufferProperties;
 struct BindGroupEntry;
+struct BindGroupLayoutDynamicBindingArray;
 struct BindGroupLayoutEntry;
 struct BlendState;
 struct BufferDescriptor;
@@ -1329,7 +1382,7 @@ struct SharedFenceExportInfo;
 struct SharedTextureMemoryAHardwareBufferProperties;
 struct SharedTextureMemoryBeginAccessDescriptor;
 struct SharedTextureMemoryDmaBufDescriptor;
-struct SharedTextureMemoryEndAccessState;
+struct SharedTextureMemoryMetalEndAccessState;
 struct SurfaceDescriptor;
 struct TexelCopyBufferInfo;
 struct TexelCopyTextureInfo;
@@ -1347,6 +1400,7 @@ struct DeviceDescriptor;
 struct PipelineLayoutDescriptor;
 struct RenderPassPixelLocalStorage;
 struct SharedTextureMemoryDescriptor;
+struct SharedTextureMemoryEndAccessState;
 struct SharedTextureMemoryProperties;
 struct TextureViewDescriptor;
 struct VertexState;
@@ -1551,7 +1605,11 @@ class BindGroup : public ObjectBase<BindGroup, WGPUBindGroup> {
     using ObjectBase::ObjectBase;
     using ObjectBase::operator=;
 
+    inline void Destroy() const;
+    inline uint32_t InsertBinding(BindGroupEntryContents const * contents) const;
+    inline ConvertibleStatus RemoveBinding(uint32_t binding) const;
     inline void SetLabel(StringView label) const;
+    inline ConvertibleStatus Update(BindGroupEntry const * entry) const;
 
 
   private:
@@ -1579,6 +1637,7 @@ class Buffer : public ObjectBase<Buffer, WGPUBuffer> {
     using ObjectBase::ObjectBase;
     using ObjectBase::operator=;
 
+    inline TexelBufferView CreateTexelView(TexelBufferViewDescriptor const * descriptor) const;
     inline void Destroy() const;
     inline void const * GetConstMappedRange(size_t offset = 0, size_t size = kWholeMapSize) const;
     inline void * GetMappedRange(size_t offset = 0, size_t size = kWholeMapSize) const;
@@ -1662,7 +1721,7 @@ class ComputePassEncoder : public ObjectBase<ComputePassEncoder, WGPUComputePass
     inline void PopDebugGroup() const;
     inline void PushDebugGroup(StringView groupLabel) const;
     inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
-    inline void SetImmediateData(uint32_t offset, void const * data, size_t size) const;
+    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
     inline void SetLabel(StringView label) const;
     inline void SetPipeline(ComputePipeline const& pipeline) const;
     inline void WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const;
@@ -1800,7 +1859,7 @@ class Instance : public ObjectBase<Instance, WGPUInstance> {
     using ObjectBase::operator=;
 
     inline Surface CreateSurface(SurfaceDescriptor const * descriptor) const;
-    inline ConvertibleStatus GetWGSLLanguageFeatures(SupportedWGSLLanguageFeatures * features) const;
+    inline void GetWGSLLanguageFeatures(SupportedWGSLLanguageFeatures * features) const;
     inline Bool HasWGSLLanguageFeature(WGSLLanguageFeatureName feature) const;
     inline void ProcessEvents() const;
     template <typename F, typename T,
@@ -1911,7 +1970,7 @@ class RenderBundleEncoder : public ObjectBase<RenderBundleEncoder, WGPURenderBun
     inline void PopDebugGroup() const;
     inline void PushDebugGroup(StringView groupLabel) const;
     inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
-    inline void SetImmediateData(uint32_t offset, void const * data, size_t size) const;
+    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
     inline void SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset = 0, uint64_t size = kWholeSize) const;
     inline void SetLabel(StringView label) const;
     inline void SetPipeline(RenderPipeline const& pipeline) const;
@@ -1945,7 +2004,7 @@ class RenderPassEncoder : public ObjectBase<RenderPassEncoder, WGPURenderPassEnc
     inline void PushDebugGroup(StringView groupLabel) const;
     inline void SetBindGroup(uint32_t groupIndex, BindGroup const& group = nullptr, size_t dynamicOffsetCount = 0, uint32_t const * dynamicOffsets = nullptr) const;
     inline void SetBlendConstant(Color const * color) const;
-    inline void SetImmediateData(uint32_t offset, void const * data, size_t size) const;
+    inline void SetImmediates(uint32_t offset, void const * data, size_t size) const;
     inline void SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset = 0, uint64_t size = kWholeSize) const;
     inline void SetLabel(StringView label) const;
     inline void SetPipeline(RenderPipeline const& pipeline) const;
@@ -2086,6 +2145,20 @@ class Surface : public ObjectBase<Surface, WGPUSurface> {
     static inline void WGPURelease(WGPUSurface handle);
 };
 
+class TexelBufferView : public ObjectBase<TexelBufferView, WGPUTexelBufferView> {
+  public:
+    using ObjectBase::ObjectBase;
+    using ObjectBase::operator=;
+
+    inline void SetLabel(StringView label) const;
+
+
+  private:
+    friend ObjectBase<TexelBufferView, WGPUTexelBufferView>;
+    static inline void WGPUAddRef(WGPUTexelBufferView handle);
+    static inline void WGPURelease(WGPUTexelBufferView handle);
+};
+
 class Texture : public ObjectBase<Texture, WGPUTexture> {
   public:
     using ObjectBase::ObjectBase;
@@ -2102,7 +2175,9 @@ class Texture : public ObjectBase<Texture, WGPUTexture> {
     inline uint32_t GetSampleCount() const;
     inline TextureUsage GetUsage() const;
     inline uint32_t GetWidth() const;
+    inline void Pin(TextureUsage usage) const;
     inline void SetLabel(StringView label) const;
+    inline void Unpin() const;
 
 
   private:
@@ -2159,6 +2234,41 @@ struct AdapterPropertiesVk : ChainedStructOut {
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
     alignas(kFirstMemberAlignment) uint32_t driverVersion;
+};
+
+// Can be chained in AdapterInfo
+struct AdapterPropertiesWGPU : ChainedStructOut {
+    inline AdapterPropertiesWGPU();
+
+    struct Init;
+    inline AdapterPropertiesWGPU(Init&& init);
+    inline operator const WGPUAdapterPropertiesWGPU&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(BackendType));
+    alignas(kFirstMemberAlignment) BackendType backendType = BackendType::Undefined;
+};
+
+// Can be chained in BindGroupDescriptor
+struct BindGroupDynamicBindingArray : ChainedStruct {
+    inline BindGroupDynamicBindingArray();
+
+    struct Init;
+    inline BindGroupDynamicBindingArray(Init&& init);
+    inline operator const WGPUBindGroupDynamicBindingArray&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    alignas(kFirstMemberAlignment) uint32_t dynamicArraySize = 0;
+};
+
+struct BindGroupEntryContents {
+    inline operator const WGPUBindGroupEntryContents&() const noexcept;
+
+    ChainedStruct const * nextInChain = nullptr;
+    Buffer buffer = nullptr;
+    uint64_t offset = 0;
+    uint64_t size = kWholeSize;
+    Sampler sampler = nullptr;
+    TextureView textureView = nullptr;
 };
 
 struct BlendComponent {
@@ -2308,6 +2418,18 @@ struct DawnCompilationMessageUtf16 : ChainedStruct {
     alignas(kFirstMemberAlignment) uint64_t linePos;
     uint64_t offset;
     uint64_t length;
+};
+
+// Can be chained in DeviceDescriptor
+struct DawnConsumeAdapterDescriptor : ChainedStruct {
+    inline DawnConsumeAdapterDescriptor();
+
+    struct Init;
+    inline DawnConsumeAdapterDescriptor(Init&& init);
+    inline operator const WGPUDawnConsumeAdapterDescriptor&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
+    alignas(kFirstMemberAlignment) Bool consumeAdapter = false;
 };
 
 // Can be chained in DeviceDescriptor
@@ -2478,6 +2600,26 @@ struct DawnWireWGSLControl : ChainedStruct {
     alignas(kFirstMemberAlignment) Bool enableExperimental = false;
     Bool enableUnsafe = false;
     Bool enableTesting = false;
+};
+
+struct DynamicBindingArrayLayout {
+    inline operator const WGPUDynamicBindingArrayLayout&() const noexcept;
+
+    ChainedStruct const * nextInChain = nullptr;
+    uint32_t start = 0;
+    DynamicBindingKind kind = DynamicBindingKind::Undefined;
+};
+
+// Can be chained in Limits
+struct DynamicBindingArrayLimits : ChainedStructOut {
+    inline DynamicBindingArrayLimits();
+
+    struct Init;
+    inline DynamicBindingArrayLimits(Init&& init);
+    inline operator const WGPUDynamicBindingArrayLimits&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    alignas(kFirstMemberAlignment) uint32_t maxDynamicBindingArraySize = kLimitU32Undefined;
 };
 
 // Can be chained in SurfaceDescriptor
@@ -2971,6 +3113,18 @@ struct SharedTextureMemoryAHardwareBufferDescriptor : ChainedStruct {
 };
 
 // Can be chained in SharedTextureMemoryBeginAccessDescriptor
+struct SharedTextureMemoryD3D11BeginState : ChainedStruct {
+    inline SharedTextureMemoryD3D11BeginState();
+
+    struct Init;
+    inline SharedTextureMemoryD3D11BeginState(Init&& init);
+    inline operator const WGPUSharedTextureMemoryD3D11BeginState&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
+    alignas(kFirstMemberAlignment) Bool requiresEndAccessFence = true;
+};
+
+// Can be chained in SharedTextureMemoryBeginAccessDescriptor
 struct SharedTextureMemoryD3DSwapchainBeginState : ChainedStruct {
     inline SharedTextureMemoryD3DSwapchainBeginState();
 
@@ -3358,6 +3512,41 @@ struct SurfaceTexture {
     SurfaceGetCurrentTextureStatus status = {};
 };
 
+// Can be chained in BindGroupEntry
+struct TexelBufferBindingEntry : ChainedStruct {
+    inline TexelBufferBindingEntry();
+
+    struct Init;
+    inline TexelBufferBindingEntry(Init&& init);
+    inline operator const WGPUTexelBufferBindingEntry&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(TexelBufferView));
+    alignas(kFirstMemberAlignment) TexelBufferView texelBufferView = nullptr;
+};
+
+// Can be chained in BindGroupLayoutEntry
+struct TexelBufferBindingLayout : ChainedStruct {
+    inline TexelBufferBindingLayout();
+
+    struct Init;
+    inline TexelBufferBindingLayout(Init&& init);
+    inline operator const WGPUTexelBufferBindingLayout&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(TexelBufferAccess));
+    alignas(kFirstMemberAlignment) TexelBufferAccess access = TexelBufferAccess::Undefined;
+    TextureFormat format = TextureFormat::Undefined;
+};
+
+struct TexelBufferViewDescriptor {
+    inline operator const WGPUTexelBufferViewDescriptor&() const noexcept;
+
+    ChainedStruct const * nextInChain = nullptr;
+    StringView label = {};
+    TextureFormat format = TextureFormat::Undefined;
+    uint64_t offset = 0;
+    uint64_t size = kWholeSize;
+};
+
 struct TexelCopyBufferLayout {
     inline operator const WGPUTexelCopyBufferLayout&() const noexcept;
 
@@ -3489,6 +3678,18 @@ struct BindGroupEntry {
     uint64_t size = kWholeSize;
     Sampler sampler = nullptr;
     TextureView textureView = nullptr;
+};
+
+// Can be chained in BindGroupLayoutDescriptor
+struct BindGroupLayoutDynamicBindingArray : ChainedStruct {
+    inline BindGroupLayoutDynamicBindingArray();
+
+    struct Init;
+    inline BindGroupLayoutDynamicBindingArray(Init&& init);
+    inline operator const WGPUBindGroupLayoutDynamicBindingArray&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(DynamicBindingArrayLayout));
+    alignas(kFirstMemberAlignment) DynamicBindingArrayLayout dynamicArray = {};
 };
 
 struct BindGroupLayoutEntry {
@@ -3803,24 +4004,16 @@ struct SharedTextureMemoryDmaBufDescriptor : ChainedStruct {
     SharedTextureMemoryDmaBufPlane const * planes = nullptr;
 };
 
-struct SharedTextureMemoryEndAccessState {
-    inline SharedTextureMemoryEndAccessState();
-    inline ~SharedTextureMemoryEndAccessState();
-    SharedTextureMemoryEndAccessState(const SharedTextureMemoryEndAccessState&) = delete;
-    SharedTextureMemoryEndAccessState& operator=(const SharedTextureMemoryEndAccessState&) = delete;
-    inline SharedTextureMemoryEndAccessState(SharedTextureMemoryEndAccessState&&);
-    inline SharedTextureMemoryEndAccessState& operator=(SharedTextureMemoryEndAccessState&&);
-    inline operator const WGPUSharedTextureMemoryEndAccessState&() const noexcept;
+// Can be chained in SharedTextureMemoryEndAccessState
+struct SharedTextureMemoryMetalEndAccessState : ChainedStructOut {
+    inline SharedTextureMemoryMetalEndAccessState();
 
-    ChainedStructOut  * nextInChain = nullptr;
-    Bool const initialized = {};
-    size_t const fenceCount = {};
-    SharedFence const * const fences = nullptr;
-    uint64_t const * const signaledValues = nullptr;
+    struct Init;
+    inline SharedTextureMemoryMetalEndAccessState(Init&& init);
+    inline operator const WGPUSharedTextureMemoryMetalEndAccessState&() const noexcept;
 
-  private:
-    inline void FreeMembers();
-    static inline void Reset(SharedTextureMemoryEndAccessState& value);
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Future));
+    alignas(kFirstMemberAlignment) Future commandsScheduledFuture = {};
 };
 
 struct SurfaceDescriptor {
@@ -3915,7 +4108,7 @@ struct BindGroupDescriptor {
     ChainedStruct const * nextInChain = nullptr;
     StringView label = {};
     BindGroupLayout layout = nullptr;
-    size_t entryCount;
+    size_t entryCount = 0;
     BindGroupEntry const * entries = nullptr;
 };
 
@@ -3924,7 +4117,7 @@ struct BindGroupLayoutDescriptor {
 
     ChainedStruct const * nextInChain = nullptr;
     StringView label = {};
-    size_t entryCount;
+    size_t entryCount = 0;
     BindGroupLayoutEntry const * entries = nullptr;
 };
 
@@ -3989,6 +4182,26 @@ struct SharedTextureMemoryDescriptor {
 
     ChainedStruct const * nextInChain = nullptr;
     StringView label = {};
+};
+
+struct SharedTextureMemoryEndAccessState {
+    inline SharedTextureMemoryEndAccessState();
+    inline ~SharedTextureMemoryEndAccessState();
+    SharedTextureMemoryEndAccessState(const SharedTextureMemoryEndAccessState&) = delete;
+    SharedTextureMemoryEndAccessState& operator=(const SharedTextureMemoryEndAccessState&) = delete;
+    inline SharedTextureMemoryEndAccessState(SharedTextureMemoryEndAccessState&&);
+    inline SharedTextureMemoryEndAccessState& operator=(SharedTextureMemoryEndAccessState&&);
+    inline operator const WGPUSharedTextureMemoryEndAccessState&() const noexcept;
+
+    ChainedStructOut  * nextInChain = nullptr;
+    Bool const initialized = {};
+    size_t const fenceCount = {};
+    SharedFence const * const fences = nullptr;
+    uint64_t const * const signaledValues = nullptr;
+
+  private:
+    inline void FreeMembers();
+    static inline void Reset(SharedTextureMemoryEndAccessState& value);
 };
 
 struct SharedTextureMemoryProperties {
@@ -4155,6 +4368,67 @@ static_assert(sizeof(AdapterPropertiesVk) == sizeof(WGPUAdapterPropertiesVk), "s
 static_assert(alignof(AdapterPropertiesVk) == alignof(WGPUAdapterPropertiesVk), "alignof mismatch for AdapterPropertiesVk");
 static_assert(offsetof(AdapterPropertiesVk, driverVersion) == offsetof(WGPUAdapterPropertiesVk, driverVersion),
         "offsetof mismatch for AdapterPropertiesVk::driverVersion");
+
+// AdapterPropertiesWGPU implementation
+AdapterPropertiesWGPU::AdapterPropertiesWGPU()
+  : ChainedStructOut { nullptr, SType::AdapterPropertiesWGPU } {}
+struct AdapterPropertiesWGPU::Init {
+    ChainedStructOut *  nextInChain;
+    BackendType backendType = BackendType::Undefined;
+};
+AdapterPropertiesWGPU::AdapterPropertiesWGPU(AdapterPropertiesWGPU::Init&& init)
+  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesWGPU }, 
+    backendType(std::move(init.backendType)){}
+
+AdapterPropertiesWGPU::operator const WGPUAdapterPropertiesWGPU&() const noexcept {
+    return *reinterpret_cast<const WGPUAdapterPropertiesWGPU*>(this);
+}
+
+static_assert(sizeof(AdapterPropertiesWGPU) == sizeof(WGPUAdapterPropertiesWGPU), "sizeof mismatch for AdapterPropertiesWGPU");
+static_assert(alignof(AdapterPropertiesWGPU) == alignof(WGPUAdapterPropertiesWGPU), "alignof mismatch for AdapterPropertiesWGPU");
+static_assert(offsetof(AdapterPropertiesWGPU, backendType) == offsetof(WGPUAdapterPropertiesWGPU, backendType),
+        "offsetof mismatch for AdapterPropertiesWGPU::backendType");
+
+// BindGroupDynamicBindingArray implementation
+BindGroupDynamicBindingArray::BindGroupDynamicBindingArray()
+  : ChainedStruct { nullptr, SType::BindGroupDynamicBindingArray } {}
+struct BindGroupDynamicBindingArray::Init {
+    ChainedStruct * const nextInChain;
+    uint32_t dynamicArraySize = 0;
+};
+BindGroupDynamicBindingArray::BindGroupDynamicBindingArray(BindGroupDynamicBindingArray::Init&& init)
+  : ChainedStruct { init.nextInChain, SType::BindGroupDynamicBindingArray }, 
+    dynamicArraySize(std::move(init.dynamicArraySize)){}
+
+BindGroupDynamicBindingArray::operator const WGPUBindGroupDynamicBindingArray&() const noexcept {
+    return *reinterpret_cast<const WGPUBindGroupDynamicBindingArray*>(this);
+}
+
+static_assert(sizeof(BindGroupDynamicBindingArray) == sizeof(WGPUBindGroupDynamicBindingArray), "sizeof mismatch for BindGroupDynamicBindingArray");
+static_assert(alignof(BindGroupDynamicBindingArray) == alignof(WGPUBindGroupDynamicBindingArray), "alignof mismatch for BindGroupDynamicBindingArray");
+static_assert(offsetof(BindGroupDynamicBindingArray, dynamicArraySize) == offsetof(WGPUBindGroupDynamicBindingArray, dynamicArraySize),
+        "offsetof mismatch for BindGroupDynamicBindingArray::dynamicArraySize");
+
+// BindGroupEntryContents implementation
+
+BindGroupEntryContents::operator const WGPUBindGroupEntryContents&() const noexcept {
+    return *reinterpret_cast<const WGPUBindGroupEntryContents*>(this);
+}
+
+static_assert(sizeof(BindGroupEntryContents) == sizeof(WGPUBindGroupEntryContents), "sizeof mismatch for BindGroupEntryContents");
+static_assert(alignof(BindGroupEntryContents) == alignof(WGPUBindGroupEntryContents), "alignof mismatch for BindGroupEntryContents");
+static_assert(offsetof(BindGroupEntryContents, nextInChain) == offsetof(WGPUBindGroupEntryContents, nextInChain),
+        "offsetof mismatch for BindGroupEntryContents::nextInChain");
+static_assert(offsetof(BindGroupEntryContents, buffer) == offsetof(WGPUBindGroupEntryContents, buffer),
+        "offsetof mismatch for BindGroupEntryContents::buffer");
+static_assert(offsetof(BindGroupEntryContents, offset) == offsetof(WGPUBindGroupEntryContents, offset),
+        "offsetof mismatch for BindGroupEntryContents::offset");
+static_assert(offsetof(BindGroupEntryContents, size) == offsetof(WGPUBindGroupEntryContents, size),
+        "offsetof mismatch for BindGroupEntryContents::size");
+static_assert(offsetof(BindGroupEntryContents, sampler) == offsetof(WGPUBindGroupEntryContents, sampler),
+        "offsetof mismatch for BindGroupEntryContents::sampler");
+static_assert(offsetof(BindGroupEntryContents, textureView) == offsetof(WGPUBindGroupEntryContents, textureView),
+        "offsetof mismatch for BindGroupEntryContents::textureView");
 
 // BlendComponent implementation
 
@@ -4439,6 +4713,26 @@ static_assert(offsetof(DawnCompilationMessageUtf16, offset) == offsetof(WGPUDawn
         "offsetof mismatch for DawnCompilationMessageUtf16::offset");
 static_assert(offsetof(DawnCompilationMessageUtf16, length) == offsetof(WGPUDawnCompilationMessageUtf16, length),
         "offsetof mismatch for DawnCompilationMessageUtf16::length");
+
+// DawnConsumeAdapterDescriptor implementation
+DawnConsumeAdapterDescriptor::DawnConsumeAdapterDescriptor()
+  : ChainedStruct { nullptr, SType::DawnConsumeAdapterDescriptor } {}
+struct DawnConsumeAdapterDescriptor::Init {
+    ChainedStruct * const nextInChain;
+    Bool consumeAdapter = false;
+};
+DawnConsumeAdapterDescriptor::DawnConsumeAdapterDescriptor(DawnConsumeAdapterDescriptor::Init&& init)
+  : ChainedStruct { init.nextInChain, SType::DawnConsumeAdapterDescriptor }, 
+    consumeAdapter(std::move(init.consumeAdapter)){}
+
+DawnConsumeAdapterDescriptor::operator const WGPUDawnConsumeAdapterDescriptor&() const noexcept {
+    return *reinterpret_cast<const WGPUDawnConsumeAdapterDescriptor*>(this);
+}
+
+static_assert(sizeof(DawnConsumeAdapterDescriptor) == sizeof(WGPUDawnConsumeAdapterDescriptor), "sizeof mismatch for DawnConsumeAdapterDescriptor");
+static_assert(alignof(DawnConsumeAdapterDescriptor) == alignof(WGPUDawnConsumeAdapterDescriptor), "alignof mismatch for DawnConsumeAdapterDescriptor");
+static_assert(offsetof(DawnConsumeAdapterDescriptor, consumeAdapter) == offsetof(WGPUDawnConsumeAdapterDescriptor, consumeAdapter),
+        "offsetof mismatch for DawnConsumeAdapterDescriptor::consumeAdapter");
 
 // DawnDeviceAllocatorControl implementation
 DawnDeviceAllocatorControl::DawnDeviceAllocatorControl()
@@ -4740,6 +5034,41 @@ static_assert(offsetof(DawnWireWGSLControl, enableUnsafe) == offsetof(WGPUDawnWi
         "offsetof mismatch for DawnWireWGSLControl::enableUnsafe");
 static_assert(offsetof(DawnWireWGSLControl, enableTesting) == offsetof(WGPUDawnWireWGSLControl, enableTesting),
         "offsetof mismatch for DawnWireWGSLControl::enableTesting");
+
+// DynamicBindingArrayLayout implementation
+
+DynamicBindingArrayLayout::operator const WGPUDynamicBindingArrayLayout&() const noexcept {
+    return *reinterpret_cast<const WGPUDynamicBindingArrayLayout*>(this);
+}
+
+static_assert(sizeof(DynamicBindingArrayLayout) == sizeof(WGPUDynamicBindingArrayLayout), "sizeof mismatch for DynamicBindingArrayLayout");
+static_assert(alignof(DynamicBindingArrayLayout) == alignof(WGPUDynamicBindingArrayLayout), "alignof mismatch for DynamicBindingArrayLayout");
+static_assert(offsetof(DynamicBindingArrayLayout, nextInChain) == offsetof(WGPUDynamicBindingArrayLayout, nextInChain),
+        "offsetof mismatch for DynamicBindingArrayLayout::nextInChain");
+static_assert(offsetof(DynamicBindingArrayLayout, start) == offsetof(WGPUDynamicBindingArrayLayout, start),
+        "offsetof mismatch for DynamicBindingArrayLayout::start");
+static_assert(offsetof(DynamicBindingArrayLayout, kind) == offsetof(WGPUDynamicBindingArrayLayout, kind),
+        "offsetof mismatch for DynamicBindingArrayLayout::kind");
+
+// DynamicBindingArrayLimits implementation
+DynamicBindingArrayLimits::DynamicBindingArrayLimits()
+  : ChainedStructOut { nullptr, SType::DynamicBindingArrayLimits } {}
+struct DynamicBindingArrayLimits::Init {
+    ChainedStructOut *  nextInChain;
+    uint32_t maxDynamicBindingArraySize = kLimitU32Undefined;
+};
+DynamicBindingArrayLimits::DynamicBindingArrayLimits(DynamicBindingArrayLimits::Init&& init)
+  : ChainedStructOut { init.nextInChain, SType::DynamicBindingArrayLimits }, 
+    maxDynamicBindingArraySize(std::move(init.maxDynamicBindingArraySize)){}
+
+DynamicBindingArrayLimits::operator const WGPUDynamicBindingArrayLimits&() const noexcept {
+    return *reinterpret_cast<const WGPUDynamicBindingArrayLimits*>(this);
+}
+
+static_assert(sizeof(DynamicBindingArrayLimits) == sizeof(WGPUDynamicBindingArrayLimits), "sizeof mismatch for DynamicBindingArrayLimits");
+static_assert(alignof(DynamicBindingArrayLimits) == alignof(WGPUDynamicBindingArrayLimits), "alignof mismatch for DynamicBindingArrayLimits");
+static_assert(offsetof(DynamicBindingArrayLimits, maxDynamicBindingArraySize) == offsetof(WGPUDynamicBindingArrayLimits, maxDynamicBindingArraySize),
+        "offsetof mismatch for DynamicBindingArrayLimits::maxDynamicBindingArraySize");
 
 // EmscriptenSurfaceSourceCanvasHTMLSelector implementation
 EmscriptenSurfaceSourceCanvasHTMLSelector::EmscriptenSurfaceSourceCanvasHTMLSelector()
@@ -5644,6 +5973,26 @@ static_assert(offsetof(SharedTextureMemoryAHardwareBufferDescriptor, handle) == 
 static_assert(offsetof(SharedTextureMemoryAHardwareBufferDescriptor, useExternalFormat) == offsetof(WGPUSharedTextureMemoryAHardwareBufferDescriptor, useExternalFormat),
         "offsetof mismatch for SharedTextureMemoryAHardwareBufferDescriptor::useExternalFormat");
 
+// SharedTextureMemoryD3D11BeginState implementation
+SharedTextureMemoryD3D11BeginState::SharedTextureMemoryD3D11BeginState()
+  : ChainedStruct { nullptr, SType::SharedTextureMemoryD3D11BeginState } {}
+struct SharedTextureMemoryD3D11BeginState::Init {
+    ChainedStruct * const nextInChain;
+    Bool requiresEndAccessFence = true;
+};
+SharedTextureMemoryD3D11BeginState::SharedTextureMemoryD3D11BeginState(SharedTextureMemoryD3D11BeginState::Init&& init)
+  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryD3D11BeginState }, 
+    requiresEndAccessFence(std::move(init.requiresEndAccessFence)){}
+
+SharedTextureMemoryD3D11BeginState::operator const WGPUSharedTextureMemoryD3D11BeginState&() const noexcept {
+    return *reinterpret_cast<const WGPUSharedTextureMemoryD3D11BeginState*>(this);
+}
+
+static_assert(sizeof(SharedTextureMemoryD3D11BeginState) == sizeof(WGPUSharedTextureMemoryD3D11BeginState), "sizeof mismatch for SharedTextureMemoryD3D11BeginState");
+static_assert(alignof(SharedTextureMemoryD3D11BeginState) == alignof(WGPUSharedTextureMemoryD3D11BeginState), "alignof mismatch for SharedTextureMemoryD3D11BeginState");
+static_assert(offsetof(SharedTextureMemoryD3D11BeginState, requiresEndAccessFence) == offsetof(WGPUSharedTextureMemoryD3D11BeginState, requiresEndAccessFence),
+        "offsetof mismatch for SharedTextureMemoryD3D11BeginState::requiresEndAccessFence");
+
 // SharedTextureMemoryD3DSwapchainBeginState implementation
 SharedTextureMemoryD3DSwapchainBeginState::SharedTextureMemoryD3DSwapchainBeginState()
   : ChainedStruct { nullptr, SType::SharedTextureMemoryD3DSwapchainBeginState } {}
@@ -6435,6 +6784,69 @@ static_assert(offsetof(SurfaceTexture, texture) == offsetof(WGPUSurfaceTexture, 
 static_assert(offsetof(SurfaceTexture, status) == offsetof(WGPUSurfaceTexture, status),
         "offsetof mismatch for SurfaceTexture::status");
 
+// TexelBufferBindingEntry implementation
+TexelBufferBindingEntry::TexelBufferBindingEntry()
+  : ChainedStruct { nullptr, SType::TexelBufferBindingEntry } {}
+struct TexelBufferBindingEntry::Init {
+    ChainedStruct * const nextInChain;
+    TexelBufferView texelBufferView = nullptr;
+};
+TexelBufferBindingEntry::TexelBufferBindingEntry(TexelBufferBindingEntry::Init&& init)
+  : ChainedStruct { init.nextInChain, SType::TexelBufferBindingEntry }, 
+    texelBufferView(std::move(init.texelBufferView)){}
+
+TexelBufferBindingEntry::operator const WGPUTexelBufferBindingEntry&() const noexcept {
+    return *reinterpret_cast<const WGPUTexelBufferBindingEntry*>(this);
+}
+
+static_assert(sizeof(TexelBufferBindingEntry) == sizeof(WGPUTexelBufferBindingEntry), "sizeof mismatch for TexelBufferBindingEntry");
+static_assert(alignof(TexelBufferBindingEntry) == alignof(WGPUTexelBufferBindingEntry), "alignof mismatch for TexelBufferBindingEntry");
+static_assert(offsetof(TexelBufferBindingEntry, texelBufferView) == offsetof(WGPUTexelBufferBindingEntry, texelBufferView),
+        "offsetof mismatch for TexelBufferBindingEntry::texelBufferView");
+
+// TexelBufferBindingLayout implementation
+TexelBufferBindingLayout::TexelBufferBindingLayout()
+  : ChainedStruct { nullptr, SType::TexelBufferBindingLayout } {}
+struct TexelBufferBindingLayout::Init {
+    ChainedStruct * const nextInChain;
+    TexelBufferAccess access = TexelBufferAccess::Undefined;
+    TextureFormat format = TextureFormat::Undefined;
+};
+TexelBufferBindingLayout::TexelBufferBindingLayout(TexelBufferBindingLayout::Init&& init)
+  : ChainedStruct { init.nextInChain, SType::TexelBufferBindingLayout }, 
+    access(std::move(init.access)), 
+    format(std::move(init.format)){}
+
+TexelBufferBindingLayout::operator const WGPUTexelBufferBindingLayout&() const noexcept {
+    return *reinterpret_cast<const WGPUTexelBufferBindingLayout*>(this);
+}
+
+static_assert(sizeof(TexelBufferBindingLayout) == sizeof(WGPUTexelBufferBindingLayout), "sizeof mismatch for TexelBufferBindingLayout");
+static_assert(alignof(TexelBufferBindingLayout) == alignof(WGPUTexelBufferBindingLayout), "alignof mismatch for TexelBufferBindingLayout");
+static_assert(offsetof(TexelBufferBindingLayout, access) == offsetof(WGPUTexelBufferBindingLayout, access),
+        "offsetof mismatch for TexelBufferBindingLayout::access");
+static_assert(offsetof(TexelBufferBindingLayout, format) == offsetof(WGPUTexelBufferBindingLayout, format),
+        "offsetof mismatch for TexelBufferBindingLayout::format");
+
+// TexelBufferViewDescriptor implementation
+
+TexelBufferViewDescriptor::operator const WGPUTexelBufferViewDescriptor&() const noexcept {
+    return *reinterpret_cast<const WGPUTexelBufferViewDescriptor*>(this);
+}
+
+static_assert(sizeof(TexelBufferViewDescriptor) == sizeof(WGPUTexelBufferViewDescriptor), "sizeof mismatch for TexelBufferViewDescriptor");
+static_assert(alignof(TexelBufferViewDescriptor) == alignof(WGPUTexelBufferViewDescriptor), "alignof mismatch for TexelBufferViewDescriptor");
+static_assert(offsetof(TexelBufferViewDescriptor, nextInChain) == offsetof(WGPUTexelBufferViewDescriptor, nextInChain),
+        "offsetof mismatch for TexelBufferViewDescriptor::nextInChain");
+static_assert(offsetof(TexelBufferViewDescriptor, label) == offsetof(WGPUTexelBufferViewDescriptor, label),
+        "offsetof mismatch for TexelBufferViewDescriptor::label");
+static_assert(offsetof(TexelBufferViewDescriptor, format) == offsetof(WGPUTexelBufferViewDescriptor, format),
+        "offsetof mismatch for TexelBufferViewDescriptor::format");
+static_assert(offsetof(TexelBufferViewDescriptor, offset) == offsetof(WGPUTexelBufferViewDescriptor, offset),
+        "offsetof mismatch for TexelBufferViewDescriptor::offset");
+static_assert(offsetof(TexelBufferViewDescriptor, size) == offsetof(WGPUTexelBufferViewDescriptor, size),
+        "offsetof mismatch for TexelBufferViewDescriptor::size");
+
 // TexelCopyBufferLayout implementation
 
 TexelCopyBufferLayout::operator const WGPUTexelCopyBufferLayout&() const noexcept {
@@ -6734,6 +7146,26 @@ static_assert(offsetof(BindGroupEntry, sampler) == offsetof(WGPUBindGroupEntry, 
         "offsetof mismatch for BindGroupEntry::sampler");
 static_assert(offsetof(BindGroupEntry, textureView) == offsetof(WGPUBindGroupEntry, textureView),
         "offsetof mismatch for BindGroupEntry::textureView");
+
+// BindGroupLayoutDynamicBindingArray implementation
+BindGroupLayoutDynamicBindingArray::BindGroupLayoutDynamicBindingArray()
+  : ChainedStruct { nullptr, SType::BindGroupLayoutDynamicBindingArray } {}
+struct BindGroupLayoutDynamicBindingArray::Init {
+    ChainedStruct * const nextInChain;
+    DynamicBindingArrayLayout dynamicArray = {};
+};
+BindGroupLayoutDynamicBindingArray::BindGroupLayoutDynamicBindingArray(BindGroupLayoutDynamicBindingArray::Init&& init)
+  : ChainedStruct { init.nextInChain, SType::BindGroupLayoutDynamicBindingArray }, 
+    dynamicArray(std::move(init.dynamicArray)){}
+
+BindGroupLayoutDynamicBindingArray::operator const WGPUBindGroupLayoutDynamicBindingArray&() const noexcept {
+    return *reinterpret_cast<const WGPUBindGroupLayoutDynamicBindingArray*>(this);
+}
+
+static_assert(sizeof(BindGroupLayoutDynamicBindingArray) == sizeof(WGPUBindGroupLayoutDynamicBindingArray), "sizeof mismatch for BindGroupLayoutDynamicBindingArray");
+static_assert(alignof(BindGroupLayoutDynamicBindingArray) == alignof(WGPUBindGroupLayoutDynamicBindingArray), "alignof mismatch for BindGroupLayoutDynamicBindingArray");
+static_assert(offsetof(BindGroupLayoutDynamicBindingArray, dynamicArray) == offsetof(WGPUBindGroupLayoutDynamicBindingArray, dynamicArray),
+        "offsetof mismatch for BindGroupLayoutDynamicBindingArray::dynamicArray");
 
 // BindGroupLayoutEntry implementation
 
@@ -7352,65 +7784,25 @@ static_assert(offsetof(SharedTextureMemoryDmaBufDescriptor, planeCount) == offse
 static_assert(offsetof(SharedTextureMemoryDmaBufDescriptor, planes) == offsetof(WGPUSharedTextureMemoryDmaBufDescriptor, planes),
         "offsetof mismatch for SharedTextureMemoryDmaBufDescriptor::planes");
 
-// SharedTextureMemoryEndAccessState implementation
-SharedTextureMemoryEndAccessState::SharedTextureMemoryEndAccessState() = default;
-SharedTextureMemoryEndAccessState::~SharedTextureMemoryEndAccessState() {
-    FreeMembers();
+// SharedTextureMemoryMetalEndAccessState implementation
+SharedTextureMemoryMetalEndAccessState::SharedTextureMemoryMetalEndAccessState()
+  : ChainedStructOut { nullptr, SType::SharedTextureMemoryMetalEndAccessState } {}
+struct SharedTextureMemoryMetalEndAccessState::Init {
+    ChainedStructOut *  nextInChain;
+    Future commandsScheduledFuture = {};
+};
+SharedTextureMemoryMetalEndAccessState::SharedTextureMemoryMetalEndAccessState(SharedTextureMemoryMetalEndAccessState::Init&& init)
+  : ChainedStructOut { init.nextInChain, SType::SharedTextureMemoryMetalEndAccessState }, 
+    commandsScheduledFuture(std::move(init.commandsScheduledFuture)){}
+
+SharedTextureMemoryMetalEndAccessState::operator const WGPUSharedTextureMemoryMetalEndAccessState&() const noexcept {
+    return *reinterpret_cast<const WGPUSharedTextureMemoryMetalEndAccessState*>(this);
 }
 
-SharedTextureMemoryEndAccessState::SharedTextureMemoryEndAccessState(SharedTextureMemoryEndAccessState&& rhs)
-    : initialized(rhs.initialized),
-            fenceCount(rhs.fenceCount),
-            fences(rhs.fences),
-            signaledValues(rhs.signaledValues){
-    Reset(rhs);
-}
-
-SharedTextureMemoryEndAccessState& SharedTextureMemoryEndAccessState::operator=(SharedTextureMemoryEndAccessState&& rhs) {
-    if (&rhs == this) {
-        return *this;
-    }
-    FreeMembers();
-    detail::AsNonConstReference(this->initialized) = std::move(rhs.initialized);
-    detail::AsNonConstReference(this->fenceCount) = std::move(rhs.fenceCount);
-    detail::AsNonConstReference(this->fences) = std::move(rhs.fences);
-    detail::AsNonConstReference(this->signaledValues) = std::move(rhs.signaledValues);
-    Reset(rhs);
-    return *this;
-}
-
-void SharedTextureMemoryEndAccessState::FreeMembers() {
-    bool needsFreeing = false;    if (this->fences != nullptr) { needsFreeing = true; }    if (this->signaledValues != nullptr) { needsFreeing = true; }if (needsFreeing) {
-        wgpuSharedTextureMemoryEndAccessStateFreeMembers(
-            *reinterpret_cast<WGPUSharedTextureMemoryEndAccessState*>(this));
-    }
-}
-
-// static
-void SharedTextureMemoryEndAccessState::Reset(SharedTextureMemoryEndAccessState& value) {
-    SharedTextureMemoryEndAccessState defaultValue{};
-    detail::AsNonConstReference(value.initialized) = defaultValue.initialized;
-    detail::AsNonConstReference(value.fenceCount) = defaultValue.fenceCount;
-    detail::AsNonConstReference(value.fences) = defaultValue.fences;
-    detail::AsNonConstReference(value.signaledValues) = defaultValue.signaledValues;
-}
-
-SharedTextureMemoryEndAccessState::operator const WGPUSharedTextureMemoryEndAccessState&() const noexcept {
-    return *reinterpret_cast<const WGPUSharedTextureMemoryEndAccessState*>(this);
-}
-
-static_assert(sizeof(SharedTextureMemoryEndAccessState) == sizeof(WGPUSharedTextureMemoryEndAccessState), "sizeof mismatch for SharedTextureMemoryEndAccessState");
-static_assert(alignof(SharedTextureMemoryEndAccessState) == alignof(WGPUSharedTextureMemoryEndAccessState), "alignof mismatch for SharedTextureMemoryEndAccessState");
-static_assert(offsetof(SharedTextureMemoryEndAccessState, nextInChain) == offsetof(WGPUSharedTextureMemoryEndAccessState, nextInChain),
-        "offsetof mismatch for SharedTextureMemoryEndAccessState::nextInChain");
-static_assert(offsetof(SharedTextureMemoryEndAccessState, initialized) == offsetof(WGPUSharedTextureMemoryEndAccessState, initialized),
-        "offsetof mismatch for SharedTextureMemoryEndAccessState::initialized");
-static_assert(offsetof(SharedTextureMemoryEndAccessState, fenceCount) == offsetof(WGPUSharedTextureMemoryEndAccessState, fenceCount),
-        "offsetof mismatch for SharedTextureMemoryEndAccessState::fenceCount");
-static_assert(offsetof(SharedTextureMemoryEndAccessState, fences) == offsetof(WGPUSharedTextureMemoryEndAccessState, fences),
-        "offsetof mismatch for SharedTextureMemoryEndAccessState::fences");
-static_assert(offsetof(SharedTextureMemoryEndAccessState, signaledValues) == offsetof(WGPUSharedTextureMemoryEndAccessState, signaledValues),
-        "offsetof mismatch for SharedTextureMemoryEndAccessState::signaledValues");
+static_assert(sizeof(SharedTextureMemoryMetalEndAccessState) == sizeof(WGPUSharedTextureMemoryMetalEndAccessState), "sizeof mismatch for SharedTextureMemoryMetalEndAccessState");
+static_assert(alignof(SharedTextureMemoryMetalEndAccessState) == alignof(WGPUSharedTextureMemoryMetalEndAccessState), "alignof mismatch for SharedTextureMemoryMetalEndAccessState");
+static_assert(offsetof(SharedTextureMemoryMetalEndAccessState, commandsScheduledFuture) == offsetof(WGPUSharedTextureMemoryMetalEndAccessState, commandsScheduledFuture),
+        "offsetof mismatch for SharedTextureMemoryMetalEndAccessState::commandsScheduledFuture");
 
 // SurfaceDescriptor implementation
 
@@ -7768,6 +8160,66 @@ static_assert(offsetof(SharedTextureMemoryDescriptor, nextInChain) == offsetof(W
         "offsetof mismatch for SharedTextureMemoryDescriptor::nextInChain");
 static_assert(offsetof(SharedTextureMemoryDescriptor, label) == offsetof(WGPUSharedTextureMemoryDescriptor, label),
         "offsetof mismatch for SharedTextureMemoryDescriptor::label");
+
+// SharedTextureMemoryEndAccessState implementation
+SharedTextureMemoryEndAccessState::SharedTextureMemoryEndAccessState() = default;
+SharedTextureMemoryEndAccessState::~SharedTextureMemoryEndAccessState() {
+    FreeMembers();
+}
+
+SharedTextureMemoryEndAccessState::SharedTextureMemoryEndAccessState(SharedTextureMemoryEndAccessState&& rhs)
+    : initialized(rhs.initialized),
+            fenceCount(rhs.fenceCount),
+            fences(rhs.fences),
+            signaledValues(rhs.signaledValues){
+    Reset(rhs);
+}
+
+SharedTextureMemoryEndAccessState& SharedTextureMemoryEndAccessState::operator=(SharedTextureMemoryEndAccessState&& rhs) {
+    if (&rhs == this) {
+        return *this;
+    }
+    FreeMembers();
+    detail::AsNonConstReference(this->initialized) = std::move(rhs.initialized);
+    detail::AsNonConstReference(this->fenceCount) = std::move(rhs.fenceCount);
+    detail::AsNonConstReference(this->fences) = std::move(rhs.fences);
+    detail::AsNonConstReference(this->signaledValues) = std::move(rhs.signaledValues);
+    Reset(rhs);
+    return *this;
+}
+
+void SharedTextureMemoryEndAccessState::FreeMembers() {
+    bool needsFreeing = false;    if (this->fences != nullptr) { needsFreeing = true; }    if (this->signaledValues != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        wgpuSharedTextureMemoryEndAccessStateFreeMembers(
+            *reinterpret_cast<WGPUSharedTextureMemoryEndAccessState*>(this));
+    }
+}
+
+// static
+void SharedTextureMemoryEndAccessState::Reset(SharedTextureMemoryEndAccessState& value) {
+    SharedTextureMemoryEndAccessState defaultValue{};
+    detail::AsNonConstReference(value.initialized) = defaultValue.initialized;
+    detail::AsNonConstReference(value.fenceCount) = defaultValue.fenceCount;
+    detail::AsNonConstReference(value.fences) = defaultValue.fences;
+    detail::AsNonConstReference(value.signaledValues) = defaultValue.signaledValues;
+}
+
+SharedTextureMemoryEndAccessState::operator const WGPUSharedTextureMemoryEndAccessState&() const noexcept {
+    return *reinterpret_cast<const WGPUSharedTextureMemoryEndAccessState*>(this);
+}
+
+static_assert(sizeof(SharedTextureMemoryEndAccessState) == sizeof(WGPUSharedTextureMemoryEndAccessState), "sizeof mismatch for SharedTextureMemoryEndAccessState");
+static_assert(alignof(SharedTextureMemoryEndAccessState) == alignof(WGPUSharedTextureMemoryEndAccessState), "alignof mismatch for SharedTextureMemoryEndAccessState");
+static_assert(offsetof(SharedTextureMemoryEndAccessState, nextInChain) == offsetof(WGPUSharedTextureMemoryEndAccessState, nextInChain),
+        "offsetof mismatch for SharedTextureMemoryEndAccessState::nextInChain");
+static_assert(offsetof(SharedTextureMemoryEndAccessState, initialized) == offsetof(WGPUSharedTextureMemoryEndAccessState, initialized),
+        "offsetof mismatch for SharedTextureMemoryEndAccessState::initialized");
+static_assert(offsetof(SharedTextureMemoryEndAccessState, fenceCount) == offsetof(WGPUSharedTextureMemoryEndAccessState, fenceCount),
+        "offsetof mismatch for SharedTextureMemoryEndAccessState::fenceCount");
+static_assert(offsetof(SharedTextureMemoryEndAccessState, fences) == offsetof(WGPUSharedTextureMemoryEndAccessState, fences),
+        "offsetof mismatch for SharedTextureMemoryEndAccessState::fences");
+static_assert(offsetof(SharedTextureMemoryEndAccessState, signaledValues) == offsetof(WGPUSharedTextureMemoryEndAccessState, signaledValues),
+        "offsetof mismatch for SharedTextureMemoryEndAccessState::signaledValues");
 
 // SharedTextureMemoryProperties implementation
 
@@ -8145,8 +8597,23 @@ static_assert(alignof(Adapter) == alignof(WGPUAdapter), "alignof mismatch for Ad
 
 // BindGroup implementation
 
+void BindGroup::Destroy() const {
+    wgpuBindGroupDestroy(Get());
+}
+uint32_t BindGroup::InsertBinding(BindGroupEntryContents const * contents) const {
+    auto result = wgpuBindGroupInsertBinding(Get(), reinterpret_cast<WGPUBindGroupEntryContents const *>(contents));
+    return result;
+}
+ConvertibleStatus BindGroup::RemoveBinding(uint32_t binding) const {
+    auto result = wgpuBindGroupRemoveBinding(Get(), binding);
+    return static_cast<Status>(result);
+}
 void BindGroup::SetLabel(StringView label) const {
     wgpuBindGroupSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+}
+ConvertibleStatus BindGroup::Update(BindGroupEntry const * entry) const {
+    auto result = wgpuBindGroupUpdate(Get(), reinterpret_cast<WGPUBindGroupEntry const *>(entry));
+    return static_cast<Status>(result);
 }
 
 
@@ -8185,6 +8652,10 @@ static_assert(alignof(BindGroupLayout) == alignof(WGPUBindGroupLayout), "alignof
 
 // Buffer implementation
 
+TexelBufferView Buffer::CreateTexelView(TexelBufferViewDescriptor const * descriptor) const {
+    auto result = wgpuBufferCreateTexelView(Get(), reinterpret_cast<WGPUTexelBufferViewDescriptor const *>(descriptor));
+    return TexelBufferView::Acquire(result);
+}
 void Buffer::Destroy() const {
     wgpuBufferDestroy(Get());
 }
@@ -8409,8 +8880,8 @@ void ComputePassEncoder::PushDebugGroup(StringView groupLabel) const {
 void ComputePassEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) const {
     wgpuComputePassEncoderSetBindGroup(Get(), groupIndex, group.Get(), dynamicOffsetCount, reinterpret_cast<uint32_t const *>(dynamicOffsets));
 }
-void ComputePassEncoder::SetImmediateData(uint32_t offset, void const * data, size_t size) const {
-    wgpuComputePassEncoderSetImmediateData(Get(), offset, reinterpret_cast<void const *>(data), size);
+void ComputePassEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
+    wgpuComputePassEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
 }
 void ComputePassEncoder::SetLabel(StringView label) const {
     wgpuComputePassEncoderSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
@@ -8884,10 +9355,9 @@ Surface Instance::CreateSurface(SurfaceDescriptor const * descriptor) const {
     auto result = wgpuInstanceCreateSurface(Get(), reinterpret_cast<WGPUSurfaceDescriptor const *>(descriptor));
     return Surface::Acquire(result);
 }
-ConvertibleStatus Instance::GetWGSLLanguageFeatures(SupportedWGSLLanguageFeatures * features) const {
+void Instance::GetWGSLLanguageFeatures(SupportedWGSLLanguageFeatures * features) const {
     *features = SupportedWGSLLanguageFeatures();
-    auto result = wgpuInstanceGetWGSLLanguageFeatures(Get(), reinterpret_cast<WGPUSupportedWGSLLanguageFeatures *>(features));
-    return static_cast<Status>(result);
+    wgpuInstanceGetWGSLLanguageFeatures(Get(), reinterpret_cast<WGPUSupportedWGSLLanguageFeatures *>(features));
 }
 Bool Instance::HasWGSLLanguageFeature(WGSLLanguageFeatureName feature) const {
     auto result = wgpuInstanceHasWGSLLanguageFeature(Get(), static_cast<WGPUWGSLLanguageFeatureName>(feature));
@@ -9177,8 +9647,8 @@ void RenderBundleEncoder::PushDebugGroup(StringView groupLabel) const {
 void RenderBundleEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) const {
     wgpuRenderBundleEncoderSetBindGroup(Get(), groupIndex, group.Get(), dynamicOffsetCount, reinterpret_cast<uint32_t const *>(dynamicOffsets));
 }
-void RenderBundleEncoder::SetImmediateData(uint32_t offset, void const * data, size_t size) const {
-    wgpuRenderBundleEncoderSetImmediateData(Get(), offset, reinterpret_cast<void const *>(data), size);
+void RenderBundleEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
+    wgpuRenderBundleEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
 }
 void RenderBundleEncoder::SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset, uint64_t size) const {
     wgpuRenderBundleEncoderSetIndexBuffer(Get(), buffer.Get(), static_cast<WGPUIndexFormat>(format), offset, size);
@@ -9257,8 +9727,8 @@ void RenderPassEncoder::SetBindGroup(uint32_t groupIndex, BindGroup const& group
 void RenderPassEncoder::SetBlendConstant(Color const * color) const {
     wgpuRenderPassEncoderSetBlendConstant(Get(), reinterpret_cast<WGPUColor const *>(color));
 }
-void RenderPassEncoder::SetImmediateData(uint32_t offset, void const * data, size_t size) const {
-    wgpuRenderPassEncoderSetImmediateData(Get(), offset, reinterpret_cast<void const *>(data), size);
+void RenderPassEncoder::SetImmediates(uint32_t offset, void const * data, size_t size) const {
+    wgpuRenderPassEncoderSetImmediates(Get(), offset, reinterpret_cast<void const *>(data), size);
 }
 void RenderPassEncoder::SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset, uint64_t size) const {
     wgpuRenderPassEncoderSetIndexBuffer(Get(), buffer.Get(), static_cast<WGPUIndexFormat>(format), offset, size);
@@ -9558,6 +10028,26 @@ void Surface::WGPURelease(WGPUSurface handle) {
 static_assert(sizeof(Surface) == sizeof(WGPUSurface), "sizeof mismatch for Surface");
 static_assert(alignof(Surface) == alignof(WGPUSurface), "alignof mismatch for Surface");
 
+// TexelBufferView implementation
+
+void TexelBufferView::SetLabel(StringView label) const {
+    wgpuTexelBufferViewSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+}
+
+
+void TexelBufferView::WGPUAddRef(WGPUTexelBufferView handle) {
+    if (handle != nullptr) {
+        wgpuTexelBufferViewAddRef(handle);
+    }
+}
+void TexelBufferView::WGPURelease(WGPUTexelBufferView handle) {
+    if (handle != nullptr) {
+        wgpuTexelBufferViewRelease(handle);
+    }
+}
+static_assert(sizeof(TexelBufferView) == sizeof(WGPUTexelBufferView), "sizeof mismatch for TexelBufferView");
+static_assert(alignof(TexelBufferView) == alignof(WGPUTexelBufferView), "alignof mismatch for TexelBufferView");
+
 // Texture implementation
 
 TextureView Texture::CreateErrorView(TextureViewDescriptor const * descriptor) const {
@@ -9603,8 +10093,14 @@ uint32_t Texture::GetWidth() const {
     auto result = wgpuTextureGetWidth(Get());
     return result;
 }
+void Texture::Pin(TextureUsage usage) const {
+    wgpuTexturePin(Get(), static_cast<WGPUTextureUsage>(usage));
+}
 void Texture::SetLabel(StringView label) const {
     wgpuTextureSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+}
+void Texture::Unpin() const {
+    wgpuTextureUnpin(Get());
 }
 
 
@@ -9643,33 +10139,6 @@ static_assert(alignof(TextureView) == alignof(WGPUTextureView), "alignof mismatc
 
 
 
-// RenderPassDescriptorMaxDrawCount is deprecated.
-// Use RenderPassMaxDrawCount instead.
-using RenderPassDescriptorMaxDrawCount = RenderPassMaxDrawCount;
-// ShaderModuleSPIRVDescriptor is deprecated.
-// Use ShaderSourceSPIRV instead.
-using ShaderModuleSPIRVDescriptor = ShaderSourceSPIRV;
-// ShaderModuleWGSLDescriptor is deprecated.
-// Use ShaderSourceWGSL instead.
-using ShaderModuleWGSLDescriptor = ShaderSourceWGSL;
-// SurfaceDescriptorFromAndroidNativeWindow is deprecated.
-// Use SurfaceSourceAndroidNativeWindow instead.
-using SurfaceDescriptorFromAndroidNativeWindow = SurfaceSourceAndroidNativeWindow;
-// SurfaceDescriptorFromMetalLayer is deprecated.
-// Use SurfaceSourceMetalLayer instead.
-using SurfaceDescriptorFromMetalLayer = SurfaceSourceMetalLayer;
-// SurfaceDescriptorFromWaylandSurface is deprecated.
-// Use SurfaceSourceWaylandSurface instead.
-using SurfaceDescriptorFromWaylandSurface = SurfaceSourceWaylandSurface;
-// SurfaceDescriptorFromWindowsHWND is deprecated.
-// Use SurfaceSourceWindowsHWND instead.
-using SurfaceDescriptorFromWindowsHWND = SurfaceSourceWindowsHWND;
-// SurfaceDescriptorFromXcbWindow is deprecated.
-// Use SurfaceSourceXCBWindow instead.
-using SurfaceDescriptorFromXcbWindow = SurfaceSourceXCBWindow;
-// SurfaceDescriptorFromXlibWindow is deprecated.
-// Use SurfaceSourceXlibWindow instead.
-using SurfaceDescriptorFromXlibWindow = SurfaceSourceXlibWindow;
 
 // Free Functions
 static inline Instance CreateInstance(InstanceDescriptor const * descriptor = nullptr) {
@@ -9695,6 +10164,7 @@ static inline Proc GetProcAddress(StringView procName) {
 }  // namespace wgpu
 
 namespace wgpu {
+
 template<>
 struct IsWGPUBitmask<wgpu::BufferUsage> {
     static constexpr bool enable = true;
@@ -9724,6 +10194,14 @@ template<>
 struct IsWGPUBitmask<wgpu::TextureUsage> {
     static constexpr bool enable = true;
 };
+
+
+inline bool operator==(const TextureComponentSwizzle& s1, const TextureComponentSwizzle& s2) {
+    return s1.r == s2.r && s1.g == s2.g && s1.b == s2.b && s1.a == s2.a;
+}
+inline bool operator!=(const TextureComponentSwizzle& s1, const TextureComponentSwizzle& s2) {
+    return !(s1 == s2);
+}
 
 } // namespace wgpu
 

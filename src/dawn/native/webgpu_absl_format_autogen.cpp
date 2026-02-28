@@ -138,6 +138,27 @@ namespace dawn::native {
         return AbslFormatConvert(*value, spec, s);
     }
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+    AbslFormatConvert(const TexelBufferViewDescriptor* value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s) {
+        if (value == nullptr) {
+            s->Append("[null]");
+            return {true};
+        }
+        s->Append("[TexelBufferViewDescriptor");
+        if (value->label.data != nullptr) {
+            s->Append(absl::StrFormat(" \"%s\"", value->label));
+        }
+        s->Append("]");
+        return {true};
+    }
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+    AbslFormatConvert(const UnpackedPtr<TexelBufferViewDescriptor>& value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s) {
+        return AbslFormatConvert(*value, spec, s);
+    }
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
     AbslFormatConvert(const BufferDescriptor* value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s) {
@@ -1042,6 +1063,26 @@ AbslFormatConvert(DeviceLostReason value,
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+AbslFormatConvert(DynamicBindingKind value,
+                  const absl::FormatConversionSpec& spec,
+                  absl::FormatSink* s) {
+    if (spec.conversion_char() == absl::FormatConversionChar::s) {
+        s->Append("DynamicBindingKind::");
+        switch (WGPUDynamicBindingKind(value)) {
+        case WGPUDynamicBindingKind_Undefined:
+            s->Append("Undefined");
+            return {true};
+        case WGPUDynamicBindingKind_SampledTexture:
+            s->Append("SampledTexture");
+            return {true};
+        default:
+            break;
+        }
+    }
+    s->Append(absl::StrFormat("%u", static_cast<WGPUDynamicBindingKind>(value)));
+    return {true};
+}
+absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
 AbslFormatConvert(ErrorFilter value,
                   const absl::FormatConversionSpec& spec,
                   absl::FormatSink* s) {
@@ -1208,6 +1249,12 @@ AbslFormatConvert(FeatureName value,
             return {true};
         case WGPUFeatureName_TextureFormatsTier2:
             s->Append("TextureFormatsTier2");
+            return {true};
+        case WGPUFeatureName_PrimitiveIndex:
+            s->Append("PrimitiveIndex");
+            return {true};
+        case WGPUFeatureName_TextureComponentSwizzle:
+            s->Append("TextureComponentSwizzle");
             return {true};
         case WGPUFeatureName_DawnInternalUsages:
             s->Append("DawnInternalUsages");
@@ -1380,8 +1427,17 @@ AbslFormatConvert(FeatureName value,
         case WGPUFeatureName_DawnDeviceAllocatorControl:
             s->Append("DawnDeviceAllocatorControl");
             return {true};
-        case WGPUFeatureName_TextureComponentSwizzle:
-            s->Append("TextureComponentSwizzle");
+        case WGPUFeatureName_ChromiumExperimentalBindless:
+            s->Append("ChromiumExperimentalBindless");
+            return {true};
+        case WGPUFeatureName_AdapterPropertiesWGPU:
+            s->Append("AdapterPropertiesWGPU");
+            return {true};
+        case WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
+            s->Append("SharedBufferMemoryD3D12SharedMemoryFileMappingHandle");
+            return {true};
+        case WGPUFeatureName_SharedTextureMemoryD3D12Resource:
+            s->Append("SharedTextureMemoryD3D12Resource");
             return {true};
         default:
             break;
@@ -1468,6 +1524,12 @@ AbslFormatConvert(InstanceFeatureName value,
         switch (WGPUInstanceFeatureName(value)) {
         case WGPUInstanceFeatureName_TimedWaitAny:
             s->Append("TimedWaitAny");
+            return {true};
+        case WGPUInstanceFeatureName_ShaderSourceSPIRV:
+            s->Append("ShaderSourceSPIRV");
+            return {true};
+        case WGPUInstanceFeatureName_MultipleDevicesPerAdapter:
+            s->Append("MultipleDevicesPerAdapter");
             return {true};
         default:
             break;
@@ -2033,6 +2095,9 @@ AbslFormatConvert(SType value,
         case WGPUSType_RequestAdapterWebXROptions:
             s->Append("RequestAdapterWebXROptions");
             return {true};
+        case WGPUSType_TextureComponentSwizzleDescriptor:
+            s->Append("TextureComponentSwizzleDescriptor");
+            return {true};
         case WGPUSType_CompatibilityModeLimits:
             s->Append("CompatibilityModeLimits");
             return {true};
@@ -2249,8 +2314,41 @@ AbslFormatConvert(SType value,
         case WGPUSType_DawnFakeDeviceInitializeErrorForTesting:
             s->Append("DawnFakeDeviceInitializeErrorForTesting");
             return {true};
-        case WGPUSType_TextureComponentSwizzleDescriptor:
-            s->Append("TextureComponentSwizzleDescriptor");
+        case WGPUSType_SharedTextureMemoryD3D11BeginState:
+            s->Append("SharedTextureMemoryD3D11BeginState");
+            return {true};
+        case WGPUSType_DawnConsumeAdapterDescriptor:
+            s->Append("DawnConsumeAdapterDescriptor");
+            return {true};
+        case WGPUSType_BindGroupLayoutDynamicBindingArray:
+            s->Append("BindGroupLayoutDynamicBindingArray");
+            return {true};
+        case WGPUSType_DynamicBindingArrayLimits:
+            s->Append("DynamicBindingArrayLimits");
+            return {true};
+        case WGPUSType_BindGroupDynamicBindingArray:
+            s->Append("BindGroupDynamicBindingArray");
+            return {true};
+        case WGPUSType_TexelBufferBindingEntry:
+            s->Append("TexelBufferBindingEntry");
+            return {true};
+        case WGPUSType_TexelBufferBindingLayout:
+            s->Append("TexelBufferBindingLayout");
+            return {true};
+        case WGPUSType_SharedTextureMemoryMetalEndAccessState:
+            s->Append("SharedTextureMemoryMetalEndAccessState");
+            return {true};
+        case WGPUSType_AdapterPropertiesWGPU:
+            s->Append("AdapterPropertiesWGPU");
+            return {true};
+        case WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor:
+            s->Append("SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor");
+            return {true};
+        case WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor:
+            s->Append("SharedTextureMemoryD3D12ResourceDescriptor");
+            return {true};
+        case WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup:
+            s->Append("RequestAdapterOptionsAngleVirtualizationGroup");
             return {true};
         default:
             break;
@@ -2321,6 +2419,29 @@ AbslFormatConvert(SurfaceGetCurrentTextureStatus value,
         }
     }
     s->Append(absl::StrFormat("%u", static_cast<WGPUSurfaceGetCurrentTextureStatus>(value)));
+    return {true};
+}
+absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+AbslFormatConvert(TexelBufferAccess value,
+                  const absl::FormatConversionSpec& spec,
+                  absl::FormatSink* s) {
+    if (spec.conversion_char() == absl::FormatConversionChar::s) {
+        s->Append("TexelBufferAccess::");
+        switch (WGPUTexelBufferAccess(value)) {
+        case WGPUTexelBufferAccess_Undefined:
+            s->Append("Undefined");
+            return {true};
+        case WGPUTexelBufferAccess_ReadOnly:
+            s->Append("ReadOnly");
+            return {true};
+        case WGPUTexelBufferAccess_ReadWrite:
+            s->Append("ReadWrite");
+            return {true};
+        default:
+            break;
+        }
+    }
+    s->Append(absl::StrFormat("%u", static_cast<WGPUTexelBufferAccess>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2406,6 +2527,12 @@ AbslFormatConvert(TextureFormat value,
         case WGPUTextureFormat_R8Sint:
             s->Append("R8Sint");
             return {true};
+        case WGPUTextureFormat_R16Unorm:
+            s->Append("R16Unorm");
+            return {true};
+        case WGPUTextureFormat_R16Snorm:
+            s->Append("R16Snorm");
+            return {true};
         case WGPUTextureFormat_R16Uint:
             s->Append("R16Uint");
             return {true};
@@ -2435,6 +2562,12 @@ AbslFormatConvert(TextureFormat value,
             return {true};
         case WGPUTextureFormat_R32Sint:
             s->Append("R32Sint");
+            return {true};
+        case WGPUTextureFormat_RG16Unorm:
+            s->Append("RG16Unorm");
+            return {true};
+        case WGPUTextureFormat_RG16Snorm:
+            s->Append("RG16Snorm");
             return {true};
         case WGPUTextureFormat_RG16Uint:
             s->Append("RG16Uint");
@@ -2486,6 +2619,12 @@ AbslFormatConvert(TextureFormat value,
             return {true};
         case WGPUTextureFormat_RG32Sint:
             s->Append("RG32Sint");
+            return {true};
+        case WGPUTextureFormat_RGBA16Unorm:
+            s->Append("RGBA16Unorm");
+            return {true};
+        case WGPUTextureFormat_RGBA16Snorm:
+            s->Append("RGBA16Snorm");
             return {true};
         case WGPUTextureFormat_RGBA16Uint:
             s->Append("RGBA16Uint");
@@ -2678,24 +2817,6 @@ AbslFormatConvert(TextureFormat value,
             return {true};
         case WGPUTextureFormat_ASTC12x12UnormSrgb:
             s->Append("ASTC12x12UnormSrgb");
-            return {true};
-        case WGPUTextureFormat_R16Unorm:
-            s->Append("R16Unorm");
-            return {true};
-        case WGPUTextureFormat_RG16Unorm:
-            s->Append("RG16Unorm");
-            return {true};
-        case WGPUTextureFormat_RGBA16Unorm:
-            s->Append("RGBA16Unorm");
-            return {true};
-        case WGPUTextureFormat_R16Snorm:
-            s->Append("R16Snorm");
-            return {true};
-        case WGPUTextureFormat_RG16Snorm:
-            s->Append("RG16Snorm");
-            return {true};
-        case WGPUTextureFormat_RGBA16Snorm:
-            s->Append("RGBA16Snorm");
             return {true};
         case WGPUTextureFormat_R8BG8Biplanar420Unorm:
             s->Append("R8BG8Biplanar420Unorm");
@@ -3020,11 +3141,26 @@ AbslFormatConvert(WGSLLanguageFeatureName value,
         case WGPUWGSLLanguageFeatureName_PointerCompositeAccess:
             s->Append("PointerCompositeAccess");
             return {true};
+        case WGPUWGSLLanguageFeatureName_UniformBufferStandardLayout:
+            s->Append("UniformBufferStandardLayout");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_SubgroupId:
+            s->Append("SubgroupId");
+            return {true};
         case WGPUWGSLLanguageFeatureName_SizedBindingArray:
             s->Append("SizedBindingArray");
             return {true};
         case WGPUWGSLLanguageFeatureName_TexelBuffers:
             s->Append("TexelBuffers");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_ChromiumPrint:
+            s->Append("ChromiumPrint");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_FragmentDepth:
+            s->Append("FragmentDepth");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
+            s->Append("ImmediateAddressSpace");
             return {true};
         case WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented:
             s->Append("ChromiumTestingUnimplemented");
@@ -3150,6 +3286,14 @@ AbslFormatConvert(BufferUsage value,
             first = false;
             s->Append("QueryResolve");
             value &= ~BufferUsage::QueryResolve;
+        }
+        if (value & BufferUsage::TexelBuffer) {
+            if (!first) {
+                s->Append("|");
+            }
+            first = false;
+            s->Append("TexelBuffer");
+            value &= ~BufferUsage::TexelBuffer;
         }
 
         if (static_cast<bool>(value)) {

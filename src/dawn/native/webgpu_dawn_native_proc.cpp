@@ -49,12 +49,17 @@ extern void NativeAdapterRelease(WGPUAdapter cSelf);
 extern void NativeAdapterInfoFreeMembers(WGPUAdapterInfo cSelf);
 extern void NativeAdapterPropertiesMemoryHeapsFreeMembers(WGPUAdapterPropertiesMemoryHeaps cSelf);
 extern void NativeAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPUAdapterPropertiesSubgroupMatrixConfigs cSelf);
+extern void NativeBindGroupDestroy(WGPUBindGroup cSelf);
+extern uint32_t NativeBindGroupInsertBinding(WGPUBindGroup cSelf, WGPUBindGroupEntryContents const * contents);
+extern WGPUStatus NativeBindGroupRemoveBinding(WGPUBindGroup cSelf, uint32_t binding);
 extern void NativeBindGroupSetLabel(WGPUBindGroup cSelf, WGPUStringView label);
+extern WGPUStatus NativeBindGroupUpdate(WGPUBindGroup cSelf, WGPUBindGroupEntry const * entry);
 extern void NativeBindGroupAddRef(WGPUBindGroup cSelf);
 extern void NativeBindGroupRelease(WGPUBindGroup cSelf);
 extern void NativeBindGroupLayoutSetLabel(WGPUBindGroupLayout cSelf, WGPUStringView label);
 extern void NativeBindGroupLayoutAddRef(WGPUBindGroupLayout cSelf);
 extern void NativeBindGroupLayoutRelease(WGPUBindGroupLayout cSelf);
+extern WGPUTexelBufferView NativeBufferCreateTexelView(WGPUBuffer cSelf, WGPUTexelBufferViewDescriptor const * descriptor);
 extern void NativeBufferDestroy(WGPUBuffer cSelf);
 extern void const * NativeBufferGetConstMappedRange(WGPUBuffer cSelf, size_t offset, size_t size);
 extern void * NativeBufferGetMappedRange(WGPUBuffer cSelf, size_t offset, size_t size);
@@ -96,7 +101,7 @@ extern void NativeComputePassEncoderInsertDebugMarker(WGPUComputePassEncoder cSe
 extern void NativeComputePassEncoderPopDebugGroup(WGPUComputePassEncoder cSelf);
 extern void NativeComputePassEncoderPushDebugGroup(WGPUComputePassEncoder cSelf, WGPUStringView groupLabel);
 extern void NativeComputePassEncoderSetBindGroup(WGPUComputePassEncoder cSelf, uint32_t groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets);
-extern void NativeComputePassEncoderSetImmediateData(WGPUComputePassEncoder cSelf, uint32_t offset, void const * data, size_t size);
+extern void NativeComputePassEncoderSetImmediates(WGPUComputePassEncoder cSelf, uint32_t offset, void const * data, size_t size);
 extern void NativeComputePassEncoderSetLabel(WGPUComputePassEncoder cSelf, WGPUStringView label);
 extern void NativeComputePassEncoderSetPipeline(WGPUComputePassEncoder cSelf, WGPUComputePipeline pipeline);
 extern void NativeComputePassEncoderWriteTimestamp(WGPUComputePassEncoder cSelf, WGPUQuerySet querySet, uint32_t queryIndex);
@@ -155,7 +160,7 @@ extern void NativeExternalTextureSetLabel(WGPUExternalTexture cSelf, WGPUStringV
 extern void NativeExternalTextureAddRef(WGPUExternalTexture cSelf);
 extern void NativeExternalTextureRelease(WGPUExternalTexture cSelf);
 extern WGPUSurface NativeInstanceCreateSurface(WGPUInstance cSelf, WGPUSurfaceDescriptor const * descriptor);
-extern WGPUStatus NativeInstanceGetWGSLLanguageFeatures(WGPUInstance cSelf, WGPUSupportedWGSLLanguageFeatures * features);
+extern void NativeInstanceGetWGSLLanguageFeatures(WGPUInstance cSelf, WGPUSupportedWGSLLanguageFeatures * features);
 extern WGPUBool NativeInstanceHasWGSLLanguageFeature(WGPUInstance cSelf, WGPUWGSLLanguageFeatureName feature);
 extern void NativeInstanceProcessEvents(WGPUInstance cSelf);
 extern WGPUFuture NativeInstanceRequestAdapter(WGPUInstance cSelf, WGPURequestAdapterOptions const * options, WGPURequestAdapterCallbackInfo callbackInfo);
@@ -192,7 +197,7 @@ extern void NativeRenderBundleEncoderInsertDebugMarker(WGPURenderBundleEncoder c
 extern void NativeRenderBundleEncoderPopDebugGroup(WGPURenderBundleEncoder cSelf);
 extern void NativeRenderBundleEncoderPushDebugGroup(WGPURenderBundleEncoder cSelf, WGPUStringView groupLabel);
 extern void NativeRenderBundleEncoderSetBindGroup(WGPURenderBundleEncoder cSelf, uint32_t groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets);
-extern void NativeRenderBundleEncoderSetImmediateData(WGPURenderBundleEncoder cSelf, uint32_t offset, void const * data, size_t size);
+extern void NativeRenderBundleEncoderSetImmediates(WGPURenderBundleEncoder cSelf, uint32_t offset, void const * data, size_t size);
 extern void NativeRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size);
 extern void NativeRenderBundleEncoderSetLabel(WGPURenderBundleEncoder cSelf, WGPUStringView label);
 extern void NativeRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder cSelf, WGPURenderPipeline pipeline);
@@ -215,7 +220,7 @@ extern void NativeRenderPassEncoderPopDebugGroup(WGPURenderPassEncoder cSelf);
 extern void NativeRenderPassEncoderPushDebugGroup(WGPURenderPassEncoder cSelf, WGPUStringView groupLabel);
 extern void NativeRenderPassEncoderSetBindGroup(WGPURenderPassEncoder cSelf, uint32_t groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets);
 extern void NativeRenderPassEncoderSetBlendConstant(WGPURenderPassEncoder cSelf, WGPUColor const * color);
-extern void NativeRenderPassEncoderSetImmediateData(WGPURenderPassEncoder cSelf, uint32_t offset, void const * data, size_t size);
+extern void NativeRenderPassEncoderSetImmediates(WGPURenderPassEncoder cSelf, uint32_t offset, void const * data, size_t size);
 extern void NativeRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size);
 extern void NativeRenderPassEncoderSetLabel(WGPURenderPassEncoder cSelf, WGPUStringView label);
 extern void NativeRenderPassEncoderSetPipeline(WGPURenderPassEncoder cSelf, WGPURenderPipeline pipeline);
@@ -270,6 +275,9 @@ extern void NativeSurfaceUnconfigure(WGPUSurface cSelf);
 extern void NativeSurfaceAddRef(WGPUSurface cSelf);
 extern void NativeSurfaceRelease(WGPUSurface cSelf);
 extern void NativeSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities cSelf);
+extern void NativeTexelBufferViewSetLabel(WGPUTexelBufferView cSelf, WGPUStringView label);
+extern void NativeTexelBufferViewAddRef(WGPUTexelBufferView cSelf);
+extern void NativeTexelBufferViewRelease(WGPUTexelBufferView cSelf);
 extern WGPUTextureView NativeTextureCreateErrorView(WGPUTexture cSelf, WGPUTextureViewDescriptor const * descriptor);
 extern WGPUTextureView NativeTextureCreateView(WGPUTexture cSelf, WGPUTextureViewDescriptor const * descriptor);
 extern void NativeTextureDestroy(WGPUTexture cSelf);
@@ -281,7 +289,9 @@ extern uint32_t NativeTextureGetMipLevelCount(WGPUTexture cSelf);
 extern uint32_t NativeTextureGetSampleCount(WGPUTexture cSelf);
 extern WGPUTextureUsage NativeTextureGetUsage(WGPUTexture cSelf);
 extern uint32_t NativeTextureGetWidth(WGPUTexture cSelf);
+extern void NativeTexturePin(WGPUTexture cSelf, WGPUTextureUsage usage);
 extern void NativeTextureSetLabel(WGPUTexture cSelf, WGPUStringView label);
+extern void NativeTextureUnpin(WGPUTexture cSelf);
 extern void NativeTextureAddRef(WGPUTexture cSelf);
 extern void NativeTextureRelease(WGPUTexture cSelf);
 extern void NativeTextureViewSetLabel(WGPUTextureView cSelf, WGPUStringView label);
@@ -361,9 +371,25 @@ extern "C" {
         return NativeAdapterPropertiesSubgroupMatrixConfigsFreeMembers(
             cSelf);
     }
+    void wgpuBindGroupDestroy(WGPUBindGroup cSelf) {
+        return NativeBindGroupDestroy(
+            cSelf);
+    }
+    uint32_t wgpuBindGroupInsertBinding(WGPUBindGroup cSelf, WGPUBindGroupEntryContents const * contents) {
+        return NativeBindGroupInsertBinding(
+            cSelf, contents);
+    }
+    WGPUStatus wgpuBindGroupRemoveBinding(WGPUBindGroup cSelf, uint32_t binding) {
+        return NativeBindGroupRemoveBinding(
+            cSelf, binding);
+    }
     void wgpuBindGroupSetLabel(WGPUBindGroup cSelf, WGPUStringView label) {
         return NativeBindGroupSetLabel(
             cSelf, label);
+    }
+    WGPUStatus wgpuBindGroupUpdate(WGPUBindGroup cSelf, WGPUBindGroupEntry const * entry) {
+        return NativeBindGroupUpdate(
+            cSelf, entry);
     }
     void wgpuBindGroupAddRef(WGPUBindGroup cSelf) {
         return NativeBindGroupAddRef(
@@ -384,6 +410,10 @@ extern "C" {
     void wgpuBindGroupLayoutRelease(WGPUBindGroupLayout cSelf) {
         return NativeBindGroupLayoutRelease(
             cSelf);
+    }
+    WGPUTexelBufferView wgpuBufferCreateTexelView(WGPUBuffer cSelf, WGPUTexelBufferViewDescriptor const * descriptor) {
+        return NativeBufferCreateTexelView(
+            cSelf, descriptor);
     }
     void wgpuBufferDestroy(WGPUBuffer cSelf) {
         return NativeBufferDestroy(
@@ -549,8 +579,8 @@ extern "C" {
         return NativeComputePassEncoderSetBindGroup(
             cSelf, groupIndex, group, dynamicOffsetCount, dynamicOffsets);
     }
-    void wgpuComputePassEncoderSetImmediateData(WGPUComputePassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
-        return NativeComputePassEncoderSetImmediateData(
+    void wgpuComputePassEncoderSetImmediates(WGPUComputePassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
+        return NativeComputePassEncoderSetImmediates(
             cSelf, offset, data, size);
     }
     void wgpuComputePassEncoderSetLabel(WGPUComputePassEncoder cSelf, WGPUStringView label) {
@@ -785,7 +815,7 @@ extern "C" {
         return NativeInstanceCreateSurface(
             cSelf, descriptor);
     }
-    WGPUStatus wgpuInstanceGetWGSLLanguageFeatures(WGPUInstance cSelf, WGPUSupportedWGSLLanguageFeatures * features) {
+    void wgpuInstanceGetWGSLLanguageFeatures(WGPUInstance cSelf, WGPUSupportedWGSLLanguageFeatures * features) {
         return NativeInstanceGetWGSLLanguageFeatures(
             cSelf, features);
     }
@@ -933,8 +963,8 @@ extern "C" {
         return NativeRenderBundleEncoderSetBindGroup(
             cSelf, groupIndex, group, dynamicOffsetCount, dynamicOffsets);
     }
-    void wgpuRenderBundleEncoderSetImmediateData(WGPURenderBundleEncoder cSelf, uint32_t offset, void const * data, size_t size) {
-        return NativeRenderBundleEncoderSetImmediateData(
+    void wgpuRenderBundleEncoderSetImmediates(WGPURenderBundleEncoder cSelf, uint32_t offset, void const * data, size_t size) {
+        return NativeRenderBundleEncoderSetImmediates(
             cSelf, offset, data, size);
     }
     void wgpuRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) {
@@ -1025,8 +1055,8 @@ extern "C" {
         return NativeRenderPassEncoderSetBlendConstant(
             cSelf, color);
     }
-    void wgpuRenderPassEncoderSetImmediateData(WGPURenderPassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
-        return NativeRenderPassEncoderSetImmediateData(
+    void wgpuRenderPassEncoderSetImmediates(WGPURenderPassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
+        return NativeRenderPassEncoderSetImmediates(
             cSelf, offset, data, size);
     }
     void wgpuRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) {
@@ -1245,6 +1275,18 @@ extern "C" {
         return NativeSurfaceCapabilitiesFreeMembers(
             cSelf);
     }
+    void wgpuTexelBufferViewSetLabel(WGPUTexelBufferView cSelf, WGPUStringView label) {
+        return NativeTexelBufferViewSetLabel(
+            cSelf, label);
+    }
+    void wgpuTexelBufferViewAddRef(WGPUTexelBufferView cSelf) {
+        return NativeTexelBufferViewAddRef(
+            cSelf);
+    }
+    void wgpuTexelBufferViewRelease(WGPUTexelBufferView cSelf) {
+        return NativeTexelBufferViewRelease(
+            cSelf);
+    }
     WGPUTextureView wgpuTextureCreateErrorView(WGPUTexture cSelf, WGPUTextureViewDescriptor const * descriptor) {
         return NativeTextureCreateErrorView(
             cSelf, descriptor);
@@ -1289,9 +1331,17 @@ extern "C" {
         return NativeTextureGetWidth(
             cSelf);
     }
+    void wgpuTexturePin(WGPUTexture cSelf, WGPUTextureUsage usage) {
+        return NativeTexturePin(
+            cSelf, usage);
+    }
     void wgpuTextureSetLabel(WGPUTexture cSelf, WGPUStringView label) {
         return NativeTextureSetLabel(
             cSelf, label);
+    }
+    void wgpuTextureUnpin(WGPUTexture cSelf) {
+        return NativeTextureUnpin(
+            cSelf);
     }
     void wgpuTextureAddRef(WGPUTexture cSelf) {
         return NativeTextureAddRef(

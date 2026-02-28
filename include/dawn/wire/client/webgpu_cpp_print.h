@@ -25,10 +25,10 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef WEBGPU_CPP_PRINT_H_
-#define WEBGPU_CPP_PRINT_H_
+#ifndef DAWN_WIRE_CLIENT_WEBGPU_CPP_PRINT_H_
+#define DAWN_WIRE_CLIENT_WEBGPU_CPP_PRINT_H_
 
-#include "webgpu/webgpu_cpp.h"
+#include "dawn/wire/client/webgpu_cpp.h"
 
 #include <iomanip>
 #include <ios>
@@ -2729,7 +2729,7 @@ namespace wgpu {
 
 }  // namespace wgpu
 
-namespace wgpu {
+namespace wgpu::dawn::wire::client {
 
   template <typename CharT, typename Traits>
   std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& o, StringView value) {
@@ -2737,6 +2737,6 @@ namespace wgpu {
       return o;
   }
 
-}  // namespace wgpu
+}  // namespace wgpu::dawn::wire::client
 
-#endif // WEBGPU_CPP_PRINT_H_
+#endif // DAWN_WIRE_CLIENT_WEBGPU_CPP_PRINT_H_

@@ -14,6 +14,8 @@ class ComboLimits : public NonMovable
         , private wgpu::CompatibilityModeLimits
     {
   public:
+    static constexpr size_t kMemberCount = 36;
+
     ComboLimits();
 
     // This is not copyable or movable to avoid surprises with nextInChain pointers becoming stale
