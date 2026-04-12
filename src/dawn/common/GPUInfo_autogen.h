@@ -142,6 +142,7 @@ bool IsQualcommPCIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId);
 // QualcommACPI architectures
 bool IsQualcommACPIAdreno6xx(PCIVendorID vendorId, PCIDeviceID deviceId);
 bool IsQualcommACPIAdreno7xx(PCIVendorID vendorId, PCIDeviceID deviceId);
+bool IsQualcommACPIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId);
 
 // Samsung architectures
 bool IsSamsungRDNA2(PCIVendorID vendorId, PCIDeviceID deviceId);

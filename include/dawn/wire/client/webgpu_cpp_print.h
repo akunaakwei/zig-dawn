@@ -275,6 +275,89 @@ namespace wgpu {
       return o;
   }
   template <typename CharT, typename Traits>
+  std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& o, ColorSpacePrimariesDawn value) {
+      switch (value) {
+      case ColorSpacePrimariesDawn::SRGB:
+        o << "ColorSpacePrimariesDawn::SRGB";
+        break;
+      case ColorSpacePrimariesDawn::Rec601:
+        o << "ColorSpacePrimariesDawn::Rec601";
+        break;
+      case ColorSpacePrimariesDawn::Rec2020:
+        o << "ColorSpacePrimariesDawn::Rec2020";
+        break;
+      case ColorSpacePrimariesDawn::DisplayP3:
+        o << "ColorSpacePrimariesDawn::DisplayP3";
+        break;
+          default:
+            o << "ColorSpacePrimariesDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorSpacePrimariesDawn>::type>(value);
+      }
+      return o;
+  }
+  template <typename CharT, typename Traits>
+  std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& o, ColorSpaceTransferDawn value) {
+      switch (value) {
+      case ColorSpaceTransferDawn::Identity:
+        o << "ColorSpaceTransferDawn::Identity";
+        break;
+      case ColorSpaceTransferDawn::SRGB:
+        o << "ColorSpaceTransferDawn::SRGB";
+        break;
+      case ColorSpaceTransferDawn::DisplayP3:
+        o << "ColorSpaceTransferDawn::DisplayP3";
+        break;
+      case ColorSpaceTransferDawn::SMPTE_170M:
+        o << "ColorSpaceTransferDawn::SMPTE_170M";
+        break;
+      case ColorSpaceTransferDawn::HLG:
+        o << "ColorSpaceTransferDawn::HLG";
+        break;
+      case ColorSpaceTransferDawn::PQ:
+        o << "ColorSpaceTransferDawn::PQ";
+        break;
+          default:
+            o << "ColorSpaceTransferDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorSpaceTransferDawn>::type>(value);
+      }
+      return o;
+  }
+  template <typename CharT, typename Traits>
+  std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& o, ColorSpaceYCbCrMatrixDawn value) {
+      switch (value) {
+      case ColorSpaceYCbCrMatrixDawn::Identity:
+        o << "ColorSpaceYCbCrMatrixDawn::Identity";
+        break;
+      case ColorSpaceYCbCrMatrixDawn::Rec601:
+        o << "ColorSpaceYCbCrMatrixDawn::Rec601";
+        break;
+      case ColorSpaceYCbCrMatrixDawn::Rec709:
+        o << "ColorSpaceYCbCrMatrixDawn::Rec709";
+        break;
+      case ColorSpaceYCbCrMatrixDawn::Rec2020:
+        o << "ColorSpaceYCbCrMatrixDawn::Rec2020";
+        break;
+          default:
+            o << "ColorSpaceYCbCrMatrixDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorSpaceYCbCrMatrixDawn>::type>(value);
+      }
+      return o;
+  }
+  template <typename CharT, typename Traits>
+  std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& o, ColorSpaceYCbCrRangeDawn value) {
+      switch (value) {
+      case ColorSpaceYCbCrRangeDawn::Identity:
+        o << "ColorSpaceYCbCrRangeDawn::Identity";
+        break;
+      case ColorSpaceYCbCrRangeDawn::Narrow:
+        o << "ColorSpaceYCbCrRangeDawn::Narrow";
+        break;
+      case ColorSpaceYCbCrRangeDawn::Full:
+        o << "ColorSpaceYCbCrRangeDawn::Full";
+        break;
+          default:
+            o << "ColorSpaceYCbCrRangeDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorSpaceYCbCrRangeDawn>::type>(value);
+      }
+      return o;
+  }
+  template <typename CharT, typename Traits>
   std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& o, CompareFunction value) {
       switch (value) {
       case CompareFunction::Undefined:
@@ -778,6 +861,24 @@ namespace wgpu {
       case FeatureName::AtomicVec2uMinMax:
         o << "FeatureName::AtomicVec2uMinMax";
         break;
+      case FeatureName::Unorm16FormatsForExternalTexture:
+        o << "FeatureName::Unorm16FormatsForExternalTexture";
+        break;
+      case FeatureName::OpaqueYCbCrAndroidForExternalTexture:
+        o << "FeatureName::OpaqueYCbCrAndroidForExternalTexture";
+        break;
+      case FeatureName::Unorm16Filterable:
+        o << "FeatureName::Unorm16Filterable";
+        break;
+      case FeatureName::RenderPassRenderArea:
+        o << "FeatureName::RenderPassRenderArea";
+        break;
+      case FeatureName::DawnNativeSpontaneousQueueEvents:
+        o << "FeatureName::DawnNativeSpontaneousQueueEvents";
+        break;
+      case FeatureName::AdapterPropertiesDrm:
+        o << "FeatureName::AdapterPropertiesDrm";
+        break;
           default:
             o << "FeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<FeatureName>::type>(value);
       }
@@ -970,6 +1071,12 @@ namespace wgpu {
         break;
       case PredefinedColorSpace::DisplayP3:
         o << "PredefinedColorSpace::DisplayP3";
+        break;
+      case PredefinedColorSpace::SRGBLinear:
+        o << "PredefinedColorSpace::SRGBLinear";
+        break;
+      case PredefinedColorSpace::DisplayP3Linear:
+        o << "PredefinedColorSpace::DisplayP3Linear";
         break;
           default:
             o << "PredefinedColorSpace::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<PredefinedColorSpace>::type>(value);
@@ -1270,20 +1377,20 @@ namespace wgpu {
       case SType::TextureComponentSwizzleDescriptor:
         o << "SType::TextureComponentSwizzleDescriptor";
         break;
-      case SType::CompatibilityModeLimits:
-        o << "SType::CompatibilityModeLimits";
-        break;
-      case SType::TextureBindingViewDimensionDescriptor:
-        o << "SType::TextureBindingViewDimensionDescriptor";
-        break;
-      case SType::SurfaceDescriptorFromWindowsCoreWindow:
-        o << "SType::SurfaceDescriptorFromWindowsCoreWindow";
+      case SType::ExternalTextureBindingLayout:
+        o << "SType::ExternalTextureBindingLayout";
         break;
       case SType::ExternalTextureBindingEntry:
         o << "SType::ExternalTextureBindingEntry";
         break;
-      case SType::ExternalTextureBindingLayout:
-        o << "SType::ExternalTextureBindingLayout";
+      case SType::CompatibilityModeLimits:
+        o << "SType::CompatibilityModeLimits";
+        break;
+      case SType::TextureBindingViewDimension:
+        o << "SType::TextureBindingViewDimension";
+        break;
+      case SType::SurfaceDescriptorFromWindowsCoreWindow:
+        o << "SType::SurfaceDescriptorFromWindowsCoreWindow";
         break;
       case SType::SurfaceDescriptorFromWindowsUWPSwapChainPanel:
         o << "SType::SurfaceDescriptorFromWindowsUWPSwapChainPanel";
@@ -1357,8 +1464,8 @@ namespace wgpu {
       case SType::ColorTargetStateExpandResolveTextureDawn:
         o << "SType::ColorTargetStateExpandResolveTextureDawn";
         break;
-      case SType::RenderPassDescriptorExpandResolveRect:
-        o << "SType::RenderPassDescriptorExpandResolveRect";
+      case SType::RenderPassRenderAreaRect:
+        o << "SType::RenderPassRenderAreaRect";
         break;
       case SType::SharedTextureMemoryVkDedicatedAllocationDescriptor:
         o << "SType::SharedTextureMemoryVkDedicatedAllocationDescriptor";
@@ -1518,6 +1625,9 @@ namespace wgpu {
         break;
       case SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
         o << "SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs";
+        break;
+      case SType::AdapterPropertiesDrm:
+        o << "SType::AdapterPropertiesDrm";
         break;
           default:
             o << "SType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<SType>::type>(value);
@@ -2241,6 +2351,12 @@ namespace wgpu {
       case WGSLLanguageFeatureName::TextureAndSamplerLet:
         o << "WGSLLanguageFeatureName::TextureAndSamplerLet";
         break;
+      case WGSLLanguageFeatureName::SubgroupUniformity:
+        o << "WGSLLanguageFeatureName::SubgroupUniformity";
+        break;
+      case WGSLLanguageFeatureName::TextureFormatsTier1:
+        o << "WGSLLanguageFeatureName::TextureFormatsTier1";
+        break;
       case WGSLLanguageFeatureName::ChromiumTestingUnimplemented:
         o << "WGSLLanguageFeatureName::ChromiumTestingUnimplemented";
         break;
@@ -2270,9 +2386,6 @@ namespace wgpu {
         break;
       case WGSLLanguageFeatureName::ImmediateAddressSpace:
         o << "WGSLLanguageFeatureName::ImmediateAddressSpace";
-        break;
-      case WGSLLanguageFeatureName::SubgroupUniformity:
-        o << "WGSLLanguageFeatureName::SubgroupUniformity";
         break;
       case WGSLLanguageFeatureName::BufferView:
         o << "WGSLLanguageFeatureName::BufferView";

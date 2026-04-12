@@ -18,6 +18,10 @@ namespace dawn::native {
     MaybeError ValidateBufferBindingType(wgpu::BufferBindingType value);
     MaybeError ValidateBufferMapState(wgpu::BufferMapState value);
     MaybeError ValidateCallbackMode(wgpu::CallbackMode value);
+    MaybeError ValidateColorSpacePrimariesDawn(wgpu::ColorSpacePrimariesDawn value);
+    MaybeError ValidateColorSpaceTransferDawn(wgpu::ColorSpaceTransferDawn value);
+    MaybeError ValidateColorSpaceYCbCrMatrixDawn(wgpu::ColorSpaceYCbCrMatrixDawn value);
+    MaybeError ValidateColorSpaceYCbCrRangeDawn(wgpu::ColorSpaceYCbCrRangeDawn value);
     MaybeError ValidateCompareFunction(wgpu::CompareFunction value);
     MaybeError ValidateCompilationInfoRequestStatus(wgpu::CompilationInfoRequestStatus value);
     MaybeError ValidateCompilationMessageType(wgpu::CompilationMessageType value);

@@ -156,8 +156,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -182,8 +181,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -301,8 +299,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -347,8 +344,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -696,8 +692,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -1183,8 +1178,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -1285,8 +1279,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -1340,8 +1333,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -1402,8 +1394,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -1466,8 +1457,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -1957,8 +1947,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -2051,8 +2040,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -2087,8 +2075,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -2169,8 +2156,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -2206,6 +2192,16 @@ namespace dawn::native {
         auto deviceGuard = device->GetGuard();
 
         self->APIExportInfo(info_);
+    }
+
+    void NativeSharedFenceSetLabel(WGPUSharedFence cSelf, WGPUStringView label) {
+        auto self = FromAPI(cSelf);
+
+        auto label_ = *reinterpret_cast<StringView*>(&label);
+        auto device = self->GetDevice();
+        auto deviceGuard = device->GetGuard();
+
+        self->APISetLabel(label_);
     }
 
     void NativeSharedFenceAddRef(WGPUSharedFence cSelf) {
@@ -2284,8 +2280,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -2416,8 +2411,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -2462,8 +2456,7 @@ namespace dawn::native {
     void NativeTextureDestroy(WGPUTexture cSelf) {
         auto self = FromAPI(cSelf);
 
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APIDestroy();
     }
@@ -2563,8 +2556,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -2608,8 +2600,7 @@ namespace dawn::native {
         auto self = FromAPI(cSelf);
 
         auto label_ = *reinterpret_cast<StringView*>(&label);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
+        // This method is specified to not use AutoLock in json script or it returns a future.
 
         self->APISetLabel(label_);
     }
@@ -2882,6 +2873,7 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeSharedFenceAddRef), "wgpuSharedFenceAddRef" },
             { reinterpret_cast<WGPUProc>(NativeSharedFenceExportInfo), "wgpuSharedFenceExportInfo" },
             { reinterpret_cast<WGPUProc>(NativeSharedFenceRelease), "wgpuSharedFenceRelease" },
+            { reinterpret_cast<WGPUProc>(NativeSharedFenceSetLabel), "wgpuSharedFenceSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeSharedTextureMemoryAddRef), "wgpuSharedTextureMemoryAddRef" },
             { reinterpret_cast<WGPUProc>(NativeSharedTextureMemoryBeginAccess), "wgpuSharedTextureMemoryBeginAccess" },
             { reinterpret_cast<WGPUProc>(NativeSharedTextureMemoryCreateTexture), "wgpuSharedTextureMemoryCreateTexture" },
@@ -3213,6 +3205,7 @@ namespace dawn::native {
         procs.sharedBufferMemoryRelease = NativeSharedBufferMemoryRelease;
         procs.sharedBufferMemoryEndAccessStateFreeMembers = NativeSharedBufferMemoryEndAccessStateFreeMembers;
         procs.sharedFenceExportInfo = NativeSharedFenceExportInfo;
+        procs.sharedFenceSetLabel = NativeSharedFenceSetLabel;
         procs.sharedFenceAddRef = NativeSharedFenceAddRef;
         procs.sharedFenceRelease = NativeSharedFenceRelease;
         procs.sharedTextureMemoryBeginAccess = NativeSharedTextureMemoryBeginAccess;

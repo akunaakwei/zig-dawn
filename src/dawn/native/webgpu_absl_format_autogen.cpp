@@ -138,27 +138,6 @@ namespace dawn::native {
         return AbslFormatConvert(*value, spec, s);
     }
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
-    AbslFormatConvert(const SharedBufferMemoryDescriptor* value,
-                      const absl::FormatConversionSpec& spec,
-                      absl::FormatSink* s) {
-        if (value == nullptr) {
-            s->Append("[null]");
-            return {true};
-        }
-        s->Append("[SharedBufferMemoryDescriptor");
-        if (value->label.data != nullptr) {
-            s->Append(absl::StrFormat(" \"%s\"", value->label));
-        }
-        s->Append("]");
-        return {true};
-    }
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
-    AbslFormatConvert(const UnpackedPtr<SharedBufferMemoryDescriptor>& value,
-                      const absl::FormatConversionSpec& spec,
-                      absl::FormatSink* s) {
-        return AbslFormatConvert(*value, spec, s);
-    }
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
     AbslFormatConvert(const TexelBufferViewDescriptor* value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s) {
@@ -301,6 +280,27 @@ namespace dawn::native {
     }
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
     AbslFormatConvert(const UnpackedPtr<ShaderModuleDescriptor>& value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s) {
+        return AbslFormatConvert(*value, spec, s);
+    }
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+    AbslFormatConvert(const SharedBufferMemoryDescriptor* value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s) {
+        if (value == nullptr) {
+            s->Append("[null]");
+            return {true};
+        }
+        s->Append("[SharedBufferMemoryDescriptor");
+        if (value->label.data != nullptr) {
+            s->Append(absl::StrFormat(" \"%s\"", value->label));
+        }
+        s->Append("]");
+        return {true};
+    }
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+    AbslFormatConvert(const UnpackedPtr<SharedBufferMemoryDescriptor>& value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s) {
         return AbslFormatConvert(*value, spec, s);
@@ -855,6 +855,113 @@ AbslFormatConvert(CallbackMode value,
         }
     }
     s->Append(absl::StrFormat("%u", static_cast<WGPUCallbackMode>(value)));
+    return {true};
+}
+absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+AbslFormatConvert(ColorSpacePrimariesDawn value,
+                  const absl::FormatConversionSpec& spec,
+                  absl::FormatSink* s) {
+    if (spec.conversion_char() == absl::FormatConversionChar::s) {
+        s->Append("ColorSpacePrimariesDawn::");
+        switch (WGPUColorSpacePrimariesDawn(value)) {
+        case WGPUColorSpacePrimariesDawn_SRGB:
+            s->Append("SRGB");
+            return {true};
+        case WGPUColorSpacePrimariesDawn_Rec601:
+            s->Append("Rec601");
+            return {true};
+        case WGPUColorSpacePrimariesDawn_Rec2020:
+            s->Append("Rec2020");
+            return {true};
+        case WGPUColorSpacePrimariesDawn_DisplayP3:
+            s->Append("DisplayP3");
+            return {true};
+        default:
+            break;
+        }
+    }
+    s->Append(absl::StrFormat("%u", static_cast<WGPUColorSpacePrimariesDawn>(value)));
+    return {true};
+}
+absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+AbslFormatConvert(ColorSpaceTransferDawn value,
+                  const absl::FormatConversionSpec& spec,
+                  absl::FormatSink* s) {
+    if (spec.conversion_char() == absl::FormatConversionChar::s) {
+        s->Append("ColorSpaceTransferDawn::");
+        switch (WGPUColorSpaceTransferDawn(value)) {
+        case WGPUColorSpaceTransferDawn_Identity:
+            s->Append("Identity");
+            return {true};
+        case WGPUColorSpaceTransferDawn_SRGB:
+            s->Append("SRGB");
+            return {true};
+        case WGPUColorSpaceTransferDawn_DisplayP3:
+            s->Append("DisplayP3");
+            return {true};
+        case WGPUColorSpaceTransferDawn_SMPTE_170M:
+            s->Append("SMPTE_170M");
+            return {true};
+        case WGPUColorSpaceTransferDawn_HLG:
+            s->Append("HLG");
+            return {true};
+        case WGPUColorSpaceTransferDawn_PQ:
+            s->Append("PQ");
+            return {true};
+        default:
+            break;
+        }
+    }
+    s->Append(absl::StrFormat("%u", static_cast<WGPUColorSpaceTransferDawn>(value)));
+    return {true};
+}
+absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+AbslFormatConvert(ColorSpaceYCbCrMatrixDawn value,
+                  const absl::FormatConversionSpec& spec,
+                  absl::FormatSink* s) {
+    if (spec.conversion_char() == absl::FormatConversionChar::s) {
+        s->Append("ColorSpaceYCbCrMatrixDawn::");
+        switch (WGPUColorSpaceYCbCrMatrixDawn(value)) {
+        case WGPUColorSpaceYCbCrMatrixDawn_Identity:
+            s->Append("Identity");
+            return {true};
+        case WGPUColorSpaceYCbCrMatrixDawn_Rec601:
+            s->Append("Rec601");
+            return {true};
+        case WGPUColorSpaceYCbCrMatrixDawn_Rec709:
+            s->Append("Rec709");
+            return {true};
+        case WGPUColorSpaceYCbCrMatrixDawn_Rec2020:
+            s->Append("Rec2020");
+            return {true};
+        default:
+            break;
+        }
+    }
+    s->Append(absl::StrFormat("%u", static_cast<WGPUColorSpaceYCbCrMatrixDawn>(value)));
+    return {true};
+}
+absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+AbslFormatConvert(ColorSpaceYCbCrRangeDawn value,
+                  const absl::FormatConversionSpec& spec,
+                  absl::FormatSink* s) {
+    if (spec.conversion_char() == absl::FormatConversionChar::s) {
+        s->Append("ColorSpaceYCbCrRangeDawn::");
+        switch (WGPUColorSpaceYCbCrRangeDawn(value)) {
+        case WGPUColorSpaceYCbCrRangeDawn_Identity:
+            s->Append("Identity");
+            return {true};
+        case WGPUColorSpaceYCbCrRangeDawn_Narrow:
+            s->Append("Narrow");
+            return {true};
+        case WGPUColorSpaceYCbCrRangeDawn_Full:
+            s->Append("Full");
+            return {true};
+        default:
+            break;
+        }
+    }
+    s->Append(absl::StrFormat("%u", static_cast<WGPUColorSpaceYCbCrRangeDawn>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1437,6 +1544,24 @@ AbslFormatConvert(FeatureName value,
         case WGPUFeatureName_AtomicVec2uMinMax:
             s->Append("AtomicVec2uMinMax");
             return {true};
+        case WGPUFeatureName_Unorm16FormatsForExternalTexture:
+            s->Append("Unorm16FormatsForExternalTexture");
+            return {true};
+        case WGPUFeatureName_OpaqueYCbCrAndroidForExternalTexture:
+            s->Append("OpaqueYCbCrAndroidForExternalTexture");
+            return {true};
+        case WGPUFeatureName_Unorm16Filterable:
+            s->Append("Unorm16Filterable");
+            return {true};
+        case WGPUFeatureName_RenderPassRenderArea:
+            s->Append("RenderPassRenderArea");
+            return {true};
+        case WGPUFeatureName_DawnNativeSpontaneousQueueEvents:
+            s->Append("DawnNativeSpontaneousQueueEvents");
+            return {true};
+        case WGPUFeatureName_AdapterPropertiesDrm:
+            s->Append("AdapterPropertiesDrm");
+            return {true};
         default:
             break;
         }
@@ -1718,6 +1843,12 @@ AbslFormatConvert(PredefinedColorSpace value,
             return {true};
         case WGPUPredefinedColorSpace_DisplayP3:
             s->Append("DisplayP3");
+            return {true};
+        case WGPUPredefinedColorSpace_SRGBLinear:
+            s->Append("SRGBLinear");
+            return {true};
+        case WGPUPredefinedColorSpace_DisplayP3Linear:
+            s->Append("DisplayP3Linear");
             return {true};
         default:
             break;
@@ -2096,20 +2227,20 @@ AbslFormatConvert(SType value,
         case WGPUSType_TextureComponentSwizzleDescriptor:
             s->Append("TextureComponentSwizzleDescriptor");
             return {true};
-        case WGPUSType_CompatibilityModeLimits:
-            s->Append("CompatibilityModeLimits");
-            return {true};
-        case WGPUSType_TextureBindingViewDimensionDescriptor:
-            s->Append("TextureBindingViewDimensionDescriptor");
-            return {true};
-        case WGPUSType_SurfaceDescriptorFromWindowsCoreWindow:
-            s->Append("SurfaceDescriptorFromWindowsCoreWindow");
+        case WGPUSType_ExternalTextureBindingLayout:
+            s->Append("ExternalTextureBindingLayout");
             return {true};
         case WGPUSType_ExternalTextureBindingEntry:
             s->Append("ExternalTextureBindingEntry");
             return {true};
-        case WGPUSType_ExternalTextureBindingLayout:
-            s->Append("ExternalTextureBindingLayout");
+        case WGPUSType_CompatibilityModeLimits:
+            s->Append("CompatibilityModeLimits");
+            return {true};
+        case WGPUSType_TextureBindingViewDimension:
+            s->Append("TextureBindingViewDimension");
+            return {true};
+        case WGPUSType_SurfaceDescriptorFromWindowsCoreWindow:
+            s->Append("SurfaceDescriptorFromWindowsCoreWindow");
             return {true};
         case WGPUSType_SurfaceDescriptorFromWindowsUWPSwapChainPanel:
             s->Append("SurfaceDescriptorFromWindowsUWPSwapChainPanel");
@@ -2183,8 +2314,8 @@ AbslFormatConvert(SType value,
         case WGPUSType_ColorTargetStateExpandResolveTextureDawn:
             s->Append("ColorTargetStateExpandResolveTextureDawn");
             return {true};
-        case WGPUSType_RenderPassDescriptorExpandResolveRect:
-            s->Append("RenderPassDescriptorExpandResolveRect");
+        case WGPUSType_RenderPassRenderAreaRect:
+            s->Append("RenderPassRenderAreaRect");
             return {true};
         case WGPUSType_SharedTextureMemoryVkDedicatedAllocationDescriptor:
             s->Append("SharedTextureMemoryVkDedicatedAllocationDescriptor");
@@ -2344,6 +2475,9 @@ AbslFormatConvert(SType value,
             return {true};
         case WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
             s->Append("AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
+            return {true};
+        case WGPUSType_AdapterPropertiesDrm:
+            s->Append("AdapterPropertiesDrm");
             return {true};
         default:
             break;
@@ -3145,6 +3279,12 @@ AbslFormatConvert(WGSLLanguageFeatureName value,
         case WGPUWGSLLanguageFeatureName_TextureAndSamplerLet:
             s->Append("TextureAndSamplerLet");
             return {true};
+        case WGPUWGSLLanguageFeatureName_SubgroupUniformity:
+            s->Append("SubgroupUniformity");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_TextureFormatsTier1:
+            s->Append("TextureFormatsTier1");
+            return {true};
         case WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented:
             s->Append("ChromiumTestingUnimplemented");
             return {true};
@@ -3174,9 +3314,6 @@ AbslFormatConvert(WGSLLanguageFeatureName value,
             return {true};
         case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
             s->Append("ImmediateAddressSpace");
-            return {true};
-        case WGPUWGSLLanguageFeatureName_SubgroupUniformity:
-            s->Append("SubgroupUniformity");
             return {true};
         case WGPUWGSLLanguageFeatureName_BufferView:
             s->Append("BufferView");

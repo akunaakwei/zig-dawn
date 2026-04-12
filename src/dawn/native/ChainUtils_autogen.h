@@ -80,20 +80,20 @@ template <>
 constexpr inline wgpu::SType STypeForImpl<TextureComponentSwizzleDescriptor> =
     wgpu::SType::TextureComponentSwizzleDescriptor;
 template <>
-constexpr inline wgpu::SType STypeForImpl<CompatibilityModeLimits> =
-    wgpu::SType::CompatibilityModeLimits;
-template <>
-constexpr inline wgpu::SType STypeForImpl<TextureBindingViewDimensionDescriptor> =
-    wgpu::SType::TextureBindingViewDimensionDescriptor;
-template <>
-constexpr inline wgpu::SType STypeForImpl<SurfaceDescriptorFromWindowsCoreWindow> =
-    wgpu::SType::SurfaceDescriptorFromWindowsCoreWindow;
+constexpr inline wgpu::SType STypeForImpl<ExternalTextureBindingLayout> =
+    wgpu::SType::ExternalTextureBindingLayout;
 template <>
 constexpr inline wgpu::SType STypeForImpl<ExternalTextureBindingEntry> =
     wgpu::SType::ExternalTextureBindingEntry;
 template <>
-constexpr inline wgpu::SType STypeForImpl<ExternalTextureBindingLayout> =
-    wgpu::SType::ExternalTextureBindingLayout;
+constexpr inline wgpu::SType STypeForImpl<CompatibilityModeLimits> =
+    wgpu::SType::CompatibilityModeLimits;
+template <>
+constexpr inline wgpu::SType STypeForImpl<TextureBindingViewDimension> =
+    wgpu::SType::TextureBindingViewDimension;
+template <>
+constexpr inline wgpu::SType STypeForImpl<SurfaceDescriptorFromWindowsCoreWindow> =
+    wgpu::SType::SurfaceDescriptorFromWindowsCoreWindow;
 template <>
 constexpr inline wgpu::SType STypeForImpl<SurfaceDescriptorFromWindowsUWPSwapChainPanel> =
     wgpu::SType::SurfaceDescriptorFromWindowsUWPSwapChainPanel;
@@ -155,8 +155,8 @@ template <>
 constexpr inline wgpu::SType STypeForImpl<ColorTargetStateExpandResolveTextureDawn> =
     wgpu::SType::ColorTargetStateExpandResolveTextureDawn;
 template <>
-constexpr inline wgpu::SType STypeForImpl<RenderPassDescriptorExpandResolveRect> =
-    wgpu::SType::RenderPassDescriptorExpandResolveRect;
+constexpr inline wgpu::SType STypeForImpl<RenderPassRenderAreaRect> =
+    wgpu::SType::RenderPassRenderAreaRect;
 template <>
 constexpr inline wgpu::SType STypeForImpl<SharedTextureMemoryVkDedicatedAllocationDescriptor> =
     wgpu::SType::SharedTextureMemoryVkDedicatedAllocationDescriptor;
@@ -290,11 +290,17 @@ template <>
 constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesWGPU> =
     wgpu::SType::AdapterPropertiesWGPU;
 template <>
+constexpr inline wgpu::SType STypeForImpl<SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor> =
+    wgpu::SType::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor;
+template <>
 constexpr inline wgpu::SType STypeForImpl<PipelineLayoutResourceTable> =
     wgpu::SType::PipelineLayoutResourceTable;
 template <>
 constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesExplicitComputeSubgroupSizeConfigs> =
     wgpu::SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs;
+template <>
+constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesDrm> =
+    wgpu::SType::AdapterPropertiesDrm;
 
 template <typename Arg, typename... Rest>
 std::string STypesToString() {
@@ -364,6 +370,15 @@ struct UnpackedPtrTypeFor<BufferBindingLayout> {
 };
 template <>
 constexpr inline Extensibility ExtensibilityFor<BufferBindingLayout> = Extensibility::In;
+
+template <>
+struct UnpackedPtrTypeFor<ColorSpaceDawn> {
+    using Type = UnpackedPtrChain<
+        AdditionalExtensions<ColorSpaceDawn>::List
+    >::Type;
+};
+template <>
+constexpr inline Extensibility ExtensibilityFor<ColorSpaceDawn> = Extensibility::In;
 
 template <>
 struct UnpackedPtrTypeFor<CommandBufferDescriptor> {
@@ -508,15 +523,6 @@ struct UnpackedPtrTypeFor<SharedBufferMemoryBeginAccessDescriptor> {
 };
 template <>
 constexpr inline Extensibility ExtensibilityFor<SharedBufferMemoryBeginAccessDescriptor> = Extensibility::In;
-
-template <>
-struct UnpackedPtrTypeFor<SharedBufferMemoryDescriptor> {
-    using Type = UnpackedPtrChain<
-        AdditionalExtensions<SharedBufferMemoryDescriptor>::List
-    >::Type;
-};
-template <>
-constexpr inline Extensibility ExtensibilityFor<SharedBufferMemoryDescriptor> = Extensibility::In;
 
 template <>
 struct UnpackedPtrTypeFor<SharedBufferMemoryEndAccessState> {
@@ -777,6 +783,16 @@ template <>
 constexpr inline Extensibility ExtensibilityFor<ShaderModuleDescriptor> = Extensibility::In;
 
 template <>
+struct UnpackedPtrTypeFor<SharedBufferMemoryDescriptor> {
+    using Type = UnpackedPtrChain<
+        AdditionalExtensions<SharedBufferMemoryDescriptor>::List
+        , const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*
+    >::Type;
+};
+template <>
+constexpr inline Extensibility ExtensibilityFor<SharedBufferMemoryDescriptor> = Extensibility::In;
+
+template <>
 struct UnpackedPtrTypeFor<SharedFenceDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<SharedFenceDescriptor>::List
@@ -841,7 +857,7 @@ template <>
 struct UnpackedPtrTypeFor<TextureDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<TextureDescriptor>::List
-        , const TextureBindingViewDimensionDescriptor*
+        , const TextureBindingViewDimension*
         , const DawnTextureInternalUsageDescriptor*
     >::Type;
 };
@@ -865,6 +881,7 @@ struct UnpackedPtrTypeFor<AdapterInfo> {
         , AdapterPropertiesMemoryHeaps*
         , AdapterPropertiesD3D*
         , AdapterPropertiesVk*
+        , AdapterPropertiesDrm*
         , AdapterPropertiesWGPU*
         , AdapterPropertiesSubgroupMatrixConfigs*
         , AdapterPropertiesExplicitComputeSubgroupSizeConfigs*
@@ -1027,7 +1044,7 @@ struct UnpackedPtrTypeFor<RenderPassDescriptor> {
         AdditionalExtensions<RenderPassDescriptor>::List
         , const DawnRenderPassSampleCount*
         , const RenderPassMaxDrawCount*
-        , const RenderPassDescriptorExpandResolveRect*
+        , const RenderPassRenderAreaRect*
         , const RenderPassDescriptorResolveRect*
         , const RenderPassPixelLocalStorage*
     >::Type;

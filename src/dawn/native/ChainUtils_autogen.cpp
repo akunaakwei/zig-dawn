@@ -205,6 +205,72 @@ ResultOrError<UnpackedPtr<BufferBindingLayout>> ValidateAndUnpack<BufferBindingL
     return result;
 }
 template <>
+UnpackedPtr<ColorSpaceDawn> Unpack<ColorSpaceDawn>(typename UnpackedPtr<ColorSpaceDawn>::PtrType chain) {
+    UnpackedPtr<ColorSpaceDawn> result(chain);
+    for (typename UnpackedPtr<ColorSpaceDawn>::ChainType next = chain->nextInChain;
+         next != nullptr;
+         next = next->nextInChain) {
+        switch (next->sType) {
+            default: {
+                using Unpacker =
+                    AdditionalExtensionUnpacker<
+                        ColorSpaceDawn,
+                        UnpackedPtr<ColorSpaceDawn>,
+                        detail::AdditionalExtensions<ColorSpaceDawn>::List>;
+                Unpacker::Unpack(result.mUnpacked, result.mBitset, next, nullptr);
+                break;
+            }
+        }
+    }
+    return result;
+}
+template <>
+ResultOrError<UnpackedPtr<ColorSpaceDawn>> ValidateAndUnpack<ColorSpaceDawn>(
+    typename UnpackedPtr<ColorSpaceDawn>::PtrType chain) {
+    UnpackedPtr<ColorSpaceDawn> result(chain);
+    for (typename UnpackedPtr<ColorSpaceDawn>::ChainType next = chain->nextInChain;
+         next != nullptr;
+         next = next->nextInChain) {
+        bool duplicate = false;
+        switch (next->sType) {
+            default: {
+                using Unpacker =
+                    AdditionalExtensionUnpacker<
+                        ColorSpaceDawn,
+                        UnpackedPtr<ColorSpaceDawn>,
+                        detail::AdditionalExtensions<ColorSpaceDawn>::List>;
+                if (!Unpacker::Unpack(result.mUnpacked,
+                                      result.mBitset,
+                                      next,
+                                      &duplicate)) {
+                    if (next->sType == wgpu::SType::DawnInjectedInvalidSType) {
+                        // TODO(crbug.com/399470698): Need to reinterpret cast to base C type
+                        // for now because in/out typing are differentiated in C++ bindings.
+                        auto* ext = reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(next);
+                        return DAWN_VALIDATION_ERROR(
+                            "Unexpected chained struct of type %s found on %s chain.",
+                            wgpu::SType(ext->invalidSType), "ColorSpaceDawn"
+                        );
+                    } else {
+                        return DAWN_VALIDATION_ERROR(
+                            "Unexpected chained struct of type %s found on %s chain.",
+                            next->sType, "ColorSpaceDawn"
+                        );
+                    }
+                }
+                break;
+            }
+        }
+        if (duplicate) {
+            return DAWN_VALIDATION_ERROR(
+                "Duplicate chained struct of type %s found on %s chain.",
+                next->sType, "ColorSpaceDawn"
+            );
+        }
+    }
+    return result;
+}
+template <>
 UnpackedPtr<CommandBufferDescriptor> Unpack<CommandBufferDescriptor>(typename UnpackedPtr<CommandBufferDescriptor>::PtrType chain) {
     UnpackedPtr<CommandBufferDescriptor> result(chain);
     for (typename UnpackedPtr<CommandBufferDescriptor>::ChainType next = chain->nextInChain;
@@ -1255,72 +1321,6 @@ ResultOrError<UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>> ValidateAndU
             return DAWN_VALIDATION_ERROR(
                 "Duplicate chained struct of type %s found on %s chain.",
                 next->sType, "SharedBufferMemoryBeginAccessDescriptor"
-            );
-        }
-    }
-    return result;
-}
-template <>
-UnpackedPtr<SharedBufferMemoryDescriptor> Unpack<SharedBufferMemoryDescriptor>(typename UnpackedPtr<SharedBufferMemoryDescriptor>::PtrType chain) {
-    UnpackedPtr<SharedBufferMemoryDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryDescriptor>::ChainType next = chain->nextInChain;
-         next != nullptr;
-         next = next->nextInChain) {
-        switch (next->sType) {
-            default: {
-                using Unpacker =
-                    AdditionalExtensionUnpacker<
-                        SharedBufferMemoryDescriptor,
-                        UnpackedPtr<SharedBufferMemoryDescriptor>,
-                        detail::AdditionalExtensions<SharedBufferMemoryDescriptor>::List>;
-                Unpacker::Unpack(result.mUnpacked, result.mBitset, next, nullptr);
-                break;
-            }
-        }
-    }
-    return result;
-}
-template <>
-ResultOrError<UnpackedPtr<SharedBufferMemoryDescriptor>> ValidateAndUnpack<SharedBufferMemoryDescriptor>(
-    typename UnpackedPtr<SharedBufferMemoryDescriptor>::PtrType chain) {
-    UnpackedPtr<SharedBufferMemoryDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryDescriptor>::ChainType next = chain->nextInChain;
-         next != nullptr;
-         next = next->nextInChain) {
-        bool duplicate = false;
-        switch (next->sType) {
-            default: {
-                using Unpacker =
-                    AdditionalExtensionUnpacker<
-                        SharedBufferMemoryDescriptor,
-                        UnpackedPtr<SharedBufferMemoryDescriptor>,
-                        detail::AdditionalExtensions<SharedBufferMemoryDescriptor>::List>;
-                if (!Unpacker::Unpack(result.mUnpacked,
-                                      result.mBitset,
-                                      next,
-                                      &duplicate)) {
-                    if (next->sType == wgpu::SType::DawnInjectedInvalidSType) {
-                        // TODO(crbug.com/399470698): Need to reinterpret cast to base C type
-                        // for now because in/out typing are differentiated in C++ bindings.
-                        auto* ext = reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(next);
-                        return DAWN_VALIDATION_ERROR(
-                            "Unexpected chained struct of type %s found on %s chain.",
-                            wgpu::SType(ext->invalidSType), "SharedBufferMemoryDescriptor"
-                        );
-                    } else {
-                        return DAWN_VALIDATION_ERROR(
-                            "Unexpected chained struct of type %s found on %s chain.",
-                            next->sType, "SharedBufferMemoryDescriptor"
-                        );
-                    }
-                }
-                break;
-            }
-        }
-        if (duplicate) {
-            return DAWN_VALIDATION_ERROR(
-                "Duplicate chained struct of type %s found on %s chain.",
-                next->sType, "SharedBufferMemoryDescriptor"
             );
         }
     }
@@ -3619,6 +3619,96 @@ ResultOrError<UnpackedPtr<ShaderModuleDescriptor>> ValidateAndUnpack<ShaderModul
     return result;
 }
 template <>
+UnpackedPtr<SharedBufferMemoryDescriptor> Unpack<SharedBufferMemoryDescriptor>(typename UnpackedPtr<SharedBufferMemoryDescriptor>::PtrType chain) {
+    UnpackedPtr<SharedBufferMemoryDescriptor> result(chain);
+    for (typename UnpackedPtr<SharedBufferMemoryDescriptor>::ChainType next = chain->nextInChain;
+         next != nullptr;
+         next = next->nextInChain) {
+        switch (next->sType) {
+            case STypeFor<SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<SharedBufferMemoryDescriptor>, SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor>::Type;
+                std::get<ExtPtrType>(result.mUnpacked) =
+                    static_cast<ExtPtrType>(next);
+                result.mBitset.set(
+                    detail::UnpackedPtrIndexOf<UnpackedPtr<SharedBufferMemoryDescriptor>, ExtPtrType>
+                );
+                break;
+            }
+            default: {
+                using Unpacker =
+                    AdditionalExtensionUnpacker<
+                        SharedBufferMemoryDescriptor,
+                        UnpackedPtr<SharedBufferMemoryDescriptor>,
+                        detail::AdditionalExtensions<SharedBufferMemoryDescriptor>::List>;
+                Unpacker::Unpack(result.mUnpacked, result.mBitset, next, nullptr);
+                break;
+            }
+        }
+    }
+    return result;
+}
+template <>
+ResultOrError<UnpackedPtr<SharedBufferMemoryDescriptor>> ValidateAndUnpack<SharedBufferMemoryDescriptor>(
+    typename UnpackedPtr<SharedBufferMemoryDescriptor>::PtrType chain) {
+    UnpackedPtr<SharedBufferMemoryDescriptor> result(chain);
+    for (typename UnpackedPtr<SharedBufferMemoryDescriptor>::ChainType next = chain->nextInChain;
+         next != nullptr;
+         next = next->nextInChain) {
+        bool duplicate = false;
+        switch (next->sType) {
+            case STypeFor<SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<SharedBufferMemoryDescriptor>, SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor>::Type;
+                auto& member = std::get<ExtPtrType>(result.mUnpacked);
+                if (member != nullptr) {
+                    duplicate = true;
+                } else {
+                    member = static_cast<ExtPtrType>(next);
+                    result.mBitset.set(
+                        detail::UnpackedPtrIndexOf<UnpackedPtr<SharedBufferMemoryDescriptor>, ExtPtrType>
+                    );
+                }
+                break;
+            }
+            default: {
+                using Unpacker =
+                    AdditionalExtensionUnpacker<
+                        SharedBufferMemoryDescriptor,
+                        UnpackedPtr<SharedBufferMemoryDescriptor>,
+                        detail::AdditionalExtensions<SharedBufferMemoryDescriptor>::List>;
+                if (!Unpacker::Unpack(result.mUnpacked,
+                                      result.mBitset,
+                                      next,
+                                      &duplicate)) {
+                    if (next->sType == wgpu::SType::DawnInjectedInvalidSType) {
+                        // TODO(crbug.com/399470698): Need to reinterpret cast to base C type
+                        // for now because in/out typing are differentiated in C++ bindings.
+                        auto* ext = reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(next);
+                        return DAWN_VALIDATION_ERROR(
+                            "Unexpected chained struct of type %s found on %s chain.",
+                            wgpu::SType(ext->invalidSType), "SharedBufferMemoryDescriptor"
+                        );
+                    } else {
+                        return DAWN_VALIDATION_ERROR(
+                            "Unexpected chained struct of type %s found on %s chain.",
+                            next->sType, "SharedBufferMemoryDescriptor"
+                        );
+                    }
+                }
+                break;
+            }
+        }
+        if (duplicate) {
+            return DAWN_VALIDATION_ERROR(
+                "Duplicate chained struct of type %s found on %s chain.",
+                next->sType, "SharedBufferMemoryDescriptor"
+            );
+        }
+    }
+    return result;
+}
+template <>
 UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(typename UnpackedPtr<SharedFenceDescriptor>::PtrType chain) {
     UnpackedPtr<SharedFenceDescriptor> result(chain);
     for (typename UnpackedPtr<SharedFenceDescriptor>::ChainType next = chain->nextInChain;
@@ -4489,9 +4579,9 @@ UnpackedPtr<TextureDescriptor> Unpack<TextureDescriptor>(typename UnpackedPtr<Te
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
-            case STypeFor<TextureBindingViewDimensionDescriptor>: {
+            case STypeFor<TextureBindingViewDimension>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, TextureBindingViewDimensionDescriptor>::Type;
+                    typename detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, TextureBindingViewDimension>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4531,9 +4621,9 @@ ResultOrError<UnpackedPtr<TextureDescriptor>> ValidateAndUnpack<TextureDescripto
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
-            case STypeFor<TextureBindingViewDimensionDescriptor>: {
+            case STypeFor<TextureBindingViewDimension>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, TextureBindingViewDimensionDescriptor>::Type;
+                    typename detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, TextureBindingViewDimension>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4709,6 +4799,16 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
                 );
                 break;
             }
+            case STypeFor<AdapterPropertiesDrm>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesDrm>::Type;
+                std::get<ExtPtrType>(result.mUnpacked) =
+                    static_cast<ExtPtrType>(next);
+                result.mBitset.set(
+                    detail::UnpackedPtrIndexOf<UnpackedPtr<AdapterInfo>, ExtPtrType>
+                );
+                break;
+            }
             case STypeFor<AdapterPropertiesWGPU>: {
                 using ExtPtrType =
                     typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesWGPU>::Type;
@@ -4806,6 +4906,20 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
             case STypeFor<AdapterPropertiesVk>: {
                 using ExtPtrType =
                     typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesVk>::Type;
+                auto& member = std::get<ExtPtrType>(result.mUnpacked);
+                if (member != nullptr) {
+                    duplicate = true;
+                } else {
+                    member = static_cast<ExtPtrType>(next);
+                    result.mBitset.set(
+                        detail::UnpackedPtrIndexOf<UnpackedPtr<AdapterInfo>, ExtPtrType>
+                    );
+                }
+                break;
+            }
+            case STypeFor<AdapterPropertiesDrm>: {
+                using ExtPtrType =
+                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesDrm>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6375,9 +6489,9 @@ UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(typename Unpacked
                 );
                 break;
             }
-            case STypeFor<RenderPassDescriptorExpandResolveRect>: {
+            case STypeFor<RenderPassRenderAreaRect>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassDescriptorExpandResolveRect>::Type;
+                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassRenderAreaRect>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6455,9 +6569,9 @@ ResultOrError<UnpackedPtr<RenderPassDescriptor>> ValidateAndUnpack<RenderPassDes
                 }
                 break;
             }
-            case STypeFor<RenderPassDescriptorExpandResolveRect>: {
+            case STypeFor<RenderPassRenderAreaRect>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassDescriptorExpandResolveRect>::Type;
+                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassRenderAreaRect>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;

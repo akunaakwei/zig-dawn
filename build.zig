@@ -544,6 +544,14 @@ pub fn build(b: *std.Build) void {
             .flags = &flags,
         });
     }
+    if (!target.result.cpu.arch.isWasm()) {
+        dawn_common.addCSourceFiles(.{
+            .root = dawn_dep.path("src/dawn/common"),
+            .files = &.{ "ExternalTextureParams.cpp", "WGPUDeviceCallbackInfos.cpp" },
+            .flags = &flags,
+        });
+    }
+
     switch (target.result.os.tag) {
         .ios, .tvos, .visionos, .watchos => dawn_common.addCSourceFile(.{
             .file = dawn_dep.path("src/dawn/common/IOSurfaceUtils.cpp"),
@@ -1188,7 +1196,6 @@ const tint_core_intrinsic_sources = .{
 const tint_core_ir_sources = .{
     "access.cc",
     "binary.cc",
-    "bitcast.cc",
     "block.cc",
     "block_param.cc",
     "break_if.cc",
@@ -1467,7 +1474,6 @@ const tint_wgsl_program_sources = .{
 const tint_wgsl_reader_sources = .{
     "reader.cc",
     "lower/lower.cc",
-    "parser/classify_template_args.cc",
     "parser/lexer.cc",
     "parser/parser.cc",
     "parser/token.cc",
@@ -1580,7 +1586,6 @@ const tint_spirv_ir_sources = .{
     "binary.cc",
     "builtin_call.cc",
     "copy_logical.cc",
-    "literal_operand.cc",
 };
 
 const tint_spirv_reader_sources = .{
@@ -1601,6 +1606,7 @@ const tint_spirv_reader_sources = .{
 const tint_spirv_type_sources = .{
     "explicit_layout_array.cc",
     "image.cc",
+    "literal.cc",
     "sampled_image.cc",
 };
 
@@ -1718,6 +1724,7 @@ const dawn_sources = .{
     "RenderPipeline.cpp",
     "ResourceMemoryAllocation.cpp",
     "ResourceTable.cpp",
+    "ResourceTableDefaultResources.cpp",
     "RingBufferAllocator.cpp",
     "Sampler.cpp",
     "ScratchBuffer.cpp",
@@ -1927,7 +1934,6 @@ const dawn_vulkan_sources = .{
     "vulkan/PhysicalDeviceVk.cpp",
     "vulkan/PipelineCacheVk.cpp",
     "vulkan/PipelineLayoutVk.cpp",
-    "vulkan/PipelineVk.cpp",
     "vulkan/QuerySetVk.cpp",
     "vulkan/QueueVk.cpp",
     "vulkan/RenderPassCache.cpp",
@@ -1942,6 +1948,7 @@ const dawn_vulkan_sources = .{
     "vulkan/SharedTextureMemoryVk.cpp",
     "vulkan/StreamImplVk.cpp",
     "vulkan/SwapChainVk.cpp",
+    "vulkan/TexelBufferViewVk.cpp",
     "vulkan/TextureVk.cpp",
     "vulkan/UtilsVulkan.cpp",
     "vulkan/VulkanError.cpp",

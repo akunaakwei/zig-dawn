@@ -975,6 +975,10 @@ void wgpuSharedFenceExportInfo(WGPUSharedFence sharedFence, WGPUSharedFenceExpor
     procs.sharedFenceExportInfo(sharedFence, info);
 }
 DAWN_NO_SANITIZE("cfi-icall")
+void wgpuSharedFenceSetLabel(WGPUSharedFence sharedFence, WGPUStringView label) {
+    procs.sharedFenceSetLabel(sharedFence, label);
+}
+DAWN_NO_SANITIZE("cfi-icall")
 void wgpuSharedFenceAddRef(WGPUSharedFence sharedFence) {
     procs.sharedFenceAddRef(sharedFence);
 }

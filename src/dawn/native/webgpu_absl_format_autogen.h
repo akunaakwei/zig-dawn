@@ -63,14 +63,6 @@ namespace dawn::native {
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
-        AbslFormatConvert(const SharedBufferMemoryDescriptor* value,
-                          const absl::FormatConversionSpec& spec,
-                          absl::FormatSink* s);
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
-        AbslFormatConvert(const UnpackedPtr<SharedBufferMemoryDescriptor>& value,
-                          const absl::FormatConversionSpec& spec,
-                          absl::FormatSink* s);
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
         AbslFormatConvert(const TexelBufferViewDescriptor* value,
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
@@ -124,6 +116,14 @@ namespace dawn::native {
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
         AbslFormatConvert(const UnpackedPtr<ShaderModuleDescriptor>& value,
+                          const absl::FormatConversionSpec& spec,
+                          absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+        AbslFormatConvert(const SharedBufferMemoryDescriptor* value,
+                          const absl::FormatConversionSpec& spec,
+                          absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+        AbslFormatConvert(const UnpackedPtr<SharedBufferMemoryDescriptor>& value,
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
@@ -265,6 +265,22 @@ namespace wgpu {
                       absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
     AbslFormatConvert(CallbackMode value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+    AbslFormatConvert(ColorSpacePrimariesDawn value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+    AbslFormatConvert(ColorSpaceTransferDawn value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+    AbslFormatConvert(ColorSpaceYCbCrMatrixDawn value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
+    AbslFormatConvert(ColorSpaceYCbCrRangeDawn value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>

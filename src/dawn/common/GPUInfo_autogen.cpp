@@ -89,6 +89,7 @@ enum class Architecture {
     QualcommPCI_Adreno8xx,
     QualcommACPI_Adreno6xx,
     QualcommACPI_Adreno7xx,
+    QualcommACPI_Adreno8xx,
     Samsung_RDNA2,
     Samsung_RDNA3,
     Huawei_Maleoon,
@@ -136,14 +137,13 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                 case 0x6990:
                 case 0x6FD0:
                 case 0x9920:
+                case 0x6940:
                     return Architecture::AMD_GCN4;
                 case 0x66A0:
                 case 0x6860:
                 case 0x6870:
-                case 0x6940:
                 case 0x69A0:
                 case 0x15D0:
-                case 0x1630:
                     return Architecture::AMD_GCN5;
                 case 0x7310:
                 case 0x7340:
@@ -158,7 +158,6 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                 case 0x7420:
                 case 0x7430:
                 case 0x1430:
-                case 0x1500:
                 case 0x15E0:
                 case 0x1640:
                 case 0x1680:
@@ -168,6 +167,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                 case 0x7440:
                 case 0x7470:
                 case 0x7480:
+                case 0x1500:
                 case 0x15B0:
                 case 0x15C0:
                 case 0x7450:
@@ -180,6 +180,13 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                     return Architecture::AMD_RDNA4;
                 case 0x7380:
                     return Architecture::AMD_CDNA1;
+            }
+            switch (deviceId & 0xFFFF) {
+                case 0x1636:
+                case 0x1638:
+                    return Architecture::AMD_GCN5;
+                case 0x163F:
+                    return Architecture::AMD_RDNA2;
             }
         } break;
         case kVendorID_ARM: {
@@ -361,6 +368,9 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                 case 0x37314400:
                 case 0x36334300:
                     return Architecture::QualcommACPI_Adreno7xx;
+                case 0x35464600:
+                case 0x36334600:
+                    return Architecture::QualcommACPI_Adreno8xx;
             }
         } break;
         case kVendorID_Samsung: {
@@ -597,6 +607,9 @@ bool IsQualcommACPIAdreno6xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
 bool IsQualcommACPIAdreno7xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
     return GetArchitecture(vendorId, deviceId) == Architecture::QualcommACPI_Adreno7xx;
 }
+bool IsQualcommACPIAdreno8xx(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::QualcommACPI_Adreno8xx;
+}
 // Samsung architectures
 bool IsSamsungRDNA2(PCIVendorID vendorId, PCIDeviceID deviceId) {
     return GetArchitecture(vendorId, deviceId) == Architecture::Samsung_RDNA2;
@@ -750,6 +763,8 @@ std::string GetArchitectureName(PCIVendorID vendorId, PCIDeviceID deviceId) {
             return "adreno-6xx";
         case Architecture::QualcommACPI_Adreno7xx:
             return "adreno-7xx";
+        case Architecture::QualcommACPI_Adreno8xx:
+            return "adreno-8xx";
         case Architecture::Samsung_RDNA2:
             return "rdna-2";
         case Architecture::Samsung_RDNA3:

@@ -116,12 +116,18 @@ SharedTextureMemoryD3D12Resource,
 ChromiumExperimentalSamplingResourceTable,
 ChromiumExperimentalSubgroupSizeControl,
 AtomicVec2uMinMax,
+Unorm16FormatsForExternalTexture,
+OpaqueYCbCrAndroidForExternalTexture,
+Unorm16Filterable,
+RenderPassRenderArea,
+DawnNativeSpontaneousQueueEvents,
+AdapterPropertiesDrm,
   InvalidEnum,
 };
 
 template<>
 struct EnumCount<Feature> {
-    static constexpr uint32_t value = 82;
+    static constexpr uint32_t value = 88;
 };
 
 }  // namespace dawn::native

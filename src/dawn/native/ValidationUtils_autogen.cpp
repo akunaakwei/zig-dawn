@@ -172,6 +172,68 @@ namespace dawn::native {
         }
     }
 
+    MaybeError ValidateColorSpacePrimariesDawn(wgpu::ColorSpacePrimariesDawn value) {
+        switch (WGPUColorSpacePrimariesDawn(value)) {
+            case WGPUColorSpacePrimariesDawn_SRGB:
+                return {};
+            case WGPUColorSpacePrimariesDawn_Rec601:
+                return {};
+            case WGPUColorSpacePrimariesDawn_Rec2020:
+                return {};
+            case WGPUColorSpacePrimariesDawn_DisplayP3:
+                return {};
+            default:
+                return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUColorSpacePrimariesDawn.", value);
+        }
+    }
+
+    MaybeError ValidateColorSpaceTransferDawn(wgpu::ColorSpaceTransferDawn value) {
+        switch (WGPUColorSpaceTransferDawn(value)) {
+            case WGPUColorSpaceTransferDawn_Identity:
+                return {};
+            case WGPUColorSpaceTransferDawn_SRGB:
+                return {};
+            case WGPUColorSpaceTransferDawn_DisplayP3:
+                return {};
+            case WGPUColorSpaceTransferDawn_SMPTE_170M:
+                return {};
+            case WGPUColorSpaceTransferDawn_HLG:
+                return {};
+            case WGPUColorSpaceTransferDawn_PQ:
+                return {};
+            default:
+                return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUColorSpaceTransferDawn.", value);
+        }
+    }
+
+    MaybeError ValidateColorSpaceYCbCrMatrixDawn(wgpu::ColorSpaceYCbCrMatrixDawn value) {
+        switch (WGPUColorSpaceYCbCrMatrixDawn(value)) {
+            case WGPUColorSpaceYCbCrMatrixDawn_Identity:
+                return {};
+            case WGPUColorSpaceYCbCrMatrixDawn_Rec601:
+                return {};
+            case WGPUColorSpaceYCbCrMatrixDawn_Rec709:
+                return {};
+            case WGPUColorSpaceYCbCrMatrixDawn_Rec2020:
+                return {};
+            default:
+                return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUColorSpaceYCbCrMatrixDawn.", value);
+        }
+    }
+
+    MaybeError ValidateColorSpaceYCbCrRangeDawn(wgpu::ColorSpaceYCbCrRangeDawn value) {
+        switch (WGPUColorSpaceYCbCrRangeDawn(value)) {
+            case WGPUColorSpaceYCbCrRangeDawn_Identity:
+                return {};
+            case WGPUColorSpaceYCbCrRangeDawn_Narrow:
+                return {};
+            case WGPUColorSpaceYCbCrRangeDawn_Full:
+                return {};
+            default:
+                return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUColorSpaceYCbCrRangeDawn.", value);
+        }
+    }
+
     MaybeError ValidateCompareFunction(wgpu::CompareFunction value) {
         switch (WGPUCompareFunction(value)) {
             case WGPUCompareFunction_Undefined:
@@ -528,6 +590,18 @@ namespace dawn::native {
                 return {};
             case WGPUFeatureName_AtomicVec2uMinMax:
                 return {};
+            case WGPUFeatureName_Unorm16FormatsForExternalTexture:
+                return {};
+            case WGPUFeatureName_OpaqueYCbCrAndroidForExternalTexture:
+                return {};
+            case WGPUFeatureName_Unorm16Filterable:
+                return {};
+            case WGPUFeatureName_RenderPassRenderArea:
+                return {};
+            case WGPUFeatureName_DawnNativeSpontaneousQueueEvents:
+                return {};
+            case WGPUFeatureName_AdapterPropertiesDrm:
+                return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUFeatureName.", value);
         }
@@ -687,6 +761,10 @@ namespace dawn::native {
             case WGPUPredefinedColorSpace_SRGB:
                 return {};
             case WGPUPredefinedColorSpace_DisplayP3:
+                return {};
+            case WGPUPredefinedColorSpace_SRGBLinear:
+                return {};
+            case WGPUPredefinedColorSpace_DisplayP3Linear:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUPredefinedColorSpace.", value);
@@ -905,15 +983,15 @@ namespace dawn::native {
                 return {};
             case WGPUSType_TextureComponentSwizzleDescriptor:
                 return {};
-            case WGPUSType_CompatibilityModeLimits:
-                return {};
-            case WGPUSType_TextureBindingViewDimensionDescriptor:
-                return {};
-            case WGPUSType_SurfaceDescriptorFromWindowsCoreWindow:
+            case WGPUSType_ExternalTextureBindingLayout:
                 return {};
             case WGPUSType_ExternalTextureBindingEntry:
                 return {};
-            case WGPUSType_ExternalTextureBindingLayout:
+            case WGPUSType_CompatibilityModeLimits:
+                return {};
+            case WGPUSType_TextureBindingViewDimension:
+                return {};
+            case WGPUSType_SurfaceDescriptorFromWindowsCoreWindow:
                 return {};
             case WGPUSType_SurfaceDescriptorFromWindowsUWPSwapChainPanel:
                 return {};
@@ -963,7 +1041,7 @@ namespace dawn::native {
                 return {};
             case WGPUSType_ColorTargetStateExpandResolveTextureDawn:
                 return {};
-            case WGPUSType_RenderPassDescriptorExpandResolveRect:
+            case WGPUSType_RenderPassRenderAreaRect:
                 return {};
             case WGPUSType_SharedTextureMemoryVkDedicatedAllocationDescriptor:
                 return {};
@@ -1070,6 +1148,8 @@ namespace dawn::native {
             case WGPUSType_PipelineLayoutResourceTable:
                 return {};
             case WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
+                return {};
+            case WGPUSType_AdapterPropertiesDrm:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUSType.", value);
@@ -1568,6 +1648,10 @@ namespace dawn::native {
                 return {};
             case WGPUWGSLLanguageFeatureName_TextureAndSamplerLet:
                 return {};
+            case WGPUWGSLLanguageFeatureName_SubgroupUniformity:
+                return {};
+            case WGPUWGSLLanguageFeatureName_TextureFormatsTier1:
+                return {};
             case WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented:
                 return {};
             case WGPUWGSLLanguageFeatureName_ChromiumTestingUnsafeExperimental:
@@ -1587,8 +1671,6 @@ namespace dawn::native {
             case WGPUWGSLLanguageFeatureName_FragmentDepth:
                 return {};
             case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
-                return {};
-            case WGPUWGSLLanguageFeatureName_SubgroupUniformity:
                 return {};
             case WGPUWGSLLanguageFeatureName_BufferView:
                 return {};

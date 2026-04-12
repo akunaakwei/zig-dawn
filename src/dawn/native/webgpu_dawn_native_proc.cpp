@@ -259,6 +259,7 @@ extern void NativeSharedBufferMemoryAddRef(WGPUSharedBufferMemory cSelf);
 extern void NativeSharedBufferMemoryRelease(WGPUSharedBufferMemory cSelf);
 extern void NativeSharedBufferMemoryEndAccessStateFreeMembers(WGPUSharedBufferMemoryEndAccessState cSelf);
 extern void NativeSharedFenceExportInfo(WGPUSharedFence cSelf, WGPUSharedFenceExportInfo * info);
+extern void NativeSharedFenceSetLabel(WGPUSharedFence cSelf, WGPUStringView label);
 extern void NativeSharedFenceAddRef(WGPUSharedFence cSelf);
 extern void NativeSharedFenceRelease(WGPUSharedFence cSelf);
 extern WGPUStatus NativeSharedTextureMemoryBeginAccess(WGPUSharedTextureMemory cSelf, WGPUTexture texture, WGPUSharedTextureMemoryBeginAccessDescriptor const * descriptor);
@@ -1219,6 +1220,10 @@ extern "C" {
     void wgpuSharedFenceExportInfo(WGPUSharedFence cSelf, WGPUSharedFenceExportInfo * info) {
         return NativeSharedFenceExportInfo(
             cSelf, info);
+    }
+    void wgpuSharedFenceSetLabel(WGPUSharedFence cSelf, WGPUStringView label) {
+        return NativeSharedFenceSetLabel(
+            cSelf, label);
     }
     void wgpuSharedFenceAddRef(WGPUSharedFence cSelf) {
         return NativeSharedFenceAddRef(

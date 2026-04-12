@@ -62,6 +62,31 @@ namespace dawn::native {
         return reinterpret_cast<AdapterPropertiesD3D*>(rhs);
     }
 
+    inline const WGPUAdapterPropertiesDrm* ToAPI(const AdapterPropertiesDrm* rhs) {
+        return reinterpret_cast<const WGPUAdapterPropertiesDrm*>(rhs);
+    }
+    inline WGPUAdapterPropertiesDrm* ToAPI(AdapterPropertiesDrm* rhs) {
+        return reinterpret_cast<WGPUAdapterPropertiesDrm*>(rhs);
+    }
+    inline const AdapterPropertiesDrm* FromAPI(const WGPUAdapterPropertiesDrm* rhs) {
+        return reinterpret_cast<const AdapterPropertiesDrm*>(rhs);
+    }
+    inline AdapterPropertiesDrm* FromAPI(WGPUAdapterPropertiesDrm* rhs) {
+        return reinterpret_cast<AdapterPropertiesDrm*>(rhs);
+    }
+    inline const wgpu::AdapterPropertiesDrm* ToCppAPI(const AdapterPropertiesDrm* rhs) {
+        return reinterpret_cast<const wgpu::AdapterPropertiesDrm*>(rhs);
+    }
+    inline wgpu::AdapterPropertiesDrm* ToCppAPI(AdapterPropertiesDrm* rhs) {
+        return reinterpret_cast<wgpu::AdapterPropertiesDrm*>(rhs);
+    }
+    inline const AdapterPropertiesDrm* FromCppAPI(const wgpu::AdapterPropertiesDrm* rhs) {
+        return reinterpret_cast<const AdapterPropertiesDrm*>(rhs);
+    }
+    inline AdapterPropertiesDrm* FromCppAPI(wgpu::AdapterPropertiesDrm* rhs) {
+        return reinterpret_cast<AdapterPropertiesDrm*>(rhs);
+    }
+
     inline const WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs* ToAPI(const AdapterPropertiesExplicitComputeSubgroupSizeConfigs* rhs) {
         return reinterpret_cast<const WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs*>(rhs);
     }
@@ -260,6 +285,31 @@ namespace dawn::native {
     }
     inline Color* FromCppAPI(wgpu::Color* rhs) {
         return reinterpret_cast<Color*>(rhs);
+    }
+
+    inline const WGPUColorSpaceDawn* ToAPI(const ColorSpaceDawn* rhs) {
+        return reinterpret_cast<const WGPUColorSpaceDawn*>(rhs);
+    }
+    inline WGPUColorSpaceDawn* ToAPI(ColorSpaceDawn* rhs) {
+        return reinterpret_cast<WGPUColorSpaceDawn*>(rhs);
+    }
+    inline const ColorSpaceDawn* FromAPI(const WGPUColorSpaceDawn* rhs) {
+        return reinterpret_cast<const ColorSpaceDawn*>(rhs);
+    }
+    inline ColorSpaceDawn* FromAPI(WGPUColorSpaceDawn* rhs) {
+        return reinterpret_cast<ColorSpaceDawn*>(rhs);
+    }
+    inline const wgpu::ColorSpaceDawn* ToCppAPI(const ColorSpaceDawn* rhs) {
+        return reinterpret_cast<const wgpu::ColorSpaceDawn*>(rhs);
+    }
+    inline wgpu::ColorSpaceDawn* ToCppAPI(ColorSpaceDawn* rhs) {
+        return reinterpret_cast<wgpu::ColorSpaceDawn*>(rhs);
+    }
+    inline const ColorSpaceDawn* FromCppAPI(const wgpu::ColorSpaceDawn* rhs) {
+        return reinterpret_cast<const ColorSpaceDawn*>(rhs);
+    }
+    inline ColorSpaceDawn* FromCppAPI(wgpu::ColorSpaceDawn* rhs) {
+        return reinterpret_cast<ColorSpaceDawn*>(rhs);
     }
 
     inline const WGPUColorTargetStateExpandResolveTextureDawn* ToAPI(const ColorTargetStateExpandResolveTextureDawn* rhs) {
@@ -1337,31 +1387,6 @@ namespace dawn::native {
         return reinterpret_cast<RenderPassDepthStencilAttachment*>(rhs);
     }
 
-    inline const WGPURenderPassDescriptorExpandResolveRect* ToAPI(const RenderPassDescriptorExpandResolveRect* rhs) {
-        return reinterpret_cast<const WGPURenderPassDescriptorExpandResolveRect*>(rhs);
-    }
-    inline WGPURenderPassDescriptorExpandResolveRect* ToAPI(RenderPassDescriptorExpandResolveRect* rhs) {
-        return reinterpret_cast<WGPURenderPassDescriptorExpandResolveRect*>(rhs);
-    }
-    inline const RenderPassDescriptorExpandResolveRect* FromAPI(const WGPURenderPassDescriptorExpandResolveRect* rhs) {
-        return reinterpret_cast<const RenderPassDescriptorExpandResolveRect*>(rhs);
-    }
-    inline RenderPassDescriptorExpandResolveRect* FromAPI(WGPURenderPassDescriptorExpandResolveRect* rhs) {
-        return reinterpret_cast<RenderPassDescriptorExpandResolveRect*>(rhs);
-    }
-    inline const wgpu::RenderPassDescriptorExpandResolveRect* ToCppAPI(const RenderPassDescriptorExpandResolveRect* rhs) {
-        return reinterpret_cast<const wgpu::RenderPassDescriptorExpandResolveRect*>(rhs);
-    }
-    inline wgpu::RenderPassDescriptorExpandResolveRect* ToCppAPI(RenderPassDescriptorExpandResolveRect* rhs) {
-        return reinterpret_cast<wgpu::RenderPassDescriptorExpandResolveRect*>(rhs);
-    }
-    inline const RenderPassDescriptorExpandResolveRect* FromCppAPI(const wgpu::RenderPassDescriptorExpandResolveRect* rhs) {
-        return reinterpret_cast<const RenderPassDescriptorExpandResolveRect*>(rhs);
-    }
-    inline RenderPassDescriptorExpandResolveRect* FromCppAPI(wgpu::RenderPassDescriptorExpandResolveRect* rhs) {
-        return reinterpret_cast<RenderPassDescriptorExpandResolveRect*>(rhs);
-    }
-
     inline const WGPURenderPassDescriptorResolveRect* ToAPI(const RenderPassDescriptorResolveRect* rhs) {
         return reinterpret_cast<const WGPURenderPassDescriptorResolveRect*>(rhs);
     }
@@ -1612,29 +1637,29 @@ namespace dawn::native {
         return reinterpret_cast<SharedBufferMemoryBeginAccessDescriptor*>(rhs);
     }
 
-    inline const WGPUSharedBufferMemoryDescriptor* ToAPI(const SharedBufferMemoryDescriptor* rhs) {
-        return reinterpret_cast<const WGPUSharedBufferMemoryDescriptor*>(rhs);
+    inline const WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* ToAPI(const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* rhs) {
+        return reinterpret_cast<const WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(rhs);
     }
-    inline WGPUSharedBufferMemoryDescriptor* ToAPI(SharedBufferMemoryDescriptor* rhs) {
-        return reinterpret_cast<WGPUSharedBufferMemoryDescriptor*>(rhs);
+    inline WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* ToAPI(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* rhs) {
+        return reinterpret_cast<WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(rhs);
     }
-    inline const SharedBufferMemoryDescriptor* FromAPI(const WGPUSharedBufferMemoryDescriptor* rhs) {
-        return reinterpret_cast<const SharedBufferMemoryDescriptor*>(rhs);
+    inline const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* FromAPI(const WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* rhs) {
+        return reinterpret_cast<const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(rhs);
     }
-    inline SharedBufferMemoryDescriptor* FromAPI(WGPUSharedBufferMemoryDescriptor* rhs) {
-        return reinterpret_cast<SharedBufferMemoryDescriptor*>(rhs);
+    inline SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* FromAPI(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* rhs) {
+        return reinterpret_cast<SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(rhs);
     }
-    inline const wgpu::SharedBufferMemoryDescriptor* ToCppAPI(const SharedBufferMemoryDescriptor* rhs) {
-        return reinterpret_cast<const wgpu::SharedBufferMemoryDescriptor*>(rhs);
+    inline const wgpu::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* ToCppAPI(const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* rhs) {
+        return reinterpret_cast<const wgpu::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(rhs);
     }
-    inline wgpu::SharedBufferMemoryDescriptor* ToCppAPI(SharedBufferMemoryDescriptor* rhs) {
-        return reinterpret_cast<wgpu::SharedBufferMemoryDescriptor*>(rhs);
+    inline wgpu::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* ToCppAPI(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* rhs) {
+        return reinterpret_cast<wgpu::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(rhs);
     }
-    inline const SharedBufferMemoryDescriptor* FromCppAPI(const wgpu::SharedBufferMemoryDescriptor* rhs) {
-        return reinterpret_cast<const SharedBufferMemoryDescriptor*>(rhs);
+    inline const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* FromCppAPI(const wgpu::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* rhs) {
+        return reinterpret_cast<const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(rhs);
     }
-    inline SharedBufferMemoryDescriptor* FromCppAPI(wgpu::SharedBufferMemoryDescriptor* rhs) {
-        return reinterpret_cast<SharedBufferMemoryDescriptor*>(rhs);
+    inline SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* FromCppAPI(wgpu::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor* rhs) {
+        return reinterpret_cast<SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(rhs);
     }
 
     inline const WGPUSharedBufferMemoryEndAccessState* ToAPI(const SharedBufferMemoryEndAccessState* rhs) {
@@ -2912,29 +2937,29 @@ namespace dawn::native {
         return reinterpret_cast<TextureBindingLayout*>(rhs);
     }
 
-    inline const WGPUTextureBindingViewDimensionDescriptor* ToAPI(const TextureBindingViewDimensionDescriptor* rhs) {
-        return reinterpret_cast<const WGPUTextureBindingViewDimensionDescriptor*>(rhs);
+    inline const WGPUTextureBindingViewDimension* ToAPI(const TextureBindingViewDimension* rhs) {
+        return reinterpret_cast<const WGPUTextureBindingViewDimension*>(rhs);
     }
-    inline WGPUTextureBindingViewDimensionDescriptor* ToAPI(TextureBindingViewDimensionDescriptor* rhs) {
-        return reinterpret_cast<WGPUTextureBindingViewDimensionDescriptor*>(rhs);
+    inline WGPUTextureBindingViewDimension* ToAPI(TextureBindingViewDimension* rhs) {
+        return reinterpret_cast<WGPUTextureBindingViewDimension*>(rhs);
     }
-    inline const TextureBindingViewDimensionDescriptor* FromAPI(const WGPUTextureBindingViewDimensionDescriptor* rhs) {
-        return reinterpret_cast<const TextureBindingViewDimensionDescriptor*>(rhs);
+    inline const TextureBindingViewDimension* FromAPI(const WGPUTextureBindingViewDimension* rhs) {
+        return reinterpret_cast<const TextureBindingViewDimension*>(rhs);
     }
-    inline TextureBindingViewDimensionDescriptor* FromAPI(WGPUTextureBindingViewDimensionDescriptor* rhs) {
-        return reinterpret_cast<TextureBindingViewDimensionDescriptor*>(rhs);
+    inline TextureBindingViewDimension* FromAPI(WGPUTextureBindingViewDimension* rhs) {
+        return reinterpret_cast<TextureBindingViewDimension*>(rhs);
     }
-    inline const wgpu::TextureBindingViewDimensionDescriptor* ToCppAPI(const TextureBindingViewDimensionDescriptor* rhs) {
-        return reinterpret_cast<const wgpu::TextureBindingViewDimensionDescriptor*>(rhs);
+    inline const wgpu::TextureBindingViewDimension* ToCppAPI(const TextureBindingViewDimension* rhs) {
+        return reinterpret_cast<const wgpu::TextureBindingViewDimension*>(rhs);
     }
-    inline wgpu::TextureBindingViewDimensionDescriptor* ToCppAPI(TextureBindingViewDimensionDescriptor* rhs) {
-        return reinterpret_cast<wgpu::TextureBindingViewDimensionDescriptor*>(rhs);
+    inline wgpu::TextureBindingViewDimension* ToCppAPI(TextureBindingViewDimension* rhs) {
+        return reinterpret_cast<wgpu::TextureBindingViewDimension*>(rhs);
     }
-    inline const TextureBindingViewDimensionDescriptor* FromCppAPI(const wgpu::TextureBindingViewDimensionDescriptor* rhs) {
-        return reinterpret_cast<const TextureBindingViewDimensionDescriptor*>(rhs);
+    inline const TextureBindingViewDimension* FromCppAPI(const wgpu::TextureBindingViewDimension* rhs) {
+        return reinterpret_cast<const TextureBindingViewDimension*>(rhs);
     }
-    inline TextureBindingViewDimensionDescriptor* FromCppAPI(wgpu::TextureBindingViewDimensionDescriptor* rhs) {
-        return reinterpret_cast<TextureBindingViewDimensionDescriptor*>(rhs);
+    inline TextureBindingViewDimension* FromCppAPI(wgpu::TextureBindingViewDimension* rhs) {
+        return reinterpret_cast<TextureBindingViewDimension*>(rhs);
     }
 
     inline const WGPUTextureComponentSwizzle* ToAPI(const TextureComponentSwizzle* rhs) {
@@ -3512,6 +3537,31 @@ namespace dawn::native {
         return reinterpret_cast<RenderPassColorAttachment*>(rhs);
     }
 
+    inline const WGPURenderPassRenderAreaRect* ToAPI(const RenderPassRenderAreaRect* rhs) {
+        return reinterpret_cast<const WGPURenderPassRenderAreaRect*>(rhs);
+    }
+    inline WGPURenderPassRenderAreaRect* ToAPI(RenderPassRenderAreaRect* rhs) {
+        return reinterpret_cast<WGPURenderPassRenderAreaRect*>(rhs);
+    }
+    inline const RenderPassRenderAreaRect* FromAPI(const WGPURenderPassRenderAreaRect* rhs) {
+        return reinterpret_cast<const RenderPassRenderAreaRect*>(rhs);
+    }
+    inline RenderPassRenderAreaRect* FromAPI(WGPURenderPassRenderAreaRect* rhs) {
+        return reinterpret_cast<RenderPassRenderAreaRect*>(rhs);
+    }
+    inline const wgpu::RenderPassRenderAreaRect* ToCppAPI(const RenderPassRenderAreaRect* rhs) {
+        return reinterpret_cast<const wgpu::RenderPassRenderAreaRect*>(rhs);
+    }
+    inline wgpu::RenderPassRenderAreaRect* ToCppAPI(RenderPassRenderAreaRect* rhs) {
+        return reinterpret_cast<wgpu::RenderPassRenderAreaRect*>(rhs);
+    }
+    inline const RenderPassRenderAreaRect* FromCppAPI(const wgpu::RenderPassRenderAreaRect* rhs) {
+        return reinterpret_cast<const RenderPassRenderAreaRect*>(rhs);
+    }
+    inline RenderPassRenderAreaRect* FromCppAPI(wgpu::RenderPassRenderAreaRect* rhs) {
+        return reinterpret_cast<RenderPassRenderAreaRect*>(rhs);
+    }
+
     inline const WGPURenderPassStorageAttachment* ToAPI(const RenderPassStorageAttachment* rhs) {
         return reinterpret_cast<const WGPURenderPassStorageAttachment*>(rhs);
     }
@@ -3610,6 +3660,31 @@ namespace dawn::native {
     }
     inline ShaderModuleDescriptor* FromCppAPI(wgpu::ShaderModuleDescriptor* rhs) {
         return reinterpret_cast<ShaderModuleDescriptor*>(rhs);
+    }
+
+    inline const WGPUSharedBufferMemoryDescriptor* ToAPI(const SharedBufferMemoryDescriptor* rhs) {
+        return reinterpret_cast<const WGPUSharedBufferMemoryDescriptor*>(rhs);
+    }
+    inline WGPUSharedBufferMemoryDescriptor* ToAPI(SharedBufferMemoryDescriptor* rhs) {
+        return reinterpret_cast<WGPUSharedBufferMemoryDescriptor*>(rhs);
+    }
+    inline const SharedBufferMemoryDescriptor* FromAPI(const WGPUSharedBufferMemoryDescriptor* rhs) {
+        return reinterpret_cast<const SharedBufferMemoryDescriptor*>(rhs);
+    }
+    inline SharedBufferMemoryDescriptor* FromAPI(WGPUSharedBufferMemoryDescriptor* rhs) {
+        return reinterpret_cast<SharedBufferMemoryDescriptor*>(rhs);
+    }
+    inline const wgpu::SharedBufferMemoryDescriptor* ToCppAPI(const SharedBufferMemoryDescriptor* rhs) {
+        return reinterpret_cast<const wgpu::SharedBufferMemoryDescriptor*>(rhs);
+    }
+    inline wgpu::SharedBufferMemoryDescriptor* ToCppAPI(SharedBufferMemoryDescriptor* rhs) {
+        return reinterpret_cast<wgpu::SharedBufferMemoryDescriptor*>(rhs);
+    }
+    inline const SharedBufferMemoryDescriptor* FromCppAPI(const wgpu::SharedBufferMemoryDescriptor* rhs) {
+        return reinterpret_cast<const SharedBufferMemoryDescriptor*>(rhs);
+    }
+    inline SharedBufferMemoryDescriptor* FromCppAPI(wgpu::SharedBufferMemoryDescriptor* rhs) {
+        return reinterpret_cast<SharedBufferMemoryDescriptor*>(rhs);
     }
 
     inline const WGPUSharedFenceDescriptor* ToAPI(const SharedFenceDescriptor* rhs) {
@@ -4923,6 +4998,18 @@ namespace dawn::native {
     inline WGPUCallbackMode ToAPI(wgpu::CallbackMode rhs) {
         return static_cast<WGPUCallbackMode>(rhs);
     }
+    inline WGPUColorSpacePrimariesDawn ToAPI(wgpu::ColorSpacePrimariesDawn rhs) {
+        return static_cast<WGPUColorSpacePrimariesDawn>(rhs);
+    }
+    inline WGPUColorSpaceTransferDawn ToAPI(wgpu::ColorSpaceTransferDawn rhs) {
+        return static_cast<WGPUColorSpaceTransferDawn>(rhs);
+    }
+    inline WGPUColorSpaceYCbCrMatrixDawn ToAPI(wgpu::ColorSpaceYCbCrMatrixDawn rhs) {
+        return static_cast<WGPUColorSpaceYCbCrMatrixDawn>(rhs);
+    }
+    inline WGPUColorSpaceYCbCrRangeDawn ToAPI(wgpu::ColorSpaceYCbCrRangeDawn rhs) {
+        return static_cast<WGPUColorSpaceYCbCrRangeDawn>(rhs);
+    }
     inline WGPUCompareFunction ToAPI(wgpu::CompareFunction rhs) {
         return static_cast<WGPUCompareFunction>(rhs);
     }
@@ -5121,6 +5208,18 @@ namespace dawn::native {
     }
     inline wgpu::CallbackMode FromAPI(WGPUCallbackMode rhs) {
         return static_cast<wgpu::CallbackMode>(rhs);
+    }
+    inline wgpu::ColorSpacePrimariesDawn FromAPI(WGPUColorSpacePrimariesDawn rhs) {
+        return static_cast<wgpu::ColorSpacePrimariesDawn>(rhs);
+    }
+    inline wgpu::ColorSpaceTransferDawn FromAPI(WGPUColorSpaceTransferDawn rhs) {
+        return static_cast<wgpu::ColorSpaceTransferDawn>(rhs);
+    }
+    inline wgpu::ColorSpaceYCbCrMatrixDawn FromAPI(WGPUColorSpaceYCbCrMatrixDawn rhs) {
+        return static_cast<wgpu::ColorSpaceYCbCrMatrixDawn>(rhs);
+    }
+    inline wgpu::ColorSpaceYCbCrRangeDawn FromAPI(WGPUColorSpaceYCbCrRangeDawn rhs) {
+        return static_cast<wgpu::ColorSpaceYCbCrRangeDawn>(rhs);
     }
     inline wgpu::CompareFunction FromAPI(WGPUCompareFunction rhs) {
         return static_cast<wgpu::CompareFunction>(rhs);

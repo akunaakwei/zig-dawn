@@ -193,6 +193,18 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::ChromiumExperimentalSubgroupSizeControl;
   case Feature::AtomicVec2uMinMax:
     return wgpu::FeatureName::AtomicVec2uMinMax;
+  case Feature::Unorm16FormatsForExternalTexture:
+    return wgpu::FeatureName::Unorm16FormatsForExternalTexture;
+  case Feature::OpaqueYCbCrAndroidForExternalTexture:
+    return wgpu::FeatureName::OpaqueYCbCrAndroidForExternalTexture;
+  case Feature::Unorm16Filterable:
+    return wgpu::FeatureName::Unorm16Filterable;
+  case Feature::RenderPassRenderArea:
+    return wgpu::FeatureName::RenderPassRenderArea;
+  case Feature::DawnNativeSpontaneousQueueEvents:
+    return wgpu::FeatureName::DawnNativeSpontaneousQueueEvents;
+  case Feature::AdapterPropertiesDrm:
+    return wgpu::FeatureName::AdapterPropertiesDrm;
     case Feature::InvalidEnum:
       break;
   }
@@ -365,6 +377,18 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::ChromiumExperimentalSubgroupSizeControl;
   case wgpu::FeatureName::AtomicVec2uMinMax:
   return Feature::AtomicVec2uMinMax;
+  case wgpu::FeatureName::Unorm16FormatsForExternalTexture:
+  return Feature::Unorm16FormatsForExternalTexture;
+  case wgpu::FeatureName::OpaqueYCbCrAndroidForExternalTexture:
+  return Feature::OpaqueYCbCrAndroidForExternalTexture;
+  case wgpu::FeatureName::Unorm16Filterable:
+  return Feature::Unorm16Filterable;
+  case wgpu::FeatureName::RenderPassRenderArea:
+  return Feature::RenderPassRenderArea;
+  case wgpu::FeatureName::DawnNativeSpontaneousQueueEvents:
+  return Feature::DawnNativeSpontaneousQueueEvents;
+  case wgpu::FeatureName::AdapterPropertiesDrm:
+  return Feature::AdapterPropertiesDrm;
     default:
       return Feature::InvalidEnum;
   }
@@ -1523,6 +1547,90 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
     if (kFeatureInfo[i].feature == Feature::AtomicVec2uMinMax) {
       list[Feature::AtomicVec2uMinMax] = {
         "atomic-vec2u-min-max",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::Unorm16FormatsForExternalTexture),
+                "Please define feature info for Unorm16FormatsForExternalTexture in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::Unorm16FormatsForExternalTexture) {
+      list[Feature::Unorm16FormatsForExternalTexture] = {
+        "unorm16formats-for-external-texture",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::OpaqueYCbCrAndroidForExternalTexture),
+                "Please define feature info for OpaqueYCbCrAndroidForExternalTexture in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::OpaqueYCbCrAndroidForExternalTexture) {
+      list[Feature::OpaqueYCbCrAndroidForExternalTexture] = {
+        "opaque-y-cb-cr-android-for-external-texture",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::Unorm16Filterable),
+                "Please define feature info for Unorm16Filterable in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::Unorm16Filterable) {
+      list[Feature::Unorm16Filterable] = {
+        "unorm16filterable",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::RenderPassRenderArea),
+                "Please define feature info for RenderPassRenderArea in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::RenderPassRenderArea) {
+      list[Feature::RenderPassRenderArea] = {
+        "render-pass-render-area",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::DawnNativeSpontaneousQueueEvents),
+                "Please define feature info for DawnNativeSpontaneousQueueEvents in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::DawnNativeSpontaneousQueueEvents) {
+      list[Feature::DawnNativeSpontaneousQueueEvents] = {
+        "dawn-native-spontaneous-queue-events",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::AdapterPropertiesDrm),
+                "Please define feature info for AdapterPropertiesDrm in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::AdapterPropertiesDrm) {
+      list[Feature::AdapterPropertiesDrm] = {
+        "adapter-properties-drm",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,

@@ -116,6 +116,23 @@ explicit operator View() const {
 
     };
 
+    struct AdapterPropertiesDrm : ChainedStructOut {
+        AdapterPropertiesDrm() {
+            sType = wgpu::SType::AdapterPropertiesDrm;
+        }
+        alignas(wgpu::AdapterPropertiesDrm::kFirstMemberAlignment) wgpu::Bool hasPrimary = false;
+        wgpu::Bool hasRender = false;
+        uint64_t primaryMajor = 0;
+        uint64_t primaryMinor = 0;
+        uint64_t renderMajor = 0;
+        uint64_t renderMinor = 0;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const AdapterPropertiesDrm& rhs) const;
+
+    };
+
     struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs : ChainedStructOut {
         AdapterPropertiesExplicitComputeSubgroupSizeConfigs() {
             sType = wgpu::SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs;
@@ -226,6 +243,19 @@ explicit operator View() const {
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const Color& rhs) const;
+
+    };
+
+    struct ColorSpaceDawn {
+        ChainedStruct const * nextInChain = nullptr;
+        wgpu::ColorSpacePrimariesDawn primaries = {};
+        wgpu::ColorSpaceTransferDawn transfer = {};
+        wgpu::ColorSpaceYCbCrRangeDawn yCbCrRange = {};
+        wgpu::ColorSpaceYCbCrMatrixDawn yCbCrMatrix = {};
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const ColorSpaceDawn& rhs) const;
 
     };
 
@@ -759,21 +789,6 @@ explicit operator View() const {
 
     };
 
-    struct RenderPassDescriptorExpandResolveRect : ChainedStruct {
-        RenderPassDescriptorExpandResolveRect() {
-            sType = wgpu::SType::RenderPassDescriptorExpandResolveRect;
-        }
-        alignas(wgpu::RenderPassDescriptorExpandResolveRect::kFirstMemberAlignment) uint32_t x;
-        uint32_t y;
-        uint32_t width;
-        uint32_t height;
-
-        // Equality operators, mostly for testing. Note that this tests
-        // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const RenderPassDescriptorExpandResolveRect& rhs) const;
-
-    };
-
     struct RenderPassDescriptorResolveRect : ChainedStruct {
         RenderPassDescriptorResolveRect() {
             sType = wgpu::SType::RenderPassDescriptorResolveRect;
@@ -903,13 +918,16 @@ explicit operator View() const {
 
     };
 
-    struct SharedBufferMemoryDescriptor {
-        ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+    struct SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor : ChainedStruct {
+        SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor() {
+            sType = wgpu::SType::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor;
+        }
+        alignas(wgpu::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::kFirstMemberAlignment) void * handle;
+        uint64_t size;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const SharedBufferMemoryDescriptor& rhs) const;
+        bool operator==(const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor& rhs) const;
 
     };
 
@@ -1095,7 +1113,6 @@ explicit operator View() const {
             sType = wgpu::SType::SharedTextureMemoryAHardwareBufferDescriptor;
         }
         alignas(wgpu::SharedTextureMemoryAHardwareBufferDescriptor::kFirstMemberAlignment) void * handle;
-        wgpu::Bool useExternalFormat;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1620,15 +1637,15 @@ explicit operator View() const {
 
     };
 
-    struct TextureBindingViewDimensionDescriptor : ChainedStruct {
-        TextureBindingViewDimensionDescriptor() {
-            sType = wgpu::SType::TextureBindingViewDimensionDescriptor;
+    struct TextureBindingViewDimension : ChainedStruct {
+        TextureBindingViewDimension() {
+            sType = wgpu::SType::TextureBindingViewDimension;
         }
-        alignas(wgpu::TextureBindingViewDimensionDescriptor::kFirstMemberAlignment) wgpu::TextureViewDimension textureBindingViewDimension = wgpu::TextureViewDimension::Undefined;
+        alignas(wgpu::TextureBindingViewDimension::kFirstMemberAlignment) wgpu::TextureViewDimension textureBindingViewDimension = wgpu::TextureViewDimension::Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const TextureBindingViewDimensionDescriptor& rhs) const;
+        bool operator==(const TextureBindingViewDimension& rhs) const;
 
     };
 
@@ -2035,6 +2052,19 @@ explicit operator View() const {
 
     };
 
+    struct RenderPassRenderAreaRect : ChainedStruct {
+        RenderPassRenderAreaRect() {
+            sType = wgpu::SType::RenderPassRenderAreaRect;
+        }
+        alignas(wgpu::RenderPassRenderAreaRect::kFirstMemberAlignment) Origin2D origin;
+        Extent2D size;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const RenderPassRenderAreaRect& rhs) const;
+
+    };
+
     struct RenderPassStorageAttachment {
         ChainedStruct const * nextInChain = nullptr;
         uint64_t offset = 0;
@@ -2102,6 +2132,16 @@ explicit operator View() const {
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const ShaderModuleDescriptor& rhs) const;
+
+    };
+
+    struct SharedBufferMemoryDescriptor {
+        ChainedStruct const * nextInChain = nullptr;
+        StringView label;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const SharedBufferMemoryDescriptor& rhs) const;
 
     };
 

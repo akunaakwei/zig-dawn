@@ -1619,6 +1619,13 @@ static void ThreadDispatchSharedFenceExportInfo(WGPUSharedFence sharedFence, WGP
     }
     proc(sharedFence, info);
 }
+static void ThreadDispatchSharedFenceSetLabel(WGPUSharedFence sharedFence, WGPUStringView label) {
+    auto* proc = perThreadProcs.sharedFenceSetLabel;
+    if (!proc) {
+        proc = defaultProc.sharedFenceSetLabel;
+    }
+    proc(sharedFence, label);
+}
 static void ThreadDispatchSharedFenceAddRef(WGPUSharedFence sharedFence) {
     auto* proc = perThreadProcs.sharedFenceAddRef;
     if (!proc) {
@@ -2179,6 +2186,7 @@ extern "C" {
         ThreadDispatchSharedBufferMemoryRelease,
         ThreadDispatchSharedBufferMemoryEndAccessStateFreeMembers,
         ThreadDispatchSharedFenceExportInfo,
+        ThreadDispatchSharedFenceSetLabel,
         ThreadDispatchSharedFenceAddRef,
         ThreadDispatchSharedFenceRelease,
         ThreadDispatchSharedTextureMemoryBeginAccess,

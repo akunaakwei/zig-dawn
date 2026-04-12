@@ -262,6 +262,7 @@ typedef struct DawnProcTable {
     WGPUProcSharedBufferMemoryEndAccessStateFreeMembers sharedBufferMemoryEndAccessStateFreeMembers;
 
     WGPUProcSharedFenceExportInfo sharedFenceExportInfo;
+    WGPUProcSharedFenceSetLabel sharedFenceSetLabel;
     WGPUProcSharedFenceAddRef sharedFenceAddRef;
     WGPUProcSharedFenceRelease sharedFenceRelease;
 

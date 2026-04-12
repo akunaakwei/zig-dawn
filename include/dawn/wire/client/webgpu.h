@@ -292,6 +292,7 @@ DAWN_WIRE_EXPORT void wgpuDawnWireClientSharedBufferMemoryEndAccessStateFreeMemb
 
 // Methods of SharedFence
 DAWN_WIRE_EXPORT void wgpuDawnWireClientSharedFenceExportInfo(WGPUSharedFence sharedFence, WGPUSharedFenceExportInfo * info) WGPU_FUNCTION_ATTRIBUTE;
+DAWN_WIRE_EXPORT void wgpuDawnWireClientSharedFenceSetLabel(WGPUSharedFence sharedFence, WGPUStringView label) WGPU_FUNCTION_ATTRIBUTE;
 DAWN_WIRE_EXPORT void wgpuDawnWireClientSharedFenceAddRef(WGPUSharedFence sharedFence) WGPU_FUNCTION_ATTRIBUTE;
 DAWN_WIRE_EXPORT void wgpuDawnWireClientSharedFenceRelease(WGPUSharedFence sharedFence) WGPU_FUNCTION_ATTRIBUTE;
 
