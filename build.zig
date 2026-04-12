@@ -925,38 +925,26 @@ pub fn build(b: *std.Build) void {
     native.installHeadersDirectory(b.path("include"), ".", .{});
     // b.installArtifact(native);
 
-    const webgpu_dawn = b.addLibrary(.{
+    const webgpu_mod = b.allocator.create(std.Build.Module) catch @panic("OOM");
+    webgpu_mod.init(b, .{ .existing = native.root_module });
+    const webgpu = b.addLibrary(.{
         .name = "webgpu_dawn",
-        .root_module = b.createModule(.{
-            .target = target,
-            .optimize = optimize,
-            .link_libcpp = true,
-        }),
+        .root_module = webgpu_mod,
         .linkage = linkage,
     });
-    webgpu_dawn.linkLibrary(native);
-    webgpu_dawn.addIncludePath(b.path("include"));
-    webgpu_dawn.addIncludePath(b.path("src"));
-    webgpu_dawn.addIncludePath(dawn_dep.path("include"));
-    webgpu_dawn.addIncludePath(dawn_dep.path("src"));
-    webgpu_dawn.addCSourceFiles(.{
-        .root = b.path("src/dawn/native"),
-        .files = &.{"webgpu_dawn_native_proc.cpp"},
-        .flags = &flags,
-    });
-    webgpu_dawn.installHeader(b.path("webgpu-headers/webgpu.h"), "webgpu/webgpu.h");
-    b.installArtifact(webgpu_dawn);
-
-    const translate_webgpu = b.addTranslateC(.{
-        .root_source_file = b.path("include/dawn/webgpu.h"),
-        .target = target,
-        .optimize = optimize,
-    });
-    translate_webgpu.addIncludePath(b.path("include"));
-    translate_webgpu.addIncludePath(dawn_dep.path("include"));
-
-    const webgpu_mod = translate_webgpu.addModule("webgpu");
-    webgpu_mod.linkLibrary(webgpu_dawn);
+    webgpu_mod.addCMacro("WGPU_IMPLEMENTATION", "1");
+    webgpu_mod.addCMacro("DAWN_NATIVE_IMPLEMENTATION", "1");
+    if (linkage == .dynamic) {
+        webgpu_mod.addCMacro("DAWN_NATIVE_SHARED_LIBRARY", "1");
+        webgpu_mod.addCMacro("WGPU_SHARED_LIBRARY", "1");
+        webgpu.addCSourceFiles(.{
+            .root = b.path("src/dawn/native"),
+            .files = &.{"webgpu_dawn_native_proc.cpp"},
+            .flags = &flags,
+        });
+    }
+    webgpu.installHeader(b.path("webgpu-headers/webgpu.h"), "webgpu/webgpu.h");
+    b.installArtifact(webgpu);
 
     const glfw_dep = b.dependency("glfw", .{
         .target = target,
