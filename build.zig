@@ -88,30 +88,26 @@ pub fn build(b: *std.Build) void {
     });
     tint_utils.linkLibrary(abseil);
     tint_utils.addIncludePath(dawn_dep.path("."));
-    inline for (tint_bytes_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "bytes", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_command_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "command", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_containers_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "containers", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_diagnostic_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "diagnostic", src })),
-            .flags = &flags,
-        });
-    }
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "bytes" })),
+        .files = &tint_bytes_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "command" })),
+        .files = &tint_command_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "containers" })),
+        .files = &tint_containers_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "diagnostic" })),
+        .files = &tint_diagnostic_sources,
+        .flags = &flags,
+    });
     switch (target.result.os.tag) {
         .linux, .ios, .macos, .tvos, .visionos, .watchos => tint_utils.addCSourceFile(.{
             .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "file", "tmpfile_posix.cc" })),
@@ -127,48 +123,41 @@ pub fn build(b: *std.Build) void {
             .flags = &flags,
         }),
     }
-    inline for (tint_ice_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "ice", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_macros_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "macros", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_math_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "math", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_memory_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "memory", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_rtti_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "rtti", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_strconv_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "strconv", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_symbol_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "symbol", src })),
-            .flags = &flags,
-        });
-    }
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "ice" })),
+        .files = &tint_ice_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "macros" })),
+        .files = &tint_macros_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "math" })),
+        .files = &tint_math_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "memory" })),
+        .files = &tint_memory_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "rtti" })),
+        .files = &tint_rtti_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "strconv" })),
+        .files = &tint_strconv_sources,
+        .flags = &flags,
+    });
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "symbol" })),
+        .files = &tint_symbol_sources,
+        .flags = &flags,
+    });
     switch (target.result.os.tag) {
         .linux => tint_utils.addCSourceFiles(.{
             .root = dawn_dep.path("src/tint/utils/system"),
@@ -191,12 +180,11 @@ pub fn build(b: *std.Build) void {
             .flags = &flags,
         }),
     }
-    inline for (tint_text_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "text", src })),
-            .flags = &flags,
-        });
-    }
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "text" })),
+        .files = &tint_text_sources,
+        .flags = &flags,
+    });
     switch (target.result.os.tag) {
         .linux, .ios, .macos, .tvos, .visionos, .watchos => tint_utils.addCSourceFiles(.{
             .root = dawn_dep.path("src/tint/utils/text"),
@@ -215,12 +203,11 @@ pub fn build(b: *std.Build) void {
             .flags = &flags,
         }),
     }
-    inline for (tint_text_generator_sources) |src| {
-        tint_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "text_generator", src })),
-            .flags = &flags,
-        });
-    }
+    tint_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "utils", "text_generator" })),
+        .files = &tint_text_generator_sources,
+        .flags = &flags,
+    });
     tint_utils.addCSourceFiles(.{
         .root = dawn_dep.path("src/tint/utils"),
         .files = &.{
@@ -240,30 +227,26 @@ pub fn build(b: *std.Build) void {
     });
     tint_core.linkLibrary(tint_utils);
     tint_core.addIncludePath(dawn_dep.path("."));
-    inline for (tint_core_constant_sources) |src| {
-        tint_core.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "core", "constant", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_core_intrinsic_sources) |src| {
-        tint_core.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "core", "intrinsic", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_core_ir_sources) |src| {
-        tint_core.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "core", "ir", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_core_type_sources) |src| {
-        tint_core.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "core", "type", src })),
-            .flags = &flags,
-        });
-    }
+    tint_core.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "core", "constant" })),
+        .files = &tint_core_constant_sources,
+        .flags = &flags,
+    });
+    tint_core.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "core", "intrinsic" })),
+        .files = &tint_core_intrinsic_sources,
+        .flags = &flags,
+    });
+    tint_core.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "core", "ir" })),
+        .files = &tint_core_ir_sources,
+        .flags = &flags,
+    });
+    tint_core.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "core", "type" })),
+        .files = &tint_core_type_sources,
+        .flags = &flags,
+    });
     tint_core.addCSourceFiles(.{
         .root = dawn_dep.path("src/tint/lang/core"),
         .files = &.{
@@ -285,66 +268,51 @@ pub fn build(b: *std.Build) void {
     });
     tint_wgsl.linkLibrary(tint_utils);
     tint_wgsl.addIncludePath(dawn_dep.path("."));
-    inline for (tint_wgsl_ast_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "ast", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_wgsl_inspector_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "inspector", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_wgsl_intrinsic_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "intrinsic", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_wgsl_ir_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "ir", src })),
-            .flags = &flags,
-        });
-    }
-    // inline for (tint_wgsl_ls_sources) |src| {
-    //     tint_wgsl.addCSourceFile(.{
-    //         .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "ls", src })),
-    //         .flags = &flags,
-    //     });
-    // }
-    inline for (tint_wgsl_program_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "program", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_wgsl_reader_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "reader", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_wgsl_resolver_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "resolver", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_wgsl_sem_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "sem", src })),
-            .flags = &flags,
-        });
-    }
-    inline for (tint_wgsl_writer_sources) |src| {
-        tint_wgsl.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "writer", src })),
-            .flags = &flags,
-        });
-    }
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "ast" })),
+        .files = &tint_wgsl_ast_sources,
+        .flags = &flags,
+    });
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "inspector" })),
+        .files = &tint_wgsl_inspector_sources,
+        .flags = &flags,
+    });
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "intrinsic" })),
+        .files = &tint_wgsl_intrinsic_sources,
+        .flags = &flags,
+    });
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "ir" })),
+        .files = &tint_wgsl_ir_sources,
+        .flags = &flags,
+    });
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "program" })),
+        .files = &tint_wgsl_program_sources,
+        .flags = &flags,
+    });
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "reader" })),
+        .files = &tint_wgsl_reader_sources,
+        .flags = &flags,
+    });
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "resolver" })),
+        .files = &tint_wgsl_resolver_sources,
+        .flags = &flags,
+    });
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "sem" })),
+        .files = &tint_wgsl_sem_sources,
+        .flags = &flags,
+    });
+    tint_wgsl.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "tint", "lang", "wgsl", "writer" })),
+        .files = &tint_wgsl_writer_sources,
+        .flags = &flags,
+    });
     tint_wgsl.addCSourceFiles(.{
         .root = dawn_dep.path("src/tint/lang/wgsl"),
         .files = &.{
@@ -538,12 +506,11 @@ pub fn build(b: *std.Build) void {
     dawn_common.addIncludePath(dawn_dep.path("src/dawn/partition_alloc"));
     dawn_common.addIncludePath(b.path("include"));
     dawn_common.addIncludePath(b.path("src"));
-    inline for (dawn_common_sources) |src| {
-        dawn_common.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "common", src })),
-            .flags = &flags,
-        });
-    }
+    dawn_common.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "common" })),
+        .files = &dawn_common_sources,
+        .flags = &flags,
+    });
     if (!target.result.cpu.arch.isWasm()) {
         dawn_common.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/common"),
@@ -592,12 +559,11 @@ pub fn build(b: *std.Build) void {
     if (maybe_spirv_tools_dep) |spirv_toosl_dep| {
         wgpu_utils.linkLibrary(spirv_toosl_dep.artifact("spvtools"));
     }
-    inline for (dawn_wgpu_utils_sources) |src| {
-        wgpu_utils.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "utils", src })),
-            .flags = &flags,
-        });
-    }
+    wgpu_utils.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "utils" })),
+        .files = &dawn_wgpu_utils_sources,
+        .flags = &flags,
+    });
     wgpu_utils.addCSourceFile(.{
         .file = b.path("src/dawn/utils/ComboLimits.cpp"),
         .flags = &flags,
@@ -618,12 +584,11 @@ pub fn build(b: *std.Build) void {
     platform.addIncludePath(dawn_dep.path("src/dawn/partition_alloc"));
     platform.addIncludePath(b.path("include"));
     platform.addIncludePath(b.path("src"));
-    inline for (dawn_platform_sources) |src| {
-        platform.addCSourceFile(.{
-            .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "platform", src })),
-            .flags = &flags,
-        });
-    }
+    platform.addCSourceFiles(.{
+        .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "platform" })),
+        .files = &dawn_platform_sources,
+        .flags = &flags,
+    });
 
     const native_utils = b.addLibrary(.{
         .name = "dawn_native_utils",
@@ -811,12 +776,11 @@ pub fn build(b: *std.Build) void {
     }
 
     if (dawn_enable_d3d) {
-        inline for (dawn_d3d_sources) |src| {
-            native.addCSourceFile(.{
-                .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native", src })),
-                .flags = &flags,
-            });
-        }
+        native.addCSourceFiles(.{
+            .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
+            .files = &dawn_d3d_sources,
+            .flags = &flags,
+        });
         native.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/native"),
             .files = &.{"d3d/D3DBackend.cpp"},
@@ -826,12 +790,11 @@ pub fn build(b: *std.Build) void {
 
     if (dawn_enable_d3d11) {
         native.linkSystemLibrary("dxguid");
-        inline for (dawn_d3d11_sources) |src| {
-            native.addCSourceFile(.{
-                .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native", src })),
-                .flags = &flags,
-            });
-        }
+        native.addCSourceFiles(.{
+            .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
+            .files = &dawn_d3d11_sources,
+            .flags = &flags,
+        });
         native.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/native"),
             .files = &.{"d3d11/D3D11Backend.cpp"},
@@ -841,12 +804,11 @@ pub fn build(b: *std.Build) void {
 
     if (dawn_enable_d3d12) {
         native.linkSystemLibrary("dxguid");
-        inline for (dawn_d3d12_sources) |src| {
-            native.addCSourceFile(.{
-                .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native", src })),
-                .flags = &flags,
-            });
-        }
+        native.addCSourceFiles(.{
+            .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
+            .files = &dawn_d3d12_sources,
+            .flags = &flags,
+        });
         native.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/native"),
             .files = &.{"d3d12/D3D12Backend.cpp"},
@@ -862,12 +824,11 @@ pub fn build(b: *std.Build) void {
             native.linkFramework("Cocoa");
             native.linkFramework("IOKit");
         }
-        inline for (dawn_metal_sources) |src| {
-            native.addCSourceFile(.{
-                .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native", src })),
-                .flags = &flags,
-            });
-        }
+        native.addCSourceFiles(.{
+            .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
+            .files = &dawn_metal_sources,
+            .flags = &flags,
+        });
         native.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/native"),
             .files = &.{"metal/MetalBackend.mm"},
@@ -876,12 +837,11 @@ pub fn build(b: *std.Build) void {
     }
 
     if (dawn_enable_null) {
-        inline for (dawn_null_sources) |src| {
-            native.addCSourceFile(.{
-                .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native", src })),
-                .flags = &flags,
-            });
-        }
+        native.addCSourceFiles(.{
+            .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
+            .files = &dawn_null_sources,
+            .flags = &flags,
+        });
         native.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/native"),
             .files = &.{"null/NullBackend.cpp"},
@@ -890,12 +850,11 @@ pub fn build(b: *std.Build) void {
     }
 
     if (dawn_enable_webgpu_on_webgpu) {
-        inline for (dawn_webgpu_sources) |src| {
-            native.addCSourceFile(.{
-                .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native", src })),
-                .flags = &flags,
-            });
-        }
+        native.addCSourceFiles(.{
+            .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
+            .files = &dawn_webgpu_sources,
+            .flags = &flags,
+        });
         native.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/native"),
             .files = &.{"webgpu/WebGPUBackend.cpp"},
@@ -912,12 +871,11 @@ pub fn build(b: *std.Build) void {
     }
 
     if (dawn_enable_opengl) {
-        inline for (dawn_opengl_sources) |src| {
-            native.addCSourceFile(.{
-                .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native", src })),
-                .flags = &flags,
-            });
-        }
+        native.addCSourceFiles(.{
+            .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
+            .files = &dawn_opengl_sources,
+            .flags = &flags,
+        });
         native.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/native"),
             .files = &.{"opengl/OpenGLBackend.cpp"},
@@ -926,12 +884,11 @@ pub fn build(b: *std.Build) void {
     }
 
     if (dawn_enable_vulkan) {
-        inline for (dawn_vulkan_sources) |src| {
-            native.addCSourceFile(.{
-                .file = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native", src })),
-                .flags = &flags,
-            });
-        }
+        native.addCSourceFiles(.{
+            .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
+            .files = &dawn_vulkan_sources,
+            .flags = &flags,
+        });
         native.addCSourceFiles(.{
             .root = dawn_dep.path("src/dawn/native"),
             .files = &.{"vulkan/VulkanBackend.cpp"},
