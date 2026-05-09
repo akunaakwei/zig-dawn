@@ -957,6 +957,7 @@ pub fn build(b: *std.Build) void {
             .flags = &flags,
         });
     }
+    webgpu.installHeadersDirectory(b.path("include"), ".", .{});
     webgpu.installHeader(b.path("webgpu-headers/webgpu.h"), "webgpu/webgpu.h");
     b.installArtifact(webgpu);
 
