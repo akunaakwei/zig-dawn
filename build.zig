@@ -1521,24 +1521,27 @@ const tint_hlsl_validate_sources = .{
 };
 
 const tint_hlsl_writer_sources = .{
-    "writer.cc",
-    "common/option_helpers.cc",
     "common/options.cc",
+    "common/option_helpers.cc",
     "common/output.cc",
-    "helpers/generate_bindings.cc",
     "printer/printer.cc",
+    "raise/array_offset_from_immediate.cc",
+    "raise/array_offset_from_uniform.cc",
     "raise/binary_polyfill.cc",
     "raise/builtin_polyfill.cc",
-    "raise/change_immediate_to_uniform.cc",
     "raise/decompose_storage_access.cc",
-    "raise/decompose_uniform_access.cc",
+    "raise/extract_ternary_values.cc",
     "raise/localize_struct_array_assignment.cc",
     "raise/pixel_local.cc",
     "raise/promote_initializers.cc",
+    "raise/promote_initializers_fuzz.cc",
     "raise/raise.cc",
     "raise/replace_default_only_switch.cc",
     "raise/replace_non_indexable_mat_vec_stores.cc",
+    "raise/resource_table_helper.cc",
     "raise/shader_io.cc",
+    "writer.cc",
+    "writer_fuzz.cc",
 };
 
 const tint_spirv_intrinsic_sources = .{
