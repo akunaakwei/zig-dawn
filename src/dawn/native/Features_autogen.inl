@@ -73,6 +73,8 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::PrimitiveIndex;
   case Feature::TextureComponentSwizzle:
     return wgpu::FeatureName::TextureComponentSwizzle;
+  case Feature::SubgroupSizeControl:
+    return wgpu::FeatureName::SubgroupSizeControl;
   case Feature::DawnInternalUsages:
     return wgpu::FeatureName::DawnInternalUsages;
   case Feature::DawnMultiPlanarFormats:
@@ -183,14 +185,12 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::DawnDeviceAllocatorControl;
   case Feature::AdapterPropertiesWGPU:
     return wgpu::FeatureName::AdapterPropertiesWGPU;
-  case Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
-    return wgpu::FeatureName::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle;
+  case Feature::SharedBufferMemoryFromWindowsHandle:
+    return wgpu::FeatureName::SharedBufferMemoryFromWindowsHandle;
   case Feature::SharedTextureMemoryD3D12Resource:
     return wgpu::FeatureName::SharedTextureMemoryD3D12Resource;
   case Feature::ChromiumExperimentalSamplingResourceTable:
     return wgpu::FeatureName::ChromiumExperimentalSamplingResourceTable;
-  case Feature::ChromiumExperimentalSubgroupSizeControl:
-    return wgpu::FeatureName::ChromiumExperimentalSubgroupSizeControl;
   case Feature::AtomicVec2uMinMax:
     return wgpu::FeatureName::AtomicVec2uMinMax;
   case Feature::Unorm16FormatsForExternalTexture:
@@ -201,10 +201,12 @@ wgpu::FeatureName ToAPI(Feature feature) {
     return wgpu::FeatureName::Unorm16Filterable;
   case Feature::RenderPassRenderArea:
     return wgpu::FeatureName::RenderPassRenderArea;
-  case Feature::DawnNativeSpontaneousQueueEvents:
-    return wgpu::FeatureName::DawnNativeSpontaneousQueueEvents;
   case Feature::AdapterPropertiesDrm:
     return wgpu::FeatureName::AdapterPropertiesDrm;
+  case Feature::TextureCompressionUnaligned:
+    return wgpu::FeatureName::TextureCompressionUnaligned;
+  case Feature::DawnAllowUndefinedLoadStoreOp:
+    return wgpu::FeatureName::DawnAllowUndefinedLoadStoreOp;
     case Feature::InvalidEnum:
       break;
   }
@@ -257,6 +259,8 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::PrimitiveIndex;
   case wgpu::FeatureName::TextureComponentSwizzle:
   return Feature::TextureComponentSwizzle;
+  case wgpu::FeatureName::SubgroupSizeControl:
+  return Feature::SubgroupSizeControl;
   case wgpu::FeatureName::DawnInternalUsages:
   return Feature::DawnInternalUsages;
   case wgpu::FeatureName::DawnMultiPlanarFormats:
@@ -367,14 +371,12 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::DawnDeviceAllocatorControl;
   case wgpu::FeatureName::AdapterPropertiesWGPU:
   return Feature::AdapterPropertiesWGPU;
-  case wgpu::FeatureName::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
-  return Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle;
+  case wgpu::FeatureName::SharedBufferMemoryFromWindowsHandle:
+  return Feature::SharedBufferMemoryFromWindowsHandle;
   case wgpu::FeatureName::SharedTextureMemoryD3D12Resource:
   return Feature::SharedTextureMemoryD3D12Resource;
   case wgpu::FeatureName::ChromiumExperimentalSamplingResourceTable:
   return Feature::ChromiumExperimentalSamplingResourceTable;
-  case wgpu::FeatureName::ChromiumExperimentalSubgroupSizeControl:
-  return Feature::ChromiumExperimentalSubgroupSizeControl;
   case wgpu::FeatureName::AtomicVec2uMinMax:
   return Feature::AtomicVec2uMinMax;
   case wgpu::FeatureName::Unorm16FormatsForExternalTexture:
@@ -385,10 +387,12 @@ Feature FromAPI(wgpu::FeatureName feature) {
   return Feature::Unorm16Filterable;
   case wgpu::FeatureName::RenderPassRenderArea:
   return Feature::RenderPassRenderArea;
-  case wgpu::FeatureName::DawnNativeSpontaneousQueueEvents:
-  return Feature::DawnNativeSpontaneousQueueEvents;
   case wgpu::FeatureName::AdapterPropertiesDrm:
   return Feature::AdapterPropertiesDrm;
+  case wgpu::FeatureName::TextureCompressionUnaligned:
+  return Feature::TextureCompressionUnaligned;
+  case wgpu::FeatureName::DawnAllowUndefinedLoadStoreOp:
+  return Feature::DawnAllowUndefinedLoadStoreOp;
     default:
       return Feature::InvalidEnum;
   }
@@ -707,6 +711,20 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
     if (kFeatureInfo[i].feature == Feature::TextureComponentSwizzle) {
       list[Feature::TextureComponentSwizzle] = {
         "texture-component-swizzle",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::SubgroupSizeControl),
+                "Please define feature info for SubgroupSizeControl in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::SubgroupSizeControl) {
+      list[Feature::SubgroupSizeControl] = {
+        "subgroup-size-control",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,
@@ -1485,12 +1503,12 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
   }
 }
 {
-  static_assert(FeatureInfoIsDefined(Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle),
-                "Please define feature info for SharedBufferMemoryD3D12SharedMemoryFileMappingHandle in Features.cpp");
+  static_assert(FeatureInfoIsDefined(Feature::SharedBufferMemoryFromWindowsHandle),
+                "Please define feature info for SharedBufferMemoryFromWindowsHandle in Features.cpp");
   for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle) {
-      list[Feature::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle] = {
-        "shared-buffer-memory-d3d12shared-memory-file-mapping-handle",
+    if (kFeatureInfo[i].feature == Feature::SharedBufferMemoryFromWindowsHandle) {
+      list[Feature::SharedBufferMemoryFromWindowsHandle] = {
+        "shared-buffer-memory-from-windows-handle",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,
@@ -1519,20 +1537,6 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
     if (kFeatureInfo[i].feature == Feature::ChromiumExperimentalSamplingResourceTable) {
       list[Feature::ChromiumExperimentalSamplingResourceTable] = {
         "chromium-experimental-sampling-resource-table",
-        kFeatureInfo[i].info.description,
-        kFeatureInfo[i].info.url,
-        kFeatureInfo[i].info.featureState,
-      };
-    }
-  }
-}
-{
-  static_assert(FeatureInfoIsDefined(Feature::ChromiumExperimentalSubgroupSizeControl),
-                "Please define feature info for ChromiumExperimentalSubgroupSizeControl in Features.cpp");
-  for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::ChromiumExperimentalSubgroupSizeControl) {
-      list[Feature::ChromiumExperimentalSubgroupSizeControl] = {
-        "chromium-experimental-subgroup-size-control",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,
@@ -1611,12 +1615,12 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
   }
 }
 {
-  static_assert(FeatureInfoIsDefined(Feature::DawnNativeSpontaneousQueueEvents),
-                "Please define feature info for DawnNativeSpontaneousQueueEvents in Features.cpp");
+  static_assert(FeatureInfoIsDefined(Feature::AdapterPropertiesDrm),
+                "Please define feature info for AdapterPropertiesDrm in Features.cpp");
   for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::DawnNativeSpontaneousQueueEvents) {
-      list[Feature::DawnNativeSpontaneousQueueEvents] = {
-        "dawn-native-spontaneous-queue-events",
+    if (kFeatureInfo[i].feature == Feature::AdapterPropertiesDrm) {
+      list[Feature::AdapterPropertiesDrm] = {
+        "adapter-properties-drm",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,
@@ -1625,12 +1629,26 @@ static constexpr ityp::array<Feature, FeatureInfo, kEnumCount<Feature>> Initiali
   }
 }
 {
-  static_assert(FeatureInfoIsDefined(Feature::AdapterPropertiesDrm),
-                "Please define feature info for AdapterPropertiesDrm in Features.cpp");
+  static_assert(FeatureInfoIsDefined(Feature::TextureCompressionUnaligned),
+                "Please define feature info for TextureCompressionUnaligned in Features.cpp");
   for (size_t i = 0; i < kInfoCount; ++i) {
-    if (kFeatureInfo[i].feature == Feature::AdapterPropertiesDrm) {
-      list[Feature::AdapterPropertiesDrm] = {
-        "adapter-properties-drm",
+    if (kFeatureInfo[i].feature == Feature::TextureCompressionUnaligned) {
+      list[Feature::TextureCompressionUnaligned] = {
+        "texture-compression-unaligned",
+        kFeatureInfo[i].info.description,
+        kFeatureInfo[i].info.url,
+        kFeatureInfo[i].info.featureState,
+      };
+    }
+  }
+}
+{
+  static_assert(FeatureInfoIsDefined(Feature::DawnAllowUndefinedLoadStoreOp),
+                "Please define feature info for DawnAllowUndefinedLoadStoreOp in Features.cpp");
+  for (size_t i = 0; i < kInfoCount; ++i) {
+    if (kFeatureInfo[i].feature == Feature::DawnAllowUndefinedLoadStoreOp) {
+      list[Feature::DawnAllowUndefinedLoadStoreOp] = {
+        "dawn-allow-undefined-load-store-op",
         kFeatureInfo[i].info.description,
         kFeatureInfo[i].info.url,
         kFeatureInfo[i].info.featureState,

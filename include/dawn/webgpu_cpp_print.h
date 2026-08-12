@@ -53,7 +53,7 @@ namespace wgpu {
         o << "AdapterType::Unknown";
         break;
           default:
-            o << "AdapterType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<AdapterType>::type>(value);
+            o << "AdapterType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<AdapterType>::type>(value);
       }
       return o;
   }
@@ -73,7 +73,7 @@ namespace wgpu {
         o << "AddressMode::MirrorRepeat";
         break;
           default:
-            o << "AddressMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<AddressMode>::type>(value);
+            o << "AddressMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<AddressMode>::type>(value);
       }
       return o;
   }
@@ -90,7 +90,7 @@ namespace wgpu {
         o << "AlphaMode::Unpremultiplied";
         break;
           default:
-            o << "AlphaMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<AlphaMode>::type>(value);
+            o << "AlphaMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<AlphaMode>::type>(value);
       }
       return o;
   }
@@ -125,7 +125,7 @@ namespace wgpu {
         o << "BackendType::OpenGLES";
         break;
           default:
-            o << "BackendType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<BackendType>::type>(value);
+            o << "BackendType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<BackendType>::type>(value);
       }
       return o;
   }
@@ -187,7 +187,7 @@ namespace wgpu {
         o << "BlendFactor::OneMinusSrc1Alpha";
         break;
           default:
-            o << "BlendFactor::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<BlendFactor>::type>(value);
+            o << "BlendFactor::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<BlendFactor>::type>(value);
       }
       return o;
   }
@@ -213,7 +213,7 @@ namespace wgpu {
         o << "BlendOperation::Max";
         break;
           default:
-            o << "BlendOperation::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<BlendOperation>::type>(value);
+            o << "BlendOperation::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<BlendOperation>::type>(value);
       }
       return o;
   }
@@ -236,7 +236,7 @@ namespace wgpu {
         o << "BufferBindingType::ReadOnlyStorage";
         break;
           default:
-            o << "BufferBindingType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<BufferBindingType>::type>(value);
+            o << "BufferBindingType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<BufferBindingType>::type>(value);
       }
       return o;
   }
@@ -253,7 +253,7 @@ namespace wgpu {
         o << "BufferMapState::Mapped";
         break;
           default:
-            o << "BufferMapState::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<BufferMapState>::type>(value);
+            o << "BufferMapState::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<BufferMapState>::type>(value);
       }
       return o;
   }
@@ -270,7 +270,7 @@ namespace wgpu {
         o << "CallbackMode::AllowSpontaneous";
         break;
           default:
-            o << "CallbackMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<CallbackMode>::type>(value);
+            o << "CallbackMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<CallbackMode>::type>(value);
       }
       return o;
   }
@@ -290,7 +290,7 @@ namespace wgpu {
         o << "ColorSpacePrimariesDawn::DisplayP3";
         break;
           default:
-            o << "ColorSpacePrimariesDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorSpacePrimariesDawn>::type>(value);
+            o << "ColorSpacePrimariesDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ColorSpacePrimariesDawn>::type>(value);
       }
       return o;
   }
@@ -315,8 +315,11 @@ namespace wgpu {
       case ColorSpaceTransferDawn::PQ:
         o << "ColorSpaceTransferDawn::PQ";
         break;
+      case ColorSpaceTransferDawn::BT_1886:
+        o << "ColorSpaceTransferDawn::BT_1886";
+        break;
           default:
-            o << "ColorSpaceTransferDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorSpaceTransferDawn>::type>(value);
+            o << "ColorSpaceTransferDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ColorSpaceTransferDawn>::type>(value);
       }
       return o;
   }
@@ -336,7 +339,7 @@ namespace wgpu {
         o << "ColorSpaceYCbCrMatrixDawn::Rec2020";
         break;
           default:
-            o << "ColorSpaceYCbCrMatrixDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorSpaceYCbCrMatrixDawn>::type>(value);
+            o << "ColorSpaceYCbCrMatrixDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ColorSpaceYCbCrMatrixDawn>::type>(value);
       }
       return o;
   }
@@ -353,7 +356,7 @@ namespace wgpu {
         o << "ColorSpaceYCbCrRangeDawn::Full";
         break;
           default:
-            o << "ColorSpaceYCbCrRangeDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorSpaceYCbCrRangeDawn>::type>(value);
+            o << "ColorSpaceYCbCrRangeDawn::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ColorSpaceYCbCrRangeDawn>::type>(value);
       }
       return o;
   }
@@ -388,7 +391,7 @@ namespace wgpu {
         o << "CompareFunction::Always";
         break;
           default:
-            o << "CompareFunction::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<CompareFunction>::type>(value);
+            o << "CompareFunction::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<CompareFunction>::type>(value);
       }
       return o;
   }
@@ -402,7 +405,7 @@ namespace wgpu {
         o << "CompilationInfoRequestStatus::CallbackCancelled";
         break;
           default:
-            o << "CompilationInfoRequestStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<CompilationInfoRequestStatus>::type>(value);
+            o << "CompilationInfoRequestStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<CompilationInfoRequestStatus>::type>(value);
       }
       return o;
   }
@@ -419,7 +422,7 @@ namespace wgpu {
         o << "CompilationMessageType::Info";
         break;
           default:
-            o << "CompilationMessageType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<CompilationMessageType>::type>(value);
+            o << "CompilationMessageType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<CompilationMessageType>::type>(value);
       }
       return o;
   }
@@ -448,7 +451,7 @@ namespace wgpu {
         o << "ComponentSwizzle::A";
         break;
           default:
-            o << "ComponentSwizzle::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ComponentSwizzle>::type>(value);
+            o << "ComponentSwizzle::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ComponentSwizzle>::type>(value);
       }
       return o;
   }
@@ -471,7 +474,7 @@ namespace wgpu {
         o << "CompositeAlphaMode::Inherit";
         break;
           default:
-            o << "CompositeAlphaMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<CompositeAlphaMode>::type>(value);
+            o << "CompositeAlphaMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<CompositeAlphaMode>::type>(value);
       }
       return o;
   }
@@ -491,7 +494,7 @@ namespace wgpu {
         o << "CreatePipelineAsyncStatus::InternalError";
         break;
           default:
-            o << "CreatePipelineAsyncStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<CreatePipelineAsyncStatus>::type>(value);
+            o << "CreatePipelineAsyncStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<CreatePipelineAsyncStatus>::type>(value);
       }
       return o;
   }
@@ -511,7 +514,7 @@ namespace wgpu {
         o << "CullMode::Back";
         break;
           default:
-            o << "CullMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<CullMode>::type>(value);
+            o << "CullMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<CullMode>::type>(value);
       }
       return o;
   }
@@ -531,7 +534,7 @@ namespace wgpu {
         o << "DeviceLostReason::FailedCreation";
         break;
           default:
-            o << "DeviceLostReason::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<DeviceLostReason>::type>(value);
+            o << "DeviceLostReason::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<DeviceLostReason>::type>(value);
       }
       return o;
   }
@@ -548,7 +551,7 @@ namespace wgpu {
         o << "ErrorFilter::Internal";
         break;
           default:
-            o << "ErrorFilter::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ErrorFilter>::type>(value);
+            o << "ErrorFilter::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ErrorFilter>::type>(value);
       }
       return o;
   }
@@ -571,7 +574,7 @@ namespace wgpu {
         o << "ErrorType::Unknown";
         break;
           default:
-            o << "ErrorType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ErrorType>::type>(value);
+            o << "ErrorType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ErrorType>::type>(value);
       }
       return o;
   }
@@ -591,7 +594,7 @@ namespace wgpu {
         o << "ExternalTextureRotation::Rotate270Degrees";
         break;
           default:
-            o << "ExternalTextureRotation::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ExternalTextureRotation>::type>(value);
+            o << "ExternalTextureRotation::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ExternalTextureRotation>::type>(value);
       }
       return o;
   }
@@ -608,7 +611,7 @@ namespace wgpu {
         o << "FeatureLevel::Core";
         break;
           default:
-            o << "FeatureLevel::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<FeatureLevel>::type>(value);
+            o << "FeatureLevel::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<FeatureLevel>::type>(value);
       }
       return o;
   }
@@ -680,6 +683,9 @@ namespace wgpu {
         break;
       case FeatureName::TextureComponentSwizzle:
         o << "FeatureName::TextureComponentSwizzle";
+        break;
+      case FeatureName::SubgroupSizeControl:
+        o << "FeatureName::SubgroupSizeControl";
         break;
       case FeatureName::DawnInternalUsages:
         o << "FeatureName::DawnInternalUsages";
@@ -846,17 +852,14 @@ namespace wgpu {
       case FeatureName::AdapterPropertiesWGPU:
         o << "FeatureName::AdapterPropertiesWGPU";
         break;
-      case FeatureName::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
-        o << "FeatureName::SharedBufferMemoryD3D12SharedMemoryFileMappingHandle";
+      case FeatureName::SharedBufferMemoryFromWindowsHandle:
+        o << "FeatureName::SharedBufferMemoryFromWindowsHandle";
         break;
       case FeatureName::SharedTextureMemoryD3D12Resource:
         o << "FeatureName::SharedTextureMemoryD3D12Resource";
         break;
       case FeatureName::ChromiumExperimentalSamplingResourceTable:
         o << "FeatureName::ChromiumExperimentalSamplingResourceTable";
-        break;
-      case FeatureName::ChromiumExperimentalSubgroupSizeControl:
-        o << "FeatureName::ChromiumExperimentalSubgroupSizeControl";
         break;
       case FeatureName::AtomicVec2uMinMax:
         o << "FeatureName::AtomicVec2uMinMax";
@@ -873,14 +876,17 @@ namespace wgpu {
       case FeatureName::RenderPassRenderArea:
         o << "FeatureName::RenderPassRenderArea";
         break;
-      case FeatureName::DawnNativeSpontaneousQueueEvents:
-        o << "FeatureName::DawnNativeSpontaneousQueueEvents";
-        break;
       case FeatureName::AdapterPropertiesDrm:
         o << "FeatureName::AdapterPropertiesDrm";
         break;
+      case FeatureName::TextureCompressionUnaligned:
+        o << "FeatureName::TextureCompressionUnaligned";
+        break;
+      case FeatureName::DawnAllowUndefinedLoadStoreOp:
+        o << "FeatureName::DawnAllowUndefinedLoadStoreOp";
+        break;
           default:
-            o << "FeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<FeatureName>::type>(value);
+            o << "FeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<FeatureName>::type>(value);
       }
       return o;
   }
@@ -897,7 +903,7 @@ namespace wgpu {
         o << "FilterMode::Linear";
         break;
           default:
-            o << "FilterMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<FilterMode>::type>(value);
+            o << "FilterMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<FilterMode>::type>(value);
       }
       return o;
   }
@@ -914,7 +920,7 @@ namespace wgpu {
         o << "FrontFace::CW";
         break;
           default:
-            o << "FrontFace::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<FrontFace>::type>(value);
+            o << "FrontFace::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<FrontFace>::type>(value);
       }
       return o;
   }
@@ -931,7 +937,7 @@ namespace wgpu {
         o << "IndexFormat::Uint32";
         break;
           default:
-            o << "IndexFormat::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<IndexFormat>::type>(value);
+            o << "IndexFormat::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<IndexFormat>::type>(value);
       }
       return o;
   }
@@ -948,7 +954,7 @@ namespace wgpu {
         o << "InstanceFeatureName::MultipleDevicesPerAdapter";
         break;
           default:
-            o << "InstanceFeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<InstanceFeatureName>::type>(value);
+            o << "InstanceFeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<InstanceFeatureName>::type>(value);
       }
       return o;
   }
@@ -968,7 +974,7 @@ namespace wgpu {
         o << "LoadOp::ExpandResolveTexture";
         break;
           default:
-            o << "LoadOp::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<LoadOp>::type>(value);
+            o << "LoadOp::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<LoadOp>::type>(value);
       }
       return o;
   }
@@ -988,7 +994,7 @@ namespace wgpu {
         o << "LoggingType::Error";
         break;
           default:
-            o << "LoggingType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<LoggingType>::type>(value);
+            o << "LoggingType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<LoggingType>::type>(value);
       }
       return o;
   }
@@ -1008,7 +1014,7 @@ namespace wgpu {
         o << "MapAsyncStatus::Aborted";
         break;
           default:
-            o << "MapAsyncStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<MapAsyncStatus>::type>(value);
+            o << "MapAsyncStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<MapAsyncStatus>::type>(value);
       }
       return o;
   }
@@ -1025,7 +1031,7 @@ namespace wgpu {
         o << "MipmapFilterMode::Linear";
         break;
           default:
-            o << "MipmapFilterMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<MipmapFilterMode>::type>(value);
+            o << "MipmapFilterMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<MipmapFilterMode>::type>(value);
       }
       return o;
   }
@@ -1042,7 +1048,7 @@ namespace wgpu {
         o << "PopErrorScopeStatus::Error";
         break;
           default:
-            o << "PopErrorScopeStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<PopErrorScopeStatus>::type>(value);
+            o << "PopErrorScopeStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<PopErrorScopeStatus>::type>(value);
       }
       return o;
   }
@@ -1059,7 +1065,7 @@ namespace wgpu {
         o << "PowerPreference::HighPerformance";
         break;
           default:
-            o << "PowerPreference::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<PowerPreference>::type>(value);
+            o << "PowerPreference::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<PowerPreference>::type>(value);
       }
       return o;
   }
@@ -1078,8 +1084,11 @@ namespace wgpu {
       case PredefinedColorSpace::DisplayP3Linear:
         o << "PredefinedColorSpace::DisplayP3Linear";
         break;
+      case PredefinedColorSpace::Rec2020Linear:
+        o << "PredefinedColorSpace::Rec2020Linear";
+        break;
           default:
-            o << "PredefinedColorSpace::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<PredefinedColorSpace>::type>(value);
+            o << "PredefinedColorSpace::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<PredefinedColorSpace>::type>(value);
       }
       return o;
   }
@@ -1102,7 +1111,7 @@ namespace wgpu {
         o << "PresentMode::Mailbox";
         break;
           default:
-            o << "PresentMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<PresentMode>::type>(value);
+            o << "PresentMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<PresentMode>::type>(value);
       }
       return o;
   }
@@ -1128,7 +1137,7 @@ namespace wgpu {
         o << "PrimitiveTopology::TriangleStrip";
         break;
           default:
-            o << "PrimitiveTopology::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<PrimitiveTopology>::type>(value);
+            o << "PrimitiveTopology::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<PrimitiveTopology>::type>(value);
       }
       return o;
   }
@@ -1142,7 +1151,7 @@ namespace wgpu {
         o << "QueryType::Timestamp";
         break;
           default:
-            o << "QueryType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<QueryType>::type>(value);
+            o << "QueryType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<QueryType>::type>(value);
       }
       return o;
   }
@@ -1159,7 +1168,7 @@ namespace wgpu {
         o << "QueueWorkDoneStatus::Error";
         break;
           default:
-            o << "QueueWorkDoneStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<QueueWorkDoneStatus>::type>(value);
+            o << "QueueWorkDoneStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<QueueWorkDoneStatus>::type>(value);
       }
       return o;
   }
@@ -1179,7 +1188,7 @@ namespace wgpu {
         o << "RequestAdapterStatus::Error";
         break;
           default:
-            o << "RequestAdapterStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<RequestAdapterStatus>::type>(value);
+            o << "RequestAdapterStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<RequestAdapterStatus>::type>(value);
       }
       return o;
   }
@@ -1196,7 +1205,7 @@ namespace wgpu {
         o << "RequestDeviceStatus::Error";
         break;
           default:
-            o << "RequestDeviceStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<RequestDeviceStatus>::type>(value);
+            o << "RequestDeviceStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<RequestDeviceStatus>::type>(value);
       }
       return o;
   }
@@ -1219,7 +1228,7 @@ namespace wgpu {
         o << "SamplerBindingType::Comparison";
         break;
           default:
-            o << "SamplerBindingType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<SamplerBindingType>::type>(value);
+            o << "SamplerBindingType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<SamplerBindingType>::type>(value);
       }
       return o;
   }
@@ -1245,7 +1254,7 @@ namespace wgpu {
         o << "SharedFenceType::EGLSync";
         break;
           default:
-            o << "SharedFenceType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<SharedFenceType>::type>(value);
+            o << "SharedFenceType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<SharedFenceType>::type>(value);
       }
       return o;
   }
@@ -1259,7 +1268,7 @@ namespace wgpu {
         o << "Status::Error";
         break;
           default:
-            o << "Status::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<Status>::type>(value);
+            o << "Status::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<Status>::type>(value);
       }
       return o;
   }
@@ -1294,7 +1303,7 @@ namespace wgpu {
         o << "StencilOperation::DecrementWrap";
         break;
           default:
-            o << "StencilOperation::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<StencilOperation>::type>(value);
+            o << "StencilOperation::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<StencilOperation>::type>(value);
       }
       return o;
   }
@@ -1317,7 +1326,7 @@ namespace wgpu {
         o << "StorageTextureAccess::ReadWrite";
         break;
           default:
-            o << "StorageTextureAccess::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<StorageTextureAccess>::type>(value);
+            o << "StorageTextureAccess::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<StorageTextureAccess>::type>(value);
       }
       return o;
   }
@@ -1334,7 +1343,7 @@ namespace wgpu {
         o << "StoreOp::Discard";
         break;
           default:
-            o << "StoreOp::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<StoreOp>::type>(value);
+            o << "StoreOp::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<StoreOp>::type>(value);
       }
       return o;
   }
@@ -1611,8 +1620,8 @@ namespace wgpu {
       case SType::AdapterPropertiesWGPU:
         o << "SType::AdapterPropertiesWGPU";
         break;
-      case SType::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor:
-        o << "SType::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor";
+      case SType::SharedBufferMemoryFromWindowsHandleDescriptor:
+        o << "SType::SharedBufferMemoryFromWindowsHandleDescriptor";
         break;
       case SType::SharedTextureMemoryD3D12ResourceDescriptor:
         o << "SType::SharedTextureMemoryD3D12ResourceDescriptor";
@@ -1623,14 +1632,14 @@ namespace wgpu {
       case SType::PipelineLayoutResourceTable:
         o << "SType::PipelineLayoutResourceTable";
         break;
-      case SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
-        o << "SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs";
-        break;
       case SType::AdapterPropertiesDrm:
         o << "SType::AdapterPropertiesDrm";
         break;
+      case SType::RenderBundleEncoderResourceTable:
+        o << "SType::RenderBundleEncoderResourceTable";
+        break;
           default:
-            o << "SType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<SType>::type>(value);
+            o << "SType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<SType>::type>(value);
       }
       return o;
   }
@@ -1656,7 +1665,7 @@ namespace wgpu {
         o << "SubgroupMatrixComponentType::I8";
         break;
           default:
-            o << "SubgroupMatrixComponentType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<SubgroupMatrixComponentType>::type>(value);
+            o << "SubgroupMatrixComponentType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<SubgroupMatrixComponentType>::type>(value);
       }
       return o;
   }
@@ -1682,7 +1691,7 @@ namespace wgpu {
         o << "SurfaceGetCurrentTextureStatus::Error";
         break;
           default:
-            o << "SurfaceGetCurrentTextureStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<SurfaceGetCurrentTextureStatus>::type>(value);
+            o << "SurfaceGetCurrentTextureStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<SurfaceGetCurrentTextureStatus>::type>(value);
       }
       return o;
   }
@@ -1699,7 +1708,7 @@ namespace wgpu {
         o << "TexelBufferAccess::ReadWrite";
         break;
           default:
-            o << "TexelBufferAccess::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<TexelBufferAccess>::type>(value);
+            o << "TexelBufferAccess::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<TexelBufferAccess>::type>(value);
       }
       return o;
   }
@@ -1728,7 +1737,7 @@ namespace wgpu {
         o << "TextureAspect::Plane2Only";
         break;
           default:
-            o << "TextureAspect::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<TextureAspect>::type>(value);
+            o << "TextureAspect::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<TextureAspect>::type>(value);
       }
       return o;
   }
@@ -1748,7 +1757,7 @@ namespace wgpu {
         o << "TextureDimension::e3D";
         break;
           default:
-            o << "TextureDimension::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<TextureDimension>::type>(value);
+            o << "TextureDimension::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<TextureDimension>::type>(value);
       }
       return o;
   }
@@ -2086,7 +2095,7 @@ namespace wgpu {
         o << "TextureFormat::OpaqueYCbCrAndroid";
         break;
           default:
-            o << "TextureFormat::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<TextureFormat>::type>(value);
+            o << "TextureFormat::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<TextureFormat>::type>(value);
       }
       return o;
   }
@@ -2115,7 +2124,7 @@ namespace wgpu {
         o << "TextureSampleType::Uint";
         break;
           default:
-            o << "TextureSampleType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<TextureSampleType>::type>(value);
+            o << "TextureSampleType::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<TextureSampleType>::type>(value);
       }
       return o;
   }
@@ -2144,7 +2153,7 @@ namespace wgpu {
         o << "TextureViewDimension::e3D";
         break;
           default:
-            o << "TextureViewDimension::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<TextureViewDimension>::type>(value);
+            o << "TextureViewDimension::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<TextureViewDimension>::type>(value);
       }
       return o;
   }
@@ -2158,7 +2167,7 @@ namespace wgpu {
         o << "ToneMappingMode::Extended";
         break;
           default:
-            o << "ToneMappingMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ToneMappingMode>::type>(value);
+            o << "ToneMappingMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ToneMappingMode>::type>(value);
       }
       return o;
   }
@@ -2288,8 +2297,11 @@ namespace wgpu {
       case VertexFormat::Unorm8x4BGRA:
         o << "VertexFormat::Unorm8x4BGRA";
         break;
+      case VertexFormat::Snorm10_10_10_2:
+        o << "VertexFormat::Snorm10_10_10_2";
+        break;
           default:
-            o << "VertexFormat::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<VertexFormat>::type>(value);
+            o << "VertexFormat::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<VertexFormat>::type>(value);
       }
       return o;
   }
@@ -2306,7 +2318,7 @@ namespace wgpu {
         o << "VertexStepMode::Instance";
         break;
           default:
-            o << "VertexStepMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<VertexStepMode>::type>(value);
+            o << "VertexStepMode::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<VertexStepMode>::type>(value);
       }
       return o;
   }
@@ -2323,7 +2335,7 @@ namespace wgpu {
         o << "WaitStatus::Error";
         break;
           default:
-            o << "WaitStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<WaitStatus>::type>(value);
+            o << "WaitStatus::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<WaitStatus>::type>(value);
       }
       return o;
   }
@@ -2357,6 +2369,15 @@ namespace wgpu {
       case WGSLLanguageFeatureName::TextureFormatsTier1:
         o << "WGSLLanguageFeatureName::TextureFormatsTier1";
         break;
+      case WGSLLanguageFeatureName::LinearIndexing:
+        o << "WGSLLanguageFeatureName::LinearIndexing";
+        break;
+      case WGSLLanguageFeatureName::ImmediateAddressSpace:
+        o << "WGSLLanguageFeatureName::ImmediateAddressSpace";
+        break;
+      case WGSLLanguageFeatureName::BufferView:
+        o << "WGSLLanguageFeatureName::BufferView";
+        break;
       case WGSLLanguageFeatureName::ChromiumTestingUnimplemented:
         o << "WGSLLanguageFeatureName::ChromiumTestingUnimplemented";
         break;
@@ -2384,23 +2405,11 @@ namespace wgpu {
       case WGSLLanguageFeatureName::FragmentDepth:
         o << "WGSLLanguageFeatureName::FragmentDepth";
         break;
-      case WGSLLanguageFeatureName::ImmediateAddressSpace:
-        o << "WGSLLanguageFeatureName::ImmediateAddressSpace";
-        break;
-      case WGSLLanguageFeatureName::BufferView:
-        o << "WGSLLanguageFeatureName::BufferView";
-        break;
-      case WGSLLanguageFeatureName::FilteringParameters:
-        o << "WGSLLanguageFeatureName::FilteringParameters";
-        break;
       case WGSLLanguageFeatureName::SwizzleAssignment:
         o << "WGSLLanguageFeatureName::SwizzleAssignment";
         break;
-      case WGSLLanguageFeatureName::LinearIndexing:
-        o << "WGSLLanguageFeatureName::LinearIndexing";
-        break;
           default:
-            o << "WGSLLanguageFeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<WGSLLanguageFeatureName>::type>(value);
+            o << "WGSLLanguageFeatureName::" << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<WGSLLanguageFeatureName>::type>(value);
       }
       return o;
   }
@@ -2513,7 +2522,7 @@ namespace wgpu {
       if (!first) {
         o << "|";
       }
-      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<BufferUsage>::type>(value);
+      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<BufferUsage>::type>(value);
     }
 
     if (moreThanOneBit) {
@@ -2581,7 +2590,7 @@ namespace wgpu {
       if (!first) {
         o << "|";
       }
-      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ColorWriteMask>::type>(value);
+      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ColorWriteMask>::type>(value);
     }
 
     if (moreThanOneBit) {
@@ -2649,7 +2658,7 @@ namespace wgpu {
       if (!first) {
         o << "|";
       }
-      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<HeapProperty>::type>(value);
+      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<HeapProperty>::type>(value);
     }
 
     if (moreThanOneBit) {
@@ -2693,7 +2702,7 @@ namespace wgpu {
       if (!first) {
         o << "|";
       }
-      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<MapMode>::type>(value);
+      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<MapMode>::type>(value);
     }
 
     if (moreThanOneBit) {
@@ -2745,7 +2754,7 @@ namespace wgpu {
       if (!first) {
         o << "|";
       }
-      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<ShaderStage>::type>(value);
+      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<ShaderStage>::type>(value);
     }
 
     if (moreThanOneBit) {
@@ -2829,7 +2838,7 @@ namespace wgpu {
       if (!first) {
         o << "|";
       }
-      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<typename std::underlying_type<TextureUsage>::type>(value);
+      o << std::showbase << std::hex << std::setfill('0') << std::setw(4) << static_cast<std::underlying_type<TextureUsage>::type>(value);
     }
 
     if (moreThanOneBit) {

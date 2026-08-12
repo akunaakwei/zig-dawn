@@ -6,6 +6,8 @@
 
 // Note: Often allocated as a static global. Do not add a complex constructor.
 typedef struct DawnProcTable {
+    uint8_t version[20];
+
     WGPUProcCreateInstance createInstance;
     WGPUProcGetInstanceFeatures getInstanceFeatures;
     WGPUProcGetInstanceLimits getInstanceLimits;
@@ -104,7 +106,9 @@ typedef struct DawnProcTable {
     WGPUProcDeviceCreateComputePipeline deviceCreateComputePipeline;
     WGPUProcDeviceCreateComputePipelineAsync deviceCreateComputePipelineAsync;
     WGPUProcDeviceCreateErrorBuffer deviceCreateErrorBuffer;
+    WGPUProcDeviceCreateErrorComputePipeline deviceCreateErrorComputePipeline;
     WGPUProcDeviceCreateErrorExternalTexture deviceCreateErrorExternalTexture;
+    WGPUProcDeviceCreateErrorRenderPipeline deviceCreateErrorRenderPipeline;
     WGPUProcDeviceCreateErrorShaderModule deviceCreateErrorShaderModule;
     WGPUProcDeviceCreateErrorTexture deviceCreateErrorTexture;
     WGPUProcDeviceCreateExternalTexture deviceCreateExternalTexture;
@@ -194,7 +198,6 @@ typedef struct DawnProcTable {
     WGPUProcRenderBundleEncoderSetIndexBuffer renderBundleEncoderSetIndexBuffer;
     WGPUProcRenderBundleEncoderSetLabel renderBundleEncoderSetLabel;
     WGPUProcRenderBundleEncoderSetPipeline renderBundleEncoderSetPipeline;
-    WGPUProcRenderBundleEncoderSetResourceTable renderBundleEncoderSetResourceTable;
     WGPUProcRenderBundleEncoderSetVertexBuffer renderBundleEncoderSetVertexBuffer;
     WGPUProcRenderBundleEncoderAddRef renderBundleEncoderAddRef;
     WGPUProcRenderBundleEncoderRelease renderBundleEncoderRelease;
@@ -235,8 +238,9 @@ typedef struct DawnProcTable {
 
     WGPUProcResourceTableDestroy resourceTableDestroy;
     WGPUProcResourceTableGetSize resourceTableGetSize;
-    WGPUProcResourceTableInsertBinding resourceTableInsertBinding;
-    WGPUProcResourceTableRemoveBinding resourceTableRemoveBinding;
+    WGPUProcResourceTableInsert resourceTableInsert;
+    WGPUProcResourceTableRemove resourceTableRemove;
+    WGPUProcResourceTableSetLabel resourceTableSetLabel;
     WGPUProcResourceTableUpdate resourceTableUpdate;
     WGPUProcResourceTableAddRef resourceTableAddRef;
     WGPUProcResourceTableRelease resourceTableRelease;
@@ -310,10 +314,8 @@ typedef struct DawnProcTable {
     WGPUProcTextureGetTextureBindingViewDimension textureGetTextureBindingViewDimension;
     WGPUProcTextureGetUsage textureGetUsage;
     WGPUProcTextureGetWidth textureGetWidth;
-    WGPUProcTexturePin texturePin;
     WGPUProcTextureSetLabel textureSetLabel;
     WGPUProcTextureSetOwnershipForMemoryDump textureSetOwnershipForMemoryDump;
-    WGPUProcTextureUnpin textureUnpin;
     WGPUProcTextureAddRef textureAddRef;
     WGPUProcTextureRelease textureRelease;
 

@@ -1,7 +1,7 @@
 
-#include "dawn/native/CacheKey.h"
-#include "dawn/native/dawn_platform.h"
 #include "dawn/native/wgpu_structs_autogen.h"
+#include "src/dawn/native/CacheKey.h"
+#include "src/dawn/native/dawn_platform.h"
 
 #include <cstring>
 

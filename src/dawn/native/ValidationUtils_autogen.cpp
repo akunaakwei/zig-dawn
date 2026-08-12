@@ -201,6 +201,8 @@ namespace dawn::native {
                 return {};
             case WGPUColorSpaceTransferDawn_PQ:
                 return {};
+            case WGPUColorSpaceTransferDawn_BT_1886:
+                return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUColorSpaceTransferDawn.", value);
         }
@@ -470,6 +472,8 @@ namespace dawn::native {
                 return {};
             case WGPUFeatureName_TextureComponentSwizzle:
                 return {};
+            case WGPUFeatureName_SubgroupSizeControl:
+                return {};
             case WGPUFeatureName_DawnInternalUsages:
                 return {};
             case WGPUFeatureName_DawnMultiPlanarFormats:
@@ -580,13 +584,11 @@ namespace dawn::native {
                 return {};
             case WGPUFeatureName_AdapterPropertiesWGPU:
                 return {};
-            case WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
+            case WGPUFeatureName_SharedBufferMemoryFromWindowsHandle:
                 return {};
             case WGPUFeatureName_SharedTextureMemoryD3D12Resource:
                 return {};
             case WGPUFeatureName_ChromiumExperimentalSamplingResourceTable:
-                return {};
-            case WGPUFeatureName_ChromiumExperimentalSubgroupSizeControl:
                 return {};
             case WGPUFeatureName_AtomicVec2uMinMax:
                 return {};
@@ -598,9 +600,11 @@ namespace dawn::native {
                 return {};
             case WGPUFeatureName_RenderPassRenderArea:
                 return {};
-            case WGPUFeatureName_DawnNativeSpontaneousQueueEvents:
-                return {};
             case WGPUFeatureName_AdapterPropertiesDrm:
+                return {};
+            case WGPUFeatureName_TextureCompressionUnaligned:
+                return {};
+            case WGPUFeatureName_DawnAllowUndefinedLoadStoreOp:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUFeatureName.", value);
@@ -765,6 +769,8 @@ namespace dawn::native {
             case WGPUPredefinedColorSpace_SRGBLinear:
                 return {};
             case WGPUPredefinedColorSpace_DisplayP3Linear:
+                return {};
+            case WGPUPredefinedColorSpace_Rec2020Linear:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUPredefinedColorSpace.", value);
@@ -1139,7 +1145,7 @@ namespace dawn::native {
                 return {};
             case WGPUSType_AdapterPropertiesWGPU:
                 return {};
-            case WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor:
+            case WGPUSType_SharedBufferMemoryFromWindowsHandleDescriptor:
                 return {};
             case WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor:
                 return {};
@@ -1147,9 +1153,9 @@ namespace dawn::native {
                 return {};
             case WGPUSType_PipelineLayoutResourceTable:
                 return {};
-            case WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
-                return {};
             case WGPUSType_AdapterPropertiesDrm:
+                return {};
+            case WGPUSType_RenderBundleEncoderResourceTable:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUSType.", value);
@@ -1601,6 +1607,8 @@ namespace dawn::native {
                 return {};
             case WGPUVertexFormat_Unorm8x4BGRA:
                 return {};
+            case WGPUVertexFormat_Snorm10_10_10_2:
+                return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUVertexFormat.", value);
         }
@@ -1652,6 +1660,12 @@ namespace dawn::native {
                 return {};
             case WGPUWGSLLanguageFeatureName_TextureFormatsTier1:
                 return {};
+            case WGPUWGSLLanguageFeatureName_LinearIndexing:
+                return {};
+            case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
+                return {};
+            case WGPUWGSLLanguageFeatureName_BufferView:
+                return {};
             case WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented:
                 return {};
             case WGPUWGSLLanguageFeatureName_ChromiumTestingUnsafeExperimental:
@@ -1670,15 +1684,7 @@ namespace dawn::native {
                 return {};
             case WGPUWGSLLanguageFeatureName_FragmentDepth:
                 return {};
-            case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
-                return {};
-            case WGPUWGSLLanguageFeatureName_BufferView:
-                return {};
-            case WGPUWGSLLanguageFeatureName_FilteringParameters:
-                return {};
             case WGPUWGSLLanguageFeatureName_SwizzleAssignment:
-                return {};
-            case WGPUWGSLLanguageFeatureName_LinearIndexing:
                 return {};
             default:
                 return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUWGSLLanguageFeatureName.", value);
@@ -1687,42 +1693,42 @@ namespace dawn::native {
 
 
     MaybeError ValidateBufferUsage(wgpu::BufferUsage value) {
-        if ((value & static_cast<wgpu::BufferUsage>(~2047)) == 0) {
+        if ((value & static_cast<wgpu::BufferUsage>(~2047u)) == 0) {
             return {};
         }
         return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUBufferUsage.", value);
     }
 
     MaybeError ValidateColorWriteMask(wgpu::ColorWriteMask value) {
-        if ((value & static_cast<wgpu::ColorWriteMask>(~15)) == 0) {
+        if ((value & static_cast<wgpu::ColorWriteMask>(~15u)) == 0) {
             return {};
         }
         return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUColorWriteMask.", value);
     }
 
     MaybeError ValidateHeapProperty(wgpu::HeapProperty value) {
-        if ((value & static_cast<wgpu::HeapProperty>(~31)) == 0) {
+        if ((value & static_cast<wgpu::HeapProperty>(~31u)) == 0) {
             return {};
         }
         return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUHeapProperty.", value);
     }
 
     MaybeError ValidateMapMode(wgpu::MapMode value) {
-        if ((value & static_cast<wgpu::MapMode>(~3)) == 0) {
+        if ((value & static_cast<wgpu::MapMode>(~3u)) == 0) {
             return {};
         }
         return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUMapMode.", value);
     }
 
     MaybeError ValidateShaderStage(wgpu::ShaderStage value) {
-        if ((value & static_cast<wgpu::ShaderStage>(~7)) == 0) {
+        if ((value & static_cast<wgpu::ShaderStage>(~7u)) == 0) {
             return {};
         }
         return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUShaderStage.", value);
     }
 
     MaybeError ValidateTextureUsage(wgpu::TextureUsage value) {
-        if ((value & static_cast<wgpu::TextureUsage>(~127)) == 0) {
+        if ((value & static_cast<wgpu::TextureUsage>(~127u)) == 0) {
             return {};
         }
         return DAWN_VALIDATION_ERROR("Value %i is invalid for WGPUTextureUsage.", value);

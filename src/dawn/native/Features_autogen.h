@@ -28,12 +28,12 @@
 #ifndef DAWNNATIVE_FEATURES_AUTOGEN_H_
 #define DAWNNATIVE_FEATURES_AUTOGEN_H_
 
-#include "dawn/common/ityp_array.h"
-#include "dawn/native/dawn_platform.h"
+#include "src/dawn/common/ityp_array.h"
+#include "src/dawn/native/dawn_platform.h"
 
 namespace dawn::native {
 
-enum class Feature {
+enum class Feature : uint32_t {
 CoreFeaturesAndLimits,
 DepthClipControl,
 Depth32FloatStencil8,
@@ -56,6 +56,7 @@ TextureFormatsTier1,
 TextureFormatsTier2,
 PrimitiveIndex,
 TextureComponentSwizzle,
+SubgroupSizeControl,
 DawnInternalUsages,
 DawnMultiPlanarFormats,
 DawnNative,
@@ -111,23 +112,23 @@ ChromiumExperimentalSubgroupMatrix,
 SharedFenceEGLSync,
 DawnDeviceAllocatorControl,
 AdapterPropertiesWGPU,
-SharedBufferMemoryD3D12SharedMemoryFileMappingHandle,
+SharedBufferMemoryFromWindowsHandle,
 SharedTextureMemoryD3D12Resource,
 ChromiumExperimentalSamplingResourceTable,
-ChromiumExperimentalSubgroupSizeControl,
 AtomicVec2uMinMax,
 Unorm16FormatsForExternalTexture,
 OpaqueYCbCrAndroidForExternalTexture,
 Unorm16Filterable,
 RenderPassRenderArea,
-DawnNativeSpontaneousQueueEvents,
 AdapterPropertiesDrm,
+TextureCompressionUnaligned,
+DawnAllowUndefinedLoadStoreOp,
   InvalidEnum,
 };
 
 template<>
 struct EnumCount<Feature> {
-    static constexpr uint32_t value = 88;
+    static constexpr uint32_t value = 89;
 };
 
 }  // namespace dawn::native

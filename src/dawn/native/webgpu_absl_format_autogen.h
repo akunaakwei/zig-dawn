@@ -2,8 +2,8 @@
 #ifndef WEBGPU_ABSL_FORMAT_H_
 #define WEBGPU_ABSL_FORMAT_H_
 
-#include "dawn/native/dawn_platform.h"
-#include "dawn/native/Forward.h"
+#include "src/dawn/native/dawn_platform.h"
+#include "src/dawn/native/Forward.h"
 
 #include "absl/strings/str_format.h"
 
@@ -44,14 +44,6 @@ namespace dawn::native {
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
         AbslFormatConvert(const UnpackedPtr<RenderBundleDescriptor>& value,
-                          const absl::FormatConversionSpec& spec,
-                          absl::FormatSink* s);
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
-        AbslFormatConvert(const RenderBundleEncoderDescriptor* value,
-                          const absl::FormatConversionSpec& spec,
-                          absl::FormatSink* s);
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
-        AbslFormatConvert(const UnpackedPtr<RenderBundleEncoderDescriptor>& value,
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
@@ -100,6 +92,14 @@ namespace dawn::native {
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
         AbslFormatConvert(const UnpackedPtr<ExternalTextureDescriptor>& value,
+                          const absl::FormatConversionSpec& spec,
+                          absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+        AbslFormatConvert(const RenderBundleEncoderDescriptor* value,
+                          const absl::FormatConversionSpec& spec,
+                          absl::FormatSink* s);
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+        AbslFormatConvert(const UnpackedPtr<RenderBundleEncoderDescriptor>& value,
                           const absl::FormatConversionSpec& spec,
                           absl::FormatSink* s);
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>

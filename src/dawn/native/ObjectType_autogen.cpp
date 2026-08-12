@@ -1,6 +1,8 @@
 
 #include "dawn/native/ObjectType_autogen.h"
 
+#include "src/utils/assert.h"
+
 namespace dawn::native {
 
     const char* ObjectTypeAsString(ObjectType type) {

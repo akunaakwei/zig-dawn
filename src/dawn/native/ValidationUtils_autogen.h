@@ -4,7 +4,7 @@
 
 #include "dawn/webgpu_cpp.h"
 
-#include "dawn/native/Error.h"
+#include "src/dawn/native/Error.h"
 
 namespace dawn::native {
 

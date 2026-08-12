@@ -1,10 +1,15 @@
 
 #include "dawn/dawn_proc.h"
 
+#include <algorithm>
+
+#include "dawn/dawn_version.h"
+
 // The sanitizer is disabled for calls to procs.* since those functions may be
 // dynamically loaded.
-#include "dawn/common/Compiler.h"
-#include "dawn/common/Log.h"
+#include "src/dawn/common/Compiler.h"
+#include "src/utils/assert.h"
+#include "src/utils/log.h"
 
 // A fake wgpuCreateInstance that prints a warning so folks know that they are using dawn_procs and
 // should either use a different target to link against, or call dawnProcSetProcs.
@@ -19,6 +24,7 @@ WGPUInstance CreateInstanceThatWarns(const WGPUInstanceDescriptor* desc) {
 
 constexpr DawnProcTable MakeNullProcTable() {
     DawnProcTable procs = {};
+    std::ranges::copy(dawn::kDawnVersion, procs.version);
     procs.createInstance = CreateInstanceThatWarns;
     return procs;
 }
@@ -28,10 +34,16 @@ static DawnProcTable procs = MakeNullProcTable();
 
 void dawnProcSetProcs(const DawnProcTable* procs_) {
     if (procs_) {
+        // Verify that the proc table version matches our version, otherwise crash.
+        DAWN_CHECK(std::ranges::equal(procs_->version, dawn::kDawnVersion));
         procs = *procs_;
     } else {
         procs = kNullProcs;
     }
+}
+
+const uint8_t* dawnProcGetVersion() {
+    return dawn::kDawnVersion.data();
 }
 
 DAWN_NO_SANITIZE("cfi-icall")
@@ -264,7 +276,7 @@ void wgpuCommandEncoderSetLabel(WGPUCommandEncoder commandEncoder, WGPUStringVie
     procs.commandEncoderSetLabel(commandEncoder, label);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-void wgpuCommandEncoderWriteBuffer(WGPUCommandEncoder commandEncoder, WGPUBuffer buffer, uint64_t bufferOffset, uint8_t const * data, uint64_t size) {
+void wgpuCommandEncoderWriteBuffer(WGPUCommandEncoder commandEncoder, WGPUBuffer buffer, uint64_t bufferOffset, void const * data, size_t size) {
     procs.commandEncoderWriteBuffer(commandEncoder, buffer, bufferOffset, data, size);
 }
 DAWN_NO_SANITIZE("cfi-icall")
@@ -388,8 +400,16 @@ WGPUBuffer wgpuDeviceCreateErrorBuffer(WGPUDevice device, WGPUBufferDescriptor c
 return     procs.deviceCreateErrorBuffer(device, descriptor);
 }
 DAWN_NO_SANITIZE("cfi-icall")
+WGPUComputePipeline wgpuDeviceCreateErrorComputePipeline(WGPUDevice device, WGPUStringView label) {
+return     procs.deviceCreateErrorComputePipeline(device, label);
+}
+DAWN_NO_SANITIZE("cfi-icall")
 WGPUExternalTexture wgpuDeviceCreateErrorExternalTexture(WGPUDevice device) {
 return     procs.deviceCreateErrorExternalTexture(device);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+WGPURenderPipeline wgpuDeviceCreateErrorRenderPipeline(WGPUDevice device, WGPUStringView label) {
+return     procs.deviceCreateErrorRenderPipeline(device, label);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 WGPUShaderModule wgpuDeviceCreateErrorShaderModule(WGPUDevice device, WGPUShaderModuleDescriptor const * descriptor, WGPUStringView errorMessage) {
@@ -727,10 +747,6 @@ void wgpuRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder renderBundleEnco
     procs.renderBundleEncoderSetPipeline(renderBundleEncoder, pipeline);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-void wgpuRenderBundleEncoderSetResourceTable(WGPURenderBundleEncoder renderBundleEncoder, WGPUResourceTable table) {
-    procs.renderBundleEncoderSetResourceTable(renderBundleEncoder, table);
-}
-DAWN_NO_SANITIZE("cfi-icall")
 void wgpuRenderBundleEncoderSetVertexBuffer(WGPURenderBundleEncoder renderBundleEncoder, uint32_t slot, WGPUBuffer buffer, uint64_t offset, uint64_t size) {
     procs.renderBundleEncoderSetVertexBuffer(renderBundleEncoder, slot, buffer, offset, size);
 }
@@ -882,12 +898,16 @@ uint32_t wgpuResourceTableGetSize(WGPUResourceTable resourceTable) {
 return     procs.resourceTableGetSize(resourceTable);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-uint32_t wgpuResourceTableInsertBinding(WGPUResourceTable resourceTable, WGPUBindingResource const * resource) {
-return     procs.resourceTableInsertBinding(resourceTable, resource);
+uint32_t wgpuResourceTableInsert(WGPUResourceTable resourceTable, WGPUBindingResource const * resource) {
+return     procs.resourceTableInsert(resourceTable, resource);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-WGPUStatus wgpuResourceTableRemoveBinding(WGPUResourceTable resourceTable, uint32_t slot) {
-return     procs.resourceTableRemoveBinding(resourceTable, slot);
+WGPUStatus wgpuResourceTableRemove(WGPUResourceTable resourceTable, uint32_t slot) {
+return     procs.resourceTableRemove(resourceTable, slot);
+}
+DAWN_NO_SANITIZE("cfi-icall")
+void wgpuResourceTableSetLabel(WGPUResourceTable resourceTable, WGPUStringView label) {
+    procs.resourceTableSetLabel(resourceTable, label);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 WGPUStatus wgpuResourceTableUpdate(WGPUResourceTable resourceTable, uint32_t slot, WGPUBindingResource const * resource) {
@@ -1140,20 +1160,12 @@ uint32_t wgpuTextureGetWidth(WGPUTexture texture) {
 return     procs.textureGetWidth(texture);
 }
 DAWN_NO_SANITIZE("cfi-icall")
-void wgpuTexturePin(WGPUTexture texture, WGPUTextureUsage usage) {
-    procs.texturePin(texture, usage);
-}
-DAWN_NO_SANITIZE("cfi-icall")
 void wgpuTextureSetLabel(WGPUTexture texture, WGPUStringView label) {
     procs.textureSetLabel(texture, label);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuTextureSetOwnershipForMemoryDump(WGPUTexture texture, uint64_t ownerGuid) {
     procs.textureSetOwnershipForMemoryDump(texture, ownerGuid);
-}
-DAWN_NO_SANITIZE("cfi-icall")
-void wgpuTextureUnpin(WGPUTexture texture) {
-    procs.textureUnpin(texture);
 }
 DAWN_NO_SANITIZE("cfi-icall")
 void wgpuTextureAddRef(WGPUTexture texture) {

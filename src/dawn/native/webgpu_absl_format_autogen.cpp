@@ -1,9 +1,9 @@
 
 #include "dawn/native/webgpu_absl_format_autogen.h"
 
-#include "dawn/native/ChainUtils.h"
 #include "dawn/native/ObjectType_autogen.h"
-#include "dawn/native/webgpu_absl_format.h"
+#include "src/dawn/native/ChainUtils.h"
+#include "src/dawn/native/webgpu_absl_format.h"
 
 namespace dawn::native {
 
@@ -91,27 +91,6 @@ namespace dawn::native {
     }
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
     AbslFormatConvert(const UnpackedPtr<RenderBundleDescriptor>& value,
-                      const absl::FormatConversionSpec& spec,
-                      absl::FormatSink* s) {
-        return AbslFormatConvert(*value, spec, s);
-    }
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
-    AbslFormatConvert(const RenderBundleEncoderDescriptor* value,
-                      const absl::FormatConversionSpec& spec,
-                      absl::FormatSink* s) {
-        if (value == nullptr) {
-            s->Append("[null]");
-            return {true};
-        }
-        s->Append("[RenderBundleEncoderDescriptor");
-        if (value->label.data != nullptr) {
-            s->Append(absl::StrFormat(" \"%s\"", value->label));
-        }
-        s->Append("]");
-        return {true};
-    }
-    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
-    AbslFormatConvert(const UnpackedPtr<RenderBundleEncoderDescriptor>& value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s) {
         return AbslFormatConvert(*value, spec, s);
@@ -238,6 +217,27 @@ namespace dawn::native {
     }
     absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
     AbslFormatConvert(const UnpackedPtr<ExternalTextureDescriptor>& value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s) {
+        return AbslFormatConvert(*value, spec, s);
+    }
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+    AbslFormatConvert(const RenderBundleEncoderDescriptor* value,
+                      const absl::FormatConversionSpec& spec,
+                      absl::FormatSink* s) {
+        if (value == nullptr) {
+            s->Append("[null]");
+            return {true};
+        }
+        s->Append("[RenderBundleEncoderDescriptor");
+        if (value->label.data != nullptr) {
+            s->Append(absl::StrFormat(" \"%s\"", value->label));
+        }
+        s->Append("]");
+        return {true};
+    }
+    absl::FormatConvertResult<absl::FormatConversionCharSet::kString>
+    AbslFormatConvert(const UnpackedPtr<RenderBundleEncoderDescriptor>& value,
                       const absl::FormatConversionSpec& spec,
                       absl::FormatSink* s) {
         return AbslFormatConvert(*value, spec, s);
@@ -589,7 +589,7 @@ AbslFormatConvert(AdapterType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUAdapterType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -615,7 +615,7 @@ AbslFormatConvert(AddressMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUAddressMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -638,7 +638,7 @@ AbslFormatConvert(AlphaMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUAlphaMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -679,7 +679,7 @@ AbslFormatConvert(BackendType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUBackendType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -747,7 +747,7 @@ AbslFormatConvert(BlendFactor value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUBlendFactor>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -779,7 +779,7 @@ AbslFormatConvert(BlendOperation value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUBlendOperation>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -808,7 +808,7 @@ AbslFormatConvert(BufferBindingType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUBufferBindingType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -831,7 +831,7 @@ AbslFormatConvert(BufferMapState value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUBufferMapState>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -854,7 +854,7 @@ AbslFormatConvert(CallbackMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUCallbackMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -880,7 +880,7 @@ AbslFormatConvert(ColorSpacePrimariesDawn value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUColorSpacePrimariesDawn>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -908,11 +908,14 @@ AbslFormatConvert(ColorSpaceTransferDawn value,
         case WGPUColorSpaceTransferDawn_PQ:
             s->Append("PQ");
             return {true};
+        case WGPUColorSpaceTransferDawn_BT_1886:
+            s->Append("BT_1886");
+            return {true};
         default:
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUColorSpaceTransferDawn>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -938,7 +941,7 @@ AbslFormatConvert(ColorSpaceYCbCrMatrixDawn value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUColorSpaceYCbCrMatrixDawn>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -961,7 +964,7 @@ AbslFormatConvert(ColorSpaceYCbCrRangeDawn value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUColorSpaceYCbCrRangeDawn>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1002,7 +1005,7 @@ AbslFormatConvert(CompareFunction value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUCompareFunction>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1022,7 +1025,7 @@ AbslFormatConvert(CompilationInfoRequestStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUCompilationInfoRequestStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1045,7 +1048,7 @@ AbslFormatConvert(CompilationMessageType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUCompilationMessageType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1080,7 +1083,7 @@ AbslFormatConvert(ComponentSwizzle value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUComponentSwizzle>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1109,7 +1112,7 @@ AbslFormatConvert(CompositeAlphaMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUCompositeAlphaMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1135,7 +1138,7 @@ AbslFormatConvert(CreatePipelineAsyncStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUCreatePipelineAsyncStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1161,7 +1164,7 @@ AbslFormatConvert(CullMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUCullMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1187,7 +1190,7 @@ AbslFormatConvert(DeviceLostReason value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUDeviceLostReason>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1210,7 +1213,7 @@ AbslFormatConvert(ErrorFilter value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUErrorFilter>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1239,7 +1242,7 @@ AbslFormatConvert(ErrorType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUErrorType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1265,7 +1268,7 @@ AbslFormatConvert(ExternalTextureRotation value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUExternalTextureRotation>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1288,7 +1291,7 @@ AbslFormatConvert(FeatureLevel value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUFeatureLevel>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1363,6 +1366,9 @@ AbslFormatConvert(FeatureName value,
             return {true};
         case WGPUFeatureName_TextureComponentSwizzle:
             s->Append("TextureComponentSwizzle");
+            return {true};
+        case WGPUFeatureName_SubgroupSizeControl:
+            s->Append("SubgroupSizeControl");
             return {true};
         case WGPUFeatureName_DawnInternalUsages:
             s->Append("DawnInternalUsages");
@@ -1529,17 +1535,14 @@ AbslFormatConvert(FeatureName value,
         case WGPUFeatureName_AdapterPropertiesWGPU:
             s->Append("AdapterPropertiesWGPU");
             return {true};
-        case WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle:
-            s->Append("SharedBufferMemoryD3D12SharedMemoryFileMappingHandle");
+        case WGPUFeatureName_SharedBufferMemoryFromWindowsHandle:
+            s->Append("SharedBufferMemoryFromWindowsHandle");
             return {true};
         case WGPUFeatureName_SharedTextureMemoryD3D12Resource:
             s->Append("SharedTextureMemoryD3D12Resource");
             return {true};
         case WGPUFeatureName_ChromiumExperimentalSamplingResourceTable:
             s->Append("ChromiumExperimentalSamplingResourceTable");
-            return {true};
-        case WGPUFeatureName_ChromiumExperimentalSubgroupSizeControl:
-            s->Append("ChromiumExperimentalSubgroupSizeControl");
             return {true};
         case WGPUFeatureName_AtomicVec2uMinMax:
             s->Append("AtomicVec2uMinMax");
@@ -1556,17 +1559,20 @@ AbslFormatConvert(FeatureName value,
         case WGPUFeatureName_RenderPassRenderArea:
             s->Append("RenderPassRenderArea");
             return {true};
-        case WGPUFeatureName_DawnNativeSpontaneousQueueEvents:
-            s->Append("DawnNativeSpontaneousQueueEvents");
-            return {true};
         case WGPUFeatureName_AdapterPropertiesDrm:
             s->Append("AdapterPropertiesDrm");
+            return {true};
+        case WGPUFeatureName_TextureCompressionUnaligned:
+            s->Append("TextureCompressionUnaligned");
+            return {true};
+        case WGPUFeatureName_DawnAllowUndefinedLoadStoreOp:
+            s->Append("DawnAllowUndefinedLoadStoreOp");
             return {true};
         default:
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUFeatureName>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1589,7 +1595,7 @@ AbslFormatConvert(FilterMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUFilterMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1612,7 +1618,7 @@ AbslFormatConvert(FrontFace value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUFrontFace>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1635,7 +1641,7 @@ AbslFormatConvert(IndexFormat value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUIndexFormat>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1658,7 +1664,7 @@ AbslFormatConvert(InstanceFeatureName value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUInstanceFeatureName>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1684,7 +1690,7 @@ AbslFormatConvert(LoadOp value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPULoadOp>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1710,7 +1716,7 @@ AbslFormatConvert(LoggingType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPULoggingType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1736,7 +1742,7 @@ AbslFormatConvert(MapAsyncStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUMapAsyncStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1759,7 +1765,7 @@ AbslFormatConvert(MipmapFilterMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUMipmapFilterMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1782,7 +1788,7 @@ AbslFormatConvert(OptionalBool value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUOptionalBool>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1805,7 +1811,7 @@ AbslFormatConvert(PopErrorScopeStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUPopErrorScopeStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1828,7 +1834,7 @@ AbslFormatConvert(PowerPreference value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUPowerPreference>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1850,11 +1856,14 @@ AbslFormatConvert(PredefinedColorSpace value,
         case WGPUPredefinedColorSpace_DisplayP3Linear:
             s->Append("DisplayP3Linear");
             return {true};
+        case WGPUPredefinedColorSpace_Rec2020Linear:
+            s->Append("Rec2020Linear");
+            return {true};
         default:
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUPredefinedColorSpace>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1883,7 +1892,7 @@ AbslFormatConvert(PresentMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUPresentMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1915,7 +1924,7 @@ AbslFormatConvert(PrimitiveTopology value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUPrimitiveTopology>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1935,7 +1944,7 @@ AbslFormatConvert(QueryType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUQueryType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1958,7 +1967,7 @@ AbslFormatConvert(QueueWorkDoneStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUQueueWorkDoneStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -1984,7 +1993,7 @@ AbslFormatConvert(RequestAdapterStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPURequestAdapterStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2007,7 +2016,7 @@ AbslFormatConvert(RequestDeviceStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPURequestDeviceStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2036,7 +2045,7 @@ AbslFormatConvert(SamplerBindingType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUSamplerBindingType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2068,7 +2077,7 @@ AbslFormatConvert(SharedFenceType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUSharedFenceType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2088,7 +2097,7 @@ AbslFormatConvert(Status value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2129,7 +2138,7 @@ AbslFormatConvert(StencilOperation value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUStencilOperation>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2158,7 +2167,7 @@ AbslFormatConvert(StorageTextureAccess value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUStorageTextureAccess>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2181,7 +2190,7 @@ AbslFormatConvert(StoreOp value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUStoreOp>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2461,8 +2470,8 @@ AbslFormatConvert(SType value,
         case WGPUSType_AdapterPropertiesWGPU:
             s->Append("AdapterPropertiesWGPU");
             return {true};
-        case WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor:
-            s->Append("SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor");
+        case WGPUSType_SharedBufferMemoryFromWindowsHandleDescriptor:
+            s->Append("SharedBufferMemoryFromWindowsHandleDescriptor");
             return {true};
         case WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor:
             s->Append("SharedTextureMemoryD3D12ResourceDescriptor");
@@ -2473,17 +2482,17 @@ AbslFormatConvert(SType value,
         case WGPUSType_PipelineLayoutResourceTable:
             s->Append("PipelineLayoutResourceTable");
             return {true};
-        case WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs:
-            s->Append("AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
-            return {true};
         case WGPUSType_AdapterPropertiesDrm:
             s->Append("AdapterPropertiesDrm");
+            return {true};
+        case WGPUSType_RenderBundleEncoderResourceTable:
+            s->Append("RenderBundleEncoderResourceTable");
             return {true};
         default:
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUSType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2515,7 +2524,7 @@ AbslFormatConvert(SubgroupMatrixComponentType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUSubgroupMatrixComponentType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2547,7 +2556,7 @@ AbslFormatConvert(SurfaceGetCurrentTextureStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUSurfaceGetCurrentTextureStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2570,7 +2579,7 @@ AbslFormatConvert(TexelBufferAccess value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUTexelBufferAccess>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2605,7 +2614,7 @@ AbslFormatConvert(TextureAspect value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUTextureAspect>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2631,7 +2640,7 @@ AbslFormatConvert(TextureDimension value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUTextureDimension>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -2975,7 +2984,7 @@ AbslFormatConvert(TextureFormat value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUTextureFormat>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -3010,7 +3019,7 @@ AbslFormatConvert(TextureSampleType value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUTextureSampleType>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -3045,7 +3054,7 @@ AbslFormatConvert(TextureViewDimension value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUTextureViewDimension>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -3065,7 +3074,7 @@ AbslFormatConvert(ToneMappingMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUToneMappingMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -3198,11 +3207,14 @@ AbslFormatConvert(VertexFormat value,
         case WGPUVertexFormat_Unorm8x4BGRA:
             s->Append("Unorm8x4BGRA");
             return {true};
+        case WGPUVertexFormat_Snorm10_10_10_2:
+            s->Append("Snorm10_10_10_2");
+            return {true};
         default:
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUVertexFormat>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -3225,7 +3237,7 @@ AbslFormatConvert(VertexStepMode value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUVertexStepMode>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -3248,7 +3260,7 @@ AbslFormatConvert(WaitStatus value,
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUWaitStatus>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 absl::FormatConvertResult<absl::FormatConversionCharSet::kString|absl::FormatConversionCharSet::kIntegral>
@@ -3285,6 +3297,15 @@ AbslFormatConvert(WGSLLanguageFeatureName value,
         case WGPUWGSLLanguageFeatureName_TextureFormatsTier1:
             s->Append("TextureFormatsTier1");
             return {true};
+        case WGPUWGSLLanguageFeatureName_LinearIndexing:
+            s->Append("LinearIndexing");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
+            s->Append("ImmediateAddressSpace");
+            return {true};
+        case WGPUWGSLLanguageFeatureName_BufferView:
+            s->Append("BufferView");
+            return {true};
         case WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented:
             s->Append("ChromiumTestingUnimplemented");
             return {true};
@@ -3312,26 +3333,14 @@ AbslFormatConvert(WGSLLanguageFeatureName value,
         case WGPUWGSLLanguageFeatureName_FragmentDepth:
             s->Append("FragmentDepth");
             return {true};
-        case WGPUWGSLLanguageFeatureName_ImmediateAddressSpace:
-            s->Append("ImmediateAddressSpace");
-            return {true};
-        case WGPUWGSLLanguageFeatureName_BufferView:
-            s->Append("BufferView");
-            return {true};
-        case WGPUWGSLLanguageFeatureName_FilteringParameters:
-            s->Append("FilteringParameters");
-            return {true};
         case WGPUWGSLLanguageFeatureName_SwizzleAssignment:
             s->Append("SwizzleAssignment");
-            return {true};
-        case WGPUWGSLLanguageFeatureName_LinearIndexing:
-            s->Append("LinearIndexing");
             return {true};
         default:
             break;
         }
     }
-    s->Append(absl::StrFormat("%u", static_cast<WGPUWGSLLanguageFeatureName>(value)));
+    s->Append(absl::StrFormat("%u", static_cast<uint32_t>(value)));
     return {true};
 }
 
@@ -3450,14 +3459,14 @@ AbslFormatConvert(BufferUsage value,
             if (!first) {
                 s->Append("|");
             }
-            s->Append(absl::StrFormat("BufferUsage::%x", static_cast<typename std::underlying_type<BufferUsage>::type>(value)));
+            s->Append(absl::StrFormat("BufferUsage::%x", static_cast<std::underlying_type<BufferUsage>::type>(value)));
         }
 
         if (moreThanOneBit) {
             s->Append(")");
         }
     } else {
-        s->Append(absl::StrFormat("%u", static_cast<typename std::underlying_type<BufferUsage>::type>(value)));
+        s->Append(absl::StrFormat("%u", static_cast<std::underlying_type<BufferUsage>::type>(value)));
     }
     return {true};
 }
@@ -3524,14 +3533,14 @@ AbslFormatConvert(ColorWriteMask value,
             if (!first) {
                 s->Append("|");
             }
-            s->Append(absl::StrFormat("ColorWriteMask::%x", static_cast<typename std::underlying_type<ColorWriteMask>::type>(value)));
+            s->Append(absl::StrFormat("ColorWriteMask::%x", static_cast<std::underlying_type<ColorWriteMask>::type>(value)));
         }
 
         if (moreThanOneBit) {
             s->Append(")");
         }
     } else {
-        s->Append(absl::StrFormat("%u", static_cast<typename std::underlying_type<ColorWriteMask>::type>(value)));
+        s->Append(absl::StrFormat("%u", static_cast<std::underlying_type<ColorWriteMask>::type>(value)));
     }
     return {true};
 }
@@ -3598,14 +3607,14 @@ AbslFormatConvert(HeapProperty value,
             if (!first) {
                 s->Append("|");
             }
-            s->Append(absl::StrFormat("HeapProperty::%x", static_cast<typename std::underlying_type<HeapProperty>::type>(value)));
+            s->Append(absl::StrFormat("HeapProperty::%x", static_cast<std::underlying_type<HeapProperty>::type>(value)));
         }
 
         if (moreThanOneBit) {
             s->Append(")");
         }
     } else {
-        s->Append(absl::StrFormat("%u", static_cast<typename std::underlying_type<HeapProperty>::type>(value)));
+        s->Append(absl::StrFormat("%u", static_cast<std::underlying_type<HeapProperty>::type>(value)));
     }
     return {true};
 }
@@ -3648,14 +3657,14 @@ AbslFormatConvert(MapMode value,
             if (!first) {
                 s->Append("|");
             }
-            s->Append(absl::StrFormat("MapMode::%x", static_cast<typename std::underlying_type<MapMode>::type>(value)));
+            s->Append(absl::StrFormat("MapMode::%x", static_cast<std::underlying_type<MapMode>::type>(value)));
         }
 
         if (moreThanOneBit) {
             s->Append(")");
         }
     } else {
-        s->Append(absl::StrFormat("%u", static_cast<typename std::underlying_type<MapMode>::type>(value)));
+        s->Append(absl::StrFormat("%u", static_cast<std::underlying_type<MapMode>::type>(value)));
     }
     return {true};
 }
@@ -3706,14 +3715,14 @@ AbslFormatConvert(ShaderStage value,
             if (!first) {
                 s->Append("|");
             }
-            s->Append(absl::StrFormat("ShaderStage::%x", static_cast<typename std::underlying_type<ShaderStage>::type>(value)));
+            s->Append(absl::StrFormat("ShaderStage::%x", static_cast<std::underlying_type<ShaderStage>::type>(value)));
         }
 
         if (moreThanOneBit) {
             s->Append(")");
         }
     } else {
-        s->Append(absl::StrFormat("%u", static_cast<typename std::underlying_type<ShaderStage>::type>(value)));
+        s->Append(absl::StrFormat("%u", static_cast<std::underlying_type<ShaderStage>::type>(value)));
     }
     return {true};
 }
@@ -3796,14 +3805,14 @@ AbslFormatConvert(TextureUsage value,
             if (!first) {
                 s->Append("|");
             }
-            s->Append(absl::StrFormat("TextureUsage::%x", static_cast<typename std::underlying_type<TextureUsage>::type>(value)));
+            s->Append(absl::StrFormat("TextureUsage::%x", static_cast<std::underlying_type<TextureUsage>::type>(value)));
         }
 
         if (moreThanOneBit) {
             s->Append(")");
         }
     } else {
-        s->Append(absl::StrFormat("%u", static_cast<typename std::underlying_type<TextureUsage>::type>(value)));
+        s->Append(absl::StrFormat("%u", static_cast<std::underlying_type<TextureUsage>::type>(value)));
     }
     return {true};
 }

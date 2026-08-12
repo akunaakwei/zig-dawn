@@ -1,8 +1,8 @@
 
-#ifndef DAWNNATIVE_OBJECTTPYE_AUTOGEN_H_
-#define DAWNNATIVE_OBJECTTPYE_AUTOGEN_H_
+#ifndef DAWNNATIVE_OBJECTTYPE_AUTOGEN_H_
+#define DAWNNATIVE_OBJECTTYPE_AUTOGEN_H_
 
-#include "dawn/common/ityp_array.h"
+#include "src/dawn/common/ityp_array.h"
 
 #include <cstdint>
 
@@ -52,4 +52,4 @@ namespace dawn::native {
 } // namespace dawn::native
 
 
-#endif  // DAWNNATIVE_OBJECTTPYE_AUTOGEN_H_
+#endif  // DAWNNATIVE_OBJECTTYPE_AUTOGEN_H_

@@ -32,7 +32,7 @@
 
 #include "dawn/common/GPUInfo_autogen.h"
 
-#include "dawn/common/Assert.h"
+#include "src/utils/assert.h"
 
 namespace dawn::gpu_info {
 
@@ -71,6 +71,7 @@ enum class Architecture {
     Intel_Xe2LPG,
     Intel_Xe2HPG,
     Intel_Xe3LPG,
+    Intel_Xe3LPGXS,
     Mesa_Software,
     Microsoft_WARP,
     Nvidia_Fermi,
@@ -96,9 +97,10 @@ enum class Architecture {
 };
 
 Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    // NOLINTBEGIN(bugprone-unhandled-code-paths) "switch with only one case"
     switch(vendorId) {
         case kVendorID_AMD: {
-            switch (deviceId & 0xFFF0) {
+            switch (deviceId & 0xFFF0u) {
                 case 0x6730:
                 case 0x6740:
                 case 0x6750:
@@ -181,7 +183,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                 case 0x7380:
                     return Architecture::AMD_CDNA1;
             }
-            switch (deviceId & 0xFFFF) {
+            switch (deviceId & 0xFFFFu) {
                 case 0x1636:
                 case 0x1638:
                     return Architecture::AMD_GCN5;
@@ -190,7 +192,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_ARM: {
-            switch (deviceId & 0xF0000000) {
+            switch (deviceId & 0xF0000000u) {
                 case 0x00000000:
                     return Architecture::ARM_Midgard;
                 case 0x60000000:
@@ -207,7 +209,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_Broadcom: {
-            switch (deviceId & 0x00000000) {
+            switch (deviceId & 0x00000000u) {
                 case 0x00000000:
                     return Architecture::Broadcom_VideoCore;
             }
@@ -219,7 +221,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_ImgTec: {
-            switch (deviceId & 0xFF000000) {
+            switch (deviceId & 0xFF000000u) {
                 case 0x00000000:
                 case 0x22000000:
                 case 0x24000000:
@@ -234,7 +236,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_Intel: {
-            switch (deviceId & 0xFF00) {
+            switch (deviceId & 0xFF00u) {
                 case 0x0100:
                 case 0x0400:
                 case 0x0A00:
@@ -276,6 +278,8 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                     return Architecture::Intel_Xe2HPG;
                 case 0xB000:
                     return Architecture::Intel_Xe3LPG;
+                case 0xFD00:
+                    return Architecture::Intel_Xe3LPGXS;
             }
         } break;
         case kVendorID_Mesa: {
@@ -291,7 +295,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_Nvidia: {
-            switch (deviceId & 0xFFFFFF00) {
+            switch (deviceId & 0xFFFFFF00u) {
                 case 0x0D00:
                     return Architecture::Nvidia_Fermi;
                 case 0x0F00:
@@ -328,7 +332,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
                 case 0x2f00:
                     return Architecture::Nvidia_Blackwell;
             }
-            switch (deviceId & 0xFF000000) {
+            switch (deviceId & 0xFF000000u) {
                 case 0x1e000000:
                     return Architecture::Nvidia_Kepler;
                 case 0x92000000:
@@ -342,7 +346,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_QualcommPCI: {
-            switch (deviceId & 0xFF000000) {
+            switch (deviceId & 0xFF000000u) {
                 case 0x04000000:
                     return Architecture::QualcommPCI_Adreno4xx;
                 case 0x05000000:
@@ -359,7 +363,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_QualcommACPI: {
-            switch (deviceId & 0xFFFFFF00) {
+            switch (deviceId & 0xFFFFFF00u) {
                 case 0x41333800:
                 case 0x36334100:
                 case 0x41333400:
@@ -374,7 +378,7 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_Samsung: {
-            switch (deviceId & 0xFFFF0000) {
+            switch (deviceId & 0xFFFF0000u) {
                 case 0x00000000:
                 case 0x01300000:
                 case 0x01700000:
@@ -386,13 +390,14 @@ Architecture GetArchitecture(PCIVendorID vendorId, PCIDeviceID deviceId) {
             }
         } break;
         case kVendorID_Huawei: {
-            switch (deviceId & 0xF0000000) {
+            switch (deviceId & 0xF0000000u) {
                 case 0x10000000:
                 case 0x20000000:
                     return Architecture::Huawei_Maleoon;
             }
         } break;
     }
+    // NOLINTEND(bugprone-unhandled-code-paths)
 
     return Architecture::Unknown;
 }
@@ -547,6 +552,9 @@ bool IsIntelXe2HPG(PCIVendorID vendorId, PCIDeviceID deviceId) {
 }
 bool IsIntelXe3LPG(PCIVendorID vendorId, PCIDeviceID deviceId) {
     return GetArchitecture(vendorId, deviceId) == Architecture::Intel_Xe3LPG;
+}
+bool IsIntelXe3LPGXS(PCIVendorID vendorId, PCIDeviceID deviceId) {
+    return GetArchitecture(vendorId, deviceId) == Architecture::Intel_Xe3LPGXS;
 }
 // Mesa architectures
 bool IsMesaSoftware(PCIVendorID vendorId, PCIDeviceID deviceId) {
@@ -727,6 +735,8 @@ std::string GetArchitectureName(PCIVendorID vendorId, PCIDeviceID deviceId) {
             return "xe-2hpg";
         case Architecture::Intel_Xe3LPG:
             return "xe-3lpg";
+        case Architecture::Intel_Xe3LPGXS:
+            return "xe-3lpg-xs";
         case Architecture::Mesa_Software:
             return "software";
         case Architecture::Microsoft_WARP:

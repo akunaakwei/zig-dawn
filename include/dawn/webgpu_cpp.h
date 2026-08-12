@@ -27,7 +27,7 @@
 
 
 #ifdef __EMSCRIPTEN__
-#error "Do not include this header. Emscripten already provides headers needed for WebGPU."
+#error "Do not include this header. Use the headers provided by Emdawnwebgpu instead."
 #endif
 
 #ifndef WEBGPU_CPP_H_
@@ -40,6 +40,7 @@
 #include <memory>
 #include <optional>
 #include <functional>
+#include <span>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -50,18 +51,18 @@
 
 namespace wgpu {
 
-static constexpr uint32_t kArrayLayerCountUndefined = WGPU_ARRAY_LAYER_COUNT_UNDEFINED;
-static constexpr uint32_t kCopyStrideUndefined = WGPU_COPY_STRIDE_UNDEFINED;
-static constexpr float kDepthClearValueUndefined = std::numeric_limits<float>::quiet_NaN();
-static constexpr uint32_t kDepthSliceUndefined = WGPU_DEPTH_SLICE_UNDEFINED;
-static constexpr uint32_t kInvalidBinding = WGPU_INVALID_BINDING;
-static constexpr uint32_t kLimitU32Undefined = WGPU_LIMIT_U32_UNDEFINED;
-static constexpr uint64_t kLimitU64Undefined = WGPU_LIMIT_U64_UNDEFINED;
-static constexpr uint32_t kMipLevelCountUndefined = WGPU_MIP_LEVEL_COUNT_UNDEFINED;
-static constexpr uint32_t kQuerySetIndexUndefined = WGPU_QUERY_SET_INDEX_UNDEFINED;
-static constexpr size_t kStrlen = WGPU_STRLEN;
-static constexpr size_t kWholeMapSize = WGPU_WHOLE_MAP_SIZE;
-static constexpr uint64_t kWholeSize = WGPU_WHOLE_SIZE;
+inline constexpr uint32_t kArrayLayerCountUndefined = WGPU_ARRAY_LAYER_COUNT_UNDEFINED;
+inline constexpr uint32_t kCopyStrideUndefined = WGPU_COPY_STRIDE_UNDEFINED;
+inline constexpr float kDepthClearValueUndefined = std::numeric_limits<float>::quiet_NaN();
+inline constexpr uint32_t kDepthSliceUndefined = WGPU_DEPTH_SLICE_UNDEFINED;
+inline constexpr uint32_t kInvalidBinding = WGPU_INVALID_BINDING;
+inline constexpr uint32_t kLimitU32Undefined = WGPU_LIMIT_U32_UNDEFINED;
+inline constexpr uint64_t kLimitU64Undefined = WGPU_LIMIT_U64_UNDEFINED;
+inline constexpr uint32_t kMipLevelCountUndefined = WGPU_MIP_LEVEL_COUNT_UNDEFINED;
+inline constexpr uint32_t kQuerySetIndexUndefined = WGPU_QUERY_SET_INDEX_UNDEFINED;
+inline constexpr size_t kStrlen = WGPU_STRLEN;
+inline constexpr size_t kWholeMapSize = WGPU_WHOLE_MAP_SIZE;
+inline constexpr uint64_t kWholeSize = WGPU_WHOLE_SIZE;
 
 enum class AdapterType : uint32_t {
     DiscreteGPU = WGPUAdapterType_DiscreteGPU,
@@ -180,6 +181,7 @@ enum class ColorSpaceTransferDawn : uint32_t {
     SMPTE_170M = WGPUColorSpaceTransferDawn_SMPTE_170M,
     HLG = WGPUColorSpaceTransferDawn_HLG,
     PQ = WGPUColorSpaceTransferDawn_PQ,
+    BT_1886 = WGPUColorSpaceTransferDawn_BT_1886,
 };
 static_assert(sizeof(ColorSpaceTransferDawn) == sizeof(WGPUColorSpaceTransferDawn), "sizeof mismatch for ColorSpaceTransferDawn");
 static_assert(alignof(ColorSpaceTransferDawn) == alignof(WGPUColorSpaceTransferDawn), "alignof mismatch for ColorSpaceTransferDawn");
@@ -337,6 +339,7 @@ enum class FeatureName : uint32_t {
     TextureFormatsTier2 = WGPUFeatureName_TextureFormatsTier2,
     PrimitiveIndex = WGPUFeatureName_PrimitiveIndex,
     TextureComponentSwizzle = WGPUFeatureName_TextureComponentSwizzle,
+    SubgroupSizeControl = WGPUFeatureName_SubgroupSizeControl,
     DawnInternalUsages = WGPUFeatureName_DawnInternalUsages,
     DawnMultiPlanarFormats = WGPUFeatureName_DawnMultiPlanarFormats,
     DawnNative = WGPUFeatureName_DawnNative,
@@ -392,17 +395,17 @@ enum class FeatureName : uint32_t {
     SharedFenceEGLSync = WGPUFeatureName_SharedFenceEGLSync,
     DawnDeviceAllocatorControl = WGPUFeatureName_DawnDeviceAllocatorControl,
     AdapterPropertiesWGPU = WGPUFeatureName_AdapterPropertiesWGPU,
-    SharedBufferMemoryD3D12SharedMemoryFileMappingHandle = WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle,
+    SharedBufferMemoryFromWindowsHandle = WGPUFeatureName_SharedBufferMemoryFromWindowsHandle,
     SharedTextureMemoryD3D12Resource = WGPUFeatureName_SharedTextureMemoryD3D12Resource,
     ChromiumExperimentalSamplingResourceTable = WGPUFeatureName_ChromiumExperimentalSamplingResourceTable,
-    ChromiumExperimentalSubgroupSizeControl = WGPUFeatureName_ChromiumExperimentalSubgroupSizeControl,
     AtomicVec2uMinMax = WGPUFeatureName_AtomicVec2uMinMax,
     Unorm16FormatsForExternalTexture = WGPUFeatureName_Unorm16FormatsForExternalTexture,
     OpaqueYCbCrAndroidForExternalTexture = WGPUFeatureName_OpaqueYCbCrAndroidForExternalTexture,
     Unorm16Filterable = WGPUFeatureName_Unorm16Filterable,
     RenderPassRenderArea = WGPUFeatureName_RenderPassRenderArea,
-    DawnNativeSpontaneousQueueEvents = WGPUFeatureName_DawnNativeSpontaneousQueueEvents,
     AdapterPropertiesDrm = WGPUFeatureName_AdapterPropertiesDrm,
+    TextureCompressionUnaligned = WGPUFeatureName_TextureCompressionUnaligned,
+    DawnAllowUndefinedLoadStoreOp = WGPUFeatureName_DawnAllowUndefinedLoadStoreOp,
 };
 static_assert(sizeof(FeatureName) == sizeof(WGPUFeatureName), "sizeof mismatch for FeatureName");
 static_assert(alignof(FeatureName) == alignof(WGPUFeatureName), "alignof mismatch for FeatureName");
@@ -495,6 +498,7 @@ enum class PredefinedColorSpace : uint32_t {
     DisplayP3 = WGPUPredefinedColorSpace_DisplayP3,
     SRGBLinear = WGPUPredefinedColorSpace_SRGBLinear,
     DisplayP3Linear = WGPUPredefinedColorSpace_DisplayP3Linear,
+    Rec2020Linear = WGPUPredefinedColorSpace_Rec2020Linear,
 };
 static_assert(sizeof(PredefinedColorSpace) == sizeof(WGPUPredefinedColorSpace), "sizeof mismatch for PredefinedColorSpace");
 static_assert(alignof(PredefinedColorSpace) == alignof(WGPUPredefinedColorSpace), "alignof mismatch for PredefinedColorSpace");
@@ -704,12 +708,12 @@ enum class SType : uint32_t {
     TexelBufferBindingLayout = WGPUSType_TexelBufferBindingLayout,
     SharedTextureMemoryMetalEndAccessState = WGPUSType_SharedTextureMemoryMetalEndAccessState,
     AdapterPropertiesWGPU = WGPUSType_AdapterPropertiesWGPU,
-    SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor = WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor,
+    SharedBufferMemoryFromWindowsHandleDescriptor = WGPUSType_SharedBufferMemoryFromWindowsHandleDescriptor,
     SharedTextureMemoryD3D12ResourceDescriptor = WGPUSType_SharedTextureMemoryD3D12ResourceDescriptor,
     RequestAdapterOptionsAngleVirtualizationGroup = WGPUSType_RequestAdapterOptionsAngleVirtualizationGroup,
     PipelineLayoutResourceTable = WGPUSType_PipelineLayoutResourceTable,
-    AdapterPropertiesExplicitComputeSubgroupSizeConfigs = WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs,
     AdapterPropertiesDrm = WGPUSType_AdapterPropertiesDrm,
+    RenderBundleEncoderResourceTable = WGPUSType_RenderBundleEncoderResourceTable,
 };
 static_assert(sizeof(SType) == sizeof(WGPUSType), "sizeof mismatch for SType");
 static_assert(alignof(SType) == alignof(WGPUSType), "alignof mismatch for SType");
@@ -953,6 +957,7 @@ enum class VertexFormat : uint32_t {
     Sint32x4 = WGPUVertexFormat_Sint32x4,
     Unorm10_10_10_2 = WGPUVertexFormat_Unorm10_10_10_2,
     Unorm8x4BGRA = WGPUVertexFormat_Unorm8x4BGRA,
+    Snorm10_10_10_2 = WGPUVertexFormat_Snorm10_10_10_2,
 };
 static_assert(sizeof(VertexFormat) == sizeof(WGPUVertexFormat), "sizeof mismatch for VertexFormat");
 static_assert(alignof(VertexFormat) == alignof(WGPUVertexFormat), "alignof mismatch for VertexFormat");
@@ -983,6 +988,9 @@ enum class WGSLLanguageFeatureName : uint32_t {
     TextureAndSamplerLet = WGPUWGSLLanguageFeatureName_TextureAndSamplerLet,
     SubgroupUniformity = WGPUWGSLLanguageFeatureName_SubgroupUniformity,
     TextureFormatsTier1 = WGPUWGSLLanguageFeatureName_TextureFormatsTier1,
+    LinearIndexing = WGPUWGSLLanguageFeatureName_LinearIndexing,
+    ImmediateAddressSpace = WGPUWGSLLanguageFeatureName_ImmediateAddressSpace,
+    BufferView = WGPUWGSLLanguageFeatureName_BufferView,
     ChromiumTestingUnimplemented = WGPUWGSLLanguageFeatureName_ChromiumTestingUnimplemented,
     ChromiumTestingUnsafeExperimental = WGPUWGSLLanguageFeatureName_ChromiumTestingUnsafeExperimental,
     ChromiumTestingExperimental = WGPUWGSLLanguageFeatureName_ChromiumTestingExperimental,
@@ -992,11 +1000,7 @@ enum class WGSLLanguageFeatureName : uint32_t {
     TexelBuffers = WGPUWGSLLanguageFeatureName_TexelBuffers,
     ChromiumPrint = WGPUWGSLLanguageFeatureName_ChromiumPrint,
     FragmentDepth = WGPUWGSLLanguageFeatureName_FragmentDepth,
-    ImmediateAddressSpace = WGPUWGSLLanguageFeatureName_ImmediateAddressSpace,
-    BufferView = WGPUWGSLLanguageFeatureName_BufferView,
-    FilteringParameters = WGPUWGSLLanguageFeatureName_FilteringParameters,
     SwizzleAssignment = WGPUWGSLLanguageFeatureName_SwizzleAssignment,
-    LinearIndexing = WGPUWGSLLanguageFeatureName_LinearIndexing,
 };
 static_assert(sizeof(WGSLLanguageFeatureName) == sizeof(WGPUWGSLLanguageFeatureName), "sizeof mismatch for WGSLLanguageFeatureName");
 static_assert(alignof(WGSLLanguageFeatureName) == alignof(WGPUWGSLLanguageFeatureName), "alignof mismatch for WGSLLanguageFeatureName");
@@ -1085,11 +1089,10 @@ using Proc = WGPUProc;
 class Bool {
   public:
     constexpr Bool() = default;
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    constexpr Bool(bool value) : mValue(static_cast<WGPUBool>(value)) {}
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    Bool(WGPUBool value): mValue(value) {}
+    explicit(false) constexpr Bool(bool value) : mValue(static_cast<WGPUBool>(value)) {}
+    explicit(false) Bool(WGPUBool value): mValue(value) {}
 
+    // NOLINTNEXTLINE(google-explicit-constructor)
     constexpr operator bool() const { return static_cast<bool>(mValue); }
 
   private:
@@ -1102,13 +1105,10 @@ class Bool {
 class OptionalBool {
   public:
     constexpr OptionalBool() = default;
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    constexpr OptionalBool(bool value) : mValue(static_cast<WGPUOptionalBool>(value)) {}
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    constexpr OptionalBool(std::optional<bool> value) :
+    explicit(false) constexpr OptionalBool(bool value) : mValue(static_cast<WGPUOptionalBool>(value)) {}
+    explicit(false) constexpr OptionalBool(std::optional<bool> value) :
         mValue(value ? static_cast<WGPUOptionalBool>(*value) : WGPUOptionalBool_Undefined) {}
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    constexpr OptionalBool(WGPUOptionalBool value): mValue(value) {}
+    explicit(false) constexpr OptionalBool(WGPUOptionalBool value): mValue(value) {}
 
     // Define the values that are equivalent to the enums.
     static const OptionalBool False;
@@ -1130,7 +1130,9 @@ class OptionalBool {
     }
 
     // Conversion functions.
+    // NOLINTNEXTLINE(google-explicit-constructor)
     operator WGPUOptionalBool() const { return mValue; }
+    // NOLINTNEXTLINE(google-explicit-constructor)
     operator std::optional<bool>() const {
         if (mValue == WGPUOptionalBool_Undefined) {
             return std::nullopt;
@@ -1159,13 +1161,12 @@ inline const OptionalBool OptionalBool::Undefined = OptionalBool(WGPUOptionalBoo
 // Used while callers switch to checking the Status enum instead of booleans.
 // TODO(crbug.com/42241199): Remove when all callers check the enum.
 struct ConvertibleStatus {
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    constexpr ConvertibleStatus(Status status) : status(status) {}
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit conversion
+    explicit(false) constexpr ConvertibleStatus(Status status) : status(status) {}
+    // NOLINTNEXTLINE(google-explicit-constructor)
     constexpr operator bool() const {
         return status == Status::Success;
     }
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit conversion
+    // NOLINTNEXTLINE(google-explicit-constructor)
     constexpr operator Status() const {
         return status;
     }
@@ -1176,7 +1177,7 @@ template<typename Derived, typename CType>
 class ObjectBase {
   public:
     ObjectBase() = default;
-    ObjectBase(CType handle): mHandle(handle) {
+    explicit(false) ObjectBase(CType handle): mHandle(handle) {
         if (mHandle) Derived::WGPUAddRef(mHandle);
     }
     ~ObjectBase() {
@@ -1198,19 +1199,19 @@ class ObjectBase {
 
     ObjectBase(ObjectBase&& other) {
         mHandle = other.mHandle;
-        other.mHandle = 0;
+        other.mHandle = nullptr;
     }
     Derived& operator=(ObjectBase&& other) {
         if (&other != this) {
             if (mHandle) Derived::WGPURelease(mHandle);
             mHandle = other.mHandle;
-            other.mHandle = 0;
+            other.mHandle = nullptr;
         }
 
         return static_cast<Derived&>(*this);
     }
 
-    ObjectBase(std::nullptr_t) {}
+    explicit(false) ObjectBase(std::nullptr_t) {}
     Derived& operator=(std::nullptr_t) {
         if (mHandle != nullptr) {
             Derived::WGPURelease(mHandle);
@@ -1234,7 +1235,7 @@ class ObjectBase {
     }
     CType MoveToCHandle() {
         CType result = mHandle;
-        mHandle = 0;
+        mHandle = nullptr;
         return result;
     }
     static Derived Acquire(CType handle) {
@@ -1279,7 +1280,6 @@ class RenderPassEncoder;
 struct StringView;
 struct AdapterPropertiesD3D;
 struct AdapterPropertiesDrm;
-struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs;
 struct AdapterPropertiesVk;
 struct AdapterPropertiesWGPU;
 struct BindingResource;
@@ -1331,7 +1331,7 @@ struct PrimitiveState;
 struct QuerySetDescriptor;
 struct QueueDescriptor;
 struct RenderBundleDescriptor;
-struct RenderBundleEncoderDescriptor;
+struct RenderBundleEncoderResourceTable;
 struct RenderPassDepthStencilAttachment;
 struct RenderPassDescriptorResolveRect;
 struct RenderPassMaxDrawCount;
@@ -1343,8 +1343,8 @@ struct ShaderModuleCompilationOptions;
 struct ShaderSourceSPIRV;
 struct ShaderSourceWGSL;
 struct SharedBufferMemoryBeginAccessDescriptor;
-struct SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor;
 struct SharedBufferMemoryEndAccessState;
+struct SharedBufferMemoryFromWindowsHandleDescriptor;
 struct SharedBufferMemoryProperties;
 struct SharedFenceDXGISharedHandleDescriptor;
 struct SharedFenceDXGISharedHandleExportInfo;
@@ -1418,6 +1418,7 @@ struct ImageCopyExternalTexture;
 struct InstanceDescriptor;
 struct Limits;
 struct PipelineLayoutPixelLocalStorage;
+struct RenderBundleEncoderDescriptor;
 struct RenderPassColorAttachment;
 struct RenderPassRenderAreaRect;
 struct RenderPassStorageAttachment;
@@ -1456,33 +1457,23 @@ struct FragmentState;
 struct RenderPassDescriptor;
 struct RenderPipelineDescriptor;
 
-// TODO(42241188): Remove once all clients use StringView versions of the callbacks.
-// To make MSVC happy we need a StringView constructor from the adapter, so we first need to
-// forward declare StringViewAdapter here. Otherwise MSVC complains about an ambiguous conversion.
-namespace detail {
-    struct StringViewAdapter;
-}  // namespace detail
-
 struct StringView {
     char const * data = nullptr;
     size_t length = WGPU_STRLEN;
 
     inline constexpr StringView() noexcept = default;
 
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    inline constexpr StringView(const std::string_view& sv) noexcept {
+    explicit(false) inline constexpr StringView(const std::string_view& sv) noexcept {
         this->data = sv.data();
         this->length = sv.length();
     }
 
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    inline constexpr StringView(const char* s) {
+    explicit(false) inline constexpr StringView(const char* s) {
         this->data = s;
         this->length = WGPU_STRLEN;  // use strlen
     }
 
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    inline constexpr StringView(WGPUStringView s) {
+    explicit(false) inline constexpr StringView(WGPUStringView s) {
         this->data = s.data;
         this->length = s.length;
     }
@@ -1492,14 +1483,12 @@ struct StringView {
         this->length = length;
     }
 
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    inline constexpr StringView(std::nullptr_t) {
+    explicit(false) inline constexpr StringView(std::nullptr_t) {
         this->data = nullptr;
         this->length = WGPU_STRLEN;
     }
 
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-    inline constexpr StringView(std::nullopt_t) {
+    explicit(false) inline constexpr StringView(std::nullopt_t) {
         this->data = nullptr;
         this->length = WGPU_STRLEN;
     }
@@ -1508,7 +1497,7 @@ struct StringView {
         return this->data == nullptr && this->length == wgpu::kStrlen;
     }
 
-    // NOLINTNEXTLINE(runtime/explicit) allow implicit conversion
+    // NOLINTNEXTLINE(google-explicit-constructor)
     operator std::string_view() const {
         if (this->length == wgpu::kStrlen) {
             if (IsUndefined()) {
@@ -1531,8 +1520,6 @@ struct StringView {
         return {this->data, this->length};
     }
 
-
-    StringView(const detail::StringViewAdapter& s);
 };
 
 namespace detail {
@@ -1541,82 +1528,92 @@ constexpr size_t ConstexprMax(size_t a, size_t b) {
 }
 
 template <typename T>
-static T& AsNonConstReference(const T& value) {
+inline T& AsNonConstReference(const T& value) {
     return const_cast<T&>(value);
 }
-
-// A wrapper around StringView that can be implicitly converted to const char* with temporary
-// storage that adds the \0 for output strings that are all explicitly-sized.
-// TODO(42241188): Remove once all clients use StringView versions of the callbacks.
-struct StringViewAdapter {
-    WGPUStringView sv;
-    char* nullTerminated = nullptr;
-
-    StringViewAdapter(WGPUStringView sv) : sv(sv) {}
-    ~StringViewAdapter() { delete[] nullTerminated; }
-    operator ::WGPUStringView() { return sv; }
-    operator StringView() { return {sv.data, sv.length}; }
-    operator const char*() {
-        assert(sv.length != WGPU_STRLEN);
-        assert(nullTerminated == nullptr);
-        nullTerminated = new char[sv.length + 1];
-        for (size_t i = 0; i < sv.length; i++) {
-            nullTerminated[i] = sv.data[i];
-        }
-        nullTerminated[sv.length] = 0;
-        return nullTerminated;
-    }
-};
 }  // namespace detail
-
-inline StringView::StringView(const detail::StringViewAdapter& s): data(s.sv.data), length(s.sv.length) {}
 
 namespace detail {
 // For callbacks, we support two modes:
 //   1) No userdata where we allow a std::function type that can include argument captures.
 //   2) Explicit typed userdata where we only allow non-capturing lambdas or function pointers.
-template <typename... Args>
+template <typename R, typename... Args>
 struct CallbackTypeBase;
-template <typename... Args>
-struct CallbackTypeBase<std::tuple<Args...>> {
-    using Callback = std::function<void(Args...)>;
+template <typename R, typename... Args>
+struct CallbackTypeBase<R, std::tuple<Args...>> {
+    using Callback = std::function<R(Args...)>;
 };
-template <typename... Args>
-struct CallbackTypeBase<std::tuple<Args...>, void> {
-    using Callback = void (Args...);
+template <typename R, typename... Args>
+struct CallbackTypeBase<R, std::tuple<Args...>, void> {
+    using Callback = R (Args...);
 };
-template <typename... Args, typename T>
-struct CallbackTypeBase<std::tuple<Args...>, T> {
-    using Callback = void (Args..., T);
+template <typename R, typename... Args, typename T>
+struct CallbackTypeBase<R, std::tuple<Args...>, T> {
+    using Callback = R (Args..., T);
+};
+
+// Noexcept specializations of CallbackTypeBase.
+template <typename R, typename... Args>
+struct CallbackTypeBase<R, std::tuple<Args...>, std::true_type> {
+    using Callback = R (Args...) noexcept;
+};
+template <typename R, typename... Args>
+struct CallbackTypeBase<R, std::tuple<Args...>, void, std::true_type> {
+    using Callback = R (Args...) noexcept;
+};
+template <typename R, typename... Args, typename T>
+struct CallbackTypeBase<R, std::tuple<Args...>, T, std::true_type> {
+    using Callback = R (Args..., T) noexcept;
 };
 }  // namespace detail
-
-
 template <typename... T>
-using BufferMapCallback = typename detail::CallbackTypeBase<std::tuple<MapAsyncStatus, StringView>, T...>::Callback;
+using BufferMapCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<MapAsyncStatus, StringView>, T...>::Callback;
 template <typename... T>
-using CompilationInfoCallback = typename detail::CallbackTypeBase<std::tuple<CompilationInfoRequestStatus, CompilationInfo const *>, T...>::Callback;
+using CompilationInfoCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<CompilationInfoRequestStatus, CompilationInfo const *>, T...>::Callback;
 template <typename... T>
-using CreateComputePipelineAsyncCallback = typename detail::CallbackTypeBase<std::tuple<CreatePipelineAsyncStatus, ComputePipeline, StringView>, T...>::Callback;
+using CreateComputePipelineAsyncCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<CreatePipelineAsyncStatus, ComputePipeline, StringView>, T...>::Callback;
 template <typename... T>
-using CreateRenderPipelineAsyncCallback = typename detail::CallbackTypeBase<std::tuple<CreatePipelineAsyncStatus, RenderPipeline, StringView>, T...>::Callback;
+using CreateRenderPipelineAsyncCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<CreatePipelineAsyncStatus, RenderPipeline, StringView>, T...>::Callback;
 template <typename... T>
-using LoggingCallback = typename detail::CallbackTypeBase<std::tuple<LoggingType, StringView>, T...>::Callback;
+using DawnLoadCacheDataCallback = detail::CallbackTypeBase<
+    size_t,
+    std::tuple<size_t, uint8_t const *, size_t, uint8_t *>, T...>::Callback;
 template <typename... T>
-using PopErrorScopeCallback = typename detail::CallbackTypeBase<std::tuple<PopErrorScopeStatus, ErrorType, StringView>, T...>::Callback;
+using DawnStoreCacheDataCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<size_t, uint8_t const *, size_t, uint8_t const *>, T...>::Callback;
 template <typename... T>
-using QueueWorkDoneCallback = typename detail::CallbackTypeBase<std::tuple<QueueWorkDoneStatus, StringView>, T...>::Callback;
+using LoggingCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<LoggingType, StringView>, T...>::Callback;
 template <typename... T>
-using RequestAdapterCallback = typename detail::CallbackTypeBase<std::tuple<RequestAdapterStatus, Adapter, StringView>, T...>::Callback;
+using PopErrorScopeCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<PopErrorScopeStatus, ErrorType, StringView>, T...>::Callback;
 template <typename... T>
-using RequestDeviceCallback = typename detail::CallbackTypeBase<std::tuple<RequestDeviceStatus, Device, StringView>, T...>::Callback;
+using QueueWorkDoneCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<QueueWorkDoneStatus, StringView>, T...>::Callback;
 template <typename... T>
-using DeviceLostCallback = typename detail::CallbackTypeBase<std::tuple<const Device&, DeviceLostReason, StringView>, T...>::Callback;
+using RequestAdapterCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<RequestAdapterStatus, Adapter, StringView>, T...>::Callback;
 template <typename... T>
-using UncapturedErrorCallback = typename detail::CallbackTypeBase<std::tuple<const Device&, ErrorType, StringView>, T...>::Callback;
-
-
-
+using RequestDeviceCallback = detail::CallbackTypeBase<
+    void,
+    std::tuple<RequestDeviceStatus, Device, StringView>, T...>::Callback;
+template <typename... T>
+using DeviceLostCallback = detail::CallbackTypeBase<void, std::tuple<const Device&, DeviceLostReason, StringView>, T...>::Callback;
+template <typename... T>
+using UncapturedErrorCallback = detail::CallbackTypeBase<void, std::tuple<const Device&, ErrorType, StringView>, T...>::Callback;
 
 class Adapter : public ObjectBase<Adapter, WGPUAdapter> {
   public:
@@ -1630,16 +1627,10 @@ class Adapter : public ObjectBase<Adapter, WGPUAdapter> {
     inline Instance GetInstance() const;
     inline ConvertibleStatus GetLimits(Limits * limits) const;
     inline Bool HasFeature(FeatureName feature) const;
-    template <typename F, typename T,
-              typename Cb = RequestDeviceCallback<T>,
-              typename CbChar = void (RequestDeviceStatus status, Device device, const char* message, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
-    Future RequestDevice(DeviceDescriptor const * descriptor, CallbackMode callbackMode,F callback, T userdata) const;
-    template <typename L,
-              typename Cb = RequestDeviceCallback<>,
-              typename CbChar = std::function<void(RequestDeviceStatus status, Device device, const char* message)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    Future RequestDevice(DeviceDescriptor const * descriptor, CallbackMode callbackMode,L callback) const;
+    template <typename F, typename T>
+    Future RequestDevice(DeviceDescriptor const * descriptor, CallbackMode callbackMode, F callback, T userdata) const;
+    template <typename F>
+    Future RequestDevice(DeviceDescriptor const * descriptor, CallbackMode callbackMode, F callback) const;
 
 
   private:
@@ -1688,16 +1679,10 @@ class Buffer : public ObjectBase<Buffer, WGPUBuffer> {
     inline BufferMapState GetMapState() const;
     inline uint64_t GetSize() const;
     inline BufferUsage GetUsage() const;
-    template <typename F, typename T,
-              typename Cb = BufferMapCallback<T>,
-              typename CbChar = void (MapAsyncStatus status, const char* message, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
-    Future MapAsync(MapMode mode, size_t offset, size_t size, CallbackMode callbackMode,F callback, T userdata) const;
-    template <typename L,
-              typename Cb = BufferMapCallback<>,
-              typename CbChar = std::function<void(MapAsyncStatus status, const char* message)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    Future MapAsync(MapMode mode, size_t offset, size_t size, CallbackMode callbackMode,L callback) const;
+    template <typename F, typename T>
+    Future MapAsync(MapMode mode, size_t offset, size_t size, CallbackMode callbackMode, F callback, T userdata) const;
+    template <typename F>
+    Future MapAsync(MapMode mode, size_t offset, size_t size, CallbackMode callbackMode, F callback) const;
     inline ConvertibleStatus ReadMappedRange(size_t offset, void * data, size_t size) const;
     inline void SetLabel(StringView label) const;
     inline void Unmap() const;
@@ -1743,7 +1728,7 @@ class CommandEncoder : public ObjectBase<CommandEncoder, WGPUCommandEncoder> {
     inline void PushDebugGroup(StringView groupLabel) const;
     inline void ResolveQuerySet(QuerySet const& querySet, uint32_t firstQuery, uint32_t queryCount, Buffer const& destination, uint64_t destinationOffset) const;
     inline void SetLabel(StringView label) const;
-    inline void WriteBuffer(Buffer const& buffer, uint64_t bufferOffset, uint8_t const * data, uint64_t size) const;
+    inline void WriteBuffer(Buffer const& buffer, uint64_t bufferOffset, void const * data, size_t size) const;
     inline void WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const;
 
 
@@ -1778,18 +1763,14 @@ class Device : public ObjectBase<Device, WGPUDevice> {
     inline Buffer CreateBuffer(BufferDescriptor const * descriptor) const;
     inline CommandEncoder CreateCommandEncoder(CommandEncoderDescriptor const * descriptor = nullptr) const;
     inline ComputePipeline CreateComputePipeline(ComputePipelineDescriptor const * descriptor) const;
-    template <typename F, typename T,
-              typename Cb = CreateComputePipelineAsyncCallback<T>,
-              typename CbChar = void (CreatePipelineAsyncStatus status, ComputePipeline pipeline, const char* message, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
-    Future CreateComputePipelineAsync(ComputePipelineDescriptor const * descriptor, CallbackMode callbackMode,F callback, T userdata) const;
-    template <typename L,
-              typename Cb = CreateComputePipelineAsyncCallback<>,
-              typename CbChar = std::function<void(CreatePipelineAsyncStatus status, ComputePipeline pipeline, const char* message)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    Future CreateComputePipelineAsync(ComputePipelineDescriptor const * descriptor, CallbackMode callbackMode,L callback) const;
+    template <typename F, typename T>
+    Future CreateComputePipelineAsync(ComputePipelineDescriptor const * descriptor, CallbackMode callbackMode, F callback, T userdata) const;
+    template <typename F>
+    Future CreateComputePipelineAsync(ComputePipelineDescriptor const * descriptor, CallbackMode callbackMode, F callback) const;
     inline Buffer CreateErrorBuffer(BufferDescriptor const * descriptor) const;
+    inline ComputePipeline CreateErrorComputePipeline(StringView label) const;
     inline ExternalTexture CreateErrorExternalTexture() const;
+    inline RenderPipeline CreateErrorRenderPipeline(StringView label) const;
     inline ShaderModule CreateErrorShaderModule(ShaderModuleDescriptor const * descriptor, StringView errorMessage) const;
     inline Texture CreateErrorTexture(TextureDescriptor const * descriptor) const;
     inline ExternalTexture CreateExternalTexture(ExternalTextureDescriptor const * externalTextureDescriptor) const;
@@ -1797,16 +1778,10 @@ class Device : public ObjectBase<Device, WGPUDevice> {
     inline QuerySet CreateQuerySet(QuerySetDescriptor const * descriptor) const;
     inline RenderBundleEncoder CreateRenderBundleEncoder(RenderBundleEncoderDescriptor const * descriptor) const;
     inline RenderPipeline CreateRenderPipeline(RenderPipelineDescriptor const * descriptor) const;
-    template <typename F, typename T,
-              typename Cb = CreateRenderPipelineAsyncCallback<T>,
-              typename CbChar = void (CreatePipelineAsyncStatus status, RenderPipeline pipeline, const char* message, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
-    Future CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode,F callback, T userdata) const;
-    template <typename L,
-              typename Cb = CreateRenderPipelineAsyncCallback<>,
-              typename CbChar = std::function<void(CreatePipelineAsyncStatus status, RenderPipeline pipeline, const char* message)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    Future CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode,L callback) const;
+    template <typename F, typename T>
+    Future CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode, F callback, T userdata) const;
+    template <typename F>
+    Future CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode, F callback) const;
     inline ResourceTable CreateResourceTable(ResourceTableDescriptor const * descriptor) const;
     inline Sampler CreateSampler(SamplerDescriptor const * descriptor = nullptr) const;
     inline ShaderModule CreateShaderModule(ShaderModuleDescriptor const * descriptor) const;
@@ -1825,28 +1800,16 @@ class Device : public ObjectBase<Device, WGPUDevice> {
     inline SharedFence ImportSharedFence(SharedFenceDescriptor const * descriptor) const;
     inline SharedTextureMemory ImportSharedTextureMemory(SharedTextureMemoryDescriptor const * descriptor) const;
     inline void InjectError(ErrorType type, StringView message) const;
-    template <typename F, typename T,
-              typename Cb = PopErrorScopeCallback<T>,
-              typename CbChar = void (PopErrorScopeStatus status, ErrorType type, const char* message, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
-    Future PopErrorScope(CallbackMode callbackMode,F callback, T userdata) const;
-    template <typename L,
-              typename Cb = PopErrorScopeCallback<>,
-              typename CbChar = std::function<void(PopErrorScopeStatus status, ErrorType type, const char* message)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    Future PopErrorScope(CallbackMode callbackMode,L callback) const;
+    template <typename F, typename T>
+    Future PopErrorScope(CallbackMode callbackMode, F callback, T userdata) const;
+    template <typename F>
+    Future PopErrorScope(CallbackMode callbackMode, F callback) const;
     inline void PushErrorScope(ErrorFilter filter) const;
     inline void SetLabel(StringView label) const;
-    template <typename F, typename T,
-              typename Cb = LoggingCallback<T>,
-              typename CbChar = void (LoggingType type, const char* message, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
+    template <typename F, typename T>
     void SetLoggingCallback(F callback, T userdata) const;
-    template <typename L,
-              typename Cb = LoggingCallback<>,
-              typename CbChar = std::function<void(LoggingType type, const char* message)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    void SetLoggingCallback(L callback) const;
+    template <typename F>
+    void SetLoggingCallback(F callback) const;
     inline void Tick() const;
     inline void ValidateTextureDescriptor(TextureDescriptor const * descriptor) const;
 
@@ -1883,16 +1846,10 @@ class Instance : public ObjectBase<Instance, WGPUInstance> {
     inline void GetWGSLLanguageFeatures(SupportedWGSLLanguageFeatures * features) const;
     inline Bool HasWGSLLanguageFeature(WGSLLanguageFeatureName feature) const;
     inline void ProcessEvents() const;
-    template <typename F, typename T,
-              typename Cb = RequestAdapterCallback<T>,
-              typename CbChar = void (RequestAdapterStatus status, Adapter adapter, const char* message, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
-    Future RequestAdapter(RequestAdapterOptions const * options, CallbackMode callbackMode,F callback, T userdata) const;
-    template <typename L,
-              typename Cb = RequestAdapterCallback<>,
-              typename CbChar = std::function<void(RequestAdapterStatus status, Adapter adapter, const char* message)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    Future RequestAdapter(RequestAdapterOptions const * options, CallbackMode callbackMode,L callback) const;
+    template <typename F, typename T>
+    Future RequestAdapter(RequestAdapterOptions const * options, CallbackMode callbackMode, F callback, T userdata) const;
+    template <typename F>
+    Future RequestAdapter(RequestAdapterOptions const * options, CallbackMode callbackMode, F callback) const;
     inline WaitStatus WaitAny(size_t futureCount, FutureWaitInfo * futures, uint64_t timeoutNS) const;
 
     inline WaitStatus WaitAny(Future f, uint64_t timeout) const;
@@ -1941,16 +1898,10 @@ class Queue : public ObjectBase<Queue, WGPUQueue> {
 
     inline void CopyExternalTextureForBrowser(ImageCopyExternalTexture const * source, TexelCopyTextureInfo const * destination, Extent3D const * copySize, CopyTextureForBrowserOptions const * options) const;
     inline void CopyTextureForBrowser(TexelCopyTextureInfo const * source, TexelCopyTextureInfo const * destination, Extent3D const * copySize, CopyTextureForBrowserOptions const * options) const;
-    template <typename F, typename T,
-              typename Cb = QueueWorkDoneCallback<T>,
-              typename CbChar = void (QueueWorkDoneStatus status, const char* message, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
-    Future OnSubmittedWorkDone(CallbackMode callbackMode,F callback, T userdata) const;
-    template <typename L,
-              typename Cb = QueueWorkDoneCallback<>,
-              typename CbChar = std::function<void(QueueWorkDoneStatus status, const char* message)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    Future OnSubmittedWorkDone(CallbackMode callbackMode,L callback) const;
+    template <typename F, typename T>
+    Future OnSubmittedWorkDone(CallbackMode callbackMode, F callback, T userdata) const;
+    template <typename F>
+    Future OnSubmittedWorkDone(CallbackMode callbackMode, F callback) const;
     inline void SetLabel(StringView label) const;
     inline void Submit(size_t commandCount, CommandBuffer const * commands) const;
     inline void WriteBuffer(Buffer const& buffer, uint64_t bufferOffset, void const * data, size_t size) const;
@@ -1999,8 +1950,9 @@ class ResourceTable : public ObjectBase<ResourceTable, WGPUResourceTable> {
 
     inline void Destroy() const;
     inline uint32_t GetSize() const;
-    inline uint32_t InsertBinding(BindingResource const * resource) const;
-    inline ConvertibleStatus RemoveBinding(uint32_t slot) const;
+    inline uint32_t Insert(BindingResource const * resource) const;
+    inline ConvertibleStatus Remove(uint32_t slot) const;
+    inline void SetLabel(StringView label) const;
     inline ConvertibleStatus Update(uint32_t slot, BindingResource const * resource) const;
 
 
@@ -2029,16 +1981,10 @@ class ShaderModule : public ObjectBase<ShaderModule, WGPUShaderModule> {
     using ObjectBase::ObjectBase;
     using ObjectBase::operator=;
 
-    template <typename F, typename T,
-              typename Cb = CompilationInfoCallback<T>,
-              typename CbChar = void (CompilationInfoRequestStatus status, CompilationInfo const * compilationInfo, T userdata),
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*> || std::is_convertible_v<F, CbChar*>>>
-    Future GetCompilationInfo(CallbackMode callbackMode,F callback, T userdata) const;
-    template <typename L,
-              typename Cb = CompilationInfoCallback<>,
-              typename CbChar = std::function<void(CompilationInfoRequestStatus status, CompilationInfo const * compilationInfo)>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb> || std::is_convertible_v<L, CbChar>>>
-    Future GetCompilationInfo(CallbackMode callbackMode,L callback) const;
+    template <typename F, typename T>
+    Future GetCompilationInfo(CallbackMode callbackMode, F callback, T userdata) const;
+    template <typename F>
+    Future GetCompilationInfo(CallbackMode callbackMode, F callback) const;
     inline void SetLabel(StringView label) const;
 
 
@@ -2151,10 +2097,8 @@ class Texture : public ObjectBase<Texture, WGPUTexture> {
     inline TextureViewDimension GetTextureBindingViewDimension() const;
     inline TextureUsage GetUsage() const;
     inline uint32_t GetWidth() const;
-    inline void Pin(TextureUsage usage) const;
     inline void SetLabel(StringView label) const;
     inline void SetOwnershipForMemoryDump(uint64_t ownerGuid = 0) const;
-    inline void Unpin() const;
 
 
   private:
@@ -2220,7 +2164,6 @@ class RenderBundleEncoder : public ObjectBase<RenderBundleEncoder, WGPURenderBun
     inline void SetIndexBuffer(Buffer const& buffer, IndexFormat format, uint64_t offset = 0, uint64_t size = kWholeSize) const;
     inline void SetLabel(StringView label) const;
     inline void SetPipeline(RenderPipeline const& pipeline) const;
-    inline void SetResourceTable(ResourceTable const& table = nullptr) const;
     inline void SetVertexBuffer(uint32_t slot, Buffer const& buffer = nullptr, uint64_t offset = 0, uint64_t size = kWholeSize) const;
 
 
@@ -2280,28 +2223,29 @@ static_assert(offsetof(ChainedStruct, nextInChain) == offsetof(WGPUChainedStruct
 static_assert(offsetof(ChainedStruct, sType) == offsetof(WGPUChainedStruct, sType),
     "offsetof mismatch for ChainedStruct::sType");
 
+// NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 
 // Can be chained in AdapterInfo
 struct AdapterPropertiesD3D : ChainedStructOut {
     inline AdapterPropertiesD3D();
-
     struct Init;
-    inline AdapterPropertiesD3D(Init&& init);
+    explicit(false) inline AdapterPropertiesD3D(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUAdapterPropertiesD3D&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(uint32_t));
     alignas(kFirstMemberAlignment) uint32_t shaderModel;
 };
 
 // Can be chained in AdapterInfo
 struct AdapterPropertiesDrm : ChainedStructOut {
     inline AdapterPropertiesDrm();
-
     struct Init;
-    inline AdapterPropertiesDrm(Init&& init);
+    explicit(false) inline AdapterPropertiesDrm(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUAdapterPropertiesDrm&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(Bool));
     alignas(kFirstMemberAlignment) Bool hasPrimary = false;
     Bool hasRender = false;
     uint64_t primaryMajor = 0;
@@ -2311,44 +2255,31 @@ struct AdapterPropertiesDrm : ChainedStructOut {
 };
 
 // Can be chained in AdapterInfo
-struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs : ChainedStructOut {
-    inline AdapterPropertiesExplicitComputeSubgroupSizeConfigs();
-
-    struct Init;
-    inline AdapterPropertiesExplicitComputeSubgroupSizeConfigs(Init&& init);
-    inline operator const WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs&() const noexcept;
-
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
-    alignas(kFirstMemberAlignment) uint32_t minExplicitComputeSubgroupSize;
-    uint32_t maxExplicitComputeSubgroupSize;
-    uint32_t maxComputeWorkgroupSubgroups;
-};
-
-// Can be chained in AdapterInfo
 struct AdapterPropertiesVk : ChainedStructOut {
     inline AdapterPropertiesVk();
-
     struct Init;
-    inline AdapterPropertiesVk(Init&& init);
+    explicit(false) inline AdapterPropertiesVk(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUAdapterPropertiesVk&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(uint32_t));
     alignas(kFirstMemberAlignment) uint32_t driverVersion;
 };
 
 // Can be chained in AdapterInfo
 struct AdapterPropertiesWGPU : ChainedStructOut {
     inline AdapterPropertiesWGPU();
-
     struct Init;
-    inline AdapterPropertiesWGPU(Init&& init);
+    explicit(false) inline AdapterPropertiesWGPU(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUAdapterPropertiesWGPU&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(BackendType));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(BackendType));
     alignas(kFirstMemberAlignment) BackendType backendType = BackendType::Undefined;
 };
 
 struct BindingResource {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBindingResource&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2360,6 +2291,7 @@ struct BindingResource {
 };
 
 struct BlendComponent {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBlendComponent&() const noexcept;
 
     BlendOperation operation = BlendOperation::Undefined;
@@ -2368,6 +2300,7 @@ struct BlendComponent {
 };
 
 struct BufferBindingLayout {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBufferBindingLayout&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2379,9 +2312,9 @@ struct BufferBindingLayout {
 // Can be chained in BufferDescriptor
 struct BufferHostMappedPointer : ChainedStruct {
     inline BufferHostMappedPointer();
-
     struct Init;
-    inline BufferHostMappedPointer(Init&& init);
+    explicit(false) inline BufferHostMappedPointer(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBufferHostMappedPointer&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -2391,6 +2324,7 @@ struct BufferHostMappedPointer : ChainedStruct {
 };
 
 struct Color {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUColor&() const noexcept;
 
     double r;
@@ -2400,21 +2334,23 @@ struct Color {
 };
 
 struct ColorSpaceDawn {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUColorSpaceDawn&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
     ColorSpacePrimariesDawn primaries = {};
-    ColorSpaceTransferDawn transfer = {};
-    ColorSpaceYCbCrRangeDawn yCbCrRange = {};
-    ColorSpaceYCbCrMatrixDawn yCbCrMatrix = {};
+    ColorSpaceTransferDawn transfer = ColorSpaceTransferDawn::Identity;
+    ColorSpaceYCbCrRangeDawn yCbCrRange = ColorSpaceYCbCrRangeDawn::Identity;
+    ColorSpaceYCbCrMatrixDawn yCbCrMatrix = ColorSpaceYCbCrMatrixDawn::Identity;
+    float hdrReferenceWhiteLuminance = 0;
 };
 
 // Can be chained in ColorTargetState
 struct ColorTargetStateExpandResolveTextureDawn : ChainedStruct {
     inline ColorTargetStateExpandResolveTextureDawn();
-
     struct Init;
-    inline ColorTargetStateExpandResolveTextureDawn(Init&& init);
+    explicit(false) inline ColorTargetStateExpandResolveTextureDawn(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUColorTargetStateExpandResolveTextureDawn&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2422,6 +2358,7 @@ struct ColorTargetStateExpandResolveTextureDawn : ChainedStruct {
 };
 
 struct CommandBufferDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUCommandBufferDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2431,12 +2368,12 @@ struct CommandBufferDescriptor {
 // Can be chained in Limits
 struct CompatibilityModeLimits : ChainedStructOut {
     inline CompatibilityModeLimits();
-
     struct Init;
-    inline CompatibilityModeLimits(Init&& init);
+    explicit(false) inline CompatibilityModeLimits(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUCompatibilityModeLimits&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(uint32_t));
     alignas(kFirstMemberAlignment) uint32_t maxStorageBuffersInVertexStage = kLimitU32Undefined;
     uint32_t maxStorageTexturesInVertexStage = kLimitU32Undefined;
     uint32_t maxStorageBuffersInFragmentStage = kLimitU32Undefined;
@@ -2444,6 +2381,7 @@ struct CompatibilityModeLimits : ChainedStructOut {
 };
 
 struct ConstantEntry {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUConstantEntry&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2452,6 +2390,7 @@ struct ConstantEntry {
 };
 
 struct CopyTextureForBrowserOptions {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUCopyTextureForBrowserOptions&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2468,48 +2407,62 @@ struct CopyTextureForBrowserOptions {
 // Can be chained in AdapterInfo
 struct DawnAdapterPropertiesPowerPreference : ChainedStructOut {
     inline DawnAdapterPropertiesPowerPreference();
-
     struct Init;
-    inline DawnAdapterPropertiesPowerPreference(Init&& init);
+    explicit(false) inline DawnAdapterPropertiesPowerPreference(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnAdapterPropertiesPowerPreference&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(PowerPreference));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(PowerPreference));
     alignas(kFirstMemberAlignment) PowerPreference powerPreference = PowerPreference::Undefined;
 };
 
 // Can be chained in BufferDescriptor
 struct DawnBufferDescriptorErrorInfoFromWireClient : ChainedStruct {
     inline DawnBufferDescriptorErrorInfoFromWireClient();
-
     struct Init;
-    inline DawnBufferDescriptorErrorInfoFromWireClient(Init&& init);
+    explicit(false) inline DawnBufferDescriptorErrorInfoFromWireClient(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnBufferDescriptorErrorInfoFromWireClient&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
     alignas(kFirstMemberAlignment) Bool outOfMemory = false;
 };
 
-// Can be chained in DeviceDescriptor
-struct DawnCacheDeviceDescriptor : ChainedStruct {
-    inline DawnCacheDeviceDescriptor();
-
-    struct Init;
-    inline DawnCacheDeviceDescriptor(Init&& init);
-    inline operator const WGPUDawnCacheDeviceDescriptor&() const noexcept;
-
+namespace detail {
+struct DawnCacheDeviceDescriptor {
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(StringView));
     alignas(kFirstMemberAlignment) StringView isolationKey = {};
-    DawnLoadCacheDataFunction loadDataFunction = nullptr;
-    DawnStoreCacheDataFunction storeDataFunction = nullptr;
-    void * functionUserdata = nullptr;
+    WGPUDawnLoadCacheDataCallbackInfo dawnLoadCacheDataCallbackInfo = WGPU_DAWN_LOAD_CACHE_DATA_CALLBACK_INFO_INIT;
+    WGPUDawnStoreCacheDataCallbackInfo dawnStoreCacheDataCallbackInfo = WGPU_DAWN_STORE_CACHE_DATA_CALLBACK_INFO_INIT;
+};
+}  // namespace detail
+// Can be chained in DeviceDescriptor
+struct DawnCacheDeviceDescriptor : ChainedStruct, protected detail::DawnCacheDeviceDescriptor {
+    inline DawnCacheDeviceDescriptor();
+    struct Init;
+    explicit(false) inline DawnCacheDeviceDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
+    inline operator const WGPUDawnCacheDeviceDescriptor&() const noexcept;
+
+    using detail::DawnCacheDeviceDescriptor::kFirstMemberAlignment;
+    using detail::DawnCacheDeviceDescriptor::isolationKey;
+
+    template <typename F, typename T>
+    void SetDawnLoadCacheDataCallback(F callback, T userdata);
+    template <typename F>
+    void SetDawnLoadCacheDataCallback(F callback);
+    template <typename F, typename T>
+    void SetDawnStoreCacheDataCallback(F callback, T userdata);
+    template <typename F>
+    void SetDawnStoreCacheDataCallback(F callback);
 };
 
 // Can be chained in CompilationMessage
 struct DawnCompilationMessageUtf16 : ChainedStruct {
     inline DawnCompilationMessageUtf16();
-
     struct Init;
-    inline DawnCompilationMessageUtf16(Init&& init);
+    explicit(false) inline DawnCompilationMessageUtf16(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnCompilationMessageUtf16&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint64_t));
@@ -2521,9 +2474,9 @@ struct DawnCompilationMessageUtf16 : ChainedStruct {
 // Can be chained in DeviceDescriptor
 struct DawnConsumeAdapterDescriptor : ChainedStruct {
     inline DawnConsumeAdapterDescriptor();
-
     struct Init;
-    inline DawnConsumeAdapterDescriptor(Init&& init);
+    explicit(false) inline DawnConsumeAdapterDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnConsumeAdapterDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2533,9 +2486,9 @@ struct DawnConsumeAdapterDescriptor : ChainedStruct {
 // Can be chained in DeviceDescriptor
 struct DawnDeviceAllocatorControl : ChainedStruct {
     inline DawnDeviceAllocatorControl();
-
     struct Init;
-    inline DawnDeviceAllocatorControl(Init&& init);
+    explicit(false) inline DawnDeviceAllocatorControl(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnDeviceAllocatorControl&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(size_t));
@@ -2543,6 +2496,7 @@ struct DawnDeviceAllocatorControl : ChainedStruct {
 };
 
 struct DawnDrmFormatProperties {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnDrmFormatProperties&() const noexcept;
 
     uint64_t modifier;
@@ -2552,9 +2506,9 @@ struct DawnDrmFormatProperties {
 // Can be chained in CommandEncoderDescriptor
 struct DawnEncoderInternalUsageDescriptor : ChainedStruct {
     inline DawnEncoderInternalUsageDescriptor();
-
     struct Init;
-    inline DawnEncoderInternalUsageDescriptor(Init&& init);
+    explicit(false) inline DawnEncoderInternalUsageDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnEncoderInternalUsageDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2564,9 +2518,9 @@ struct DawnEncoderInternalUsageDescriptor : ChainedStruct {
 // Can be chained in BufferDescriptor
 struct DawnFakeBufferOOMForTesting : ChainedStruct {
     inline DawnFakeBufferOOMForTesting();
-
     struct Init;
-    inline DawnFakeBufferOOMForTesting(Init&& init);
+    explicit(false) inline DawnFakeBufferOOMForTesting(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnFakeBufferOOMForTesting&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2578,30 +2532,30 @@ struct DawnFakeBufferOOMForTesting : ChainedStruct {
 // Can be chained in DeviceDescriptor
 struct DawnFakeDeviceInitializeErrorForTesting : ChainedStruct {
     inline DawnFakeDeviceInitializeErrorForTesting();
-
     struct Init;
-    inline DawnFakeDeviceInitializeErrorForTesting(Init&& init);
+    explicit(false) inline DawnFakeDeviceInitializeErrorForTesting(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnFakeDeviceInitializeErrorForTesting&() const noexcept;
 
-};
+    };
 
 // Can be chained in Limits
 struct DawnHostMappedPointerLimits : ChainedStructOut {
     inline DawnHostMappedPointerLimits();
-
     struct Init;
-    inline DawnHostMappedPointerLimits(Init&& init);
+    explicit(false) inline DawnHostMappedPointerLimits(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnHostMappedPointerLimits&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(uint32_t));
     alignas(kFirstMemberAlignment) uint32_t hostMappedPointerAlignment = kLimitU32Undefined;
 };
 
 struct DawnInjectedInvalidSType : ChainedStruct {
     inline DawnInjectedInvalidSType();
-
     struct Init;
-    inline DawnInjectedInvalidSType(Init&& init);
+    explicit(false) inline DawnInjectedInvalidSType(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnInjectedInvalidSType&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(SType));
@@ -2611,9 +2565,9 @@ struct DawnInjectedInvalidSType : ChainedStruct {
 // Can be chained in RenderPassDescriptor
 struct DawnRenderPassSampleCount : ChainedStruct {
     inline DawnRenderPassSampleCount();
-
     struct Init;
-    inline DawnRenderPassSampleCount(Init&& init);
+    explicit(false) inline DawnRenderPassSampleCount(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnRenderPassSampleCount&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
@@ -2623,9 +2577,9 @@ struct DawnRenderPassSampleCount : ChainedStruct {
 // Can be chained in ShaderModuleDescriptor
 struct DawnShaderModuleSPIRVOptionsDescriptor : ChainedStruct {
     inline DawnShaderModuleSPIRVOptionsDescriptor();
-
     struct Init;
-    inline DawnShaderModuleSPIRVOptionsDescriptor(Init&& init);
+    explicit(false) inline DawnShaderModuleSPIRVOptionsDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnShaderModuleSPIRVOptionsDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2635,21 +2589,21 @@ struct DawnShaderModuleSPIRVOptionsDescriptor : ChainedStruct {
 // Can be chained in Limits
 struct DawnTexelCopyBufferRowAlignmentLimits : ChainedStructOut {
     inline DawnTexelCopyBufferRowAlignmentLimits();
-
     struct Init;
-    inline DawnTexelCopyBufferRowAlignmentLimits(Init&& init);
+    explicit(false) inline DawnTexelCopyBufferRowAlignmentLimits(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnTexelCopyBufferRowAlignmentLimits&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(uint32_t));
     alignas(kFirstMemberAlignment) uint32_t minTexelCopyBufferRowAlignment = kLimitU32Undefined;
 };
 
 // Can be chained in TextureDescriptor
 struct DawnTextureInternalUsageDescriptor : ChainedStruct {
     inline DawnTextureInternalUsageDescriptor();
-
     struct Init;
-    inline DawnTextureInternalUsageDescriptor(Init&& init);
+    explicit(false) inline DawnTextureInternalUsageDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnTextureInternalUsageDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(TextureUsage));
@@ -2661,9 +2615,9 @@ struct DawnTextureInternalUsageDescriptor : ChainedStruct {
 // Can be chained in DeviceDescriptor
 struct DawnTogglesDescriptor : ChainedStruct {
     inline DawnTogglesDescriptor();
-
     struct Init;
-    inline DawnTogglesDescriptor(Init&& init);
+    explicit(false) inline DawnTogglesDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnTogglesDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(size_t));
@@ -2676,9 +2630,9 @@ struct DawnTogglesDescriptor : ChainedStruct {
 // Can be chained in InstanceDescriptor
 struct DawnWGSLBlocklist : ChainedStruct {
     inline DawnWGSLBlocklist();
-
     struct Init;
-    inline DawnWGSLBlocklist(Init&& init);
+    explicit(false) inline DawnWGSLBlocklist(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnWGSLBlocklist&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(size_t));
@@ -2689,9 +2643,9 @@ struct DawnWGSLBlocklist : ChainedStruct {
 // Can be chained in InstanceDescriptor
 struct DawnWireWGSLControl : ChainedStruct {
     inline DawnWireWGSLControl();
-
     struct Init;
-    inline DawnWireWGSLControl(Init&& init);
+    explicit(false) inline DawnWireWGSLControl(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnWireWGSLControl&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2703,9 +2657,9 @@ struct DawnWireWGSLControl : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct EmscriptenSurfaceSourceCanvasHTMLSelector : ChainedStruct {
     inline EmscriptenSurfaceSourceCanvasHTMLSelector();
-
     struct Init;
-    inline EmscriptenSurfaceSourceCanvasHTMLSelector(Init&& init);
+    explicit(false) inline EmscriptenSurfaceSourceCanvasHTMLSelector(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUEmscriptenSurfaceSourceCanvasHTMLSelector&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(StringView));
@@ -2713,6 +2667,7 @@ struct EmscriptenSurfaceSourceCanvasHTMLSelector : ChainedStruct {
 };
 
 struct Extent2D {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUExtent2D&() const noexcept;
 
     uint32_t width;
@@ -2720,6 +2675,7 @@ struct Extent2D {
 };
 
 struct Extent3D {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUExtent3D&() const noexcept;
 
     uint32_t width;
@@ -2730,9 +2686,9 @@ struct Extent3D {
 // Can be chained in BindGroupEntry
 struct ExternalTextureBindingEntry : ChainedStruct {
     inline ExternalTextureBindingEntry();
-
     struct Init;
-    inline ExternalTextureBindingEntry(Init&& init);
+    explicit(false) inline ExternalTextureBindingEntry(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUExternalTextureBindingEntry&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(ExternalTexture));
@@ -2742,20 +2698,22 @@ struct ExternalTextureBindingEntry : ChainedStruct {
 // Can be chained in BindGroupLayoutEntry
 struct ExternalTextureBindingLayout : ChainedStruct {
     inline ExternalTextureBindingLayout();
-
     struct Init;
-    inline ExternalTextureBindingLayout(Init&& init);
+    explicit(false) inline ExternalTextureBindingLayout(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUExternalTextureBindingLayout&() const noexcept;
 
-};
+    };
 
 struct Future {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUFuture&() const noexcept;
 
     uint64_t id;
 };
 
 struct InstanceLimits {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUInstanceLimits&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
@@ -2763,12 +2721,14 @@ struct InstanceLimits {
 };
 
 struct INTERNAL_HAVE_EMDAWNWEBGPU_HEADER {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUINTERNAL_HAVE_EMDAWNWEBGPU_HEADER&() const noexcept;
 
     Bool unused = false;
 };
 
 struct MemoryHeapInfo {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUMemoryHeapInfo&() const noexcept;
 
     HeapProperty properties = HeapProperty::None;
@@ -2776,6 +2736,7 @@ struct MemoryHeapInfo {
 };
 
 struct MultisampleState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUMultisampleState&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2785,6 +2746,7 @@ struct MultisampleState {
 };
 
 struct Origin2D {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUOrigin2D&() const noexcept;
 
     uint32_t x = 0;
@@ -2792,6 +2754,7 @@ struct Origin2D {
 };
 
 struct Origin3D {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUOrigin3D&() const noexcept;
 
     uint32_t x = 0;
@@ -2800,6 +2763,7 @@ struct Origin3D {
 };
 
 struct PassTimestampWrites {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUPassTimestampWrites&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2811,9 +2775,9 @@ struct PassTimestampWrites {
 // Can be chained in PipelineLayoutDescriptor
 struct PipelineLayoutResourceTable : ChainedStruct {
     inline PipelineLayoutResourceTable();
-
     struct Init;
-    inline PipelineLayoutResourceTable(Init&& init);
+    explicit(false) inline PipelineLayoutResourceTable(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUPipelineLayoutResourceTable&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2821,6 +2785,7 @@ struct PipelineLayoutResourceTable : ChainedStruct {
 };
 
 struct PipelineLayoutStorageAttachment {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUPipelineLayoutStorageAttachment&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2829,6 +2794,7 @@ struct PipelineLayoutStorageAttachment {
 };
 
 struct PrimitiveState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUPrimitiveState&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2840,6 +2806,7 @@ struct PrimitiveState {
 };
 
 struct QuerySetDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUQuerySetDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2849,6 +2816,7 @@ struct QuerySetDescriptor {
 };
 
 struct QueueDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUQueueDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2856,26 +2824,27 @@ struct QueueDescriptor {
 };
 
 struct RenderBundleDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderBundleDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
     StringView label = {};
 };
 
-struct RenderBundleEncoderDescriptor {
-    inline operator const WGPURenderBundleEncoderDescriptor&() const noexcept;
+// Can be chained in RenderBundleEncoderDescriptor
+struct RenderBundleEncoderResourceTable : ChainedStruct {
+    inline RenderBundleEncoderResourceTable();
+    struct Init;
+    explicit(false) inline RenderBundleEncoderResourceTable(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
+    inline operator const WGPURenderBundleEncoderResourceTable&() const noexcept;
 
-    ChainedStruct const * nextInChain = nullptr;
-    StringView label = {};
-    size_t colorFormatCount;
-    TextureFormat const * colorFormats = nullptr;
-    TextureFormat depthStencilFormat = TextureFormat::Undefined;
-    uint32_t sampleCount = 1;
-    Bool depthReadOnly = false;
-    Bool stencilReadOnly = false;
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
+    alignas(kFirstMemberAlignment) Bool usesResourceTable = false;
 };
 
 struct RenderPassDepthStencilAttachment {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPassDepthStencilAttachment&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2893,9 +2862,9 @@ struct RenderPassDepthStencilAttachment {
 // Can be chained in RenderPassDescriptor
 struct RenderPassDescriptorResolveRect : ChainedStruct {
     inline RenderPassDescriptorResolveRect();
-
     struct Init;
-    inline RenderPassDescriptorResolveRect(Init&& init);
+    explicit(false) inline RenderPassDescriptorResolveRect(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPassDescriptorResolveRect&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
@@ -2910,9 +2879,9 @@ struct RenderPassDescriptorResolveRect : ChainedStruct {
 // Can be chained in RenderPassDescriptor
 struct RenderPassMaxDrawCount : ChainedStruct {
     inline RenderPassMaxDrawCount();
-
     struct Init;
-    inline RenderPassMaxDrawCount(Init&& init);
+    explicit(false) inline RenderPassMaxDrawCount(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPassMaxDrawCount&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint64_t));
@@ -2922,19 +2891,19 @@ struct RenderPassMaxDrawCount : ChainedStruct {
 // Can be chained in RequestAdapterOptions
 struct RequestAdapterWebGPUBackendOptions : ChainedStruct {
     inline RequestAdapterWebGPUBackendOptions();
-
     struct Init;
-    inline RequestAdapterWebGPUBackendOptions(Init&& init);
+    explicit(false) inline RequestAdapterWebGPUBackendOptions(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURequestAdapterWebGPUBackendOptions&() const noexcept;
 
-};
+    };
 
 // Can be chained in RequestAdapterOptions
 struct RequestAdapterWebXROptions : ChainedStruct {
     inline RequestAdapterWebXROptions();
-
     struct Init;
-    inline RequestAdapterWebXROptions(Init&& init);
+    explicit(false) inline RequestAdapterWebXROptions(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURequestAdapterWebXROptions&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2942,6 +2911,7 @@ struct RequestAdapterWebXROptions : ChainedStruct {
 };
 
 struct ResourceTableDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUResourceTableDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2950,6 +2920,7 @@ struct ResourceTableDescriptor {
 };
 
 struct SamplerBindingLayout {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSamplerBindingLayout&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -2959,9 +2930,9 @@ struct SamplerBindingLayout {
 // Can be chained in ShaderModuleDescriptor
 struct ShaderModuleCompilationOptions : ChainedStruct {
     inline ShaderModuleCompilationOptions();
-
     struct Init;
-    inline ShaderModuleCompilationOptions(Init&& init);
+    explicit(false) inline ShaderModuleCompilationOptions(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUShaderModuleCompilationOptions&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -2971,9 +2942,9 @@ struct ShaderModuleCompilationOptions : ChainedStruct {
 // Can be chained in ShaderModuleDescriptor
 struct ShaderSourceSPIRV : ChainedStruct {
     inline ShaderSourceSPIRV();
-
     struct Init;
-    inline ShaderSourceSPIRV(Init&& init);
+    explicit(false) inline ShaderSourceSPIRV(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUShaderSourceSPIRV&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
@@ -2984,9 +2955,9 @@ struct ShaderSourceSPIRV : ChainedStruct {
 // Can be chained in ShaderModuleDescriptor
 struct ShaderSourceWGSL : ChainedStruct {
     inline ShaderSourceWGSL();
-
     struct Init;
-    inline ShaderSourceWGSL(Init&& init);
+    explicit(false) inline ShaderSourceWGSL(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUShaderSourceWGSL&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(StringView));
@@ -2994,26 +2965,15 @@ struct ShaderSourceWGSL : ChainedStruct {
 };
 
 struct SharedBufferMemoryBeginAccessDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedBufferMemoryBeginAccessDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
     Bool initialized;
     size_t fenceCount = 0;
     SharedFence const * fences = nullptr;
+    size_t signaledValueCount = 0;
     uint64_t const * signaledValues = nullptr;
-};
-
-// Can be chained in SharedBufferMemoryDescriptor
-struct SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor : ChainedStruct {
-    inline SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor();
-
-    struct Init;
-    inline SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor(Init&& init);
-    inline operator const WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor&() const noexcept;
-
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
-    alignas(kFirstMemberAlignment) void * handle;
-    uint64_t size;
 };
 
 struct SharedBufferMemoryEndAccessState {
@@ -3023,12 +2983,14 @@ struct SharedBufferMemoryEndAccessState {
     SharedBufferMemoryEndAccessState& operator=(const SharedBufferMemoryEndAccessState&) = delete;
     inline SharedBufferMemoryEndAccessState(SharedBufferMemoryEndAccessState&&);
     inline SharedBufferMemoryEndAccessState& operator=(SharedBufferMemoryEndAccessState&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedBufferMemoryEndAccessState&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
     Bool const initialized = {};
     size_t const fenceCount = 0;
     SharedFence const * const fences = nullptr;
+    size_t const signaledValueCount = 0;
     uint64_t const * const signaledValues = nullptr;
 
   private:
@@ -3036,7 +2998,21 @@ struct SharedBufferMemoryEndAccessState {
     static inline void Reset(SharedBufferMemoryEndAccessState& value);
 };
 
+// Can be chained in SharedBufferMemoryDescriptor
+struct SharedBufferMemoryFromWindowsHandleDescriptor : ChainedStruct {
+    inline SharedBufferMemoryFromWindowsHandleDescriptor();
+    struct Init;
+    explicit(false) inline SharedBufferMemoryFromWindowsHandleDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
+    inline operator const WGPUSharedBufferMemoryFromWindowsHandleDescriptor&() const noexcept;
+
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
+    alignas(kFirstMemberAlignment) void * handle;
+    uint64_t size;
+};
+
 struct SharedBufferMemoryProperties {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedBufferMemoryProperties&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
@@ -3047,9 +3023,9 @@ struct SharedBufferMemoryProperties {
 // Can be chained in SharedFenceDescriptor
 struct SharedFenceDXGISharedHandleDescriptor : ChainedStruct {
     inline SharedFenceDXGISharedHandleDescriptor();
-
     struct Init;
-    inline SharedFenceDXGISharedHandleDescriptor(Init&& init);
+    explicit(false) inline SharedFenceDXGISharedHandleDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceDXGISharedHandleDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3059,21 +3035,21 @@ struct SharedFenceDXGISharedHandleDescriptor : ChainedStruct {
 // Can be chained in SharedFenceExportInfo
 struct SharedFenceDXGISharedHandleExportInfo : ChainedStructOut {
     inline SharedFenceDXGISharedHandleExportInfo();
-
     struct Init;
-    inline SharedFenceDXGISharedHandleExportInfo(Init&& init);
+    explicit(false) inline SharedFenceDXGISharedHandleExportInfo(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceDXGISharedHandleExportInfo&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(void *));
     alignas(kFirstMemberAlignment) void * handle;
 };
 
 // Can be chained in SharedFenceDescriptor
 struct SharedFenceEGLSyncDescriptor : ChainedStruct {
     inline SharedFenceEGLSyncDescriptor();
-
     struct Init;
-    inline SharedFenceEGLSyncDescriptor(Init&& init);
+    explicit(false) inline SharedFenceEGLSyncDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceEGLSyncDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3083,21 +3059,21 @@ struct SharedFenceEGLSyncDescriptor : ChainedStruct {
 // Can be chained in SharedFenceExportInfo
 struct SharedFenceEGLSyncExportInfo : ChainedStructOut {
     inline SharedFenceEGLSyncExportInfo();
-
     struct Init;
-    inline SharedFenceEGLSyncExportInfo(Init&& init);
+    explicit(false) inline SharedFenceEGLSyncExportInfo(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceEGLSyncExportInfo&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(void *));
     alignas(kFirstMemberAlignment) void * sync;
 };
 
 // Can be chained in SharedFenceDescriptor
 struct SharedFenceMTLSharedEventDescriptor : ChainedStruct {
     inline SharedFenceMTLSharedEventDescriptor();
-
     struct Init;
-    inline SharedFenceMTLSharedEventDescriptor(Init&& init);
+    explicit(false) inline SharedFenceMTLSharedEventDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceMTLSharedEventDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3107,21 +3083,21 @@ struct SharedFenceMTLSharedEventDescriptor : ChainedStruct {
 // Can be chained in SharedFenceExportInfo
 struct SharedFenceMTLSharedEventExportInfo : ChainedStructOut {
     inline SharedFenceMTLSharedEventExportInfo();
-
     struct Init;
-    inline SharedFenceMTLSharedEventExportInfo(Init&& init);
+    explicit(false) inline SharedFenceMTLSharedEventExportInfo(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceMTLSharedEventExportInfo&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(void *));
     alignas(kFirstMemberAlignment) void * sharedEvent;
 };
 
 // Can be chained in SharedFenceDescriptor
 struct SharedFenceSyncFDDescriptor : ChainedStruct {
     inline SharedFenceSyncFDDescriptor();
-
     struct Init;
-    inline SharedFenceSyncFDDescriptor(Init&& init);
+    explicit(false) inline SharedFenceSyncFDDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceSyncFDDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(int));
@@ -3131,21 +3107,21 @@ struct SharedFenceSyncFDDescriptor : ChainedStruct {
 // Can be chained in SharedFenceExportInfo
 struct SharedFenceSyncFDExportInfo : ChainedStructOut {
     inline SharedFenceSyncFDExportInfo();
-
     struct Init;
-    inline SharedFenceSyncFDExportInfo(Init&& init);
+    explicit(false) inline SharedFenceSyncFDExportInfo(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceSyncFDExportInfo&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(int));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(int));
     alignas(kFirstMemberAlignment) int handle;
 };
 
 // Can be chained in SharedFenceDescriptor
 struct SharedFenceVkSemaphoreOpaqueFDDescriptor : ChainedStruct {
     inline SharedFenceVkSemaphoreOpaqueFDDescriptor();
-
     struct Init;
-    inline SharedFenceVkSemaphoreOpaqueFDDescriptor(Init&& init);
+    explicit(false) inline SharedFenceVkSemaphoreOpaqueFDDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceVkSemaphoreOpaqueFDDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(int));
@@ -3155,21 +3131,21 @@ struct SharedFenceVkSemaphoreOpaqueFDDescriptor : ChainedStruct {
 // Can be chained in SharedFenceExportInfo
 struct SharedFenceVkSemaphoreOpaqueFDExportInfo : ChainedStructOut {
     inline SharedFenceVkSemaphoreOpaqueFDExportInfo();
-
     struct Init;
-    inline SharedFenceVkSemaphoreOpaqueFDExportInfo(Init&& init);
+    explicit(false) inline SharedFenceVkSemaphoreOpaqueFDExportInfo(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceVkSemaphoreOpaqueFDExportInfo&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(int));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(int));
     alignas(kFirstMemberAlignment) int handle;
 };
 
 // Can be chained in SharedFenceDescriptor
 struct SharedFenceVkSemaphoreZirconHandleDescriptor : ChainedStruct {
     inline SharedFenceVkSemaphoreZirconHandleDescriptor();
-
     struct Init;
-    inline SharedFenceVkSemaphoreZirconHandleDescriptor(Init&& init);
+    explicit(false) inline SharedFenceVkSemaphoreZirconHandleDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceVkSemaphoreZirconHandleDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
@@ -3179,21 +3155,21 @@ struct SharedFenceVkSemaphoreZirconHandleDescriptor : ChainedStruct {
 // Can be chained in SharedFenceExportInfo
 struct SharedFenceVkSemaphoreZirconHandleExportInfo : ChainedStructOut {
     inline SharedFenceVkSemaphoreZirconHandleExportInfo();
-
     struct Init;
-    inline SharedFenceVkSemaphoreZirconHandleExportInfo(Init&& init);
+    explicit(false) inline SharedFenceVkSemaphoreZirconHandleExportInfo(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceVkSemaphoreZirconHandleExportInfo&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(uint32_t));
     alignas(kFirstMemberAlignment) uint32_t handle;
 };
 
 // Can be chained in SharedTextureMemoryDescriptor
 struct SharedTextureMemoryAHardwareBufferDescriptor : ChainedStruct {
     inline SharedTextureMemoryAHardwareBufferDescriptor();
-
     struct Init;
-    inline SharedTextureMemoryAHardwareBufferDescriptor(Init&& init);
+    explicit(false) inline SharedTextureMemoryAHardwareBufferDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryAHardwareBufferDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3203,9 +3179,9 @@ struct SharedTextureMemoryAHardwareBufferDescriptor : ChainedStruct {
 // Can be chained in SharedTextureMemoryBeginAccessDescriptor
 struct SharedTextureMemoryD3D11BeginState : ChainedStruct {
     inline SharedTextureMemoryD3D11BeginState();
-
     struct Init;
-    inline SharedTextureMemoryD3D11BeginState(Init&& init);
+    explicit(false) inline SharedTextureMemoryD3D11BeginState(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryD3D11BeginState&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -3215,9 +3191,9 @@ struct SharedTextureMemoryD3D11BeginState : ChainedStruct {
 // Can be chained in SharedTextureMemoryBeginAccessDescriptor
 struct SharedTextureMemoryD3DSwapchainBeginState : ChainedStruct {
     inline SharedTextureMemoryD3DSwapchainBeginState();
-
     struct Init;
-    inline SharedTextureMemoryD3DSwapchainBeginState(Init&& init);
+    explicit(false) inline SharedTextureMemoryD3DSwapchainBeginState(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryD3DSwapchainBeginState&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -3225,6 +3201,7 @@ struct SharedTextureMemoryD3DSwapchainBeginState : ChainedStruct {
 };
 
 struct SharedTextureMemoryDmaBufPlane {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryDmaBufPlane&() const noexcept;
 
     int fd;
@@ -3235,9 +3212,9 @@ struct SharedTextureMemoryDmaBufPlane {
 // Can be chained in SharedTextureMemoryDescriptor
 struct SharedTextureMemoryDXGISharedHandleDescriptor : ChainedStruct {
     inline SharedTextureMemoryDXGISharedHandleDescriptor();
-
     struct Init;
-    inline SharedTextureMemoryDXGISharedHandleDescriptor(Init&& init);
+    explicit(false) inline SharedTextureMemoryDXGISharedHandleDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryDXGISharedHandleDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3248,9 +3225,9 @@ struct SharedTextureMemoryDXGISharedHandleDescriptor : ChainedStruct {
 // Can be chained in SharedTextureMemoryDescriptor
 struct SharedTextureMemoryEGLImageDescriptor : ChainedStruct {
     inline SharedTextureMemoryEGLImageDescriptor();
-
     struct Init;
-    inline SharedTextureMemoryEGLImageDescriptor(Init&& init);
+    explicit(false) inline SharedTextureMemoryEGLImageDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryEGLImageDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3260,9 +3237,9 @@ struct SharedTextureMemoryEGLImageDescriptor : ChainedStruct {
 // Can be chained in SharedTextureMemoryDescriptor
 struct SharedTextureMemoryIOSurfaceDescriptor : ChainedStruct {
     inline SharedTextureMemoryIOSurfaceDescriptor();
-
     struct Init;
-    inline SharedTextureMemoryIOSurfaceDescriptor(Init&& init);
+    explicit(false) inline SharedTextureMemoryIOSurfaceDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryIOSurfaceDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3273,9 +3250,9 @@ struct SharedTextureMemoryIOSurfaceDescriptor : ChainedStruct {
 // Can be chained in SharedTextureMemoryDescriptor
 struct SharedTextureMemoryOpaqueFDDescriptor : ChainedStruct {
     inline SharedTextureMemoryOpaqueFDDescriptor();
-
     struct Init;
-    inline SharedTextureMemoryOpaqueFDDescriptor(Init&& init);
+    explicit(false) inline SharedTextureMemoryOpaqueFDDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryOpaqueFDDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void const *));
@@ -3289,9 +3266,9 @@ struct SharedTextureMemoryOpaqueFDDescriptor : ChainedStruct {
 // Can be chained in SharedTextureMemoryDescriptor
 struct SharedTextureMemoryVkDedicatedAllocationDescriptor : ChainedStruct {
     inline SharedTextureMemoryVkDedicatedAllocationDescriptor();
-
     struct Init;
-    inline SharedTextureMemoryVkDedicatedAllocationDescriptor(Init&& init);
+    explicit(false) inline SharedTextureMemoryVkDedicatedAllocationDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryVkDedicatedAllocationDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Bool));
@@ -3301,9 +3278,9 @@ struct SharedTextureMemoryVkDedicatedAllocationDescriptor : ChainedStruct {
 // Can be chained in SharedTextureMemoryBeginAccessDescriptor
 struct SharedTextureMemoryVkImageLayoutBeginState : ChainedStruct {
     inline SharedTextureMemoryVkImageLayoutBeginState();
-
     struct Init;
-    inline SharedTextureMemoryVkImageLayoutBeginState(Init&& init);
+    explicit(false) inline SharedTextureMemoryVkImageLayoutBeginState(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryVkImageLayoutBeginState&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(int32_t));
@@ -3314,12 +3291,12 @@ struct SharedTextureMemoryVkImageLayoutBeginState : ChainedStruct {
 // Can be chained in SharedTextureMemoryEndAccessState
 struct SharedTextureMemoryVkImageLayoutEndState : ChainedStructOut {
     inline SharedTextureMemoryVkImageLayoutEndState();
-
     struct Init;
-    inline SharedTextureMemoryVkImageLayoutEndState(Init&& init);
+    explicit(false) inline SharedTextureMemoryVkImageLayoutEndState(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryVkImageLayoutEndState&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(int32_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(int32_t));
     alignas(kFirstMemberAlignment) int32_t oldLayout;
     int32_t newLayout;
 };
@@ -3327,9 +3304,9 @@ struct SharedTextureMemoryVkImageLayoutEndState : ChainedStructOut {
 // Can be chained in SharedTextureMemoryDescriptor
 struct SharedTextureMemoryZirconHandleDescriptor : ChainedStruct {
     inline SharedTextureMemoryZirconHandleDescriptor();
-
     struct Init;
-    inline SharedTextureMemoryZirconHandleDescriptor(Init&& init);
+    explicit(false) inline SharedTextureMemoryZirconHandleDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryZirconHandleDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
@@ -3340,9 +3317,9 @@ struct SharedTextureMemoryZirconHandleDescriptor : ChainedStruct {
 // Can be chained in BindGroupLayoutEntry
 struct StaticSamplerBindingLayout : ChainedStruct {
     inline StaticSamplerBindingLayout();
-
     struct Init;
-    inline StaticSamplerBindingLayout(Init&& init);
+    explicit(false) inline StaticSamplerBindingLayout(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUStaticSamplerBindingLayout&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Sampler));
@@ -3351,6 +3328,7 @@ struct StaticSamplerBindingLayout : ChainedStruct {
 };
 
 struct StencilFaceState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUStencilFaceState&() const noexcept;
 
     CompareFunction compare = CompareFunction::Undefined;
@@ -3360,6 +3338,7 @@ struct StencilFaceState {
 };
 
 struct StorageTextureBindingLayout {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUStorageTextureBindingLayout&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3369,6 +3348,7 @@ struct StorageTextureBindingLayout {
 };
 
 struct SubgroupMatrixConfig {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSubgroupMatrixConfig&() const noexcept;
 
     SubgroupMatrixComponentType componentType = {};
@@ -3385,6 +3365,7 @@ struct SupportedFeatures {
     SupportedFeatures& operator=(const SupportedFeatures&) = delete;
     inline SupportedFeatures(SupportedFeatures&&);
     inline SupportedFeatures& operator=(SupportedFeatures&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSupportedFeatures&() const noexcept;
 
     size_t const featureCount = {};
@@ -3402,6 +3383,7 @@ struct SupportedInstanceFeatures {
     SupportedInstanceFeatures& operator=(const SupportedInstanceFeatures&) = delete;
     inline SupportedInstanceFeatures(SupportedInstanceFeatures&&);
     inline SupportedInstanceFeatures& operator=(SupportedInstanceFeatures&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSupportedInstanceFeatures&() const noexcept;
 
     size_t const featureCount = {};
@@ -3419,6 +3401,7 @@ struct SupportedWGSLLanguageFeatures {
     SupportedWGSLLanguageFeatures& operator=(const SupportedWGSLLanguageFeatures&) = delete;
     inline SupportedWGSLLanguageFeatures(SupportedWGSLLanguageFeatures&&);
     inline SupportedWGSLLanguageFeatures& operator=(SupportedWGSLLanguageFeatures&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSupportedWGSLLanguageFeatures&() const noexcept;
 
     size_t const featureCount = {};
@@ -3436,6 +3419,7 @@ struct SurfaceCapabilities {
     SurfaceCapabilities& operator=(const SurfaceCapabilities&) = delete;
     inline SurfaceCapabilities(SurfaceCapabilities&&);
     inline SurfaceCapabilities& operator=(SurfaceCapabilities&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceCapabilities&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
@@ -3455,9 +3439,9 @@ struct SurfaceCapabilities {
 // Can be chained in SurfaceDescriptor
 struct SurfaceColorManagement : ChainedStruct {
     inline SurfaceColorManagement();
-
     struct Init;
-    inline SurfaceColorManagement(Init&& init);
+    explicit(false) inline SurfaceColorManagement(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceColorManagement&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(PredefinedColorSpace));
@@ -3466,6 +3450,7 @@ struct SurfaceColorManagement : ChainedStruct {
 };
 
 struct SurfaceConfiguration {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceConfiguration&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3483,9 +3468,9 @@ struct SurfaceConfiguration {
 // Can be chained in SurfaceDescriptor
 struct SurfaceDescriptorFromWindowsCoreWindow : ChainedStruct {
     inline SurfaceDescriptorFromWindowsCoreWindow();
-
     struct Init;
-    inline SurfaceDescriptorFromWindowsCoreWindow(Init&& init);
+    explicit(false) inline SurfaceDescriptorFromWindowsCoreWindow(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceDescriptorFromWindowsCoreWindow&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3495,9 +3480,9 @@ struct SurfaceDescriptorFromWindowsCoreWindow : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct SurfaceDescriptorFromWindowsUWPSwapChainPanel : ChainedStruct {
     inline SurfaceDescriptorFromWindowsUWPSwapChainPanel();
-
     struct Init;
-    inline SurfaceDescriptorFromWindowsUWPSwapChainPanel(Init&& init);
+    explicit(false) inline SurfaceDescriptorFromWindowsUWPSwapChainPanel(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceDescriptorFromWindowsUWPSwapChainPanel&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3507,9 +3492,9 @@ struct SurfaceDescriptorFromWindowsUWPSwapChainPanel : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct SurfaceDescriptorFromWindowsWinUISwapChainPanel : ChainedStruct {
     inline SurfaceDescriptorFromWindowsWinUISwapChainPanel();
-
     struct Init;
-    inline SurfaceDescriptorFromWindowsWinUISwapChainPanel(Init&& init);
+    explicit(false) inline SurfaceDescriptorFromWindowsWinUISwapChainPanel(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceDescriptorFromWindowsWinUISwapChainPanel&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3519,9 +3504,9 @@ struct SurfaceDescriptorFromWindowsWinUISwapChainPanel : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct SurfaceSourceAndroidNativeWindow : ChainedStruct {
     inline SurfaceSourceAndroidNativeWindow();
-
     struct Init;
-    inline SurfaceSourceAndroidNativeWindow(Init&& init);
+    explicit(false) inline SurfaceSourceAndroidNativeWindow(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceSourceAndroidNativeWindow&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3531,9 +3516,9 @@ struct SurfaceSourceAndroidNativeWindow : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct SurfaceSourceMetalLayer : ChainedStruct {
     inline SurfaceSourceMetalLayer();
-
     struct Init;
-    inline SurfaceSourceMetalLayer(Init&& init);
+    explicit(false) inline SurfaceSourceMetalLayer(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceSourceMetalLayer&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3543,9 +3528,9 @@ struct SurfaceSourceMetalLayer : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct SurfaceSourceWaylandSurface : ChainedStruct {
     inline SurfaceSourceWaylandSurface();
-
     struct Init;
-    inline SurfaceSourceWaylandSurface(Init&& init);
+    explicit(false) inline SurfaceSourceWaylandSurface(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceSourceWaylandSurface&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3556,9 +3541,9 @@ struct SurfaceSourceWaylandSurface : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct SurfaceSourceWindowsHWND : ChainedStruct {
     inline SurfaceSourceWindowsHWND();
-
     struct Init;
-    inline SurfaceSourceWindowsHWND(Init&& init);
+    explicit(false) inline SurfaceSourceWindowsHWND(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceSourceWindowsHWND&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3569,9 +3554,9 @@ struct SurfaceSourceWindowsHWND : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct SurfaceSourceXCBWindow : ChainedStruct {
     inline SurfaceSourceXCBWindow();
-
     struct Init;
-    inline SurfaceSourceXCBWindow(Init&& init);
+    explicit(false) inline SurfaceSourceXCBWindow(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceSourceXCBWindow&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3582,9 +3567,9 @@ struct SurfaceSourceXCBWindow : ChainedStruct {
 // Can be chained in SurfaceDescriptor
 struct SurfaceSourceXlibWindow : ChainedStruct {
     inline SurfaceSourceXlibWindow();
-
     struct Init;
-    inline SurfaceSourceXlibWindow(Init&& init);
+    explicit(false) inline SurfaceSourceXlibWindow(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceSourceXlibWindow&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(void *));
@@ -3593,6 +3578,7 @@ struct SurfaceSourceXlibWindow : ChainedStruct {
 };
 
 struct SurfaceTexture {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceTexture&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
@@ -3603,9 +3589,9 @@ struct SurfaceTexture {
 // Can be chained in BindGroupEntry
 struct TexelBufferBindingEntry : ChainedStruct {
     inline TexelBufferBindingEntry();
-
     struct Init;
-    inline TexelBufferBindingEntry(Init&& init);
+    explicit(false) inline TexelBufferBindingEntry(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTexelBufferBindingEntry&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(TexelBufferView));
@@ -3615,9 +3601,9 @@ struct TexelBufferBindingEntry : ChainedStruct {
 // Can be chained in BindGroupLayoutEntry
 struct TexelBufferBindingLayout : ChainedStruct {
     inline TexelBufferBindingLayout();
-
     struct Init;
-    inline TexelBufferBindingLayout(Init&& init);
+    explicit(false) inline TexelBufferBindingLayout(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTexelBufferBindingLayout&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(TexelBufferAccess));
@@ -3626,6 +3612,7 @@ struct TexelBufferBindingLayout : ChainedStruct {
 };
 
 struct TexelBufferViewDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTexelBufferViewDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3636,6 +3623,7 @@ struct TexelBufferViewDescriptor {
 };
 
 struct TexelCopyBufferLayout {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTexelCopyBufferLayout&() const noexcept;
 
     uint64_t offset = 0;
@@ -3644,6 +3632,7 @@ struct TexelCopyBufferLayout {
 };
 
 struct TextureBindingLayout {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTextureBindingLayout&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3655,9 +3644,9 @@ struct TextureBindingLayout {
 // Can be chained in TextureDescriptor
 struct TextureBindingViewDimension : ChainedStruct {
     inline TextureBindingViewDimension();
-
     struct Init;
-    inline TextureBindingViewDimension(Init&& init);
+    explicit(false) inline TextureBindingViewDimension(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTextureBindingViewDimension&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(TextureViewDimension));
@@ -3665,6 +3654,7 @@ struct TextureBindingViewDimension : ChainedStruct {
 };
 
 struct TextureComponentSwizzle {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTextureComponentSwizzle&() const noexcept;
 
     ComponentSwizzle r = ComponentSwizzle::Undefined;
@@ -3674,6 +3664,7 @@ struct TextureComponentSwizzle {
 };
 
 struct VertexAttribute {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUVertexAttribute&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3686,9 +3677,9 @@ struct VertexAttribute {
 // Can be chained in TextureViewDescriptor
 struct YCbCrVkDescriptor : ChainedStruct {
     inline YCbCrVkDescriptor();
-
     struct Init;
-    inline YCbCrVkDescriptor(Init&& init);
+    explicit(false) inline YCbCrVkDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUYCbCrVkDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint32_t));
@@ -3709,17 +3700,17 @@ struct YCbCrVkDescriptor : ChainedStruct {
 // Can be chained in AdapterInfo
 struct AdapterPropertiesMemoryHeaps : ChainedStructOut {
     inline AdapterPropertiesMemoryHeaps();
-
     struct Init;
-    inline AdapterPropertiesMemoryHeaps(Init&& init);
+    explicit(false) inline AdapterPropertiesMemoryHeaps(Init&& init);
     inline ~AdapterPropertiesMemoryHeaps();
     AdapterPropertiesMemoryHeaps(const AdapterPropertiesMemoryHeaps&) = delete;
     AdapterPropertiesMemoryHeaps& operator=(const AdapterPropertiesMemoryHeaps&) = delete;
     inline AdapterPropertiesMemoryHeaps(AdapterPropertiesMemoryHeaps&&);
     inline AdapterPropertiesMemoryHeaps& operator=(AdapterPropertiesMemoryHeaps&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUAdapterPropertiesMemoryHeaps&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(size_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(size_t));
     alignas(kFirstMemberAlignment) size_t const heapCount = {};
     MemoryHeapInfo const * const heapInfo = nullptr;
 
@@ -3731,17 +3722,17 @@ struct AdapterPropertiesMemoryHeaps : ChainedStructOut {
 // Can be chained in AdapterInfo
 struct AdapterPropertiesSubgroupMatrixConfigs : ChainedStructOut {
     inline AdapterPropertiesSubgroupMatrixConfigs();
-
     struct Init;
-    inline AdapterPropertiesSubgroupMatrixConfigs(Init&& init);
+    explicit(false) inline AdapterPropertiesSubgroupMatrixConfigs(Init&& init);
     inline ~AdapterPropertiesSubgroupMatrixConfigs();
     AdapterPropertiesSubgroupMatrixConfigs(const AdapterPropertiesSubgroupMatrixConfigs&) = delete;
     AdapterPropertiesSubgroupMatrixConfigs& operator=(const AdapterPropertiesSubgroupMatrixConfigs&) = delete;
     inline AdapterPropertiesSubgroupMatrixConfigs(AdapterPropertiesSubgroupMatrixConfigs&&);
     inline AdapterPropertiesSubgroupMatrixConfigs& operator=(AdapterPropertiesSubgroupMatrixConfigs&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUAdapterPropertiesSubgroupMatrixConfigs&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(size_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(size_t));
     alignas(kFirstMemberAlignment) size_t const configCount = {};
     SubgroupMatrixConfig const * const configs = nullptr;
 
@@ -3751,12 +3742,14 @@ struct AdapterPropertiesSubgroupMatrixConfigs : ChainedStructOut {
 };
 
 struct AHardwareBufferProperties {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUAHardwareBufferProperties&() const noexcept;
 
     YCbCrVkDescriptor yCbCrInfo = {};
 };
 
 struct BindGroupEntry {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBindGroupEntry&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3769,6 +3762,7 @@ struct BindGroupEntry {
 };
 
 struct BindGroupLayoutEntry {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBindGroupLayoutEntry&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3782,6 +3776,7 @@ struct BindGroupLayoutEntry {
 };
 
 struct BlendState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBlendState&() const noexcept;
 
     BlendComponent color = {};
@@ -3789,6 +3784,7 @@ struct BlendState {
 };
 
 struct BufferDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBufferDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3799,6 +3795,7 @@ struct BufferDescriptor {
 };
 
 struct CommandEncoderDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUCommandEncoderDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3806,6 +3803,7 @@ struct CommandEncoderDescriptor {
 };
 
 struct CompilationMessage {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUCompilationMessage&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3818,6 +3816,7 @@ struct CompilationMessage {
 };
 
 struct ComputePassDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUComputePassDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3826,6 +3825,7 @@ struct ComputePassDescriptor {
 };
 
 struct ComputeState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUComputeState&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3838,17 +3838,17 @@ struct ComputeState {
 // Can be chained in DawnFormatCapabilities
 struct DawnDrmFormatCapabilities : ChainedStructOut {
     inline DawnDrmFormatCapabilities();
-
     struct Init;
-    inline DawnDrmFormatCapabilities(Init&& init);
+    explicit(false) inline DawnDrmFormatCapabilities(Init&& init);
     inline ~DawnDrmFormatCapabilities();
     DawnDrmFormatCapabilities(const DawnDrmFormatCapabilities&) = delete;
     DawnDrmFormatCapabilities& operator=(const DawnDrmFormatCapabilities&) = delete;
     inline DawnDrmFormatCapabilities(DawnDrmFormatCapabilities&&);
     inline DawnDrmFormatCapabilities& operator=(DawnDrmFormatCapabilities&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnDrmFormatCapabilities&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(size_t));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(size_t));
     alignas(kFirstMemberAlignment) size_t const propertiesCount = {};
     DawnDrmFormatProperties const * const properties = nullptr;
 
@@ -3858,6 +3858,7 @@ struct DawnDrmFormatCapabilities : ChainedStructOut {
 };
 
 struct DepthStencilState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDepthStencilState&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3874,6 +3875,7 @@ struct DepthStencilState {
 };
 
 struct ExternalTextureDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUExternalTextureDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3893,6 +3895,7 @@ struct ExternalTextureDescriptor {
 };
 
 struct FutureWaitInfo {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUFutureWaitInfo&() const noexcept;
 
     Future future = {};
@@ -3900,6 +3903,7 @@ struct FutureWaitInfo {
 };
 
 struct ImageCopyExternalTexture {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUImageCopyExternalTexture&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3909,6 +3913,7 @@ struct ImageCopyExternalTexture {
 };
 
 struct InstanceDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUInstanceDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3918,6 +3923,7 @@ struct InstanceDescriptor {
 };
 
 struct Limits {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPULimits&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
@@ -3958,9 +3964,9 @@ struct Limits {
 // Can be chained in PipelineLayoutDescriptor
 struct PipelineLayoutPixelLocalStorage : ChainedStruct {
     inline PipelineLayoutPixelLocalStorage();
-
     struct Init;
-    inline PipelineLayoutPixelLocalStorage(Init&& init);
+    explicit(false) inline PipelineLayoutPixelLocalStorage(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUPipelineLayoutPixelLocalStorage&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint64_t));
@@ -3969,7 +3975,22 @@ struct PipelineLayoutPixelLocalStorage : ChainedStruct {
     PipelineLayoutStorageAttachment const * storageAttachments = nullptr;
 };
 
+struct RenderBundleEncoderDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
+    inline operator const WGPURenderBundleEncoderDescriptor&() const noexcept;
+
+    ChainedStruct const * nextInChain = nullptr;
+    StringView label = {};
+    size_t colorFormatCount;
+    TextureFormat const * colorFormats = nullptr;
+    TextureFormat depthStencilFormat = TextureFormat::Undefined;
+    uint32_t sampleCount = 1;
+    Bool depthReadOnly = false;
+    Bool stencilReadOnly = false;
+};
+
 struct RenderPassColorAttachment {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPassColorAttachment&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -3984,9 +4005,9 @@ struct RenderPassColorAttachment {
 // Can be chained in RenderPassDescriptor
 struct RenderPassRenderAreaRect : ChainedStruct {
     inline RenderPassRenderAreaRect();
-
     struct Init;
-    inline RenderPassRenderAreaRect(Init&& init);
+    explicit(false) inline RenderPassRenderAreaRect(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPassRenderAreaRect&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Origin2D));
@@ -3995,6 +4016,7 @@ struct RenderPassRenderAreaRect : ChainedStruct {
 };
 
 struct RenderPassStorageAttachment {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPassStorageAttachment&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4006,6 +4028,7 @@ struct RenderPassStorageAttachment {
 };
 
 struct RequestAdapterOptions {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURequestAdapterOptions&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4017,6 +4040,7 @@ struct RequestAdapterOptions {
 };
 
 struct SamplerDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSamplerDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4034,6 +4058,7 @@ struct SamplerDescriptor {
 };
 
 struct ShaderModuleDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUShaderModuleDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4041,6 +4066,7 @@ struct ShaderModuleDescriptor {
 };
 
 struct SharedBufferMemoryDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedBufferMemoryDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4048,6 +4074,7 @@ struct SharedBufferMemoryDescriptor {
 };
 
 struct SharedFenceDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4055,6 +4082,7 @@ struct SharedFenceDescriptor {
 };
 
 struct SharedFenceExportInfo {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedFenceExportInfo&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
@@ -4064,16 +4092,17 @@ struct SharedFenceExportInfo {
 // Can be chained in SharedTextureMemoryProperties
 struct SharedTextureMemoryAHardwareBufferProperties : ChainedStructOut {
     inline SharedTextureMemoryAHardwareBufferProperties();
-
     struct Init;
-    inline SharedTextureMemoryAHardwareBufferProperties(Init&& init);
+    explicit(false) inline SharedTextureMemoryAHardwareBufferProperties(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryAHardwareBufferProperties&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(YCbCrVkDescriptor));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(YCbCrVkDescriptor));
     alignas(kFirstMemberAlignment) YCbCrVkDescriptor yCbCrInfo = {};
 };
 
 struct SharedTextureMemoryBeginAccessDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryBeginAccessDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4081,15 +4110,16 @@ struct SharedTextureMemoryBeginAccessDescriptor {
     Bool initialized;
     size_t fenceCount;
     SharedFence const * fences = nullptr;
+    size_t signaledValueCount = 0;
     uint64_t const * signaledValues = nullptr;
 };
 
 // Can be chained in SharedTextureMemoryDescriptor
 struct SharedTextureMemoryDmaBufDescriptor : ChainedStruct {
     inline SharedTextureMemoryDmaBufDescriptor();
-
     struct Init;
-    inline SharedTextureMemoryDmaBufDescriptor(Init&& init);
+    explicit(false) inline SharedTextureMemoryDmaBufDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryDmaBufDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Extent3D));
@@ -4103,16 +4133,17 @@ struct SharedTextureMemoryDmaBufDescriptor : ChainedStruct {
 // Can be chained in SharedTextureMemoryEndAccessState
 struct SharedTextureMemoryMetalEndAccessState : ChainedStructOut {
     inline SharedTextureMemoryMetalEndAccessState();
-
     struct Init;
-    inline SharedTextureMemoryMetalEndAccessState(Init&& init);
+    explicit(false) inline SharedTextureMemoryMetalEndAccessState(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryMetalEndAccessState&() const noexcept;
 
-    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(Future));
+    static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStructOut), alignof(Future));
     alignas(kFirstMemberAlignment) Future commandsScheduledFuture = {};
 };
 
 struct SurfaceDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSurfaceDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4120,6 +4151,7 @@ struct SurfaceDescriptor {
 };
 
 struct TexelCopyBufferInfo {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTexelCopyBufferInfo&() const noexcept;
 
     TexelCopyBufferLayout layout = {};
@@ -4127,6 +4159,7 @@ struct TexelCopyBufferInfo {
 };
 
 struct TexelCopyTextureInfo {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTexelCopyTextureInfo&() const noexcept;
 
     Texture texture = nullptr;
@@ -4138,9 +4171,9 @@ struct TexelCopyTextureInfo {
 // Can be chained in TextureViewDescriptor
 struct TextureComponentSwizzleDescriptor : ChainedStruct {
     inline TextureComponentSwizzleDescriptor();
-
     struct Init;
-    inline TextureComponentSwizzleDescriptor(Init&& init);
+    explicit(false) inline TextureComponentSwizzleDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTextureComponentSwizzleDescriptor&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(TextureComponentSwizzle));
@@ -4148,6 +4181,7 @@ struct TextureComponentSwizzleDescriptor : ChainedStruct {
 };
 
 struct TextureDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTextureDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4163,6 +4197,7 @@ struct TextureDescriptor {
 };
 
 struct VertexBufferLayout {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUVertexBufferLayout&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4179,6 +4214,7 @@ struct AdapterInfo {
     AdapterInfo& operator=(const AdapterInfo&) = delete;
     inline AdapterInfo(AdapterInfo&&);
     inline AdapterInfo& operator=(AdapterInfo&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUAdapterInfo&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
@@ -4199,6 +4235,7 @@ struct AdapterInfo {
 };
 
 struct BindGroupDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBindGroupDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4209,6 +4246,7 @@ struct BindGroupDescriptor {
 };
 
 struct BindGroupLayoutDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUBindGroupLayoutDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4218,6 +4256,7 @@ struct BindGroupLayoutDescriptor {
 };
 
 struct ColorTargetState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUColorTargetState&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4227,6 +4266,7 @@ struct ColorTargetState {
 };
 
 struct CompilationInfo {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUCompilationInfo&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4235,6 +4275,7 @@ struct CompilationInfo {
 };
 
 struct ComputePipelineDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUComputePipelineDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4244,12 +4285,50 @@ struct ComputePipelineDescriptor {
 };
 
 struct DawnFormatCapabilities {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUDawnFormatCapabilities&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
 };
 
+namespace detail {
+struct DeviceDescriptor {
+    ChainedStruct const * nextInChain = nullptr;
+    StringView label = {};
+    size_t requiredFeatureCount = 0;
+    FeatureName const * requiredFeatures = nullptr;
+    Limits const * requiredLimits = nullptr;
+    QueueDescriptor defaultQueue = {};
+    WGPUDeviceLostCallbackInfo deviceLostCallbackInfo = WGPU_DEVICE_LOST_CALLBACK_INFO_INIT;
+    WGPUUncapturedErrorCallbackInfo uncapturedErrorCallbackInfo = WGPU_UNCAPTURED_ERROR_CALLBACK_INFO_INIT;
+};
+}  // namespace detail
+struct DeviceDescriptor : protected detail::DeviceDescriptor {
+    inline DeviceDescriptor();
+    struct Init;
+    explicit(false) inline DeviceDescriptor(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
+    inline operator const WGPUDeviceDescriptor&() const noexcept;
+
+    using detail::DeviceDescriptor::nextInChain;
+    using detail::DeviceDescriptor::label;
+    using detail::DeviceDescriptor::requiredFeatureCount;
+    using detail::DeviceDescriptor::requiredFeatures;
+    using detail::DeviceDescriptor::requiredLimits;
+    using detail::DeviceDescriptor::defaultQueue;
+
+    template <typename F, typename T>
+    void SetDeviceLostCallback(CallbackMode callbackMode, F callback, T userdata);
+    template <typename F>
+    void SetDeviceLostCallback(CallbackMode callbackMode, F callback);
+    template <typename F, typename T>
+    void SetUncapturedErrorCallback(F callback, T userdata);
+    template <typename F>
+    void SetUncapturedErrorCallback(F callback);
+};
+
 struct PipelineLayoutDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUPipelineLayoutDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4262,9 +4341,9 @@ struct PipelineLayoutDescriptor {
 // Can be chained in RenderPassDescriptor
 struct RenderPassPixelLocalStorage : ChainedStruct {
     inline RenderPassPixelLocalStorage();
-
     struct Init;
-    inline RenderPassPixelLocalStorage(Init&& init);
+    explicit(false) inline RenderPassPixelLocalStorage(Init&& init);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPassPixelLocalStorage&() const noexcept;
 
     static constexpr size_t kFirstMemberAlignment = detail::ConstexprMax(alignof(ChainedStruct), alignof(uint64_t));
@@ -4274,6 +4353,7 @@ struct RenderPassPixelLocalStorage : ChainedStruct {
 };
 
 struct SharedTextureMemoryDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4287,12 +4367,14 @@ struct SharedTextureMemoryEndAccessState {
     SharedTextureMemoryEndAccessState& operator=(const SharedTextureMemoryEndAccessState&) = delete;
     inline SharedTextureMemoryEndAccessState(SharedTextureMemoryEndAccessState&&);
     inline SharedTextureMemoryEndAccessState& operator=(SharedTextureMemoryEndAccessState&&);
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryEndAccessState&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
     Bool const initialized = {};
     size_t const fenceCount = {};
     SharedFence const * const fences = nullptr;
+    size_t const signaledValueCount = 0;
     uint64_t const * const signaledValues = nullptr;
 
   private:
@@ -4301,6 +4383,7 @@ struct SharedTextureMemoryEndAccessState {
 };
 
 struct SharedTextureMemoryProperties {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUSharedTextureMemoryProperties&() const noexcept;
 
     ChainedStructOut  * nextInChain = nullptr;
@@ -4310,6 +4393,7 @@ struct SharedTextureMemoryProperties {
 };
 
 struct TextureViewDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUTextureViewDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4325,6 +4409,7 @@ struct TextureViewDescriptor {
 };
 
 struct VertexState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUVertexState&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4337,6 +4422,7 @@ struct VertexState {
 };
 
 struct FragmentState {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPUFragmentState&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4349,6 +4435,7 @@ struct FragmentState {
 };
 
 struct RenderPassDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPassDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4361,6 +4448,7 @@ struct RenderPassDescriptor {
 };
 
 struct RenderPipelineDescriptor {
+    // NOLINTNEXTLINE(google-explicit-constructor)
     inline operator const WGPURenderPipelineDescriptor&() const noexcept;
 
     ChainedStruct const * nextInChain = nullptr;
@@ -4373,68 +4461,349 @@ struct RenderPipelineDescriptor {
     FragmentState const * fragment = nullptr;
 };
 
+// NOLINTEND(bugprone-invalid-enum-default-initialization)
 
+// Callback info handling is generated and/or custom implemented here to convert the types between C and C++.
 namespace detail {
-struct DeviceDescriptor {
-    ChainedStruct const * nextInChain = nullptr;
-    StringView label = {};
-    size_t requiredFeatureCount = 0;
-    FeatureName const * requiredFeatures = nullptr;
-    Limits const * requiredLimits = nullptr;
-    QueueDescriptor defaultQueue = {};
-    WGPUDeviceLostCallbackInfo deviceLostCallbackInfo = WGPU_DEVICE_LOST_CALLBACK_INFO_INIT;
-    WGPUUncapturedErrorCallbackInfo uncapturedErrorCallbackInfo = WGPU_UNCAPTURED_ERROR_CALLBACK_INFO_INIT;
+struct Untyped {};
+
+// The current interface of CppFTraits exposes the following values:
+//   - CppFTraits::capturing: true if the callback is a capturing callback (i.e. a lambda that
+//     captures its environment).
+//   - CppFTraits::PtrT: The C++ callback function pointer type.
+//   - CppFTraits::ReturnT: The return type of the C++ callback function pointer.
+//   - CppFTraits::BaseArgsTuple: A tuple of the C++ arguments minus the user specified typed
+//     parameter.
+//
+// Implementation notes:
+//   - The |Untyped| struct is only used to differentiate whether |T| is a user specified type
+//     in which case we need to strip the type from the callback arguments for speecialization
+//     deduction.
+template <typename CppFT, typename CppFPtr, typename T>
+struct CppFTraitsImpl;
+// Specialization for raw function pointers.
+template <typename CppFT, typename R, typename... CppArgs, typename T>
+struct CppFTraitsImpl<CppFT, R(*)(CppArgs...), T> {
+    using PtrT = R(*)(CppArgs...);
+    using ReturnT = R;
+    static constexpr bool capturing = false;
+
+    static constexpr size_t NumCppArgs = sizeof...(CppArgs);
+    using BaseArgsTuple = decltype([]<std::size_t... Is>(std::index_sequence<Is...>) {
+        return std::type_identity<std::tuple<std::tuple_element_t<Is, std::tuple<CppArgs...>>...>>{};
+    }(std::make_index_sequence<std::is_same_v<T, Untyped> ? NumCppArgs : NumCppArgs - 1>{})
+    )::type;
 };
+// Specialization for noexcept raw function pointers.
+template <typename CppFT, typename R, typename... CppArgs, typename T>
+struct CppFTraitsImpl<CppFT, R(*)(CppArgs...) noexcept, T> {
+    using PtrT = R(*)(CppArgs...) noexcept;
+    using ReturnT = R;
+    static constexpr bool capturing = false;
+
+    static constexpr size_t NumCppArgs = sizeof...(CppArgs);
+    using BaseArgsTuple = decltype([]<std::size_t... Is>(std::index_sequence<Is...>) {
+        return std::type_identity<std::tuple<std::tuple_element_t<Is, std::tuple<CppArgs...>>...>>{};
+    }(std::make_index_sequence<std::is_same_v<T, Untyped> ? NumCppArgs : NumCppArgs - 1>{})
+    )::type;
+};
+// Specialization for member function pointers (lambdas);
+template <typename CppFT, typename R, typename C, typename... CppArgs, typename T>
+struct CppFTraitsImpl<CppFT, R(C::*)(CppArgs...) const, T> {
+    using PtrT = R(*)(CppArgs...);
+    using ReturnT = R;
+    static constexpr bool capturing = !std::is_convertible_v<CppFT, PtrT>;
+
+    static constexpr size_t NumCppArgs = sizeof...(CppArgs);
+    using BaseArgsTuple = decltype([]<std::size_t... Is>(std::index_sequence<Is...>) {
+        return std::type_identity<std::tuple<std::tuple_element_t<Is, std::tuple<CppArgs...>>...>>{};
+    }(std::make_index_sequence<std::is_same_v<T, Untyped> ? NumCppArgs : NumCppArgs - 1>{})
+    )::type;
+};
+// Specialization for noexcept member function pointers (noexcept lambdas);
+template <typename CppFT, typename R, typename C, typename... CppArgs, typename T>
+struct CppFTraitsImpl<CppFT, R(C::*)(CppArgs...) const noexcept, T> {
+    using PtrT = R(*)(CppArgs...) noexcept;
+    using ReturnT = R;
+    static constexpr bool capturing = !std::is_convertible_v<CppFT, PtrT>;
+
+    static constexpr size_t NumCppArgs = sizeof...(CppArgs);
+    using BaseArgsTuple = decltype([]<std::size_t... Is>(std::index_sequence<Is...>) {
+        return std::type_identity<std::tuple<std::tuple_element_t<Is, std::tuple<CppArgs...>>...>>{};
+    }(std::make_index_sequence<std::is_same_v<T, Untyped> ? NumCppArgs : NumCppArgs - 1>{})
+    )::type;
+};
+template <typename CppFT, typename T = Untyped>
+struct CppFTraits : CppFTraitsImpl<CppFT, decltype(&CppFT::operator()), T> {};
+template <typename R, typename... CppArgs, typename T>
+struct CppFTraits<R(*)(CppArgs...), T> :
+    CppFTraitsImpl<R(*)(CppArgs...), R(*)(CppArgs...), T> {};
+template <typename R, typename... CppArgs, typename T>
+struct CppFTraits<R(*)(CppArgs...) noexcept, T> :
+    CppFTraitsImpl<R(*)(CppArgs...) noexcept, R(*)(CppArgs...) noexcept, T> {};
+
+// CArgConverter are specialization structs that specialize a conversion from a C CallbackInfo's
+// callback argument types to a set of valid C++ types. These specializations provide us a way to
+// support additional C++ callback types, i.e. converting raw pointers to more C++ friendly
+// structures when applicable.
+template <typename CInfoT, typename CppArgs>
+struct CArgConverter;
+template <>
+struct CArgConverter<WGPUBufferMapCallbackInfo, std::tuple<MapAsyncStatus, StringView>> {
+    using Result = std::tuple<MapAsyncStatus, StringView>;
+    static Result Convert(WGPUMapAsyncStatus status, WGPUStringView message) {
+        return std::make_tuple(static_cast<MapAsyncStatus>(status), StringView {
+    message.data,
+    message.length
+});
+    }
+};
+template <>
+struct CArgConverter<WGPUCompilationInfoCallbackInfo, std::tuple<CompilationInfoRequestStatus, CompilationInfo const *>> {
+    using Result = std::tuple<CompilationInfoRequestStatus, CompilationInfo const *>;
+    static Result Convert(WGPUCompilationInfoRequestStatus status, WGPUCompilationInfo const * compilationInfo) {
+        return std::make_tuple(static_cast<CompilationInfoRequestStatus>(status), reinterpret_cast<CompilationInfo const*>(compilationInfo));
+    }
+};
+template <>
+struct CArgConverter<WGPUCreateComputePipelineAsyncCallbackInfo, std::tuple<CreatePipelineAsyncStatus, ComputePipeline, StringView>> {
+    using Result = std::tuple<CreatePipelineAsyncStatus, ComputePipeline, StringView>;
+    static Result Convert(WGPUCreatePipelineAsyncStatus status, WGPUComputePipeline pipeline, WGPUStringView message) {
+        return std::make_tuple(static_cast<CreatePipelineAsyncStatus>(status), ComputePipeline::Acquire(pipeline), StringView {
+    message.data,
+    message.length
+});
+    }
+};
+template <>
+struct CArgConverter<WGPUCreateRenderPipelineAsyncCallbackInfo, std::tuple<CreatePipelineAsyncStatus, RenderPipeline, StringView>> {
+    using Result = std::tuple<CreatePipelineAsyncStatus, RenderPipeline, StringView>;
+    static Result Convert(WGPUCreatePipelineAsyncStatus status, WGPURenderPipeline pipeline, WGPUStringView message) {
+        return std::make_tuple(static_cast<CreatePipelineAsyncStatus>(status), RenderPipeline::Acquire(pipeline), StringView {
+    message.data,
+    message.length
+});
+    }
+};
+template <>
+struct CArgConverter<WGPULoggingCallbackInfo, std::tuple<LoggingType, StringView>> {
+    using Result = std::tuple<LoggingType, StringView>;
+    static Result Convert(WGPULoggingType type, WGPUStringView message) {
+        return std::make_tuple(static_cast<LoggingType>(type), StringView {
+    message.data,
+    message.length
+});
+    }
+};
+template <>
+struct CArgConverter<WGPUPopErrorScopeCallbackInfo, std::tuple<PopErrorScopeStatus, ErrorType, StringView>> {
+    using Result = std::tuple<PopErrorScopeStatus, ErrorType, StringView>;
+    static Result Convert(WGPUPopErrorScopeStatus status, WGPUErrorType type, WGPUStringView message) {
+        return std::make_tuple(static_cast<PopErrorScopeStatus>(status), static_cast<ErrorType>(type), StringView {
+    message.data,
+    message.length
+});
+    }
+};
+template <>
+struct CArgConverter<WGPUQueueWorkDoneCallbackInfo, std::tuple<QueueWorkDoneStatus, StringView>> {
+    using Result = std::tuple<QueueWorkDoneStatus, StringView>;
+    static Result Convert(WGPUQueueWorkDoneStatus status, WGPUStringView message) {
+        return std::make_tuple(static_cast<QueueWorkDoneStatus>(status), StringView {
+    message.data,
+    message.length
+});
+    }
+};
+template <>
+struct CArgConverter<WGPURequestAdapterCallbackInfo, std::tuple<RequestAdapterStatus, Adapter, StringView>> {
+    using Result = std::tuple<RequestAdapterStatus, Adapter, StringView>;
+    static Result Convert(WGPURequestAdapterStatus status, WGPUAdapter adapter, WGPUStringView message) {
+        return std::make_tuple(static_cast<RequestAdapterStatus>(status), Adapter::Acquire(adapter), StringView {
+    message.data,
+    message.length
+});
+    }
+};
+template <>
+struct CArgConverter<WGPURequestDeviceCallbackInfo, std::tuple<RequestDeviceStatus, Device, StringView>> {
+    using Result = std::tuple<RequestDeviceStatus, Device, StringView>;
+    static Result Convert(WGPURequestDeviceStatus status, WGPUDevice device, WGPUStringView message) {
+        return std::make_tuple(static_cast<RequestDeviceStatus>(status), Device::Acquire(device), StringView {
+    message.data,
+    message.length
+});
+    }
+};
+template <>
+struct CArgConverter<WGPUDeviceLostCallbackInfo,
+                     std::tuple<const Device&, DeviceLostReason, StringView>> {
+    using Result = std::tuple<const Device&, DeviceLostReason, StringView>;
+    static Result Convert(WGPUDevice const* device,
+                          WGPUDeviceLostReason reason,
+                          WGPUStringView message) {
+        return std::make_tuple(std::cref(*reinterpret_cast<const Device*>(device)),
+                               static_cast<DeviceLostReason>(reason), message);
+    }
+};
+template <>
+struct CArgConverter<WGPUUncapturedErrorCallbackInfo,
+                     std::tuple<const Device&, ErrorType, StringView>> {
+    using Result = std::tuple<const Device&, ErrorType, StringView>;
+    static Result Convert(WGPUDevice const* device, WGPUErrorType type, WGPUStringView message) {
+        return std::make_tuple(std::cref(*reinterpret_cast<const Device*>(device)),
+                               static_cast<ErrorType>(type), message);
+    }
+};
+template <>
+struct CArgConverter<WGPUDawnLoadCacheDataCallbackInfo,
+                     std::tuple<std::span<const std::byte>, std::span<std::byte>>> {
+    using Result = std::tuple<std::span<const std::byte>, std::span<std::byte>>;
+    static Result Convert(size_t keySize, uint8_t const* key, size_t valueSize, uint8_t* value) {
+        return std::make_tuple(
+            std::span<const std::byte>(reinterpret_cast<const std::byte*>(key), keySize),
+            std::span<std::byte>(reinterpret_cast<std::byte*>(value), valueSize)
+        );
+    }
+};
+template <>
+struct CArgConverter<WGPUDawnStoreCacheDataCallbackInfo,
+                     std::tuple<std::span<const std::byte>, std::span<const std::byte>>> {
+    using Result = std::tuple<std::span<const std::byte>, std::span<const std::byte>>;
+    static Result Convert(size_t keySize, uint8_t const* key, size_t valueSize, uint8_t const* value) {
+        return std::make_tuple(
+            std::span<const std::byte>(reinterpret_cast<const std::byte*>(key), keySize),
+            std::span<const std::byte>(reinterpret_cast<const std::byte*>(value), valueSize)
+        );
+    }
+};
+
+// The CallbackHelper struct implements the static functions needed to convert the base C callbacks
+// into the user provided C++ callbacks. More than anything, it handles converting the real C
+// callback arguments (i.e. not the userdata pointers we use internally) to C++ arguments, and
+// casts the userdata pointers appropriately to ensure that everything is typed.
+template <typename R, typename CInfoT, typename CppF, typename CArgsTuple, typename Indices>
+struct CallbackHelperImpl;
+template <typename R, typename CInfoT, typename CppF, typename... CArgs, std::size_t... Is>
+struct CallbackHelperImpl<R, CInfoT, CppF, std::tuple<CArgs...>, std::index_sequence<Is...>> {
+    // Implementation for callbacks without an additional typed argument. We support capturing
+    // lambdas if users can specify a callback mode in this case and make an allocation.
+    static R Call(std::tuple_element_t<Is, std::tuple<CArgs...>>... cArgs,
+                     void* callbackParam, void*) {
+        using CppFTraits = CppFTraits<CppF>;
+        using Converter = CArgConverter<CInfoT, typename CppFTraits::BaseArgsTuple>;
+
+        if constexpr (CppFTraits::capturing) {
+            std::unique_ptr<CppF> callback(reinterpret_cast<CppF*>(callbackParam));
+            return std::apply(*callback, Converter::Convert(cArgs...));
+        } else {
+            auto callback = reinterpret_cast<CppFTraits::PtrT>(callbackParam);
+            return std::apply(callback, Converter::Convert(cArgs...));
+        }
+    }
+
+    // Implementation for callbacks where the user specifies an additional typed argument. We do
+    // not support capturing lambdas in this case since the user is already providing a typed
+    // argument and would make more sense for any other state to be capturing by that argument
+    // instead.
+    template <typename T>
+    static R Call(std::tuple_element_t<Is, std::tuple<CArgs...>>... cArgs,
+                     void* callbackParam, void* userdataParam) {
+        using CppFTraits = CppFTraits<CppF, T>;
+        using Converter = CArgConverter<CInfoT, typename CppFTraits::BaseArgsTuple>;
+
+        auto callback = reinterpret_cast<CppFTraits::PtrT>(callbackParam);
+        auto param = std::make_tuple(static_cast<T>(userdataParam));
+        return std::apply(callback, std::tuple_cat(Converter::Convert(cArgs...), param));
+    }
+};
+template <typename CInfoT, typename F, typename CbT>
+struct CallbackHelper;
+template <typename CInfoT, typename F, typename R, typename... CArgs>
+struct CallbackHelper<CInfoT, F, R(*)(CArgs...)> {
+    static constexpr size_t NumCArgs = sizeof...(CArgs);
+    using CArgsTuple = std::tuple<CArgs...>;
+    static_assert(NumCArgs >= 2, "C Function pointers must have two void* trailing arguments.");
+    static_assert(
+        std::is_same_v<std::tuple_element_t<NumCArgs - 1, CArgsTuple>, void*>,
+        "C Function pointer's last argument must be void*."
+    );
+    static_assert(
+        std::is_same_v<std::tuple_element_t<NumCArgs - 2, CArgsTuple>, void*>,
+        "C Function pointer's second to last argument must be void*."
+    );
+
+    using Impl = CallbackHelperImpl<R, CInfoT, F, CArgsTuple, std::make_index_sequence<NumCArgs - 2>>;
+    static R Call(CArgs... args) {
+        return Impl::Call(std::forward<CArgs>(args)...);
+    }
+    template <typename T>
+    static R Call(CArgs... args) {
+        return Impl::template Call<T>(std::forward<CArgs>(args)...);
+    }
+};
+
+// The CallbackInfoHelper provides a utility to create a C CallbackInfo struct type from a C++
+// callback. This allows us to de-duplicates the logic used for WebGPU structs that have
+// CallbackInfo members and WebGPU API functions that return a Future.
+template <typename CInfoT, typename F>
+struct CallbackInfoHelper {
+    static CInfoT Create(F lambda) {
+        CInfoT info = {};
+        if constexpr (CppFTraits<F>::capturing) {
+            if constexpr (requires(CInfoT x) { x.mode; }) {
+                // If we have a mode argument, then the callback is guaranteed to be called only
+                // once so we can support it by moving it and making an allocation for it.
+                std::unique_ptr<F> alloc = std::make_unique<F>(std::move(lambda));
+                info.userdata1 = reinterpret_cast<void*>(alloc.release());
+            } else {
+                // MSVC <=19.39 doesn't support static_assert(false) and this was fixed in later C++
+                // standards https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p2593r1.html
+                constexpr bool kAlwaysFalse = sizeof(F) == 0;
+                static_assert(
+                    kAlwaysFalse, "capturing lambdas aren't supported for repeatable callbacks"
+                );
+            }
+        } else {
+            // Otherwise, if the lambda is not capturing, that means we can refer to it as a
+            // pointer directly.
+            info.userdata1 = reinterpret_cast<void*>(+lambda);
+        }
+        info.callback = CallbackHelper<CInfoT, F, decltype(CInfoT::callback)>::Call;
+        info.userdata2 = nullptr;
+        return info;
+    }
+
+    template <typename T>
+    requires (!CppFTraits<F>::capturing)
+    static CInfoT Create(F lambda, T userdata) {
+        CInfoT info = {};
+        info.callback = CallbackHelper<CInfoT, F, decltype(CInfoT::callback)>::template Call<T>;
+        info.userdata1 = reinterpret_cast<void*>(+lambda);
+        info.userdata2 = userdata;
+        return info;
+    }
+};
+
 }  // namespace detail
-struct DeviceDescriptor : protected detail::DeviceDescriptor {
-    inline operator const WGPUDeviceDescriptor&() const noexcept;
-
-    using detail::DeviceDescriptor::nextInChain;
-    using detail::DeviceDescriptor::label;
-    using detail::DeviceDescriptor::requiredFeatureCount;
-    using detail::DeviceDescriptor::requiredFeatures;
-    using detail::DeviceDescriptor::requiredLimits;
-    using detail::DeviceDescriptor::defaultQueue;
-
-    inline DeviceDescriptor();
-    struct Init;
-    inline DeviceDescriptor(Init&& init);
-
-    template <typename F, typename T,
-              typename Cb = DeviceLostCallback<T>,
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*>>>
-    void SetDeviceLostCallback(CallbackMode callbackMode, F callback, T userdata);
-    template <typename L,
-              typename Cb = DeviceLostCallback<>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb>>>
-    void SetDeviceLostCallback(CallbackMode callbackMode, L callback);
-
-    template <typename F, typename T,
-              typename Cb = UncapturedErrorCallback<T>,
-              typename = std::enable_if_t<std::is_convertible_v<F, Cb*>>>
-    void SetUncapturedErrorCallback(F callback, T userdata);
-    template <typename L,
-              typename Cb = UncapturedErrorCallback<>,
-              typename = std::enable_if_t<std::is_convertible_v<L, Cb>>>
-    void SetUncapturedErrorCallback(L callback);
-};
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 // error: 'offsetof' within non-standard-layout type 'wgpu::XXX' is conditionally-supported
 #pragma GCC diagnostic ignored "-Winvalid-offsetof"
 #endif
+// NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 
 // AdapterPropertiesD3D implementation
 AdapterPropertiesD3D::AdapterPropertiesD3D()
-  : ChainedStructOut { nullptr, SType::AdapterPropertiesD3D } {}
+: ChainedStructOut { nullptr, SType::AdapterPropertiesD3D } {}
 struct AdapterPropertiesD3D::Init {
     ChainedStructOut *  nextInChain;
     uint32_t shaderModel;
 };
-AdapterPropertiesD3D::AdapterPropertiesD3D(AdapterPropertiesD3D::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesD3D }, 
-    shaderModel(std::move(init.shaderModel)){}
+AdapterPropertiesD3D::AdapterPropertiesD3D(AdapterPropertiesD3D::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::AdapterPropertiesD3D },
+    shaderModel(std::move(init.shaderModel)) {}
 
 AdapterPropertiesD3D::operator const WGPUAdapterPropertiesD3D&() const noexcept {
     return *reinterpret_cast<const WGPUAdapterPropertiesD3D*>(this);
@@ -4447,7 +4816,7 @@ static_assert(offsetof(AdapterPropertiesD3D, shaderModel) == offsetof(WGPUAdapte
 
 // AdapterPropertiesDrm implementation
 AdapterPropertiesDrm::AdapterPropertiesDrm()
-  : ChainedStructOut { nullptr, SType::AdapterPropertiesDrm } {}
+: ChainedStructOut { nullptr, SType::AdapterPropertiesDrm } {}
 struct AdapterPropertiesDrm::Init {
     ChainedStructOut *  nextInChain;
     Bool hasPrimary = false;
@@ -4457,14 +4826,14 @@ struct AdapterPropertiesDrm::Init {
     uint64_t renderMajor = 0;
     uint64_t renderMinor = 0;
 };
-AdapterPropertiesDrm::AdapterPropertiesDrm(AdapterPropertiesDrm::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesDrm }, 
-    hasPrimary(std::move(init.hasPrimary)), 
-    hasRender(std::move(init.hasRender)), 
-    primaryMajor(std::move(init.primaryMajor)), 
-    primaryMinor(std::move(init.primaryMinor)), 
-    renderMajor(std::move(init.renderMajor)), 
-    renderMinor(std::move(init.renderMinor)){}
+AdapterPropertiesDrm::AdapterPropertiesDrm(AdapterPropertiesDrm::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::AdapterPropertiesDrm },
+    hasPrimary(std::move(init.hasPrimary)),
+    hasRender(std::move(init.hasRender)),
+    primaryMajor(std::move(init.primaryMajor)),
+    primaryMinor(std::move(init.primaryMinor)),
+    renderMajor(std::move(init.renderMajor)),
+    renderMinor(std::move(init.renderMinor)) {}
 
 AdapterPropertiesDrm::operator const WGPUAdapterPropertiesDrm&() const noexcept {
     return *reinterpret_cast<const WGPUAdapterPropertiesDrm*>(this);
@@ -4485,44 +4854,16 @@ static_assert(offsetof(AdapterPropertiesDrm, renderMajor) == offsetof(WGPUAdapte
 static_assert(offsetof(AdapterPropertiesDrm, renderMinor) == offsetof(WGPUAdapterPropertiesDrm, renderMinor),
         "offsetof mismatch for AdapterPropertiesDrm::renderMinor");
 
-// AdapterPropertiesExplicitComputeSubgroupSizeConfigs implementation
-AdapterPropertiesExplicitComputeSubgroupSizeConfigs::AdapterPropertiesExplicitComputeSubgroupSizeConfigs()
-  : ChainedStructOut { nullptr, SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs } {}
-struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs::Init {
-    ChainedStructOut *  nextInChain;
-    uint32_t minExplicitComputeSubgroupSize;
-    uint32_t maxExplicitComputeSubgroupSize;
-    uint32_t maxComputeWorkgroupSubgroups;
-};
-AdapterPropertiesExplicitComputeSubgroupSizeConfigs::AdapterPropertiesExplicitComputeSubgroupSizeConfigs(AdapterPropertiesExplicitComputeSubgroupSizeConfigs::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs }, 
-    minExplicitComputeSubgroupSize(std::move(init.minExplicitComputeSubgroupSize)), 
-    maxExplicitComputeSubgroupSize(std::move(init.maxExplicitComputeSubgroupSize)), 
-    maxComputeWorkgroupSubgroups(std::move(init.maxComputeWorkgroupSubgroups)){}
-
-AdapterPropertiesExplicitComputeSubgroupSizeConfigs::operator const WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs&() const noexcept {
-    return *reinterpret_cast<const WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs*>(this);
-}
-
-static_assert(sizeof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs) == sizeof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs), "sizeof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
-static_assert(alignof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs) == alignof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs), "alignof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
-static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, minExplicitComputeSubgroupSize) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, minExplicitComputeSubgroupSize),
-        "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::minExplicitComputeSubgroupSize");
-static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxExplicitComputeSubgroupSize) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxExplicitComputeSubgroupSize),
-        "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::maxExplicitComputeSubgroupSize");
-static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxComputeWorkgroupSubgroups) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxComputeWorkgroupSubgroups),
-        "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::maxComputeWorkgroupSubgroups");
-
 // AdapterPropertiesVk implementation
 AdapterPropertiesVk::AdapterPropertiesVk()
-  : ChainedStructOut { nullptr, SType::AdapterPropertiesVk } {}
+: ChainedStructOut { nullptr, SType::AdapterPropertiesVk } {}
 struct AdapterPropertiesVk::Init {
     ChainedStructOut *  nextInChain;
     uint32_t driverVersion;
 };
-AdapterPropertiesVk::AdapterPropertiesVk(AdapterPropertiesVk::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesVk }, 
-    driverVersion(std::move(init.driverVersion)){}
+AdapterPropertiesVk::AdapterPropertiesVk(AdapterPropertiesVk::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::AdapterPropertiesVk },
+    driverVersion(std::move(init.driverVersion)) {}
 
 AdapterPropertiesVk::operator const WGPUAdapterPropertiesVk&() const noexcept {
     return *reinterpret_cast<const WGPUAdapterPropertiesVk*>(this);
@@ -4535,14 +4876,14 @@ static_assert(offsetof(AdapterPropertiesVk, driverVersion) == offsetof(WGPUAdapt
 
 // AdapterPropertiesWGPU implementation
 AdapterPropertiesWGPU::AdapterPropertiesWGPU()
-  : ChainedStructOut { nullptr, SType::AdapterPropertiesWGPU } {}
+: ChainedStructOut { nullptr, SType::AdapterPropertiesWGPU } {}
 struct AdapterPropertiesWGPU::Init {
     ChainedStructOut *  nextInChain;
     BackendType backendType = BackendType::Undefined;
 };
-AdapterPropertiesWGPU::AdapterPropertiesWGPU(AdapterPropertiesWGPU::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesWGPU }, 
-    backendType(std::move(init.backendType)){}
+AdapterPropertiesWGPU::AdapterPropertiesWGPU(AdapterPropertiesWGPU::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::AdapterPropertiesWGPU },
+    backendType(std::move(init.backendType)) {}
 
 AdapterPropertiesWGPU::operator const WGPUAdapterPropertiesWGPU&() const noexcept {
     return *reinterpret_cast<const WGPUAdapterPropertiesWGPU*>(this);
@@ -4608,18 +4949,18 @@ static_assert(offsetof(BufferBindingLayout, minBindingSize) == offsetof(WGPUBuff
 
 // BufferHostMappedPointer implementation
 BufferHostMappedPointer::BufferHostMappedPointer()
-  : ChainedStruct { nullptr, SType::BufferHostMappedPointer } {}
+: ChainedStruct { nullptr, SType::BufferHostMappedPointer } {}
 struct BufferHostMappedPointer::Init {
     ChainedStruct * const nextInChain;
     void * pointer;
     Callback disposeCallback;
     void * userdata;
 };
-BufferHostMappedPointer::BufferHostMappedPointer(BufferHostMappedPointer::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::BufferHostMappedPointer }, 
-    pointer(std::move(init.pointer)), 
-    disposeCallback(std::move(init.disposeCallback)), 
-    userdata(std::move(init.userdata)){}
+BufferHostMappedPointer::BufferHostMappedPointer(BufferHostMappedPointer::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::BufferHostMappedPointer },
+    pointer(std::move(init.pointer)),
+    disposeCallback(std::move(init.disposeCallback)),
+    userdata(std::move(init.userdata)) {}
 
 BufferHostMappedPointer::operator const WGPUBufferHostMappedPointer&() const noexcept {
     return *reinterpret_cast<const WGPUBufferHostMappedPointer*>(this);
@@ -4669,17 +5010,19 @@ static_assert(offsetof(ColorSpaceDawn, yCbCrRange) == offsetof(WGPUColorSpaceDaw
         "offsetof mismatch for ColorSpaceDawn::yCbCrRange");
 static_assert(offsetof(ColorSpaceDawn, yCbCrMatrix) == offsetof(WGPUColorSpaceDawn, yCbCrMatrix),
         "offsetof mismatch for ColorSpaceDawn::yCbCrMatrix");
+static_assert(offsetof(ColorSpaceDawn, hdrReferenceWhiteLuminance) == offsetof(WGPUColorSpaceDawn, hdrReferenceWhiteLuminance),
+        "offsetof mismatch for ColorSpaceDawn::hdrReferenceWhiteLuminance");
 
 // ColorTargetStateExpandResolveTextureDawn implementation
 ColorTargetStateExpandResolveTextureDawn::ColorTargetStateExpandResolveTextureDawn()
-  : ChainedStruct { nullptr, SType::ColorTargetStateExpandResolveTextureDawn } {}
+: ChainedStruct { nullptr, SType::ColorTargetStateExpandResolveTextureDawn } {}
 struct ColorTargetStateExpandResolveTextureDawn::Init {
     ChainedStruct * const nextInChain;
     Bool enabled = false;
 };
-ColorTargetStateExpandResolveTextureDawn::ColorTargetStateExpandResolveTextureDawn(ColorTargetStateExpandResolveTextureDawn::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::ColorTargetStateExpandResolveTextureDawn }, 
-    enabled(std::move(init.enabled)){}
+ColorTargetStateExpandResolveTextureDawn::ColorTargetStateExpandResolveTextureDawn(ColorTargetStateExpandResolveTextureDawn::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::ColorTargetStateExpandResolveTextureDawn },
+    enabled(std::move(init.enabled)) {}
 
 ColorTargetStateExpandResolveTextureDawn::operator const WGPUColorTargetStateExpandResolveTextureDawn&() const noexcept {
     return *reinterpret_cast<const WGPUColorTargetStateExpandResolveTextureDawn*>(this);
@@ -4705,7 +5048,7 @@ static_assert(offsetof(CommandBufferDescriptor, label) == offsetof(WGPUCommandBu
 
 // CompatibilityModeLimits implementation
 CompatibilityModeLimits::CompatibilityModeLimits()
-  : ChainedStructOut { nullptr, SType::CompatibilityModeLimits } {}
+: ChainedStructOut { nullptr, SType::CompatibilityModeLimits } {}
 struct CompatibilityModeLimits::Init {
     ChainedStructOut *  nextInChain;
     uint32_t maxStorageBuffersInVertexStage = kLimitU32Undefined;
@@ -4713,12 +5056,12 @@ struct CompatibilityModeLimits::Init {
     uint32_t maxStorageBuffersInFragmentStage = kLimitU32Undefined;
     uint32_t maxStorageTexturesInFragmentStage = kLimitU32Undefined;
 };
-CompatibilityModeLimits::CompatibilityModeLimits(CompatibilityModeLimits::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::CompatibilityModeLimits }, 
-    maxStorageBuffersInVertexStage(std::move(init.maxStorageBuffersInVertexStage)), 
-    maxStorageTexturesInVertexStage(std::move(init.maxStorageTexturesInVertexStage)), 
-    maxStorageBuffersInFragmentStage(std::move(init.maxStorageBuffersInFragmentStage)), 
-    maxStorageTexturesInFragmentStage(std::move(init.maxStorageTexturesInFragmentStage)){}
+CompatibilityModeLimits::CompatibilityModeLimits(CompatibilityModeLimits::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::CompatibilityModeLimits },
+    maxStorageBuffersInVertexStage(std::move(init.maxStorageBuffersInVertexStage)),
+    maxStorageTexturesInVertexStage(std::move(init.maxStorageTexturesInVertexStage)),
+    maxStorageBuffersInFragmentStage(std::move(init.maxStorageBuffersInFragmentStage)),
+    maxStorageTexturesInFragmentStage(std::move(init.maxStorageTexturesInFragmentStage)) {}
 
 CompatibilityModeLimits::operator const WGPUCompatibilityModeLimits&() const noexcept {
     return *reinterpret_cast<const WGPUCompatibilityModeLimits*>(this);
@@ -4779,14 +5122,14 @@ static_assert(offsetof(CopyTextureForBrowserOptions, internalUsage) == offsetof(
 
 // DawnAdapterPropertiesPowerPreference implementation
 DawnAdapterPropertiesPowerPreference::DawnAdapterPropertiesPowerPreference()
-  : ChainedStructOut { nullptr, SType::DawnAdapterPropertiesPowerPreference } {}
+: ChainedStructOut { nullptr, SType::DawnAdapterPropertiesPowerPreference } {}
 struct DawnAdapterPropertiesPowerPreference::Init {
     ChainedStructOut *  nextInChain;
     PowerPreference powerPreference = PowerPreference::Undefined;
 };
-DawnAdapterPropertiesPowerPreference::DawnAdapterPropertiesPowerPreference(DawnAdapterPropertiesPowerPreference::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::DawnAdapterPropertiesPowerPreference }, 
-    powerPreference(std::move(init.powerPreference)){}
+DawnAdapterPropertiesPowerPreference::DawnAdapterPropertiesPowerPreference(DawnAdapterPropertiesPowerPreference::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::DawnAdapterPropertiesPowerPreference },
+    powerPreference(std::move(init.powerPreference)) {}
 
 DawnAdapterPropertiesPowerPreference::operator const WGPUDawnAdapterPropertiesPowerPreference&() const noexcept {
     return *reinterpret_cast<const WGPUDawnAdapterPropertiesPowerPreference*>(this);
@@ -4799,14 +5142,14 @@ static_assert(offsetof(DawnAdapterPropertiesPowerPreference, powerPreference) ==
 
 // DawnBufferDescriptorErrorInfoFromWireClient implementation
 DawnBufferDescriptorErrorInfoFromWireClient::DawnBufferDescriptorErrorInfoFromWireClient()
-  : ChainedStruct { nullptr, SType::DawnBufferDescriptorErrorInfoFromWireClient } {}
+: ChainedStruct { nullptr, SType::DawnBufferDescriptorErrorInfoFromWireClient } {}
 struct DawnBufferDescriptorErrorInfoFromWireClient::Init {
     ChainedStruct * const nextInChain;
     Bool outOfMemory = false;
 };
-DawnBufferDescriptorErrorInfoFromWireClient::DawnBufferDescriptorErrorInfoFromWireClient(DawnBufferDescriptorErrorInfoFromWireClient::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnBufferDescriptorErrorInfoFromWireClient }, 
-    outOfMemory(std::move(init.outOfMemory)){}
+DawnBufferDescriptorErrorInfoFromWireClient::DawnBufferDescriptorErrorInfoFromWireClient(DawnBufferDescriptorErrorInfoFromWireClient::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnBufferDescriptorErrorInfoFromWireClient },
+    outOfMemory(std::move(init.outOfMemory)) {}
 
 DawnBufferDescriptorErrorInfoFromWireClient::operator const WGPUDawnBufferDescriptorErrorInfoFromWireClient&() const noexcept {
     return *reinterpret_cast<const WGPUDawnBufferDescriptorErrorInfoFromWireClient*>(this);
@@ -4819,20 +5162,42 @@ static_assert(offsetof(DawnBufferDescriptorErrorInfoFromWireClient, outOfMemory)
 
 // DawnCacheDeviceDescriptor implementation
 DawnCacheDeviceDescriptor::DawnCacheDeviceDescriptor()
-  : ChainedStruct { nullptr, SType::DawnCacheDeviceDescriptor } {}
+: ChainedStruct { nullptr, SType::DawnCacheDeviceDescriptor } {}
 struct DawnCacheDeviceDescriptor::Init {
     ChainedStruct * const nextInChain;
     StringView isolationKey = {};
-    DawnLoadCacheDataFunction loadDataFunction = nullptr;
-    DawnStoreCacheDataFunction storeDataFunction = nullptr;
-    void * functionUserdata = nullptr;
 };
-DawnCacheDeviceDescriptor::DawnCacheDeviceDescriptor(DawnCacheDeviceDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnCacheDeviceDescriptor }, 
-    isolationKey(std::move(init.isolationKey)), 
-    loadDataFunction(std::move(init.loadDataFunction)), 
-    storeDataFunction(std::move(init.storeDataFunction)), 
-    functionUserdata(std::move(init.functionUserdata)){}
+DawnCacheDeviceDescriptor::DawnCacheDeviceDescriptor(DawnCacheDeviceDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnCacheDeviceDescriptor },
+    detail::DawnCacheDeviceDescriptor {
+        std::move(init.isolationKey),
+    } {}
+template <typename F, typename T>
+void DawnCacheDeviceDescriptor::SetDawnLoadCacheDataCallback(F callback, T userdata) {
+    static_assert(offsetof(DawnCacheDeviceDescriptor, dawnLoadCacheDataCallbackInfo) == offsetof(WGPUDawnCacheDeviceDescriptor, dawnLoadCacheDataCallbackInfo),
+                  "offsetof mismatch for DawnCacheDeviceDescriptor::dawnLoadCacheDataCallbackInfo");
+
+    assert(dawnLoadCacheDataCallbackInfo.callback == nullptr);
+    dawnLoadCacheDataCallbackInfo = detail::CallbackInfoHelper<WGPUDawnLoadCacheDataCallbackInfo, F>::Create(std::move(callback), userdata);
+}
+template <typename F>
+void DawnCacheDeviceDescriptor::SetDawnLoadCacheDataCallback(F callback) {
+    assert(dawnLoadCacheDataCallbackInfo.callback == nullptr);
+    dawnLoadCacheDataCallbackInfo = detail::CallbackInfoHelper<WGPUDawnLoadCacheDataCallbackInfo, F>::Create(std::move(callback));
+}
+template <typename F, typename T>
+void DawnCacheDeviceDescriptor::SetDawnStoreCacheDataCallback(F callback, T userdata) {
+    static_assert(offsetof(DawnCacheDeviceDescriptor, dawnStoreCacheDataCallbackInfo) == offsetof(WGPUDawnCacheDeviceDescriptor, dawnStoreCacheDataCallbackInfo),
+                  "offsetof mismatch for DawnCacheDeviceDescriptor::dawnStoreCacheDataCallbackInfo");
+
+    assert(dawnStoreCacheDataCallbackInfo.callback == nullptr);
+    dawnStoreCacheDataCallbackInfo = detail::CallbackInfoHelper<WGPUDawnStoreCacheDataCallbackInfo, F>::Create(std::move(callback), userdata);
+}
+template <typename F>
+void DawnCacheDeviceDescriptor::SetDawnStoreCacheDataCallback(F callback) {
+    assert(dawnStoreCacheDataCallbackInfo.callback == nullptr);
+    dawnStoreCacheDataCallbackInfo = detail::CallbackInfoHelper<WGPUDawnStoreCacheDataCallbackInfo, F>::Create(std::move(callback));
+}
 
 DawnCacheDeviceDescriptor::operator const WGPUDawnCacheDeviceDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUDawnCacheDeviceDescriptor*>(this);
@@ -4842,27 +5207,21 @@ static_assert(sizeof(DawnCacheDeviceDescriptor) == sizeof(WGPUDawnCacheDeviceDes
 static_assert(alignof(DawnCacheDeviceDescriptor) == alignof(WGPUDawnCacheDeviceDescriptor), "alignof mismatch for DawnCacheDeviceDescriptor");
 static_assert(offsetof(DawnCacheDeviceDescriptor, isolationKey) == offsetof(WGPUDawnCacheDeviceDescriptor, isolationKey),
         "offsetof mismatch for DawnCacheDeviceDescriptor::isolationKey");
-static_assert(offsetof(DawnCacheDeviceDescriptor, loadDataFunction) == offsetof(WGPUDawnCacheDeviceDescriptor, loadDataFunction),
-        "offsetof mismatch for DawnCacheDeviceDescriptor::loadDataFunction");
-static_assert(offsetof(DawnCacheDeviceDescriptor, storeDataFunction) == offsetof(WGPUDawnCacheDeviceDescriptor, storeDataFunction),
-        "offsetof mismatch for DawnCacheDeviceDescriptor::storeDataFunction");
-static_assert(offsetof(DawnCacheDeviceDescriptor, functionUserdata) == offsetof(WGPUDawnCacheDeviceDescriptor, functionUserdata),
-        "offsetof mismatch for DawnCacheDeviceDescriptor::functionUserdata");
 
 // DawnCompilationMessageUtf16 implementation
 DawnCompilationMessageUtf16::DawnCompilationMessageUtf16()
-  : ChainedStruct { nullptr, SType::DawnCompilationMessageUtf16 } {}
+: ChainedStruct { nullptr, SType::DawnCompilationMessageUtf16 } {}
 struct DawnCompilationMessageUtf16::Init {
     ChainedStruct * const nextInChain;
     uint64_t linePos;
     uint64_t offset;
     uint64_t length;
 };
-DawnCompilationMessageUtf16::DawnCompilationMessageUtf16(DawnCompilationMessageUtf16::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnCompilationMessageUtf16 }, 
-    linePos(std::move(init.linePos)), 
-    offset(std::move(init.offset)), 
-    length(std::move(init.length)){}
+DawnCompilationMessageUtf16::DawnCompilationMessageUtf16(DawnCompilationMessageUtf16::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnCompilationMessageUtf16 },
+    linePos(std::move(init.linePos)),
+    offset(std::move(init.offset)),
+    length(std::move(init.length)) {}
 
 DawnCompilationMessageUtf16::operator const WGPUDawnCompilationMessageUtf16&() const noexcept {
     return *reinterpret_cast<const WGPUDawnCompilationMessageUtf16*>(this);
@@ -4879,14 +5238,14 @@ static_assert(offsetof(DawnCompilationMessageUtf16, length) == offsetof(WGPUDawn
 
 // DawnConsumeAdapterDescriptor implementation
 DawnConsumeAdapterDescriptor::DawnConsumeAdapterDescriptor()
-  : ChainedStruct { nullptr, SType::DawnConsumeAdapterDescriptor } {}
+: ChainedStruct { nullptr, SType::DawnConsumeAdapterDescriptor } {}
 struct DawnConsumeAdapterDescriptor::Init {
     ChainedStruct * const nextInChain;
     Bool consumeAdapter = false;
 };
-DawnConsumeAdapterDescriptor::DawnConsumeAdapterDescriptor(DawnConsumeAdapterDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnConsumeAdapterDescriptor }, 
-    consumeAdapter(std::move(init.consumeAdapter)){}
+DawnConsumeAdapterDescriptor::DawnConsumeAdapterDescriptor(DawnConsumeAdapterDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnConsumeAdapterDescriptor },
+    consumeAdapter(std::move(init.consumeAdapter)) {}
 
 DawnConsumeAdapterDescriptor::operator const WGPUDawnConsumeAdapterDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUDawnConsumeAdapterDescriptor*>(this);
@@ -4899,14 +5258,14 @@ static_assert(offsetof(DawnConsumeAdapterDescriptor, consumeAdapter) == offsetof
 
 // DawnDeviceAllocatorControl implementation
 DawnDeviceAllocatorControl::DawnDeviceAllocatorControl()
-  : ChainedStruct { nullptr, SType::DawnDeviceAllocatorControl } {}
+: ChainedStruct { nullptr, SType::DawnDeviceAllocatorControl } {}
 struct DawnDeviceAllocatorControl::Init {
     ChainedStruct * const nextInChain;
     size_t allocatorHeapBlockSize = 0;
 };
-DawnDeviceAllocatorControl::DawnDeviceAllocatorControl(DawnDeviceAllocatorControl::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnDeviceAllocatorControl }, 
-    allocatorHeapBlockSize(std::move(init.allocatorHeapBlockSize)){}
+DawnDeviceAllocatorControl::DawnDeviceAllocatorControl(DawnDeviceAllocatorControl::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnDeviceAllocatorControl },
+    allocatorHeapBlockSize(std::move(init.allocatorHeapBlockSize)) {}
 
 DawnDeviceAllocatorControl::operator const WGPUDawnDeviceAllocatorControl&() const noexcept {
     return *reinterpret_cast<const WGPUDawnDeviceAllocatorControl*>(this);
@@ -4932,14 +5291,14 @@ static_assert(offsetof(DawnDrmFormatProperties, modifierPlaneCount) == offsetof(
 
 // DawnEncoderInternalUsageDescriptor implementation
 DawnEncoderInternalUsageDescriptor::DawnEncoderInternalUsageDescriptor()
-  : ChainedStruct { nullptr, SType::DawnEncoderInternalUsageDescriptor } {}
+: ChainedStruct { nullptr, SType::DawnEncoderInternalUsageDescriptor } {}
 struct DawnEncoderInternalUsageDescriptor::Init {
     ChainedStruct * const nextInChain;
     Bool useInternalUsages = false;
 };
-DawnEncoderInternalUsageDescriptor::DawnEncoderInternalUsageDescriptor(DawnEncoderInternalUsageDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnEncoderInternalUsageDescriptor }, 
-    useInternalUsages(std::move(init.useInternalUsages)){}
+DawnEncoderInternalUsageDescriptor::DawnEncoderInternalUsageDescriptor(DawnEncoderInternalUsageDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnEncoderInternalUsageDescriptor },
+    useInternalUsages(std::move(init.useInternalUsages)) {}
 
 DawnEncoderInternalUsageDescriptor::operator const WGPUDawnEncoderInternalUsageDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUDawnEncoderInternalUsageDescriptor*>(this);
@@ -4952,18 +5311,18 @@ static_assert(offsetof(DawnEncoderInternalUsageDescriptor, useInternalUsages) ==
 
 // DawnFakeBufferOOMForTesting implementation
 DawnFakeBufferOOMForTesting::DawnFakeBufferOOMForTesting()
-  : ChainedStruct { nullptr, SType::DawnFakeBufferOOMForTesting } {}
+: ChainedStruct { nullptr, SType::DawnFakeBufferOOMForTesting } {}
 struct DawnFakeBufferOOMForTesting::Init {
     ChainedStruct * const nextInChain;
     Bool fakeOOMAtWireClientMap;
     Bool fakeOOMAtNativeMap;
     Bool fakeOOMAtDevice;
 };
-DawnFakeBufferOOMForTesting::DawnFakeBufferOOMForTesting(DawnFakeBufferOOMForTesting::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnFakeBufferOOMForTesting }, 
-    fakeOOMAtWireClientMap(std::move(init.fakeOOMAtWireClientMap)), 
-    fakeOOMAtNativeMap(std::move(init.fakeOOMAtNativeMap)), 
-    fakeOOMAtDevice(std::move(init.fakeOOMAtDevice)){}
+DawnFakeBufferOOMForTesting::DawnFakeBufferOOMForTesting(DawnFakeBufferOOMForTesting::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnFakeBufferOOMForTesting },
+    fakeOOMAtWireClientMap(std::move(init.fakeOOMAtWireClientMap)),
+    fakeOOMAtNativeMap(std::move(init.fakeOOMAtNativeMap)),
+    fakeOOMAtDevice(std::move(init.fakeOOMAtDevice)) {}
 
 DawnFakeBufferOOMForTesting::operator const WGPUDawnFakeBufferOOMForTesting&() const noexcept {
     return *reinterpret_cast<const WGPUDawnFakeBufferOOMForTesting*>(this);
@@ -4980,12 +5339,12 @@ static_assert(offsetof(DawnFakeBufferOOMForTesting, fakeOOMAtDevice) == offsetof
 
 // DawnFakeDeviceInitializeErrorForTesting implementation
 DawnFakeDeviceInitializeErrorForTesting::DawnFakeDeviceInitializeErrorForTesting()
-  : ChainedStruct { nullptr, SType::DawnFakeDeviceInitializeErrorForTesting } {}
+: ChainedStruct { nullptr, SType::DawnFakeDeviceInitializeErrorForTesting } {}
 struct DawnFakeDeviceInitializeErrorForTesting::Init {
     ChainedStruct * const nextInChain;
 };
-DawnFakeDeviceInitializeErrorForTesting::DawnFakeDeviceInitializeErrorForTesting(DawnFakeDeviceInitializeErrorForTesting::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnFakeDeviceInitializeErrorForTesting }{}
+DawnFakeDeviceInitializeErrorForTesting::DawnFakeDeviceInitializeErrorForTesting(DawnFakeDeviceInitializeErrorForTesting::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnFakeDeviceInitializeErrorForTesting } {}
 
 DawnFakeDeviceInitializeErrorForTesting::operator const WGPUDawnFakeDeviceInitializeErrorForTesting&() const noexcept {
     return *reinterpret_cast<const WGPUDawnFakeDeviceInitializeErrorForTesting*>(this);
@@ -4996,14 +5355,14 @@ static_assert(alignof(DawnFakeDeviceInitializeErrorForTesting) == alignof(WGPUDa
 
 // DawnHostMappedPointerLimits implementation
 DawnHostMappedPointerLimits::DawnHostMappedPointerLimits()
-  : ChainedStructOut { nullptr, SType::DawnHostMappedPointerLimits } {}
+: ChainedStructOut { nullptr, SType::DawnHostMappedPointerLimits } {}
 struct DawnHostMappedPointerLimits::Init {
     ChainedStructOut *  nextInChain;
     uint32_t hostMappedPointerAlignment = kLimitU32Undefined;
 };
-DawnHostMappedPointerLimits::DawnHostMappedPointerLimits(DawnHostMappedPointerLimits::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::DawnHostMappedPointerLimits }, 
-    hostMappedPointerAlignment(std::move(init.hostMappedPointerAlignment)){}
+DawnHostMappedPointerLimits::DawnHostMappedPointerLimits(DawnHostMappedPointerLimits::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::DawnHostMappedPointerLimits },
+    hostMappedPointerAlignment(std::move(init.hostMappedPointerAlignment)) {}
 
 DawnHostMappedPointerLimits::operator const WGPUDawnHostMappedPointerLimits&() const noexcept {
     return *reinterpret_cast<const WGPUDawnHostMappedPointerLimits*>(this);
@@ -5016,14 +5375,14 @@ static_assert(offsetof(DawnHostMappedPointerLimits, hostMappedPointerAlignment) 
 
 // DawnInjectedInvalidSType implementation
 DawnInjectedInvalidSType::DawnInjectedInvalidSType()
-  : ChainedStruct { nullptr, SType::DawnInjectedInvalidSType } {}
+: ChainedStruct { nullptr, SType::DawnInjectedInvalidSType } {}
 struct DawnInjectedInvalidSType::Init {
     ChainedStruct * const nextInChain;
     SType invalidSType = {};
 };
-DawnInjectedInvalidSType::DawnInjectedInvalidSType(DawnInjectedInvalidSType::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnInjectedInvalidSType }, 
-    invalidSType(std::move(init.invalidSType)){}
+DawnInjectedInvalidSType::DawnInjectedInvalidSType(DawnInjectedInvalidSType::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnInjectedInvalidSType },
+    invalidSType(std::move(init.invalidSType)) {}
 
 DawnInjectedInvalidSType::operator const WGPUDawnInjectedInvalidSType&() const noexcept {
     return *reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(this);
@@ -5036,14 +5395,14 @@ static_assert(offsetof(DawnInjectedInvalidSType, invalidSType) == offsetof(WGPUD
 
 // DawnRenderPassSampleCount implementation
 DawnRenderPassSampleCount::DawnRenderPassSampleCount()
-  : ChainedStruct { nullptr, SType::DawnRenderPassSampleCount } {}
+: ChainedStruct { nullptr, SType::DawnRenderPassSampleCount } {}
 struct DawnRenderPassSampleCount::Init {
     ChainedStruct * const nextInChain;
     uint32_t sampleCount = 1;
 };
-DawnRenderPassSampleCount::DawnRenderPassSampleCount(DawnRenderPassSampleCount::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnRenderPassSampleCount }, 
-    sampleCount(std::move(init.sampleCount)){}
+DawnRenderPassSampleCount::DawnRenderPassSampleCount(DawnRenderPassSampleCount::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnRenderPassSampleCount },
+    sampleCount(std::move(init.sampleCount)) {}
 
 DawnRenderPassSampleCount::operator const WGPUDawnRenderPassSampleCount&() const noexcept {
     return *reinterpret_cast<const WGPUDawnRenderPassSampleCount*>(this);
@@ -5056,14 +5415,14 @@ static_assert(offsetof(DawnRenderPassSampleCount, sampleCount) == offsetof(WGPUD
 
 // DawnShaderModuleSPIRVOptionsDescriptor implementation
 DawnShaderModuleSPIRVOptionsDescriptor::DawnShaderModuleSPIRVOptionsDescriptor()
-  : ChainedStruct { nullptr, SType::DawnShaderModuleSPIRVOptionsDescriptor } {}
+: ChainedStruct { nullptr, SType::DawnShaderModuleSPIRVOptionsDescriptor } {}
 struct DawnShaderModuleSPIRVOptionsDescriptor::Init {
     ChainedStruct * const nextInChain;
     Bool allowNonUniformDerivatives = false;
 };
-DawnShaderModuleSPIRVOptionsDescriptor::DawnShaderModuleSPIRVOptionsDescriptor(DawnShaderModuleSPIRVOptionsDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnShaderModuleSPIRVOptionsDescriptor }, 
-    allowNonUniformDerivatives(std::move(init.allowNonUniformDerivatives)){}
+DawnShaderModuleSPIRVOptionsDescriptor::DawnShaderModuleSPIRVOptionsDescriptor(DawnShaderModuleSPIRVOptionsDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnShaderModuleSPIRVOptionsDescriptor },
+    allowNonUniformDerivatives(std::move(init.allowNonUniformDerivatives)) {}
 
 DawnShaderModuleSPIRVOptionsDescriptor::operator const WGPUDawnShaderModuleSPIRVOptionsDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUDawnShaderModuleSPIRVOptionsDescriptor*>(this);
@@ -5076,14 +5435,14 @@ static_assert(offsetof(DawnShaderModuleSPIRVOptionsDescriptor, allowNonUniformDe
 
 // DawnTexelCopyBufferRowAlignmentLimits implementation
 DawnTexelCopyBufferRowAlignmentLimits::DawnTexelCopyBufferRowAlignmentLimits()
-  : ChainedStructOut { nullptr, SType::DawnTexelCopyBufferRowAlignmentLimits } {}
+: ChainedStructOut { nullptr, SType::DawnTexelCopyBufferRowAlignmentLimits } {}
 struct DawnTexelCopyBufferRowAlignmentLimits::Init {
     ChainedStructOut *  nextInChain;
     uint32_t minTexelCopyBufferRowAlignment = kLimitU32Undefined;
 };
-DawnTexelCopyBufferRowAlignmentLimits::DawnTexelCopyBufferRowAlignmentLimits(DawnTexelCopyBufferRowAlignmentLimits::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::DawnTexelCopyBufferRowAlignmentLimits }, 
-    minTexelCopyBufferRowAlignment(std::move(init.minTexelCopyBufferRowAlignment)){}
+DawnTexelCopyBufferRowAlignmentLimits::DawnTexelCopyBufferRowAlignmentLimits(DawnTexelCopyBufferRowAlignmentLimits::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::DawnTexelCopyBufferRowAlignmentLimits },
+    minTexelCopyBufferRowAlignment(std::move(init.minTexelCopyBufferRowAlignment)) {}
 
 DawnTexelCopyBufferRowAlignmentLimits::operator const WGPUDawnTexelCopyBufferRowAlignmentLimits&() const noexcept {
     return *reinterpret_cast<const WGPUDawnTexelCopyBufferRowAlignmentLimits*>(this);
@@ -5096,14 +5455,14 @@ static_assert(offsetof(DawnTexelCopyBufferRowAlignmentLimits, minTexelCopyBuffer
 
 // DawnTextureInternalUsageDescriptor implementation
 DawnTextureInternalUsageDescriptor::DawnTextureInternalUsageDescriptor()
-  : ChainedStruct { nullptr, SType::DawnTextureInternalUsageDescriptor } {}
+: ChainedStruct { nullptr, SType::DawnTextureInternalUsageDescriptor } {}
 struct DawnTextureInternalUsageDescriptor::Init {
     ChainedStruct * const nextInChain;
     TextureUsage internalUsage = TextureUsage::None;
 };
-DawnTextureInternalUsageDescriptor::DawnTextureInternalUsageDescriptor(DawnTextureInternalUsageDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnTextureInternalUsageDescriptor }, 
-    internalUsage(std::move(init.internalUsage)){}
+DawnTextureInternalUsageDescriptor::DawnTextureInternalUsageDescriptor(DawnTextureInternalUsageDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnTextureInternalUsageDescriptor },
+    internalUsage(std::move(init.internalUsage)) {}
 
 DawnTextureInternalUsageDescriptor::operator const WGPUDawnTextureInternalUsageDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUDawnTextureInternalUsageDescriptor*>(this);
@@ -5116,7 +5475,7 @@ static_assert(offsetof(DawnTextureInternalUsageDescriptor, internalUsage) == off
 
 // DawnTogglesDescriptor implementation
 DawnTogglesDescriptor::DawnTogglesDescriptor()
-  : ChainedStruct { nullptr, SType::DawnTogglesDescriptor } {}
+: ChainedStruct { nullptr, SType::DawnTogglesDescriptor } {}
 struct DawnTogglesDescriptor::Init {
     ChainedStruct * const nextInChain;
     size_t enabledToggleCount = 0;
@@ -5124,12 +5483,12 @@ struct DawnTogglesDescriptor::Init {
     size_t disabledToggleCount = 0;
     const char* const * disabledToggles = nullptr;
 };
-DawnTogglesDescriptor::DawnTogglesDescriptor(DawnTogglesDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnTogglesDescriptor }, 
-    enabledToggleCount(std::move(init.enabledToggleCount)), 
-    enabledToggles(std::move(init.enabledToggles)), 
-    disabledToggleCount(std::move(init.disabledToggleCount)), 
-    disabledToggles(std::move(init.disabledToggles)){}
+DawnTogglesDescriptor::DawnTogglesDescriptor(DawnTogglesDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnTogglesDescriptor },
+    enabledToggleCount(std::move(init.enabledToggleCount)),
+    enabledToggles(std::move(init.enabledToggles)),
+    disabledToggleCount(std::move(init.disabledToggleCount)),
+    disabledToggles(std::move(init.disabledToggles)) {}
 
 DawnTogglesDescriptor::operator const WGPUDawnTogglesDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUDawnTogglesDescriptor*>(this);
@@ -5148,16 +5507,16 @@ static_assert(offsetof(DawnTogglesDescriptor, disabledToggles) == offsetof(WGPUD
 
 // DawnWGSLBlocklist implementation
 DawnWGSLBlocklist::DawnWGSLBlocklist()
-  : ChainedStruct { nullptr, SType::DawnWGSLBlocklist } {}
+: ChainedStruct { nullptr, SType::DawnWGSLBlocklist } {}
 struct DawnWGSLBlocklist::Init {
     ChainedStruct * const nextInChain;
     size_t blocklistedFeatureCount = 0;
     const char* const * blocklistedFeatures = nullptr;
 };
-DawnWGSLBlocklist::DawnWGSLBlocklist(DawnWGSLBlocklist::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnWGSLBlocklist }, 
-    blocklistedFeatureCount(std::move(init.blocklistedFeatureCount)), 
-    blocklistedFeatures(std::move(init.blocklistedFeatures)){}
+DawnWGSLBlocklist::DawnWGSLBlocklist(DawnWGSLBlocklist::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnWGSLBlocklist },
+    blocklistedFeatureCount(std::move(init.blocklistedFeatureCount)),
+    blocklistedFeatures(std::move(init.blocklistedFeatures)) {}
 
 DawnWGSLBlocklist::operator const WGPUDawnWGSLBlocklist&() const noexcept {
     return *reinterpret_cast<const WGPUDawnWGSLBlocklist*>(this);
@@ -5172,18 +5531,18 @@ static_assert(offsetof(DawnWGSLBlocklist, blocklistedFeatures) == offsetof(WGPUD
 
 // DawnWireWGSLControl implementation
 DawnWireWGSLControl::DawnWireWGSLControl()
-  : ChainedStruct { nullptr, SType::DawnWireWGSLControl } {}
+: ChainedStruct { nullptr, SType::DawnWireWGSLControl } {}
 struct DawnWireWGSLControl::Init {
     ChainedStruct * const nextInChain;
     Bool enableExperimental = false;
     Bool enableUnsafe = false;
     Bool enableTesting = false;
 };
-DawnWireWGSLControl::DawnWireWGSLControl(DawnWireWGSLControl::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::DawnWireWGSLControl }, 
-    enableExperimental(std::move(init.enableExperimental)), 
-    enableUnsafe(std::move(init.enableUnsafe)), 
-    enableTesting(std::move(init.enableTesting)){}
+DawnWireWGSLControl::DawnWireWGSLControl(DawnWireWGSLControl::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::DawnWireWGSLControl },
+    enableExperimental(std::move(init.enableExperimental)),
+    enableUnsafe(std::move(init.enableUnsafe)),
+    enableTesting(std::move(init.enableTesting)) {}
 
 DawnWireWGSLControl::operator const WGPUDawnWireWGSLControl&() const noexcept {
     return *reinterpret_cast<const WGPUDawnWireWGSLControl*>(this);
@@ -5200,14 +5559,14 @@ static_assert(offsetof(DawnWireWGSLControl, enableTesting) == offsetof(WGPUDawnW
 
 // EmscriptenSurfaceSourceCanvasHTMLSelector implementation
 EmscriptenSurfaceSourceCanvasHTMLSelector::EmscriptenSurfaceSourceCanvasHTMLSelector()
-  : ChainedStruct { nullptr, SType::EmscriptenSurfaceSourceCanvasHTMLSelector } {}
+: ChainedStruct { nullptr, SType::EmscriptenSurfaceSourceCanvasHTMLSelector } {}
 struct EmscriptenSurfaceSourceCanvasHTMLSelector::Init {
     ChainedStruct * const nextInChain;
     StringView selector = {};
 };
-EmscriptenSurfaceSourceCanvasHTMLSelector::EmscriptenSurfaceSourceCanvasHTMLSelector(EmscriptenSurfaceSourceCanvasHTMLSelector::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::EmscriptenSurfaceSourceCanvasHTMLSelector }, 
-    selector(std::move(init.selector)){}
+EmscriptenSurfaceSourceCanvasHTMLSelector::EmscriptenSurfaceSourceCanvasHTMLSelector(EmscriptenSurfaceSourceCanvasHTMLSelector::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::EmscriptenSurfaceSourceCanvasHTMLSelector },
+    selector(std::move(init.selector)) {}
 
 EmscriptenSurfaceSourceCanvasHTMLSelector::operator const WGPUEmscriptenSurfaceSourceCanvasHTMLSelector&() const noexcept {
     return *reinterpret_cast<const WGPUEmscriptenSurfaceSourceCanvasHTMLSelector*>(this);
@@ -5248,14 +5607,14 @@ static_assert(offsetof(Extent3D, depthOrArrayLayers) == offsetof(WGPUExtent3D, d
 
 // ExternalTextureBindingEntry implementation
 ExternalTextureBindingEntry::ExternalTextureBindingEntry()
-  : ChainedStruct { nullptr, SType::ExternalTextureBindingEntry } {}
+: ChainedStruct { nullptr, SType::ExternalTextureBindingEntry } {}
 struct ExternalTextureBindingEntry::Init {
     ChainedStruct * const nextInChain;
     ExternalTexture externalTexture = nullptr;
 };
-ExternalTextureBindingEntry::ExternalTextureBindingEntry(ExternalTextureBindingEntry::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::ExternalTextureBindingEntry }, 
-    externalTexture(std::move(init.externalTexture)){}
+ExternalTextureBindingEntry::ExternalTextureBindingEntry(ExternalTextureBindingEntry::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::ExternalTextureBindingEntry },
+    externalTexture(std::move(init.externalTexture)) {}
 
 ExternalTextureBindingEntry::operator const WGPUExternalTextureBindingEntry&() const noexcept {
     return *reinterpret_cast<const WGPUExternalTextureBindingEntry*>(this);
@@ -5268,12 +5627,12 @@ static_assert(offsetof(ExternalTextureBindingEntry, externalTexture) == offsetof
 
 // ExternalTextureBindingLayout implementation
 ExternalTextureBindingLayout::ExternalTextureBindingLayout()
-  : ChainedStruct { nullptr, SType::ExternalTextureBindingLayout } {}
+: ChainedStruct { nullptr, SType::ExternalTextureBindingLayout } {}
 struct ExternalTextureBindingLayout::Init {
     ChainedStruct * const nextInChain;
 };
-ExternalTextureBindingLayout::ExternalTextureBindingLayout(ExternalTextureBindingLayout::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::ExternalTextureBindingLayout }{}
+ExternalTextureBindingLayout::ExternalTextureBindingLayout(ExternalTextureBindingLayout::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::ExternalTextureBindingLayout } {}
 
 ExternalTextureBindingLayout::operator const WGPUExternalTextureBindingLayout&() const noexcept {
     return *reinterpret_cast<const WGPUExternalTextureBindingLayout*>(this);
@@ -5394,14 +5753,14 @@ static_assert(offsetof(PassTimestampWrites, endOfPassWriteIndex) == offsetof(WGP
 
 // PipelineLayoutResourceTable implementation
 PipelineLayoutResourceTable::PipelineLayoutResourceTable()
-  : ChainedStruct { nullptr, SType::PipelineLayoutResourceTable } {}
+: ChainedStruct { nullptr, SType::PipelineLayoutResourceTable } {}
 struct PipelineLayoutResourceTable::Init {
     ChainedStruct * const nextInChain;
     Bool usesResourceTable = false;
 };
-PipelineLayoutResourceTable::PipelineLayoutResourceTable(PipelineLayoutResourceTable::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::PipelineLayoutResourceTable }, 
-    usesResourceTable(std::move(init.usesResourceTable)){}
+PipelineLayoutResourceTable::PipelineLayoutResourceTable(PipelineLayoutResourceTable::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::PipelineLayoutResourceTable },
+    usesResourceTable(std::move(init.usesResourceTable)) {}
 
 PipelineLayoutResourceTable::operator const WGPUPipelineLayoutResourceTable&() const noexcept {
     return *reinterpret_cast<const WGPUPipelineLayoutResourceTable*>(this);
@@ -5491,30 +5850,25 @@ static_assert(offsetof(RenderBundleDescriptor, nextInChain) == offsetof(WGPURend
 static_assert(offsetof(RenderBundleDescriptor, label) == offsetof(WGPURenderBundleDescriptor, label),
         "offsetof mismatch for RenderBundleDescriptor::label");
 
-// RenderBundleEncoderDescriptor implementation
+// RenderBundleEncoderResourceTable implementation
+RenderBundleEncoderResourceTable::RenderBundleEncoderResourceTable()
+: ChainedStruct { nullptr, SType::RenderBundleEncoderResourceTable } {}
+struct RenderBundleEncoderResourceTable::Init {
+    ChainedStruct * const nextInChain;
+    Bool usesResourceTable = false;
+};
+RenderBundleEncoderResourceTable::RenderBundleEncoderResourceTable(RenderBundleEncoderResourceTable::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::RenderBundleEncoderResourceTable },
+    usesResourceTable(std::move(init.usesResourceTable)) {}
 
-RenderBundleEncoderDescriptor::operator const WGPURenderBundleEncoderDescriptor&() const noexcept {
-    return *reinterpret_cast<const WGPURenderBundleEncoderDescriptor*>(this);
+RenderBundleEncoderResourceTable::operator const WGPURenderBundleEncoderResourceTable&() const noexcept {
+    return *reinterpret_cast<const WGPURenderBundleEncoderResourceTable*>(this);
 }
 
-static_assert(sizeof(RenderBundleEncoderDescriptor) == sizeof(WGPURenderBundleEncoderDescriptor), "sizeof mismatch for RenderBundleEncoderDescriptor");
-static_assert(alignof(RenderBundleEncoderDescriptor) == alignof(WGPURenderBundleEncoderDescriptor), "alignof mismatch for RenderBundleEncoderDescriptor");
-static_assert(offsetof(RenderBundleEncoderDescriptor, nextInChain) == offsetof(WGPURenderBundleEncoderDescriptor, nextInChain),
-        "offsetof mismatch for RenderBundleEncoderDescriptor::nextInChain");
-static_assert(offsetof(RenderBundleEncoderDescriptor, label) == offsetof(WGPURenderBundleEncoderDescriptor, label),
-        "offsetof mismatch for RenderBundleEncoderDescriptor::label");
-static_assert(offsetof(RenderBundleEncoderDescriptor, colorFormatCount) == offsetof(WGPURenderBundleEncoderDescriptor, colorFormatCount),
-        "offsetof mismatch for RenderBundleEncoderDescriptor::colorFormatCount");
-static_assert(offsetof(RenderBundleEncoderDescriptor, colorFormats) == offsetof(WGPURenderBundleEncoderDescriptor, colorFormats),
-        "offsetof mismatch for RenderBundleEncoderDescriptor::colorFormats");
-static_assert(offsetof(RenderBundleEncoderDescriptor, depthStencilFormat) == offsetof(WGPURenderBundleEncoderDescriptor, depthStencilFormat),
-        "offsetof mismatch for RenderBundleEncoderDescriptor::depthStencilFormat");
-static_assert(offsetof(RenderBundleEncoderDescriptor, sampleCount) == offsetof(WGPURenderBundleEncoderDescriptor, sampleCount),
-        "offsetof mismatch for RenderBundleEncoderDescriptor::sampleCount");
-static_assert(offsetof(RenderBundleEncoderDescriptor, depthReadOnly) == offsetof(WGPURenderBundleEncoderDescriptor, depthReadOnly),
-        "offsetof mismatch for RenderBundleEncoderDescriptor::depthReadOnly");
-static_assert(offsetof(RenderBundleEncoderDescriptor, stencilReadOnly) == offsetof(WGPURenderBundleEncoderDescriptor, stencilReadOnly),
-        "offsetof mismatch for RenderBundleEncoderDescriptor::stencilReadOnly");
+static_assert(sizeof(RenderBundleEncoderResourceTable) == sizeof(WGPURenderBundleEncoderResourceTable), "sizeof mismatch for RenderBundleEncoderResourceTable");
+static_assert(alignof(RenderBundleEncoderResourceTable) == alignof(WGPURenderBundleEncoderResourceTable), "alignof mismatch for RenderBundleEncoderResourceTable");
+static_assert(offsetof(RenderBundleEncoderResourceTable, usesResourceTable) == offsetof(WGPURenderBundleEncoderResourceTable, usesResourceTable),
+        "offsetof mismatch for RenderBundleEncoderResourceTable::usesResourceTable");
 
 // RenderPassDepthStencilAttachment implementation
 
@@ -5547,7 +5901,7 @@ static_assert(offsetof(RenderPassDepthStencilAttachment, stencilReadOnly) == off
 
 // RenderPassDescriptorResolveRect implementation
 RenderPassDescriptorResolveRect::RenderPassDescriptorResolveRect()
-  : ChainedStruct { nullptr, SType::RenderPassDescriptorResolveRect } {}
+: ChainedStruct { nullptr, SType::RenderPassDescriptorResolveRect } {}
 struct RenderPassDescriptorResolveRect::Init {
     ChainedStruct * const nextInChain;
     uint32_t colorOffsetX;
@@ -5557,14 +5911,14 @@ struct RenderPassDescriptorResolveRect::Init {
     uint32_t width;
     uint32_t height;
 };
-RenderPassDescriptorResolveRect::RenderPassDescriptorResolveRect(RenderPassDescriptorResolveRect::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::RenderPassDescriptorResolveRect }, 
-    colorOffsetX(std::move(init.colorOffsetX)), 
-    colorOffsetY(std::move(init.colorOffsetY)), 
-    resolveOffsetX(std::move(init.resolveOffsetX)), 
-    resolveOffsetY(std::move(init.resolveOffsetY)), 
-    width(std::move(init.width)), 
-    height(std::move(init.height)){}
+RenderPassDescriptorResolveRect::RenderPassDescriptorResolveRect(RenderPassDescriptorResolveRect::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::RenderPassDescriptorResolveRect },
+    colorOffsetX(std::move(init.colorOffsetX)),
+    colorOffsetY(std::move(init.colorOffsetY)),
+    resolveOffsetX(std::move(init.resolveOffsetX)),
+    resolveOffsetY(std::move(init.resolveOffsetY)),
+    width(std::move(init.width)),
+    height(std::move(init.height)) {}
 
 RenderPassDescriptorResolveRect::operator const WGPURenderPassDescriptorResolveRect&() const noexcept {
     return *reinterpret_cast<const WGPURenderPassDescriptorResolveRect*>(this);
@@ -5587,14 +5941,14 @@ static_assert(offsetof(RenderPassDescriptorResolveRect, height) == offsetof(WGPU
 
 // RenderPassMaxDrawCount implementation
 RenderPassMaxDrawCount::RenderPassMaxDrawCount()
-  : ChainedStruct { nullptr, SType::RenderPassMaxDrawCount } {}
+: ChainedStruct { nullptr, SType::RenderPassMaxDrawCount } {}
 struct RenderPassMaxDrawCount::Init {
     ChainedStruct * const nextInChain;
     uint64_t maxDrawCount = 50000000;
 };
-RenderPassMaxDrawCount::RenderPassMaxDrawCount(RenderPassMaxDrawCount::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::RenderPassMaxDrawCount }, 
-    maxDrawCount(std::move(init.maxDrawCount)){}
+RenderPassMaxDrawCount::RenderPassMaxDrawCount(RenderPassMaxDrawCount::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::RenderPassMaxDrawCount },
+    maxDrawCount(std::move(init.maxDrawCount)) {}
 
 RenderPassMaxDrawCount::operator const WGPURenderPassMaxDrawCount&() const noexcept {
     return *reinterpret_cast<const WGPURenderPassMaxDrawCount*>(this);
@@ -5607,12 +5961,12 @@ static_assert(offsetof(RenderPassMaxDrawCount, maxDrawCount) == offsetof(WGPURen
 
 // RequestAdapterWebGPUBackendOptions implementation
 RequestAdapterWebGPUBackendOptions::RequestAdapterWebGPUBackendOptions()
-  : ChainedStruct { nullptr, SType::RequestAdapterWebGPUBackendOptions } {}
+: ChainedStruct { nullptr, SType::RequestAdapterWebGPUBackendOptions } {}
 struct RequestAdapterWebGPUBackendOptions::Init {
     ChainedStruct * const nextInChain;
 };
-RequestAdapterWebGPUBackendOptions::RequestAdapterWebGPUBackendOptions(RequestAdapterWebGPUBackendOptions::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::RequestAdapterWebGPUBackendOptions }{}
+RequestAdapterWebGPUBackendOptions::RequestAdapterWebGPUBackendOptions(RequestAdapterWebGPUBackendOptions::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::RequestAdapterWebGPUBackendOptions } {}
 
 RequestAdapterWebGPUBackendOptions::operator const WGPURequestAdapterWebGPUBackendOptions&() const noexcept {
     return *reinterpret_cast<const WGPURequestAdapterWebGPUBackendOptions*>(this);
@@ -5623,14 +5977,14 @@ static_assert(alignof(RequestAdapterWebGPUBackendOptions) == alignof(WGPURequest
 
 // RequestAdapterWebXROptions implementation
 RequestAdapterWebXROptions::RequestAdapterWebXROptions()
-  : ChainedStruct { nullptr, SType::RequestAdapterWebXROptions } {}
+: ChainedStruct { nullptr, SType::RequestAdapterWebXROptions } {}
 struct RequestAdapterWebXROptions::Init {
     ChainedStruct * const nextInChain;
     Bool xrCompatible;
 };
-RequestAdapterWebXROptions::RequestAdapterWebXROptions(RequestAdapterWebXROptions::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::RequestAdapterWebXROptions }, 
-    xrCompatible(std::move(init.xrCompatible)){}
+RequestAdapterWebXROptions::RequestAdapterWebXROptions(RequestAdapterWebXROptions::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::RequestAdapterWebXROptions },
+    xrCompatible(std::move(init.xrCompatible)) {}
 
 RequestAdapterWebXROptions::operator const WGPURequestAdapterWebXROptions&() const noexcept {
     return *reinterpret_cast<const WGPURequestAdapterWebXROptions*>(this);
@@ -5671,14 +6025,14 @@ static_assert(offsetof(SamplerBindingLayout, type) == offsetof(WGPUSamplerBindin
 
 // ShaderModuleCompilationOptions implementation
 ShaderModuleCompilationOptions::ShaderModuleCompilationOptions()
-  : ChainedStruct { nullptr, SType::ShaderModuleCompilationOptions } {}
+: ChainedStruct { nullptr, SType::ShaderModuleCompilationOptions } {}
 struct ShaderModuleCompilationOptions::Init {
     ChainedStruct * const nextInChain;
     Bool strictMath;
 };
-ShaderModuleCompilationOptions::ShaderModuleCompilationOptions(ShaderModuleCompilationOptions::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::ShaderModuleCompilationOptions }, 
-    strictMath(std::move(init.strictMath)){}
+ShaderModuleCompilationOptions::ShaderModuleCompilationOptions(ShaderModuleCompilationOptions::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::ShaderModuleCompilationOptions },
+    strictMath(std::move(init.strictMath)) {}
 
 ShaderModuleCompilationOptions::operator const WGPUShaderModuleCompilationOptions&() const noexcept {
     return *reinterpret_cast<const WGPUShaderModuleCompilationOptions*>(this);
@@ -5691,16 +6045,16 @@ static_assert(offsetof(ShaderModuleCompilationOptions, strictMath) == offsetof(W
 
 // ShaderSourceSPIRV implementation
 ShaderSourceSPIRV::ShaderSourceSPIRV()
-  : ChainedStruct { nullptr, SType::ShaderSourceSPIRV } {}
+: ChainedStruct { nullptr, SType::ShaderSourceSPIRV } {}
 struct ShaderSourceSPIRV::Init {
     ChainedStruct * const nextInChain;
     uint32_t codeSize;
     uint32_t const * code = nullptr;
 };
-ShaderSourceSPIRV::ShaderSourceSPIRV(ShaderSourceSPIRV::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::ShaderSourceSPIRV }, 
-    codeSize(std::move(init.codeSize)), 
-    code(std::move(init.code)){}
+ShaderSourceSPIRV::ShaderSourceSPIRV(ShaderSourceSPIRV::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::ShaderSourceSPIRV },
+    codeSize(std::move(init.codeSize)),
+    code(std::move(init.code)) {}
 
 ShaderSourceSPIRV::operator const WGPUShaderSourceSPIRV&() const noexcept {
     return *reinterpret_cast<const WGPUShaderSourceSPIRV*>(this);
@@ -5715,14 +6069,14 @@ static_assert(offsetof(ShaderSourceSPIRV, code) == offsetof(WGPUShaderSourceSPIR
 
 // ShaderSourceWGSL implementation
 ShaderSourceWGSL::ShaderSourceWGSL()
-  : ChainedStruct { nullptr, SType::ShaderSourceWGSL } {}
+: ChainedStruct { nullptr, SType::ShaderSourceWGSL } {}
 struct ShaderSourceWGSL::Init {
     ChainedStruct * const nextInChain;
     StringView code = {};
 };
-ShaderSourceWGSL::ShaderSourceWGSL(ShaderSourceWGSL::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::ShaderSourceWGSL }, 
-    code(std::move(init.code)){}
+ShaderSourceWGSL::ShaderSourceWGSL(ShaderSourceWGSL::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::ShaderSourceWGSL },
+    code(std::move(init.code)) {}
 
 ShaderSourceWGSL::operator const WGPUShaderSourceWGSL&() const noexcept {
     return *reinterpret_cast<const WGPUShaderSourceWGSL*>(this);
@@ -5749,32 +6103,10 @@ static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, fenceCount) == o
         "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::fenceCount");
 static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, fences) == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, fences),
         "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::fences");
+static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, signaledValueCount) == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, signaledValueCount),
+        "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::signaledValueCount");
 static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, signaledValues) == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, signaledValues),
         "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::signaledValues");
-
-// SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor implementation
-SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor()
-  : ChainedStruct { nullptr, SType::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor } {}
-struct SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::Init {
-    ChainedStruct * const nextInChain;
-    void * handle;
-    uint64_t size;
-};
-SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor }, 
-    handle(std::move(init.handle)), 
-    size(std::move(init.size)){}
-
-SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::operator const WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor&() const noexcept {
-    return *reinterpret_cast<const WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*>(this);
-}
-
-static_assert(sizeof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor) == sizeof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor), "sizeof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor");
-static_assert(alignof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor) == alignof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor), "alignof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor");
-static_assert(offsetof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, handle) == offsetof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, handle),
-        "offsetof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::handle");
-static_assert(offsetof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, size) == offsetof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, size),
-        "offsetof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::size");
 
 // SharedBufferMemoryEndAccessState implementation
 SharedBufferMemoryEndAccessState::SharedBufferMemoryEndAccessState() = default;
@@ -5786,6 +6118,7 @@ SharedBufferMemoryEndAccessState::SharedBufferMemoryEndAccessState(SharedBufferM
     : initialized(rhs.initialized),
             fenceCount(rhs.fenceCount),
             fences(rhs.fences),
+            signaledValueCount(rhs.signaledValueCount),
             signaledValues(rhs.signaledValues){
     Reset(rhs);
 }
@@ -5798,6 +6131,7 @@ SharedBufferMemoryEndAccessState& SharedBufferMemoryEndAccessState::operator=(Sh
     detail::AsNonConstReference(this->initialized) = std::move(rhs.initialized);
     detail::AsNonConstReference(this->fenceCount) = std::move(rhs.fenceCount);
     detail::AsNonConstReference(this->fences) = std::move(rhs.fences);
+    detail::AsNonConstReference(this->signaledValueCount) = std::move(rhs.signaledValueCount);
     detail::AsNonConstReference(this->signaledValues) = std::move(rhs.signaledValues);
     Reset(rhs);
     return *this;
@@ -5816,6 +6150,7 @@ void SharedBufferMemoryEndAccessState::Reset(SharedBufferMemoryEndAccessState& v
     detail::AsNonConstReference(value.initialized) = defaultValue.initialized;
     detail::AsNonConstReference(value.fenceCount) = defaultValue.fenceCount;
     detail::AsNonConstReference(value.fences) = defaultValue.fences;
+    detail::AsNonConstReference(value.signaledValueCount) = defaultValue.signaledValueCount;
     detail::AsNonConstReference(value.signaledValues) = defaultValue.signaledValues;
 }
 
@@ -5833,8 +6168,34 @@ static_assert(offsetof(SharedBufferMemoryEndAccessState, fenceCount) == offsetof
         "offsetof mismatch for SharedBufferMemoryEndAccessState::fenceCount");
 static_assert(offsetof(SharedBufferMemoryEndAccessState, fences) == offsetof(WGPUSharedBufferMemoryEndAccessState, fences),
         "offsetof mismatch for SharedBufferMemoryEndAccessState::fences");
+static_assert(offsetof(SharedBufferMemoryEndAccessState, signaledValueCount) == offsetof(WGPUSharedBufferMemoryEndAccessState, signaledValueCount),
+        "offsetof mismatch for SharedBufferMemoryEndAccessState::signaledValueCount");
 static_assert(offsetof(SharedBufferMemoryEndAccessState, signaledValues) == offsetof(WGPUSharedBufferMemoryEndAccessState, signaledValues),
         "offsetof mismatch for SharedBufferMemoryEndAccessState::signaledValues");
+
+// SharedBufferMemoryFromWindowsHandleDescriptor implementation
+SharedBufferMemoryFromWindowsHandleDescriptor::SharedBufferMemoryFromWindowsHandleDescriptor()
+: ChainedStruct { nullptr, SType::SharedBufferMemoryFromWindowsHandleDescriptor } {}
+struct SharedBufferMemoryFromWindowsHandleDescriptor::Init {
+    ChainedStruct * const nextInChain;
+    void * handle;
+    uint64_t size;
+};
+SharedBufferMemoryFromWindowsHandleDescriptor::SharedBufferMemoryFromWindowsHandleDescriptor(SharedBufferMemoryFromWindowsHandleDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedBufferMemoryFromWindowsHandleDescriptor },
+    handle(std::move(init.handle)),
+    size(std::move(init.size)) {}
+
+SharedBufferMemoryFromWindowsHandleDescriptor::operator const WGPUSharedBufferMemoryFromWindowsHandleDescriptor&() const noexcept {
+    return *reinterpret_cast<const WGPUSharedBufferMemoryFromWindowsHandleDescriptor*>(this);
+}
+
+static_assert(sizeof(SharedBufferMemoryFromWindowsHandleDescriptor) == sizeof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor), "sizeof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor");
+static_assert(alignof(SharedBufferMemoryFromWindowsHandleDescriptor) == alignof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor), "alignof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor");
+static_assert(offsetof(SharedBufferMemoryFromWindowsHandleDescriptor, handle) == offsetof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor, handle),
+        "offsetof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor::handle");
+static_assert(offsetof(SharedBufferMemoryFromWindowsHandleDescriptor, size) == offsetof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor, size),
+        "offsetof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor::size");
 
 // SharedBufferMemoryProperties implementation
 
@@ -5853,14 +6214,14 @@ static_assert(offsetof(SharedBufferMemoryProperties, size) == offsetof(WGPUShare
 
 // SharedFenceDXGISharedHandleDescriptor implementation
 SharedFenceDXGISharedHandleDescriptor::SharedFenceDXGISharedHandleDescriptor()
-  : ChainedStruct { nullptr, SType::SharedFenceDXGISharedHandleDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedFenceDXGISharedHandleDescriptor } {}
 struct SharedFenceDXGISharedHandleDescriptor::Init {
     ChainedStruct * const nextInChain;
     void * handle;
 };
-SharedFenceDXGISharedHandleDescriptor::SharedFenceDXGISharedHandleDescriptor(SharedFenceDXGISharedHandleDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedFenceDXGISharedHandleDescriptor }, 
-    handle(std::move(init.handle)){}
+SharedFenceDXGISharedHandleDescriptor::SharedFenceDXGISharedHandleDescriptor(SharedFenceDXGISharedHandleDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedFenceDXGISharedHandleDescriptor },
+    handle(std::move(init.handle)) {}
 
 SharedFenceDXGISharedHandleDescriptor::operator const WGPUSharedFenceDXGISharedHandleDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceDXGISharedHandleDescriptor*>(this);
@@ -5873,14 +6234,14 @@ static_assert(offsetof(SharedFenceDXGISharedHandleDescriptor, handle) == offseto
 
 // SharedFenceDXGISharedHandleExportInfo implementation
 SharedFenceDXGISharedHandleExportInfo::SharedFenceDXGISharedHandleExportInfo()
-  : ChainedStructOut { nullptr, SType::SharedFenceDXGISharedHandleExportInfo } {}
+: ChainedStructOut { nullptr, SType::SharedFenceDXGISharedHandleExportInfo } {}
 struct SharedFenceDXGISharedHandleExportInfo::Init {
     ChainedStructOut *  nextInChain;
     void * handle;
 };
-SharedFenceDXGISharedHandleExportInfo::SharedFenceDXGISharedHandleExportInfo(SharedFenceDXGISharedHandleExportInfo::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedFenceDXGISharedHandleExportInfo }, 
-    handle(std::move(init.handle)){}
+SharedFenceDXGISharedHandleExportInfo::SharedFenceDXGISharedHandleExportInfo(SharedFenceDXGISharedHandleExportInfo::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedFenceDXGISharedHandleExportInfo },
+    handle(std::move(init.handle)) {}
 
 SharedFenceDXGISharedHandleExportInfo::operator const WGPUSharedFenceDXGISharedHandleExportInfo&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceDXGISharedHandleExportInfo*>(this);
@@ -5893,14 +6254,14 @@ static_assert(offsetof(SharedFenceDXGISharedHandleExportInfo, handle) == offseto
 
 // SharedFenceEGLSyncDescriptor implementation
 SharedFenceEGLSyncDescriptor::SharedFenceEGLSyncDescriptor()
-  : ChainedStruct { nullptr, SType::SharedFenceEGLSyncDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedFenceEGLSyncDescriptor } {}
 struct SharedFenceEGLSyncDescriptor::Init {
     ChainedStruct * const nextInChain;
     void * sync;
 };
-SharedFenceEGLSyncDescriptor::SharedFenceEGLSyncDescriptor(SharedFenceEGLSyncDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedFenceEGLSyncDescriptor }, 
-    sync(std::move(init.sync)){}
+SharedFenceEGLSyncDescriptor::SharedFenceEGLSyncDescriptor(SharedFenceEGLSyncDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedFenceEGLSyncDescriptor },
+    sync(std::move(init.sync)) {}
 
 SharedFenceEGLSyncDescriptor::operator const WGPUSharedFenceEGLSyncDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceEGLSyncDescriptor*>(this);
@@ -5913,14 +6274,14 @@ static_assert(offsetof(SharedFenceEGLSyncDescriptor, sync) == offsetof(WGPUShare
 
 // SharedFenceEGLSyncExportInfo implementation
 SharedFenceEGLSyncExportInfo::SharedFenceEGLSyncExportInfo()
-  : ChainedStructOut { nullptr, SType::SharedFenceEGLSyncExportInfo } {}
+: ChainedStructOut { nullptr, SType::SharedFenceEGLSyncExportInfo } {}
 struct SharedFenceEGLSyncExportInfo::Init {
     ChainedStructOut *  nextInChain;
     void * sync;
 };
-SharedFenceEGLSyncExportInfo::SharedFenceEGLSyncExportInfo(SharedFenceEGLSyncExportInfo::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedFenceEGLSyncExportInfo }, 
-    sync(std::move(init.sync)){}
+SharedFenceEGLSyncExportInfo::SharedFenceEGLSyncExportInfo(SharedFenceEGLSyncExportInfo::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedFenceEGLSyncExportInfo },
+    sync(std::move(init.sync)) {}
 
 SharedFenceEGLSyncExportInfo::operator const WGPUSharedFenceEGLSyncExportInfo&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceEGLSyncExportInfo*>(this);
@@ -5933,14 +6294,14 @@ static_assert(offsetof(SharedFenceEGLSyncExportInfo, sync) == offsetof(WGPUShare
 
 // SharedFenceMTLSharedEventDescriptor implementation
 SharedFenceMTLSharedEventDescriptor::SharedFenceMTLSharedEventDescriptor()
-  : ChainedStruct { nullptr, SType::SharedFenceMTLSharedEventDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedFenceMTLSharedEventDescriptor } {}
 struct SharedFenceMTLSharedEventDescriptor::Init {
     ChainedStruct * const nextInChain;
     void * sharedEvent;
 };
-SharedFenceMTLSharedEventDescriptor::SharedFenceMTLSharedEventDescriptor(SharedFenceMTLSharedEventDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedFenceMTLSharedEventDescriptor }, 
-    sharedEvent(std::move(init.sharedEvent)){}
+SharedFenceMTLSharedEventDescriptor::SharedFenceMTLSharedEventDescriptor(SharedFenceMTLSharedEventDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedFenceMTLSharedEventDescriptor },
+    sharedEvent(std::move(init.sharedEvent)) {}
 
 SharedFenceMTLSharedEventDescriptor::operator const WGPUSharedFenceMTLSharedEventDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceMTLSharedEventDescriptor*>(this);
@@ -5953,14 +6314,14 @@ static_assert(offsetof(SharedFenceMTLSharedEventDescriptor, sharedEvent) == offs
 
 // SharedFenceMTLSharedEventExportInfo implementation
 SharedFenceMTLSharedEventExportInfo::SharedFenceMTLSharedEventExportInfo()
-  : ChainedStructOut { nullptr, SType::SharedFenceMTLSharedEventExportInfo } {}
+: ChainedStructOut { nullptr, SType::SharedFenceMTLSharedEventExportInfo } {}
 struct SharedFenceMTLSharedEventExportInfo::Init {
     ChainedStructOut *  nextInChain;
     void * sharedEvent;
 };
-SharedFenceMTLSharedEventExportInfo::SharedFenceMTLSharedEventExportInfo(SharedFenceMTLSharedEventExportInfo::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedFenceMTLSharedEventExportInfo }, 
-    sharedEvent(std::move(init.sharedEvent)){}
+SharedFenceMTLSharedEventExportInfo::SharedFenceMTLSharedEventExportInfo(SharedFenceMTLSharedEventExportInfo::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedFenceMTLSharedEventExportInfo },
+    sharedEvent(std::move(init.sharedEvent)) {}
 
 SharedFenceMTLSharedEventExportInfo::operator const WGPUSharedFenceMTLSharedEventExportInfo&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceMTLSharedEventExportInfo*>(this);
@@ -5973,14 +6334,14 @@ static_assert(offsetof(SharedFenceMTLSharedEventExportInfo, sharedEvent) == offs
 
 // SharedFenceSyncFDDescriptor implementation
 SharedFenceSyncFDDescriptor::SharedFenceSyncFDDescriptor()
-  : ChainedStruct { nullptr, SType::SharedFenceSyncFDDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedFenceSyncFDDescriptor } {}
 struct SharedFenceSyncFDDescriptor::Init {
     ChainedStruct * const nextInChain;
     int handle;
 };
-SharedFenceSyncFDDescriptor::SharedFenceSyncFDDescriptor(SharedFenceSyncFDDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedFenceSyncFDDescriptor }, 
-    handle(std::move(init.handle)){}
+SharedFenceSyncFDDescriptor::SharedFenceSyncFDDescriptor(SharedFenceSyncFDDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedFenceSyncFDDescriptor },
+    handle(std::move(init.handle)) {}
 
 SharedFenceSyncFDDescriptor::operator const WGPUSharedFenceSyncFDDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceSyncFDDescriptor*>(this);
@@ -5993,14 +6354,14 @@ static_assert(offsetof(SharedFenceSyncFDDescriptor, handle) == offsetof(WGPUShar
 
 // SharedFenceSyncFDExportInfo implementation
 SharedFenceSyncFDExportInfo::SharedFenceSyncFDExportInfo()
-  : ChainedStructOut { nullptr, SType::SharedFenceSyncFDExportInfo } {}
+: ChainedStructOut { nullptr, SType::SharedFenceSyncFDExportInfo } {}
 struct SharedFenceSyncFDExportInfo::Init {
     ChainedStructOut *  nextInChain;
     int handle;
 };
-SharedFenceSyncFDExportInfo::SharedFenceSyncFDExportInfo(SharedFenceSyncFDExportInfo::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedFenceSyncFDExportInfo }, 
-    handle(std::move(init.handle)){}
+SharedFenceSyncFDExportInfo::SharedFenceSyncFDExportInfo(SharedFenceSyncFDExportInfo::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedFenceSyncFDExportInfo },
+    handle(std::move(init.handle)) {}
 
 SharedFenceSyncFDExportInfo::operator const WGPUSharedFenceSyncFDExportInfo&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceSyncFDExportInfo*>(this);
@@ -6013,14 +6374,14 @@ static_assert(offsetof(SharedFenceSyncFDExportInfo, handle) == offsetof(WGPUShar
 
 // SharedFenceVkSemaphoreOpaqueFDDescriptor implementation
 SharedFenceVkSemaphoreOpaqueFDDescriptor::SharedFenceVkSemaphoreOpaqueFDDescriptor()
-  : ChainedStruct { nullptr, SType::SharedFenceVkSemaphoreOpaqueFDDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedFenceVkSemaphoreOpaqueFDDescriptor } {}
 struct SharedFenceVkSemaphoreOpaqueFDDescriptor::Init {
     ChainedStruct * const nextInChain;
     int handle;
 };
-SharedFenceVkSemaphoreOpaqueFDDescriptor::SharedFenceVkSemaphoreOpaqueFDDescriptor(SharedFenceVkSemaphoreOpaqueFDDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedFenceVkSemaphoreOpaqueFDDescriptor }, 
-    handle(std::move(init.handle)){}
+SharedFenceVkSemaphoreOpaqueFDDescriptor::SharedFenceVkSemaphoreOpaqueFDDescriptor(SharedFenceVkSemaphoreOpaqueFDDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedFenceVkSemaphoreOpaqueFDDescriptor },
+    handle(std::move(init.handle)) {}
 
 SharedFenceVkSemaphoreOpaqueFDDescriptor::operator const WGPUSharedFenceVkSemaphoreOpaqueFDDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceVkSemaphoreOpaqueFDDescriptor*>(this);
@@ -6033,14 +6394,14 @@ static_assert(offsetof(SharedFenceVkSemaphoreOpaqueFDDescriptor, handle) == offs
 
 // SharedFenceVkSemaphoreOpaqueFDExportInfo implementation
 SharedFenceVkSemaphoreOpaqueFDExportInfo::SharedFenceVkSemaphoreOpaqueFDExportInfo()
-  : ChainedStructOut { nullptr, SType::SharedFenceVkSemaphoreOpaqueFDExportInfo } {}
+: ChainedStructOut { nullptr, SType::SharedFenceVkSemaphoreOpaqueFDExportInfo } {}
 struct SharedFenceVkSemaphoreOpaqueFDExportInfo::Init {
     ChainedStructOut *  nextInChain;
     int handle;
 };
-SharedFenceVkSemaphoreOpaqueFDExportInfo::SharedFenceVkSemaphoreOpaqueFDExportInfo(SharedFenceVkSemaphoreOpaqueFDExportInfo::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedFenceVkSemaphoreOpaqueFDExportInfo }, 
-    handle(std::move(init.handle)){}
+SharedFenceVkSemaphoreOpaqueFDExportInfo::SharedFenceVkSemaphoreOpaqueFDExportInfo(SharedFenceVkSemaphoreOpaqueFDExportInfo::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedFenceVkSemaphoreOpaqueFDExportInfo },
+    handle(std::move(init.handle)) {}
 
 SharedFenceVkSemaphoreOpaqueFDExportInfo::operator const WGPUSharedFenceVkSemaphoreOpaqueFDExportInfo&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceVkSemaphoreOpaqueFDExportInfo*>(this);
@@ -6053,14 +6414,14 @@ static_assert(offsetof(SharedFenceVkSemaphoreOpaqueFDExportInfo, handle) == offs
 
 // SharedFenceVkSemaphoreZirconHandleDescriptor implementation
 SharedFenceVkSemaphoreZirconHandleDescriptor::SharedFenceVkSemaphoreZirconHandleDescriptor()
-  : ChainedStruct { nullptr, SType::SharedFenceVkSemaphoreZirconHandleDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedFenceVkSemaphoreZirconHandleDescriptor } {}
 struct SharedFenceVkSemaphoreZirconHandleDescriptor::Init {
     ChainedStruct * const nextInChain;
     uint32_t handle;
 };
-SharedFenceVkSemaphoreZirconHandleDescriptor::SharedFenceVkSemaphoreZirconHandleDescriptor(SharedFenceVkSemaphoreZirconHandleDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedFenceVkSemaphoreZirconHandleDescriptor }, 
-    handle(std::move(init.handle)){}
+SharedFenceVkSemaphoreZirconHandleDescriptor::SharedFenceVkSemaphoreZirconHandleDescriptor(SharedFenceVkSemaphoreZirconHandleDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedFenceVkSemaphoreZirconHandleDescriptor },
+    handle(std::move(init.handle)) {}
 
 SharedFenceVkSemaphoreZirconHandleDescriptor::operator const WGPUSharedFenceVkSemaphoreZirconHandleDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceVkSemaphoreZirconHandleDescriptor*>(this);
@@ -6073,14 +6434,14 @@ static_assert(offsetof(SharedFenceVkSemaphoreZirconHandleDescriptor, handle) == 
 
 // SharedFenceVkSemaphoreZirconHandleExportInfo implementation
 SharedFenceVkSemaphoreZirconHandleExportInfo::SharedFenceVkSemaphoreZirconHandleExportInfo()
-  : ChainedStructOut { nullptr, SType::SharedFenceVkSemaphoreZirconHandleExportInfo } {}
+: ChainedStructOut { nullptr, SType::SharedFenceVkSemaphoreZirconHandleExportInfo } {}
 struct SharedFenceVkSemaphoreZirconHandleExportInfo::Init {
     ChainedStructOut *  nextInChain;
     uint32_t handle;
 };
-SharedFenceVkSemaphoreZirconHandleExportInfo::SharedFenceVkSemaphoreZirconHandleExportInfo(SharedFenceVkSemaphoreZirconHandleExportInfo::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedFenceVkSemaphoreZirconHandleExportInfo }, 
-    handle(std::move(init.handle)){}
+SharedFenceVkSemaphoreZirconHandleExportInfo::SharedFenceVkSemaphoreZirconHandleExportInfo(SharedFenceVkSemaphoreZirconHandleExportInfo::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedFenceVkSemaphoreZirconHandleExportInfo },
+    handle(std::move(init.handle)) {}
 
 SharedFenceVkSemaphoreZirconHandleExportInfo::operator const WGPUSharedFenceVkSemaphoreZirconHandleExportInfo&() const noexcept {
     return *reinterpret_cast<const WGPUSharedFenceVkSemaphoreZirconHandleExportInfo*>(this);
@@ -6093,14 +6454,14 @@ static_assert(offsetof(SharedFenceVkSemaphoreZirconHandleExportInfo, handle) == 
 
 // SharedTextureMemoryAHardwareBufferDescriptor implementation
 SharedTextureMemoryAHardwareBufferDescriptor::SharedTextureMemoryAHardwareBufferDescriptor()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryAHardwareBufferDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryAHardwareBufferDescriptor } {}
 struct SharedTextureMemoryAHardwareBufferDescriptor::Init {
     ChainedStruct * const nextInChain;
     void * handle;
 };
-SharedTextureMemoryAHardwareBufferDescriptor::SharedTextureMemoryAHardwareBufferDescriptor(SharedTextureMemoryAHardwareBufferDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryAHardwareBufferDescriptor }, 
-    handle(std::move(init.handle)){}
+SharedTextureMemoryAHardwareBufferDescriptor::SharedTextureMemoryAHardwareBufferDescriptor(SharedTextureMemoryAHardwareBufferDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryAHardwareBufferDescriptor },
+    handle(std::move(init.handle)) {}
 
 SharedTextureMemoryAHardwareBufferDescriptor::operator const WGPUSharedTextureMemoryAHardwareBufferDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryAHardwareBufferDescriptor*>(this);
@@ -6113,14 +6474,14 @@ static_assert(offsetof(SharedTextureMemoryAHardwareBufferDescriptor, handle) == 
 
 // SharedTextureMemoryD3D11BeginState implementation
 SharedTextureMemoryD3D11BeginState::SharedTextureMemoryD3D11BeginState()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryD3D11BeginState } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryD3D11BeginState } {}
 struct SharedTextureMemoryD3D11BeginState::Init {
     ChainedStruct * const nextInChain;
     Bool requiresEndAccessFence = true;
 };
-SharedTextureMemoryD3D11BeginState::SharedTextureMemoryD3D11BeginState(SharedTextureMemoryD3D11BeginState::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryD3D11BeginState }, 
-    requiresEndAccessFence(std::move(init.requiresEndAccessFence)){}
+SharedTextureMemoryD3D11BeginState::SharedTextureMemoryD3D11BeginState(SharedTextureMemoryD3D11BeginState::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryD3D11BeginState },
+    requiresEndAccessFence(std::move(init.requiresEndAccessFence)) {}
 
 SharedTextureMemoryD3D11BeginState::operator const WGPUSharedTextureMemoryD3D11BeginState&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryD3D11BeginState*>(this);
@@ -6133,14 +6494,14 @@ static_assert(offsetof(SharedTextureMemoryD3D11BeginState, requiresEndAccessFenc
 
 // SharedTextureMemoryD3DSwapchainBeginState implementation
 SharedTextureMemoryD3DSwapchainBeginState::SharedTextureMemoryD3DSwapchainBeginState()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryD3DSwapchainBeginState } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryD3DSwapchainBeginState } {}
 struct SharedTextureMemoryD3DSwapchainBeginState::Init {
     ChainedStruct * const nextInChain;
     Bool isSwapchain = false;
 };
-SharedTextureMemoryD3DSwapchainBeginState::SharedTextureMemoryD3DSwapchainBeginState(SharedTextureMemoryD3DSwapchainBeginState::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryD3DSwapchainBeginState }, 
-    isSwapchain(std::move(init.isSwapchain)){}
+SharedTextureMemoryD3DSwapchainBeginState::SharedTextureMemoryD3DSwapchainBeginState(SharedTextureMemoryD3DSwapchainBeginState::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryD3DSwapchainBeginState },
+    isSwapchain(std::move(init.isSwapchain)) {}
 
 SharedTextureMemoryD3DSwapchainBeginState::operator const WGPUSharedTextureMemoryD3DSwapchainBeginState&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryD3DSwapchainBeginState*>(this);
@@ -6168,16 +6529,16 @@ static_assert(offsetof(SharedTextureMemoryDmaBufPlane, stride) == offsetof(WGPUS
 
 // SharedTextureMemoryDXGISharedHandleDescriptor implementation
 SharedTextureMemoryDXGISharedHandleDescriptor::SharedTextureMemoryDXGISharedHandleDescriptor()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryDXGISharedHandleDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryDXGISharedHandleDescriptor } {}
 struct SharedTextureMemoryDXGISharedHandleDescriptor::Init {
     ChainedStruct * const nextInChain;
     void * handle;
     Bool useKeyedMutex;
 };
-SharedTextureMemoryDXGISharedHandleDescriptor::SharedTextureMemoryDXGISharedHandleDescriptor(SharedTextureMemoryDXGISharedHandleDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryDXGISharedHandleDescriptor }, 
-    handle(std::move(init.handle)), 
-    useKeyedMutex(std::move(init.useKeyedMutex)){}
+SharedTextureMemoryDXGISharedHandleDescriptor::SharedTextureMemoryDXGISharedHandleDescriptor(SharedTextureMemoryDXGISharedHandleDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryDXGISharedHandleDescriptor },
+    handle(std::move(init.handle)),
+    useKeyedMutex(std::move(init.useKeyedMutex)) {}
 
 SharedTextureMemoryDXGISharedHandleDescriptor::operator const WGPUSharedTextureMemoryDXGISharedHandleDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryDXGISharedHandleDescriptor*>(this);
@@ -6192,14 +6553,14 @@ static_assert(offsetof(SharedTextureMemoryDXGISharedHandleDescriptor, useKeyedMu
 
 // SharedTextureMemoryEGLImageDescriptor implementation
 SharedTextureMemoryEGLImageDescriptor::SharedTextureMemoryEGLImageDescriptor()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryEGLImageDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryEGLImageDescriptor } {}
 struct SharedTextureMemoryEGLImageDescriptor::Init {
     ChainedStruct * const nextInChain;
     void * image;
 };
-SharedTextureMemoryEGLImageDescriptor::SharedTextureMemoryEGLImageDescriptor(SharedTextureMemoryEGLImageDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryEGLImageDescriptor }, 
-    image(std::move(init.image)){}
+SharedTextureMemoryEGLImageDescriptor::SharedTextureMemoryEGLImageDescriptor(SharedTextureMemoryEGLImageDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryEGLImageDescriptor },
+    image(std::move(init.image)) {}
 
 SharedTextureMemoryEGLImageDescriptor::operator const WGPUSharedTextureMemoryEGLImageDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryEGLImageDescriptor*>(this);
@@ -6212,16 +6573,16 @@ static_assert(offsetof(SharedTextureMemoryEGLImageDescriptor, image) == offsetof
 
 // SharedTextureMemoryIOSurfaceDescriptor implementation
 SharedTextureMemoryIOSurfaceDescriptor::SharedTextureMemoryIOSurfaceDescriptor()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryIOSurfaceDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryIOSurfaceDescriptor } {}
 struct SharedTextureMemoryIOSurfaceDescriptor::Init {
     ChainedStruct * const nextInChain;
     void * ioSurface;
     Bool allowStorageBinding = true;
 };
-SharedTextureMemoryIOSurfaceDescriptor::SharedTextureMemoryIOSurfaceDescriptor(SharedTextureMemoryIOSurfaceDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryIOSurfaceDescriptor }, 
-    ioSurface(std::move(init.ioSurface)), 
-    allowStorageBinding(std::move(init.allowStorageBinding)){}
+SharedTextureMemoryIOSurfaceDescriptor::SharedTextureMemoryIOSurfaceDescriptor(SharedTextureMemoryIOSurfaceDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryIOSurfaceDescriptor },
+    ioSurface(std::move(init.ioSurface)),
+    allowStorageBinding(std::move(init.allowStorageBinding)) {}
 
 SharedTextureMemoryIOSurfaceDescriptor::operator const WGPUSharedTextureMemoryIOSurfaceDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryIOSurfaceDescriptor*>(this);
@@ -6236,7 +6597,7 @@ static_assert(offsetof(SharedTextureMemoryIOSurfaceDescriptor, allowStorageBindi
 
 // SharedTextureMemoryOpaqueFDDescriptor implementation
 SharedTextureMemoryOpaqueFDDescriptor::SharedTextureMemoryOpaqueFDDescriptor()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryOpaqueFDDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryOpaqueFDDescriptor } {}
 struct SharedTextureMemoryOpaqueFDDescriptor::Init {
     ChainedStruct * const nextInChain;
     void const * vkImageCreateInfo;
@@ -6245,13 +6606,13 @@ struct SharedTextureMemoryOpaqueFDDescriptor::Init {
     uint64_t allocationSize;
     Bool dedicatedAllocation;
 };
-SharedTextureMemoryOpaqueFDDescriptor::SharedTextureMemoryOpaqueFDDescriptor(SharedTextureMemoryOpaqueFDDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryOpaqueFDDescriptor }, 
-    vkImageCreateInfo(std::move(init.vkImageCreateInfo)), 
-    memoryFD(std::move(init.memoryFD)), 
-    memoryTypeIndex(std::move(init.memoryTypeIndex)), 
-    allocationSize(std::move(init.allocationSize)), 
-    dedicatedAllocation(std::move(init.dedicatedAllocation)){}
+SharedTextureMemoryOpaqueFDDescriptor::SharedTextureMemoryOpaqueFDDescriptor(SharedTextureMemoryOpaqueFDDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryOpaqueFDDescriptor },
+    vkImageCreateInfo(std::move(init.vkImageCreateInfo)),
+    memoryFD(std::move(init.memoryFD)),
+    memoryTypeIndex(std::move(init.memoryTypeIndex)),
+    allocationSize(std::move(init.allocationSize)),
+    dedicatedAllocation(std::move(init.dedicatedAllocation)) {}
 
 SharedTextureMemoryOpaqueFDDescriptor::operator const WGPUSharedTextureMemoryOpaqueFDDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryOpaqueFDDescriptor*>(this);
@@ -6272,14 +6633,14 @@ static_assert(offsetof(SharedTextureMemoryOpaqueFDDescriptor, dedicatedAllocatio
 
 // SharedTextureMemoryVkDedicatedAllocationDescriptor implementation
 SharedTextureMemoryVkDedicatedAllocationDescriptor::SharedTextureMemoryVkDedicatedAllocationDescriptor()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryVkDedicatedAllocationDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryVkDedicatedAllocationDescriptor } {}
 struct SharedTextureMemoryVkDedicatedAllocationDescriptor::Init {
     ChainedStruct * const nextInChain;
     Bool dedicatedAllocation;
 };
-SharedTextureMemoryVkDedicatedAllocationDescriptor::SharedTextureMemoryVkDedicatedAllocationDescriptor(SharedTextureMemoryVkDedicatedAllocationDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryVkDedicatedAllocationDescriptor }, 
-    dedicatedAllocation(std::move(init.dedicatedAllocation)){}
+SharedTextureMemoryVkDedicatedAllocationDescriptor::SharedTextureMemoryVkDedicatedAllocationDescriptor(SharedTextureMemoryVkDedicatedAllocationDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryVkDedicatedAllocationDescriptor },
+    dedicatedAllocation(std::move(init.dedicatedAllocation)) {}
 
 SharedTextureMemoryVkDedicatedAllocationDescriptor::operator const WGPUSharedTextureMemoryVkDedicatedAllocationDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryVkDedicatedAllocationDescriptor*>(this);
@@ -6292,16 +6653,16 @@ static_assert(offsetof(SharedTextureMemoryVkDedicatedAllocationDescriptor, dedic
 
 // SharedTextureMemoryVkImageLayoutBeginState implementation
 SharedTextureMemoryVkImageLayoutBeginState::SharedTextureMemoryVkImageLayoutBeginState()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryVkImageLayoutBeginState } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryVkImageLayoutBeginState } {}
 struct SharedTextureMemoryVkImageLayoutBeginState::Init {
     ChainedStruct * const nextInChain;
     int32_t oldLayout;
     int32_t newLayout;
 };
-SharedTextureMemoryVkImageLayoutBeginState::SharedTextureMemoryVkImageLayoutBeginState(SharedTextureMemoryVkImageLayoutBeginState::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryVkImageLayoutBeginState }, 
-    oldLayout(std::move(init.oldLayout)), 
-    newLayout(std::move(init.newLayout)){}
+SharedTextureMemoryVkImageLayoutBeginState::SharedTextureMemoryVkImageLayoutBeginState(SharedTextureMemoryVkImageLayoutBeginState::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryVkImageLayoutBeginState },
+    oldLayout(std::move(init.oldLayout)),
+    newLayout(std::move(init.newLayout)) {}
 
 SharedTextureMemoryVkImageLayoutBeginState::operator const WGPUSharedTextureMemoryVkImageLayoutBeginState&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryVkImageLayoutBeginState*>(this);
@@ -6316,16 +6677,16 @@ static_assert(offsetof(SharedTextureMemoryVkImageLayoutBeginState, newLayout) ==
 
 // SharedTextureMemoryVkImageLayoutEndState implementation
 SharedTextureMemoryVkImageLayoutEndState::SharedTextureMemoryVkImageLayoutEndState()
-  : ChainedStructOut { nullptr, SType::SharedTextureMemoryVkImageLayoutEndState } {}
+: ChainedStructOut { nullptr, SType::SharedTextureMemoryVkImageLayoutEndState } {}
 struct SharedTextureMemoryVkImageLayoutEndState::Init {
     ChainedStructOut *  nextInChain;
     int32_t oldLayout;
     int32_t newLayout;
 };
-SharedTextureMemoryVkImageLayoutEndState::SharedTextureMemoryVkImageLayoutEndState(SharedTextureMemoryVkImageLayoutEndState::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedTextureMemoryVkImageLayoutEndState }, 
-    oldLayout(std::move(init.oldLayout)), 
-    newLayout(std::move(init.newLayout)){}
+SharedTextureMemoryVkImageLayoutEndState::SharedTextureMemoryVkImageLayoutEndState(SharedTextureMemoryVkImageLayoutEndState::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedTextureMemoryVkImageLayoutEndState },
+    oldLayout(std::move(init.oldLayout)),
+    newLayout(std::move(init.newLayout)) {}
 
 SharedTextureMemoryVkImageLayoutEndState::operator const WGPUSharedTextureMemoryVkImageLayoutEndState&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryVkImageLayoutEndState*>(this);
@@ -6340,16 +6701,16 @@ static_assert(offsetof(SharedTextureMemoryVkImageLayoutEndState, newLayout) == o
 
 // SharedTextureMemoryZirconHandleDescriptor implementation
 SharedTextureMemoryZirconHandleDescriptor::SharedTextureMemoryZirconHandleDescriptor()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryZirconHandleDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryZirconHandleDescriptor } {}
 struct SharedTextureMemoryZirconHandleDescriptor::Init {
     ChainedStruct * const nextInChain;
     uint32_t memoryFD;
     uint64_t allocationSize;
 };
-SharedTextureMemoryZirconHandleDescriptor::SharedTextureMemoryZirconHandleDescriptor(SharedTextureMemoryZirconHandleDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryZirconHandleDescriptor }, 
-    memoryFD(std::move(init.memoryFD)), 
-    allocationSize(std::move(init.allocationSize)){}
+SharedTextureMemoryZirconHandleDescriptor::SharedTextureMemoryZirconHandleDescriptor(SharedTextureMemoryZirconHandleDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryZirconHandleDescriptor },
+    memoryFD(std::move(init.memoryFD)),
+    allocationSize(std::move(init.allocationSize)) {}
 
 SharedTextureMemoryZirconHandleDescriptor::operator const WGPUSharedTextureMemoryZirconHandleDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryZirconHandleDescriptor*>(this);
@@ -6364,16 +6725,16 @@ static_assert(offsetof(SharedTextureMemoryZirconHandleDescriptor, allocationSize
 
 // StaticSamplerBindingLayout implementation
 StaticSamplerBindingLayout::StaticSamplerBindingLayout()
-  : ChainedStruct { nullptr, SType::StaticSamplerBindingLayout } {}
+: ChainedStruct { nullptr, SType::StaticSamplerBindingLayout } {}
 struct StaticSamplerBindingLayout::Init {
     ChainedStruct * const nextInChain;
     Sampler sampler = nullptr;
     uint32_t sampledTextureBinding = kLimitU32Undefined;
 };
-StaticSamplerBindingLayout::StaticSamplerBindingLayout(StaticSamplerBindingLayout::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::StaticSamplerBindingLayout }, 
-    sampler(std::move(init.sampler)), 
-    sampledTextureBinding(std::move(init.sampledTextureBinding)){}
+StaticSamplerBindingLayout::StaticSamplerBindingLayout(StaticSamplerBindingLayout::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::StaticSamplerBindingLayout },
+    sampler(std::move(init.sampler)),
+    sampledTextureBinding(std::move(init.sampledTextureBinding)) {}
 
 StaticSamplerBindingLayout::operator const WGPUStaticSamplerBindingLayout&() const noexcept {
     return *reinterpret_cast<const WGPUStaticSamplerBindingLayout*>(this);
@@ -6660,16 +7021,16 @@ static_assert(offsetof(SurfaceCapabilities, alphaModes) == offsetof(WGPUSurfaceC
 
 // SurfaceColorManagement implementation
 SurfaceColorManagement::SurfaceColorManagement()
-  : ChainedStruct { nullptr, SType::SurfaceColorManagement } {}
+: ChainedStruct { nullptr, SType::SurfaceColorManagement } {}
 struct SurfaceColorManagement::Init {
     ChainedStruct * const nextInChain;
     PredefinedColorSpace colorSpace = {};
     ToneMappingMode toneMappingMode = {};
 };
-SurfaceColorManagement::SurfaceColorManagement(SurfaceColorManagement::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceColorManagement }, 
-    colorSpace(std::move(init.colorSpace)), 
-    toneMappingMode(std::move(init.toneMappingMode)){}
+SurfaceColorManagement::SurfaceColorManagement(SurfaceColorManagement::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceColorManagement },
+    colorSpace(std::move(init.colorSpace)),
+    toneMappingMode(std::move(init.toneMappingMode)) {}
 
 SurfaceColorManagement::operator const WGPUSurfaceColorManagement&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceColorManagement*>(this);
@@ -6713,14 +7074,14 @@ static_assert(offsetof(SurfaceConfiguration, presentMode) == offsetof(WGPUSurfac
 
 // SurfaceDescriptorFromWindowsCoreWindow implementation
 SurfaceDescriptorFromWindowsCoreWindow::SurfaceDescriptorFromWindowsCoreWindow()
-  : ChainedStruct { nullptr, SType::SurfaceDescriptorFromWindowsCoreWindow } {}
+: ChainedStruct { nullptr, SType::SurfaceDescriptorFromWindowsCoreWindow } {}
 struct SurfaceDescriptorFromWindowsCoreWindow::Init {
     ChainedStruct * const nextInChain;
     void * coreWindow = nullptr;
 };
-SurfaceDescriptorFromWindowsCoreWindow::SurfaceDescriptorFromWindowsCoreWindow(SurfaceDescriptorFromWindowsCoreWindow::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceDescriptorFromWindowsCoreWindow }, 
-    coreWindow(std::move(init.coreWindow)){}
+SurfaceDescriptorFromWindowsCoreWindow::SurfaceDescriptorFromWindowsCoreWindow(SurfaceDescriptorFromWindowsCoreWindow::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceDescriptorFromWindowsCoreWindow },
+    coreWindow(std::move(init.coreWindow)) {}
 
 SurfaceDescriptorFromWindowsCoreWindow::operator const WGPUSurfaceDescriptorFromWindowsCoreWindow&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceDescriptorFromWindowsCoreWindow*>(this);
@@ -6733,14 +7094,14 @@ static_assert(offsetof(SurfaceDescriptorFromWindowsCoreWindow, coreWindow) == of
 
 // SurfaceDescriptorFromWindowsUWPSwapChainPanel implementation
 SurfaceDescriptorFromWindowsUWPSwapChainPanel::SurfaceDescriptorFromWindowsUWPSwapChainPanel()
-  : ChainedStruct { nullptr, SType::SurfaceDescriptorFromWindowsUWPSwapChainPanel } {}
+: ChainedStruct { nullptr, SType::SurfaceDescriptorFromWindowsUWPSwapChainPanel } {}
 struct SurfaceDescriptorFromWindowsUWPSwapChainPanel::Init {
     ChainedStruct * const nextInChain;
     void * swapChainPanel = nullptr;
 };
-SurfaceDescriptorFromWindowsUWPSwapChainPanel::SurfaceDescriptorFromWindowsUWPSwapChainPanel(SurfaceDescriptorFromWindowsUWPSwapChainPanel::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceDescriptorFromWindowsUWPSwapChainPanel }, 
-    swapChainPanel(std::move(init.swapChainPanel)){}
+SurfaceDescriptorFromWindowsUWPSwapChainPanel::SurfaceDescriptorFromWindowsUWPSwapChainPanel(SurfaceDescriptorFromWindowsUWPSwapChainPanel::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceDescriptorFromWindowsUWPSwapChainPanel },
+    swapChainPanel(std::move(init.swapChainPanel)) {}
 
 SurfaceDescriptorFromWindowsUWPSwapChainPanel::operator const WGPUSurfaceDescriptorFromWindowsUWPSwapChainPanel&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceDescriptorFromWindowsUWPSwapChainPanel*>(this);
@@ -6753,14 +7114,14 @@ static_assert(offsetof(SurfaceDescriptorFromWindowsUWPSwapChainPanel, swapChainP
 
 // SurfaceDescriptorFromWindowsWinUISwapChainPanel implementation
 SurfaceDescriptorFromWindowsWinUISwapChainPanel::SurfaceDescriptorFromWindowsWinUISwapChainPanel()
-  : ChainedStruct { nullptr, SType::SurfaceDescriptorFromWindowsWinUISwapChainPanel } {}
+: ChainedStruct { nullptr, SType::SurfaceDescriptorFromWindowsWinUISwapChainPanel } {}
 struct SurfaceDescriptorFromWindowsWinUISwapChainPanel::Init {
     ChainedStruct * const nextInChain;
     void * swapChainPanel = nullptr;
 };
-SurfaceDescriptorFromWindowsWinUISwapChainPanel::SurfaceDescriptorFromWindowsWinUISwapChainPanel(SurfaceDescriptorFromWindowsWinUISwapChainPanel::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceDescriptorFromWindowsWinUISwapChainPanel }, 
-    swapChainPanel(std::move(init.swapChainPanel)){}
+SurfaceDescriptorFromWindowsWinUISwapChainPanel::SurfaceDescriptorFromWindowsWinUISwapChainPanel(SurfaceDescriptorFromWindowsWinUISwapChainPanel::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceDescriptorFromWindowsWinUISwapChainPanel },
+    swapChainPanel(std::move(init.swapChainPanel)) {}
 
 SurfaceDescriptorFromWindowsWinUISwapChainPanel::operator const WGPUSurfaceDescriptorFromWindowsWinUISwapChainPanel&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceDescriptorFromWindowsWinUISwapChainPanel*>(this);
@@ -6773,14 +7134,14 @@ static_assert(offsetof(SurfaceDescriptorFromWindowsWinUISwapChainPanel, swapChai
 
 // SurfaceSourceAndroidNativeWindow implementation
 SurfaceSourceAndroidNativeWindow::SurfaceSourceAndroidNativeWindow()
-  : ChainedStruct { nullptr, SType::SurfaceSourceAndroidNativeWindow } {}
+: ChainedStruct { nullptr, SType::SurfaceSourceAndroidNativeWindow } {}
 struct SurfaceSourceAndroidNativeWindow::Init {
     ChainedStruct * const nextInChain;
     void * window;
 };
-SurfaceSourceAndroidNativeWindow::SurfaceSourceAndroidNativeWindow(SurfaceSourceAndroidNativeWindow::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceSourceAndroidNativeWindow }, 
-    window(std::move(init.window)){}
+SurfaceSourceAndroidNativeWindow::SurfaceSourceAndroidNativeWindow(SurfaceSourceAndroidNativeWindow::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceSourceAndroidNativeWindow },
+    window(std::move(init.window)) {}
 
 SurfaceSourceAndroidNativeWindow::operator const WGPUSurfaceSourceAndroidNativeWindow&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceSourceAndroidNativeWindow*>(this);
@@ -6793,14 +7154,14 @@ static_assert(offsetof(SurfaceSourceAndroidNativeWindow, window) == offsetof(WGP
 
 // SurfaceSourceMetalLayer implementation
 SurfaceSourceMetalLayer::SurfaceSourceMetalLayer()
-  : ChainedStruct { nullptr, SType::SurfaceSourceMetalLayer } {}
+: ChainedStruct { nullptr, SType::SurfaceSourceMetalLayer } {}
 struct SurfaceSourceMetalLayer::Init {
     ChainedStruct * const nextInChain;
     void * layer = nullptr;
 };
-SurfaceSourceMetalLayer::SurfaceSourceMetalLayer(SurfaceSourceMetalLayer::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceSourceMetalLayer }, 
-    layer(std::move(init.layer)){}
+SurfaceSourceMetalLayer::SurfaceSourceMetalLayer(SurfaceSourceMetalLayer::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceSourceMetalLayer },
+    layer(std::move(init.layer)) {}
 
 SurfaceSourceMetalLayer::operator const WGPUSurfaceSourceMetalLayer&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceSourceMetalLayer*>(this);
@@ -6813,16 +7174,16 @@ static_assert(offsetof(SurfaceSourceMetalLayer, layer) == offsetof(WGPUSurfaceSo
 
 // SurfaceSourceWaylandSurface implementation
 SurfaceSourceWaylandSurface::SurfaceSourceWaylandSurface()
-  : ChainedStruct { nullptr, SType::SurfaceSourceWaylandSurface } {}
+: ChainedStruct { nullptr, SType::SurfaceSourceWaylandSurface } {}
 struct SurfaceSourceWaylandSurface::Init {
     ChainedStruct * const nextInChain;
     void * display = nullptr;
     void * surface = nullptr;
 };
-SurfaceSourceWaylandSurface::SurfaceSourceWaylandSurface(SurfaceSourceWaylandSurface::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceSourceWaylandSurface }, 
-    display(std::move(init.display)), 
-    surface(std::move(init.surface)){}
+SurfaceSourceWaylandSurface::SurfaceSourceWaylandSurface(SurfaceSourceWaylandSurface::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceSourceWaylandSurface },
+    display(std::move(init.display)),
+    surface(std::move(init.surface)) {}
 
 SurfaceSourceWaylandSurface::operator const WGPUSurfaceSourceWaylandSurface&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceSourceWaylandSurface*>(this);
@@ -6837,16 +7198,16 @@ static_assert(offsetof(SurfaceSourceWaylandSurface, surface) == offsetof(WGPUSur
 
 // SurfaceSourceWindowsHWND implementation
 SurfaceSourceWindowsHWND::SurfaceSourceWindowsHWND()
-  : ChainedStruct { nullptr, SType::SurfaceSourceWindowsHWND } {}
+: ChainedStruct { nullptr, SType::SurfaceSourceWindowsHWND } {}
 struct SurfaceSourceWindowsHWND::Init {
     ChainedStruct * const nextInChain;
     void * hinstance = nullptr;
     void * hwnd = nullptr;
 };
-SurfaceSourceWindowsHWND::SurfaceSourceWindowsHWND(SurfaceSourceWindowsHWND::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceSourceWindowsHWND }, 
-    hinstance(std::move(init.hinstance)), 
-    hwnd(std::move(init.hwnd)){}
+SurfaceSourceWindowsHWND::SurfaceSourceWindowsHWND(SurfaceSourceWindowsHWND::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceSourceWindowsHWND },
+    hinstance(std::move(init.hinstance)),
+    hwnd(std::move(init.hwnd)) {}
 
 SurfaceSourceWindowsHWND::operator const WGPUSurfaceSourceWindowsHWND&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceSourceWindowsHWND*>(this);
@@ -6861,16 +7222,16 @@ static_assert(offsetof(SurfaceSourceWindowsHWND, hwnd) == offsetof(WGPUSurfaceSo
 
 // SurfaceSourceXCBWindow implementation
 SurfaceSourceXCBWindow::SurfaceSourceXCBWindow()
-  : ChainedStruct { nullptr, SType::SurfaceSourceXCBWindow } {}
+: ChainedStruct { nullptr, SType::SurfaceSourceXCBWindow } {}
 struct SurfaceSourceXCBWindow::Init {
     ChainedStruct * const nextInChain;
     void * connection = nullptr;
     uint32_t window;
 };
-SurfaceSourceXCBWindow::SurfaceSourceXCBWindow(SurfaceSourceXCBWindow::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceSourceXCBWindow }, 
-    connection(std::move(init.connection)), 
-    window(std::move(init.window)){}
+SurfaceSourceXCBWindow::SurfaceSourceXCBWindow(SurfaceSourceXCBWindow::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceSourceXCBWindow },
+    connection(std::move(init.connection)),
+    window(std::move(init.window)) {}
 
 SurfaceSourceXCBWindow::operator const WGPUSurfaceSourceXCBWindow&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceSourceXCBWindow*>(this);
@@ -6885,16 +7246,16 @@ static_assert(offsetof(SurfaceSourceXCBWindow, window) == offsetof(WGPUSurfaceSo
 
 // SurfaceSourceXlibWindow implementation
 SurfaceSourceXlibWindow::SurfaceSourceXlibWindow()
-  : ChainedStruct { nullptr, SType::SurfaceSourceXlibWindow } {}
+: ChainedStruct { nullptr, SType::SurfaceSourceXlibWindow } {}
 struct SurfaceSourceXlibWindow::Init {
     ChainedStruct * const nextInChain;
     void * display = nullptr;
     uint64_t window;
 };
-SurfaceSourceXlibWindow::SurfaceSourceXlibWindow(SurfaceSourceXlibWindow::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SurfaceSourceXlibWindow }, 
-    display(std::move(init.display)), 
-    window(std::move(init.window)){}
+SurfaceSourceXlibWindow::SurfaceSourceXlibWindow(SurfaceSourceXlibWindow::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SurfaceSourceXlibWindow },
+    display(std::move(init.display)),
+    window(std::move(init.window)) {}
 
 SurfaceSourceXlibWindow::operator const WGPUSurfaceSourceXlibWindow&() const noexcept {
     return *reinterpret_cast<const WGPUSurfaceSourceXlibWindow*>(this);
@@ -6924,14 +7285,14 @@ static_assert(offsetof(SurfaceTexture, status) == offsetof(WGPUSurfaceTexture, s
 
 // TexelBufferBindingEntry implementation
 TexelBufferBindingEntry::TexelBufferBindingEntry()
-  : ChainedStruct { nullptr, SType::TexelBufferBindingEntry } {}
+: ChainedStruct { nullptr, SType::TexelBufferBindingEntry } {}
 struct TexelBufferBindingEntry::Init {
     ChainedStruct * const nextInChain;
     TexelBufferView texelBufferView = nullptr;
 };
-TexelBufferBindingEntry::TexelBufferBindingEntry(TexelBufferBindingEntry::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::TexelBufferBindingEntry }, 
-    texelBufferView(std::move(init.texelBufferView)){}
+TexelBufferBindingEntry::TexelBufferBindingEntry(TexelBufferBindingEntry::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::TexelBufferBindingEntry },
+    texelBufferView(std::move(init.texelBufferView)) {}
 
 TexelBufferBindingEntry::operator const WGPUTexelBufferBindingEntry&() const noexcept {
     return *reinterpret_cast<const WGPUTexelBufferBindingEntry*>(this);
@@ -6944,16 +7305,16 @@ static_assert(offsetof(TexelBufferBindingEntry, texelBufferView) == offsetof(WGP
 
 // TexelBufferBindingLayout implementation
 TexelBufferBindingLayout::TexelBufferBindingLayout()
-  : ChainedStruct { nullptr, SType::TexelBufferBindingLayout } {}
+: ChainedStruct { nullptr, SType::TexelBufferBindingLayout } {}
 struct TexelBufferBindingLayout::Init {
     ChainedStruct * const nextInChain;
     TexelBufferAccess access = TexelBufferAccess::Undefined;
     TextureFormat format = TextureFormat::Undefined;
 };
-TexelBufferBindingLayout::TexelBufferBindingLayout(TexelBufferBindingLayout::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::TexelBufferBindingLayout }, 
-    access(std::move(init.access)), 
-    format(std::move(init.format)){}
+TexelBufferBindingLayout::TexelBufferBindingLayout(TexelBufferBindingLayout::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::TexelBufferBindingLayout },
+    access(std::move(init.access)),
+    format(std::move(init.format)) {}
 
 TexelBufferBindingLayout::operator const WGPUTexelBufferBindingLayout&() const noexcept {
     return *reinterpret_cast<const WGPUTexelBufferBindingLayout*>(this);
@@ -7019,14 +7380,14 @@ static_assert(offsetof(TextureBindingLayout, multisampled) == offsetof(WGPUTextu
 
 // TextureBindingViewDimension implementation
 TextureBindingViewDimension::TextureBindingViewDimension()
-  : ChainedStruct { nullptr, SType::TextureBindingViewDimension } {}
+: ChainedStruct { nullptr, SType::TextureBindingViewDimension } {}
 struct TextureBindingViewDimension::Init {
     ChainedStruct * const nextInChain;
     TextureViewDimension textureBindingViewDimension = TextureViewDimension::Undefined;
 };
-TextureBindingViewDimension::TextureBindingViewDimension(TextureBindingViewDimension::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::TextureBindingViewDimension }, 
-    textureBindingViewDimension(std::move(init.textureBindingViewDimension)){}
+TextureBindingViewDimension::TextureBindingViewDimension(TextureBindingViewDimension::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::TextureBindingViewDimension },
+    textureBindingViewDimension(std::move(init.textureBindingViewDimension)) {}
 
 TextureBindingViewDimension::operator const WGPUTextureBindingViewDimension&() const noexcept {
     return *reinterpret_cast<const WGPUTextureBindingViewDimension*>(this);
@@ -7073,7 +7434,7 @@ static_assert(offsetof(VertexAttribute, shaderLocation) == offsetof(WGPUVertexAt
 
 // YCbCrVkDescriptor implementation
 YCbCrVkDescriptor::YCbCrVkDescriptor()
-  : ChainedStruct { nullptr, SType::YCbCrVkDescriptor } {}
+: ChainedStruct { nullptr, SType::YCbCrVkDescriptor } {}
 struct YCbCrVkDescriptor::Init {
     ChainedStruct * const nextInChain;
     uint32_t vkFormat = 0;
@@ -7089,20 +7450,20 @@ struct YCbCrVkDescriptor::Init {
     Bool forceExplicitReconstruction = false;
     uint64_t externalFormat = 0;
 };
-YCbCrVkDescriptor::YCbCrVkDescriptor(YCbCrVkDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::YCbCrVkDescriptor }, 
-    vkFormat(std::move(init.vkFormat)), 
-    vkYCbCrModel(std::move(init.vkYCbCrModel)), 
-    vkYCbCrRange(std::move(init.vkYCbCrRange)), 
-    vkComponentSwizzleRed(std::move(init.vkComponentSwizzleRed)), 
-    vkComponentSwizzleGreen(std::move(init.vkComponentSwizzleGreen)), 
-    vkComponentSwizzleBlue(std::move(init.vkComponentSwizzleBlue)), 
-    vkComponentSwizzleAlpha(std::move(init.vkComponentSwizzleAlpha)), 
-    vkXChromaOffset(std::move(init.vkXChromaOffset)), 
-    vkYChromaOffset(std::move(init.vkYChromaOffset)), 
-    vkChromaFilter(std::move(init.vkChromaFilter)), 
-    forceExplicitReconstruction(std::move(init.forceExplicitReconstruction)), 
-    externalFormat(std::move(init.externalFormat)){}
+YCbCrVkDescriptor::YCbCrVkDescriptor(YCbCrVkDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::YCbCrVkDescriptor },
+    vkFormat(std::move(init.vkFormat)),
+    vkYCbCrModel(std::move(init.vkYCbCrModel)),
+    vkYCbCrRange(std::move(init.vkYCbCrRange)),
+    vkComponentSwizzleRed(std::move(init.vkComponentSwizzleRed)),
+    vkComponentSwizzleGreen(std::move(init.vkComponentSwizzleGreen)),
+    vkComponentSwizzleBlue(std::move(init.vkComponentSwizzleBlue)),
+    vkComponentSwizzleAlpha(std::move(init.vkComponentSwizzleAlpha)),
+    vkXChromaOffset(std::move(init.vkXChromaOffset)),
+    vkYChromaOffset(std::move(init.vkYChromaOffset)),
+    vkChromaFilter(std::move(init.vkChromaFilter)),
+    forceExplicitReconstruction(std::move(init.forceExplicitReconstruction)),
+    externalFormat(std::move(init.externalFormat)) {}
 
 YCbCrVkDescriptor::operator const WGPUYCbCrVkDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUYCbCrVkDescriptor*>(this);
@@ -7137,16 +7498,16 @@ static_assert(offsetof(YCbCrVkDescriptor, externalFormat) == offsetof(WGPUYCbCrV
 
 // AdapterPropertiesMemoryHeaps implementation
 AdapterPropertiesMemoryHeaps::AdapterPropertiesMemoryHeaps()
-  : ChainedStructOut { nullptr, SType::AdapterPropertiesMemoryHeaps } {}
+: ChainedStructOut { nullptr, SType::AdapterPropertiesMemoryHeaps } {}
 struct AdapterPropertiesMemoryHeaps::Init {
     ChainedStructOut *  nextInChain;
     size_t const heapCount = {};
     MemoryHeapInfo const * const heapInfo = nullptr;
 };
-AdapterPropertiesMemoryHeaps::AdapterPropertiesMemoryHeaps(AdapterPropertiesMemoryHeaps::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesMemoryHeaps }, 
-    heapCount(std::move(init.heapCount)), 
-    heapInfo(std::move(init.heapInfo)){}
+AdapterPropertiesMemoryHeaps::AdapterPropertiesMemoryHeaps(AdapterPropertiesMemoryHeaps::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::AdapterPropertiesMemoryHeaps },
+    heapCount(std::move(init.heapCount)),
+    heapInfo(std::move(init.heapInfo)) {}
 AdapterPropertiesMemoryHeaps::~AdapterPropertiesMemoryHeaps() {
     FreeMembers();
 }
@@ -7195,16 +7556,16 @@ static_assert(offsetof(AdapterPropertiesMemoryHeaps, heapInfo) == offsetof(WGPUA
 
 // AdapterPropertiesSubgroupMatrixConfigs implementation
 AdapterPropertiesSubgroupMatrixConfigs::AdapterPropertiesSubgroupMatrixConfigs()
-  : ChainedStructOut { nullptr, SType::AdapterPropertiesSubgroupMatrixConfigs } {}
+: ChainedStructOut { nullptr, SType::AdapterPropertiesSubgroupMatrixConfigs } {}
 struct AdapterPropertiesSubgroupMatrixConfigs::Init {
     ChainedStructOut *  nextInChain;
     size_t const configCount = {};
     SubgroupMatrixConfig const * const configs = nullptr;
 };
-AdapterPropertiesSubgroupMatrixConfigs::AdapterPropertiesSubgroupMatrixConfigs(AdapterPropertiesSubgroupMatrixConfigs::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::AdapterPropertiesSubgroupMatrixConfigs }, 
-    configCount(std::move(init.configCount)), 
-    configs(std::move(init.configs)){}
+AdapterPropertiesSubgroupMatrixConfigs::AdapterPropertiesSubgroupMatrixConfigs(AdapterPropertiesSubgroupMatrixConfigs::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::AdapterPropertiesSubgroupMatrixConfigs },
+    configCount(std::move(init.configCount)),
+    configs(std::move(init.configs)) {}
 AdapterPropertiesSubgroupMatrixConfigs::~AdapterPropertiesSubgroupMatrixConfigs() {
     FreeMembers();
 }
@@ -7414,16 +7775,16 @@ static_assert(offsetof(ComputeState, constants) == offsetof(WGPUComputeState, co
 
 // DawnDrmFormatCapabilities implementation
 DawnDrmFormatCapabilities::DawnDrmFormatCapabilities()
-  : ChainedStructOut { nullptr, SType::DawnDrmFormatCapabilities } {}
+: ChainedStructOut { nullptr, SType::DawnDrmFormatCapabilities } {}
 struct DawnDrmFormatCapabilities::Init {
     ChainedStructOut *  nextInChain;
     size_t const propertiesCount = {};
     DawnDrmFormatProperties const * const properties = nullptr;
 };
-DawnDrmFormatCapabilities::DawnDrmFormatCapabilities(DawnDrmFormatCapabilities::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::DawnDrmFormatCapabilities }, 
-    propertiesCount(std::move(init.propertiesCount)), 
-    properties(std::move(init.properties)){}
+DawnDrmFormatCapabilities::DawnDrmFormatCapabilities(DawnDrmFormatCapabilities::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::DawnDrmFormatCapabilities },
+    propertiesCount(std::move(init.propertiesCount)),
+    properties(std::move(init.properties)) {}
 DawnDrmFormatCapabilities::~DawnDrmFormatCapabilities() {
     FreeMembers();
 }
@@ -7662,18 +8023,18 @@ static_assert(offsetof(Limits, maxImmediateSize) == offsetof(WGPULimits, maxImme
 
 // PipelineLayoutPixelLocalStorage implementation
 PipelineLayoutPixelLocalStorage::PipelineLayoutPixelLocalStorage()
-  : ChainedStruct { nullptr, SType::PipelineLayoutPixelLocalStorage } {}
+: ChainedStruct { nullptr, SType::PipelineLayoutPixelLocalStorage } {}
 struct PipelineLayoutPixelLocalStorage::Init {
     ChainedStruct * const nextInChain;
     uint64_t totalPixelLocalStorageSize;
     size_t storageAttachmentCount = 0;
     PipelineLayoutStorageAttachment const * storageAttachments = nullptr;
 };
-PipelineLayoutPixelLocalStorage::PipelineLayoutPixelLocalStorage(PipelineLayoutPixelLocalStorage::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::PipelineLayoutPixelLocalStorage }, 
-    totalPixelLocalStorageSize(std::move(init.totalPixelLocalStorageSize)), 
-    storageAttachmentCount(std::move(init.storageAttachmentCount)), 
-    storageAttachments(std::move(init.storageAttachments)){}
+PipelineLayoutPixelLocalStorage::PipelineLayoutPixelLocalStorage(PipelineLayoutPixelLocalStorage::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::PipelineLayoutPixelLocalStorage },
+    totalPixelLocalStorageSize(std::move(init.totalPixelLocalStorageSize)),
+    storageAttachmentCount(std::move(init.storageAttachmentCount)),
+    storageAttachments(std::move(init.storageAttachments)) {}
 
 PipelineLayoutPixelLocalStorage::operator const WGPUPipelineLayoutPixelLocalStorage&() const noexcept {
     return *reinterpret_cast<const WGPUPipelineLayoutPixelLocalStorage*>(this);
@@ -7687,6 +8048,31 @@ static_assert(offsetof(PipelineLayoutPixelLocalStorage, storageAttachmentCount) 
         "offsetof mismatch for PipelineLayoutPixelLocalStorage::storageAttachmentCount");
 static_assert(offsetof(PipelineLayoutPixelLocalStorage, storageAttachments) == offsetof(WGPUPipelineLayoutPixelLocalStorage, storageAttachments),
         "offsetof mismatch for PipelineLayoutPixelLocalStorage::storageAttachments");
+
+// RenderBundleEncoderDescriptor implementation
+
+RenderBundleEncoderDescriptor::operator const WGPURenderBundleEncoderDescriptor&() const noexcept {
+    return *reinterpret_cast<const WGPURenderBundleEncoderDescriptor*>(this);
+}
+
+static_assert(sizeof(RenderBundleEncoderDescriptor) == sizeof(WGPURenderBundleEncoderDescriptor), "sizeof mismatch for RenderBundleEncoderDescriptor");
+static_assert(alignof(RenderBundleEncoderDescriptor) == alignof(WGPURenderBundleEncoderDescriptor), "alignof mismatch for RenderBundleEncoderDescriptor");
+static_assert(offsetof(RenderBundleEncoderDescriptor, nextInChain) == offsetof(WGPURenderBundleEncoderDescriptor, nextInChain),
+        "offsetof mismatch for RenderBundleEncoderDescriptor::nextInChain");
+static_assert(offsetof(RenderBundleEncoderDescriptor, label) == offsetof(WGPURenderBundleEncoderDescriptor, label),
+        "offsetof mismatch for RenderBundleEncoderDescriptor::label");
+static_assert(offsetof(RenderBundleEncoderDescriptor, colorFormatCount) == offsetof(WGPURenderBundleEncoderDescriptor, colorFormatCount),
+        "offsetof mismatch for RenderBundleEncoderDescriptor::colorFormatCount");
+static_assert(offsetof(RenderBundleEncoderDescriptor, colorFormats) == offsetof(WGPURenderBundleEncoderDescriptor, colorFormats),
+        "offsetof mismatch for RenderBundleEncoderDescriptor::colorFormats");
+static_assert(offsetof(RenderBundleEncoderDescriptor, depthStencilFormat) == offsetof(WGPURenderBundleEncoderDescriptor, depthStencilFormat),
+        "offsetof mismatch for RenderBundleEncoderDescriptor::depthStencilFormat");
+static_assert(offsetof(RenderBundleEncoderDescriptor, sampleCount) == offsetof(WGPURenderBundleEncoderDescriptor, sampleCount),
+        "offsetof mismatch for RenderBundleEncoderDescriptor::sampleCount");
+static_assert(offsetof(RenderBundleEncoderDescriptor, depthReadOnly) == offsetof(WGPURenderBundleEncoderDescriptor, depthReadOnly),
+        "offsetof mismatch for RenderBundleEncoderDescriptor::depthReadOnly");
+static_assert(offsetof(RenderBundleEncoderDescriptor, stencilReadOnly) == offsetof(WGPURenderBundleEncoderDescriptor, stencilReadOnly),
+        "offsetof mismatch for RenderBundleEncoderDescriptor::stencilReadOnly");
 
 // RenderPassColorAttachment implementation
 
@@ -7713,16 +8099,16 @@ static_assert(offsetof(RenderPassColorAttachment, clearValue) == offsetof(WGPURe
 
 // RenderPassRenderAreaRect implementation
 RenderPassRenderAreaRect::RenderPassRenderAreaRect()
-  : ChainedStruct { nullptr, SType::RenderPassRenderAreaRect } {}
+: ChainedStruct { nullptr, SType::RenderPassRenderAreaRect } {}
 struct RenderPassRenderAreaRect::Init {
     ChainedStruct * const nextInChain;
     Origin2D origin = {};
     Extent2D size = {};
 };
-RenderPassRenderAreaRect::RenderPassRenderAreaRect(RenderPassRenderAreaRect::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::RenderPassRenderAreaRect }, 
-    origin(std::move(init.origin)), 
-    size(std::move(init.size)){}
+RenderPassRenderAreaRect::RenderPassRenderAreaRect(RenderPassRenderAreaRect::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::RenderPassRenderAreaRect },
+    origin(std::move(init.origin)),
+    size(std::move(init.size)) {}
 
 RenderPassRenderAreaRect::operator const WGPURenderPassRenderAreaRect&() const noexcept {
     return *reinterpret_cast<const WGPURenderPassRenderAreaRect*>(this);
@@ -7864,14 +8250,14 @@ static_assert(offsetof(SharedFenceExportInfo, type) == offsetof(WGPUSharedFenceE
 
 // SharedTextureMemoryAHardwareBufferProperties implementation
 SharedTextureMemoryAHardwareBufferProperties::SharedTextureMemoryAHardwareBufferProperties()
-  : ChainedStructOut { nullptr, SType::SharedTextureMemoryAHardwareBufferProperties } {}
+: ChainedStructOut { nullptr, SType::SharedTextureMemoryAHardwareBufferProperties } {}
 struct SharedTextureMemoryAHardwareBufferProperties::Init {
     ChainedStructOut *  nextInChain;
     YCbCrVkDescriptor yCbCrInfo = {};
 };
-SharedTextureMemoryAHardwareBufferProperties::SharedTextureMemoryAHardwareBufferProperties(SharedTextureMemoryAHardwareBufferProperties::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedTextureMemoryAHardwareBufferProperties }, 
-    yCbCrInfo(std::move(init.yCbCrInfo)){}
+SharedTextureMemoryAHardwareBufferProperties::SharedTextureMemoryAHardwareBufferProperties(SharedTextureMemoryAHardwareBufferProperties::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedTextureMemoryAHardwareBufferProperties },
+    yCbCrInfo(std::move(init.yCbCrInfo)) {}
 
 SharedTextureMemoryAHardwareBufferProperties::operator const WGPUSharedTextureMemoryAHardwareBufferProperties&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryAHardwareBufferProperties*>(this);
@@ -7900,12 +8286,14 @@ static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, fenceCount) == 
         "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::fenceCount");
 static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, fences) == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, fences),
         "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::fences");
+static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, signaledValueCount) == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, signaledValueCount),
+        "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::signaledValueCount");
 static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, signaledValues) == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, signaledValues),
         "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::signaledValues");
 
 // SharedTextureMemoryDmaBufDescriptor implementation
 SharedTextureMemoryDmaBufDescriptor::SharedTextureMemoryDmaBufDescriptor()
-  : ChainedStruct { nullptr, SType::SharedTextureMemoryDmaBufDescriptor } {}
+: ChainedStruct { nullptr, SType::SharedTextureMemoryDmaBufDescriptor } {}
 struct SharedTextureMemoryDmaBufDescriptor::Init {
     ChainedStruct * const nextInChain;
     Extent3D size = {};
@@ -7914,13 +8302,13 @@ struct SharedTextureMemoryDmaBufDescriptor::Init {
     size_t planeCount;
     SharedTextureMemoryDmaBufPlane const * planes = nullptr;
 };
-SharedTextureMemoryDmaBufDescriptor::SharedTextureMemoryDmaBufDescriptor(SharedTextureMemoryDmaBufDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::SharedTextureMemoryDmaBufDescriptor }, 
-    size(std::move(init.size)), 
-    drmFormat(std::move(init.drmFormat)), 
-    drmModifier(std::move(init.drmModifier)), 
-    planeCount(std::move(init.planeCount)), 
-    planes(std::move(init.planes)){}
+SharedTextureMemoryDmaBufDescriptor::SharedTextureMemoryDmaBufDescriptor(SharedTextureMemoryDmaBufDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::SharedTextureMemoryDmaBufDescriptor },
+    size(std::move(init.size)),
+    drmFormat(std::move(init.drmFormat)),
+    drmModifier(std::move(init.drmModifier)),
+    planeCount(std::move(init.planeCount)),
+    planes(std::move(init.planes)) {}
 
 SharedTextureMemoryDmaBufDescriptor::operator const WGPUSharedTextureMemoryDmaBufDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryDmaBufDescriptor*>(this);
@@ -7941,14 +8329,14 @@ static_assert(offsetof(SharedTextureMemoryDmaBufDescriptor, planes) == offsetof(
 
 // SharedTextureMemoryMetalEndAccessState implementation
 SharedTextureMemoryMetalEndAccessState::SharedTextureMemoryMetalEndAccessState()
-  : ChainedStructOut { nullptr, SType::SharedTextureMemoryMetalEndAccessState } {}
+: ChainedStructOut { nullptr, SType::SharedTextureMemoryMetalEndAccessState } {}
 struct SharedTextureMemoryMetalEndAccessState::Init {
     ChainedStructOut *  nextInChain;
     Future commandsScheduledFuture = {};
 };
-SharedTextureMemoryMetalEndAccessState::SharedTextureMemoryMetalEndAccessState(SharedTextureMemoryMetalEndAccessState::Init&& init)
-  : ChainedStructOut { init.nextInChain, SType::SharedTextureMemoryMetalEndAccessState }, 
-    commandsScheduledFuture(std::move(init.commandsScheduledFuture)){}
+SharedTextureMemoryMetalEndAccessState::SharedTextureMemoryMetalEndAccessState(SharedTextureMemoryMetalEndAccessState::Init&& init) :
+    ChainedStructOut { init.nextInChain, SType::SharedTextureMemoryMetalEndAccessState },
+    commandsScheduledFuture(std::move(init.commandsScheduledFuture)) {}
 
 SharedTextureMemoryMetalEndAccessState::operator const WGPUSharedTextureMemoryMetalEndAccessState&() const noexcept {
     return *reinterpret_cast<const WGPUSharedTextureMemoryMetalEndAccessState*>(this);
@@ -8004,14 +8392,14 @@ static_assert(offsetof(TexelCopyTextureInfo, aspect) == offsetof(WGPUTexelCopyTe
 
 // TextureComponentSwizzleDescriptor implementation
 TextureComponentSwizzleDescriptor::TextureComponentSwizzleDescriptor()
-  : ChainedStruct { nullptr, SType::TextureComponentSwizzleDescriptor } {}
+: ChainedStruct { nullptr, SType::TextureComponentSwizzleDescriptor } {}
 struct TextureComponentSwizzleDescriptor::Init {
     ChainedStruct * const nextInChain;
     TextureComponentSwizzle swizzle = {};
 };
-TextureComponentSwizzleDescriptor::TextureComponentSwizzleDescriptor(TextureComponentSwizzleDescriptor::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::TextureComponentSwizzleDescriptor }, 
-    swizzle(std::move(init.swizzle)){}
+TextureComponentSwizzleDescriptor::TextureComponentSwizzleDescriptor(TextureComponentSwizzleDescriptor::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::TextureComponentSwizzleDescriptor },
+    swizzle(std::move(init.swizzle)) {}
 
 TextureComponentSwizzleDescriptor::operator const WGPUTextureComponentSwizzleDescriptor&() const noexcept {
     return *reinterpret_cast<const WGPUTextureComponentSwizzleDescriptor*>(this);
@@ -8256,6 +8644,73 @@ static_assert(alignof(DawnFormatCapabilities) == alignof(WGPUDawnFormatCapabilit
 static_assert(offsetof(DawnFormatCapabilities, nextInChain) == offsetof(WGPUDawnFormatCapabilities, nextInChain),
         "offsetof mismatch for DawnFormatCapabilities::nextInChain");
 
+// DeviceDescriptor implementation
+DeviceDescriptor::DeviceDescriptor() = default;
+struct DeviceDescriptor::Init {
+    ChainedStruct * const nextInChain;
+    StringView label = {};
+    size_t requiredFeatureCount = 0;
+    FeatureName const * requiredFeatures = nullptr;
+    Limits const * requiredLimits = nullptr;
+    QueueDescriptor defaultQueue = {};
+};
+DeviceDescriptor::DeviceDescriptor(DeviceDescriptor::Init&& init) :
+    detail::DeviceDescriptor {
+        init.nextInChain,
+        std::move(init.label),
+        std::move(init.requiredFeatureCount),
+        std::move(init.requiredFeatures),
+        std::move(init.requiredLimits),
+        std::move(init.defaultQueue),
+    } {}
+template <typename F, typename T>
+void DeviceDescriptor::SetDeviceLostCallback(CallbackMode callbackMode, F callback, T userdata) {
+    static_assert(offsetof(DeviceDescriptor, deviceLostCallbackInfo) == offsetof(WGPUDeviceDescriptor, deviceLostCallbackInfo),
+                  "offsetof mismatch for DeviceDescriptor::deviceLostCallbackInfo");
+
+    assert(deviceLostCallbackInfo.callback == nullptr);
+    deviceLostCallbackInfo = detail::CallbackInfoHelper<WGPUDeviceLostCallbackInfo, F>::Create(std::move(callback), userdata);
+    deviceLostCallbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
+}
+template <typename F>
+void DeviceDescriptor::SetDeviceLostCallback(CallbackMode callbackMode, F callback) {
+    assert(deviceLostCallbackInfo.callback == nullptr);
+    deviceLostCallbackInfo = detail::CallbackInfoHelper<WGPUDeviceLostCallbackInfo, F>::Create(std::move(callback));
+    deviceLostCallbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
+}
+template <typename F, typename T>
+void DeviceDescriptor::SetUncapturedErrorCallback(F callback, T userdata) {
+    static_assert(offsetof(DeviceDescriptor, uncapturedErrorCallbackInfo) == offsetof(WGPUDeviceDescriptor, uncapturedErrorCallbackInfo),
+                  "offsetof mismatch for DeviceDescriptor::uncapturedErrorCallbackInfo");
+
+    assert(uncapturedErrorCallbackInfo.callback == nullptr);
+    uncapturedErrorCallbackInfo = detail::CallbackInfoHelper<WGPUUncapturedErrorCallbackInfo, F>::Create(std::move(callback), userdata);
+}
+template <typename F>
+void DeviceDescriptor::SetUncapturedErrorCallback(F callback) {
+    assert(uncapturedErrorCallbackInfo.callback == nullptr);
+    uncapturedErrorCallbackInfo = detail::CallbackInfoHelper<WGPUUncapturedErrorCallbackInfo, F>::Create(std::move(callback));
+}
+
+DeviceDescriptor::operator const WGPUDeviceDescriptor&() const noexcept {
+    return *reinterpret_cast<const WGPUDeviceDescriptor*>(this);
+}
+
+static_assert(sizeof(DeviceDescriptor) == sizeof(WGPUDeviceDescriptor), "sizeof mismatch for DeviceDescriptor");
+static_assert(alignof(DeviceDescriptor) == alignof(WGPUDeviceDescriptor), "alignof mismatch for DeviceDescriptor");
+static_assert(offsetof(DeviceDescriptor, nextInChain) == offsetof(WGPUDeviceDescriptor, nextInChain),
+        "offsetof mismatch for DeviceDescriptor::nextInChain");
+static_assert(offsetof(DeviceDescriptor, label) == offsetof(WGPUDeviceDescriptor, label),
+        "offsetof mismatch for DeviceDescriptor::label");
+static_assert(offsetof(DeviceDescriptor, requiredFeatureCount) == offsetof(WGPUDeviceDescriptor, requiredFeatureCount),
+        "offsetof mismatch for DeviceDescriptor::requiredFeatureCount");
+static_assert(offsetof(DeviceDescriptor, requiredFeatures) == offsetof(WGPUDeviceDescriptor, requiredFeatures),
+        "offsetof mismatch for DeviceDescriptor::requiredFeatures");
+static_assert(offsetof(DeviceDescriptor, requiredLimits) == offsetof(WGPUDeviceDescriptor, requiredLimits),
+        "offsetof mismatch for DeviceDescriptor::requiredLimits");
+static_assert(offsetof(DeviceDescriptor, defaultQueue) == offsetof(WGPUDeviceDescriptor, defaultQueue),
+        "offsetof mismatch for DeviceDescriptor::defaultQueue");
+
 // PipelineLayoutDescriptor implementation
 
 PipelineLayoutDescriptor::operator const WGPUPipelineLayoutDescriptor&() const noexcept {
@@ -8277,18 +8732,18 @@ static_assert(offsetof(PipelineLayoutDescriptor, immediateSize) == offsetof(WGPU
 
 // RenderPassPixelLocalStorage implementation
 RenderPassPixelLocalStorage::RenderPassPixelLocalStorage()
-  : ChainedStruct { nullptr, SType::RenderPassPixelLocalStorage } {}
+: ChainedStruct { nullptr, SType::RenderPassPixelLocalStorage } {}
 struct RenderPassPixelLocalStorage::Init {
     ChainedStruct * const nextInChain;
     uint64_t totalPixelLocalStorageSize;
     size_t storageAttachmentCount = 0;
     RenderPassStorageAttachment const * storageAttachments = nullptr;
 };
-RenderPassPixelLocalStorage::RenderPassPixelLocalStorage(RenderPassPixelLocalStorage::Init&& init)
-  : ChainedStruct { init.nextInChain, SType::RenderPassPixelLocalStorage }, 
-    totalPixelLocalStorageSize(std::move(init.totalPixelLocalStorageSize)), 
-    storageAttachmentCount(std::move(init.storageAttachmentCount)), 
-    storageAttachments(std::move(init.storageAttachments)){}
+RenderPassPixelLocalStorage::RenderPassPixelLocalStorage(RenderPassPixelLocalStorage::Init&& init) :
+    ChainedStruct { init.nextInChain, SType::RenderPassPixelLocalStorage },
+    totalPixelLocalStorageSize(std::move(init.totalPixelLocalStorageSize)),
+    storageAttachmentCount(std::move(init.storageAttachmentCount)),
+    storageAttachments(std::move(init.storageAttachments)) {}
 
 RenderPassPixelLocalStorage::operator const WGPURenderPassPixelLocalStorage&() const noexcept {
     return *reinterpret_cast<const WGPURenderPassPixelLocalStorage*>(this);
@@ -8326,6 +8781,7 @@ SharedTextureMemoryEndAccessState::SharedTextureMemoryEndAccessState(SharedTextu
     : initialized(rhs.initialized),
             fenceCount(rhs.fenceCount),
             fences(rhs.fences),
+            signaledValueCount(rhs.signaledValueCount),
             signaledValues(rhs.signaledValues){
     Reset(rhs);
 }
@@ -8338,6 +8794,7 @@ SharedTextureMemoryEndAccessState& SharedTextureMemoryEndAccessState::operator=(
     detail::AsNonConstReference(this->initialized) = std::move(rhs.initialized);
     detail::AsNonConstReference(this->fenceCount) = std::move(rhs.fenceCount);
     detail::AsNonConstReference(this->fences) = std::move(rhs.fences);
+    detail::AsNonConstReference(this->signaledValueCount) = std::move(rhs.signaledValueCount);
     detail::AsNonConstReference(this->signaledValues) = std::move(rhs.signaledValues);
     Reset(rhs);
     return *this;
@@ -8356,6 +8813,7 @@ void SharedTextureMemoryEndAccessState::Reset(SharedTextureMemoryEndAccessState&
     detail::AsNonConstReference(value.initialized) = defaultValue.initialized;
     detail::AsNonConstReference(value.fenceCount) = defaultValue.fenceCount;
     detail::AsNonConstReference(value.fences) = defaultValue.fences;
+    detail::AsNonConstReference(value.signaledValueCount) = defaultValue.signaledValueCount;
     detail::AsNonConstReference(value.signaledValues) = defaultValue.signaledValues;
 }
 
@@ -8373,6 +8831,8 @@ static_assert(offsetof(SharedTextureMemoryEndAccessState, fenceCount) == offseto
         "offsetof mismatch for SharedTextureMemoryEndAccessState::fenceCount");
 static_assert(offsetof(SharedTextureMemoryEndAccessState, fences) == offsetof(WGPUSharedTextureMemoryEndAccessState, fences),
         "offsetof mismatch for SharedTextureMemoryEndAccessState::fences");
+static_assert(offsetof(SharedTextureMemoryEndAccessState, signaledValueCount) == offsetof(WGPUSharedTextureMemoryEndAccessState, signaledValueCount),
+        "offsetof mismatch for SharedTextureMemoryEndAccessState::signaledValueCount");
 static_assert(offsetof(SharedTextureMemoryEndAccessState, signaledValues) == offsetof(WGPUSharedTextureMemoryEndAccessState, signaledValues),
         "offsetof mismatch for SharedTextureMemoryEndAccessState::signaledValues");
 
@@ -8516,129 +8976,7 @@ static_assert(offsetof(RenderPipelineDescriptor, multisample) == offsetof(WGPURe
 static_assert(offsetof(RenderPipelineDescriptor, fragment) == offsetof(WGPURenderPipelineDescriptor, fragment),
         "offsetof mismatch for RenderPipelineDescriptor::fragment");
 
-// DeviceDescriptor implementation
-
-DeviceDescriptor::operator const WGPUDeviceDescriptor&() const noexcept {
-    return *reinterpret_cast<const WGPUDeviceDescriptor*>(this);
-}
-
-DeviceDescriptor::DeviceDescriptor() : detail::DeviceDescriptor {} {
-    static_assert(offsetof(DeviceDescriptor, nextInChain) == offsetof(WGPUDeviceDescriptor, nextInChain),
-                "offsetof mismatch for DeviceDescriptor::nextInChain");
-    static_assert(offsetof(DeviceDescriptor, label) == offsetof(WGPUDeviceDescriptor, label),
-            "offsetof mismatch for DeviceDescriptor::label");
-    static_assert(offsetof(DeviceDescriptor, requiredFeatureCount) == offsetof(WGPUDeviceDescriptor, requiredFeatureCount),
-            "offsetof mismatch for DeviceDescriptor::requiredFeatureCount");
-    static_assert(offsetof(DeviceDescriptor, requiredFeatures) == offsetof(WGPUDeviceDescriptor, requiredFeatures),
-            "offsetof mismatch for DeviceDescriptor::requiredFeatures");
-    static_assert(offsetof(DeviceDescriptor, requiredLimits) == offsetof(WGPUDeviceDescriptor, requiredLimits),
-            "offsetof mismatch for DeviceDescriptor::requiredLimits");
-    static_assert(offsetof(DeviceDescriptor, defaultQueue) == offsetof(WGPUDeviceDescriptor, defaultQueue),
-            "offsetof mismatch for DeviceDescriptor::defaultQueue");
-    static_assert(offsetof(DeviceDescriptor, deviceLostCallbackInfo) == offsetof(WGPUDeviceDescriptor, deviceLostCallbackInfo),
-            "offsetof mismatch for DeviceDescriptor::deviceLostCallbackInfo");
-    static_assert(offsetof(DeviceDescriptor, uncapturedErrorCallbackInfo) == offsetof(WGPUDeviceDescriptor, uncapturedErrorCallbackInfo),
-            "offsetof mismatch for DeviceDescriptor::uncapturedErrorCallbackInfo");
-}
-
-struct DeviceDescriptor::Init {
-    ChainedStruct const * nextInChain;
-    StringView label = {};
-    size_t requiredFeatureCount = 0;
-    FeatureName const * requiredFeatures = nullptr;
-    Limits const * requiredLimits = nullptr;
-    QueueDescriptor defaultQueue = {};
-};
-
-DeviceDescriptor::DeviceDescriptor(DeviceDescriptor::Init&& init) : detail::DeviceDescriptor {
-    init.nextInChain, 
-    std::move(init.label), 
-    std::move(init.requiredFeatureCount), 
-    std::move(init.requiredFeatures), 
-    std::move(init.requiredLimits), 
-    std::move(init.defaultQueue)} {}
-
-static_assert(sizeof(DeviceDescriptor) == sizeof(WGPUDeviceDescriptor), "sizeof mismatch for DeviceDescriptor");
-static_assert(alignof(DeviceDescriptor) == alignof(WGPUDeviceDescriptor), "alignof mismatch for DeviceDescriptor");
-
-template <typename F, typename T, typename Cb, typename>
-void DeviceDescriptor::SetDeviceLostCallback(CallbackMode callbackMode, F callback, T userdata) {
-    assert(deviceLostCallbackInfo.callback == nullptr);
-
-    deviceLostCallbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    deviceLostCallbackInfo.callback = [](WGPUDevice const * device, WGPUDeviceLostReason reason, WGPUStringView message, void* callback_param, void* userdata_param) {
-        auto cb = reinterpret_cast<Cb*>(callback_param);
-        // We manually acquire and release the device to avoid changing any ref counts.
-        auto apiDevice = Device::Acquire(*device);
-        (*cb)(apiDevice, static_cast<DeviceLostReason>(reason), message, static_cast<T>(userdata_param));
-        apiDevice.MoveToCHandle();
-    };
-    deviceLostCallbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    deviceLostCallbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
-}
-
-template <typename L, typename Cb, typename>
-void DeviceDescriptor::SetDeviceLostCallback(CallbackMode callbackMode, L callback) {
-    assert(deviceLostCallbackInfo.callback == nullptr);
-    using F = DeviceLostCallback<void>;
-
-    deviceLostCallbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        deviceLostCallbackInfo.callback = [](WGPUDevice const * device, WGPUDeviceLostReason reason, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            // We manually acquire and release the device to avoid changing any ref counts.
-            auto apiDevice = Device::Acquire(*device);
-            (*cb)(apiDevice, static_cast<DeviceLostReason>(reason), message);
-            apiDevice.MoveToCHandle();
-        };
-        deviceLostCallbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        deviceLostCallbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        deviceLostCallbackInfo.callback = [](WGPUDevice const * device, WGPUDeviceLostReason reason, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            // We manually acquire and release the device to avoid changing any ref counts.
-            auto apiDevice = Device::Acquire(*device);
-            (*the_lambda)(apiDevice, static_cast<DeviceLostReason>(reason), message);
-            apiDevice.MoveToCHandle();
-        };
-        deviceLostCallbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        deviceLostCallbackInfo.userdata2 = nullptr;
-    }
-}
-
-template <typename F, typename T, typename Cb, typename>
-void DeviceDescriptor::SetUncapturedErrorCallback(F callback, T userdata) {
-    assert(uncapturedErrorCallbackInfo.callback == nullptr);
-
-    uncapturedErrorCallbackInfo.callback = [](WGPUDevice const * device, WGPUErrorType type, WGPUStringView message, void* callback_param, void* userdata_param) {
-        auto cb = reinterpret_cast<Cb*>(callback_param);
-        // We manually acquire and release the device to avoid changing any ref counts.
-        auto apiDevice = Device::Acquire(*device);
-        (*cb)(apiDevice, static_cast<ErrorType>(type), message, static_cast<T>(userdata_param));
-        apiDevice.MoveToCHandle();
-    };
-    uncapturedErrorCallbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    uncapturedErrorCallbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
-}
-
-template <typename L, typename Cb, typename>
-void DeviceDescriptor::SetUncapturedErrorCallback(L callback) {
-    assert(uncapturedErrorCallbackInfo.callback == nullptr);
-    using F = UncapturedErrorCallback<void>;
-    static_assert(std::is_convertible_v<L, F*>, "Uncaptured error callback cannot be a binding lambda");
-
-    uncapturedErrorCallbackInfo.callback = [](WGPUDevice const * device, WGPUErrorType type, WGPUStringView message, void* callback_param, void*) {
-        auto cb = reinterpret_cast<F*>(callback_param);
-        // We manually acquire and release the device to avoid changing any ref counts.
-        auto apiDevice = Device::Acquire(*device);
-        (*cb)(apiDevice, static_cast<ErrorType>(type), message);
-        apiDevice.MoveToCHandle();
-    };
-    uncapturedErrorCallbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    uncapturedErrorCallbackInfo.userdata2 = nullptr;
-}
-
+// NOLINTEND(bugprone-invalid-enum-default-initialization)
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
@@ -8674,66 +9012,23 @@ Bool Adapter::HasFeature(FeatureName feature) const {
     auto result = wgpuAdapterHasFeature(Get(), static_cast<WGPUFeatureName>(feature));
     return result;
 }
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Adapter::RequestDevice(DeviceDescriptor const * descriptor, CallbackMode callbackMode,F callback, T userdata) const {
-    WGPURequestDeviceCallbackInfo callbackInfo = {};
+template <typename F, typename T>
+Future Adapter::RequestDevice(DeviceDescriptor const * descriptor, CallbackMode callbackMode, F callback, T userdata) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPURequestDeviceCallbackInfo, F>::Create(std::move(callback), userdata);
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPURequestDeviceStatus status, WGPUDevice device, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<RequestDeviceStatus>(status), Device::Acquire(device), StringView {
-    message.data,
-    message.length
-}, static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPURequestDeviceStatus status, WGPUDevice device, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<RequestDeviceStatus>(status), Device::Acquire(device), {detail::StringViewAdapter(message)}, static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
     auto result = wgpuAdapterRequestDevice(Get(), reinterpret_cast<WGPUDeviceDescriptor const *>(descriptor), callbackInfo);
     return Future {
         result.id
     };
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Adapter::RequestDevice(DeviceDescriptor const * descriptor, CallbackMode callbackMode,L callback) const {
-    using F = RequestDeviceCallback<void>;
-
-    WGPURequestDeviceCallbackInfo callbackInfo = {};
+template <typename F>
+Future Adapter::RequestDevice(DeviceDescriptor const * descriptor, CallbackMode callbackMode, F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPURequestDeviceCallbackInfo, F>::Create(std::move(callback));
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPURequestDeviceStatus status, WGPUDevice device, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<RequestDeviceStatus>(status), Device::Acquire(device), StringView {
-    message.data,
-    message.length
-});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPURequestDeviceStatus status, WGPUDevice device, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<RequestDeviceStatus>(status), Device::Acquire(device), {detail::StringViewAdapter(message)});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
     auto result = wgpuAdapterRequestDevice(Get(), reinterpret_cast<WGPUDeviceDescriptor const *>(descriptor), callbackInfo);
     return Future {
-            result.id
-        };
+        result.id
+    };
 }
 
 
@@ -8819,66 +9114,23 @@ BufferUsage Buffer::GetUsage() const {
     auto result = wgpuBufferGetUsage(Get());
     return static_cast<BufferUsage>(result);
 }
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Buffer::MapAsync(MapMode mode, size_t offset, size_t size, CallbackMode callbackMode,F callback, T userdata) const {
-    WGPUBufferMapCallbackInfo callbackInfo = {};
+template <typename F, typename T>
+Future Buffer::MapAsync(MapMode mode, size_t offset, size_t size, CallbackMode callbackMode, F callback, T userdata) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUBufferMapCallbackInfo, F>::Create(std::move(callback), userdata);
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPUMapAsyncStatus status, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<MapAsyncStatus>(status), StringView {
-    message.data,
-    message.length
-}, static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPUMapAsyncStatus status, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<MapAsyncStatus>(status), {detail::StringViewAdapter(message)}, static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
     auto result = wgpuBufferMapAsync(Get(), static_cast<WGPUMapMode>(mode), offset, size, callbackInfo);
     return Future {
         result.id
     };
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Buffer::MapAsync(MapMode mode, size_t offset, size_t size, CallbackMode callbackMode,L callback) const {
-    using F = BufferMapCallback<void>;
-
-    WGPUBufferMapCallbackInfo callbackInfo = {};
+template <typename F>
+Future Buffer::MapAsync(MapMode mode, size_t offset, size_t size, CallbackMode callbackMode, F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUBufferMapCallbackInfo, F>::Create(std::move(callback));
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPUMapAsyncStatus status, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<MapAsyncStatus>(status), StringView {
-    message.data,
-    message.length
-});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPUMapAsyncStatus status, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<MapAsyncStatus>(status), {detail::StringViewAdapter(message)});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
     auto result = wgpuBufferMapAsync(Get(), static_cast<WGPUMapMode>(mode), offset, size, callbackInfo);
     return Future {
-            result.id
-        };
+        result.id
+    };
 }
 ConvertibleStatus Buffer::ReadMappedRange(size_t offset, void * data, size_t size) const {
     auto result = wgpuBufferReadMappedRange(Get(), offset, reinterpret_cast<void *>(data), size);
@@ -8976,8 +9228,8 @@ void CommandEncoder::ResolveQuerySet(QuerySet const& querySet, uint32_t firstQue
 void CommandEncoder::SetLabel(StringView label) const {
     wgpuCommandEncoderSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
 }
-void CommandEncoder::WriteBuffer(Buffer const& buffer, uint64_t bufferOffset, uint8_t const * data, uint64_t size) const {
-    wgpuCommandEncoderWriteBuffer(Get(), buffer.Get(), bufferOffset, reinterpret_cast<uint8_t const *>(data), size);
+void CommandEncoder::WriteBuffer(Buffer const& buffer, uint64_t bufferOffset, void const * data, size_t size) const {
+    wgpuCommandEncoderWriteBuffer(Get(), buffer.Get(), bufferOffset, reinterpret_cast<void const *>(data), size);
 }
 void CommandEncoder::WriteTimestamp(QuerySet const& querySet, uint32_t queryIndex) const {
     wgpuCommandEncoderWriteTimestamp(Get(), querySet.Get(), queryIndex);
@@ -9043,74 +9295,39 @@ ComputePipeline Device::CreateComputePipeline(ComputePipelineDescriptor const * 
     auto result = wgpuDeviceCreateComputePipeline(Get(), reinterpret_cast<WGPUComputePipelineDescriptor const *>(descriptor));
     return ComputePipeline::Acquire(result);
 }
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Device::CreateComputePipelineAsync(ComputePipelineDescriptor const * descriptor, CallbackMode callbackMode,F callback, T userdata) const {
-    WGPUCreateComputePipelineAsyncCallbackInfo callbackInfo = {};
+template <typename F, typename T>
+Future Device::CreateComputePipelineAsync(ComputePipelineDescriptor const * descriptor, CallbackMode callbackMode, F callback, T userdata) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUCreateComputePipelineAsyncCallbackInfo, F>::Create(std::move(callback), userdata);
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPUCreatePipelineAsyncStatus status, WGPUComputePipeline pipeline, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<CreatePipelineAsyncStatus>(status), ComputePipeline::Acquire(pipeline), StringView {
-    message.data,
-    message.length
-}, static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPUCreatePipelineAsyncStatus status, WGPUComputePipeline pipeline, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<CreatePipelineAsyncStatus>(status), ComputePipeline::Acquire(pipeline), {detail::StringViewAdapter(message)}, static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
     auto result = wgpuDeviceCreateComputePipelineAsync(Get(), reinterpret_cast<WGPUComputePipelineDescriptor const *>(descriptor), callbackInfo);
     return Future {
         result.id
     };
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Device::CreateComputePipelineAsync(ComputePipelineDescriptor const * descriptor, CallbackMode callbackMode,L callback) const {
-    using F = CreateComputePipelineAsyncCallback<void>;
-
-    WGPUCreateComputePipelineAsyncCallbackInfo callbackInfo = {};
+template <typename F>
+Future Device::CreateComputePipelineAsync(ComputePipelineDescriptor const * descriptor, CallbackMode callbackMode, F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUCreateComputePipelineAsyncCallbackInfo, F>::Create(std::move(callback));
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPUCreatePipelineAsyncStatus status, WGPUComputePipeline pipeline, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<CreatePipelineAsyncStatus>(status), ComputePipeline::Acquire(pipeline), StringView {
-    message.data,
-    message.length
-});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPUCreatePipelineAsyncStatus status, WGPUComputePipeline pipeline, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<CreatePipelineAsyncStatus>(status), ComputePipeline::Acquire(pipeline), {detail::StringViewAdapter(message)});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
     auto result = wgpuDeviceCreateComputePipelineAsync(Get(), reinterpret_cast<WGPUComputePipelineDescriptor const *>(descriptor), callbackInfo);
     return Future {
-            result.id
-        };
+        result.id
+    };
 }
 Buffer Device::CreateErrorBuffer(BufferDescriptor const * descriptor) const {
     auto result = wgpuDeviceCreateErrorBuffer(Get(), reinterpret_cast<WGPUBufferDescriptor const *>(descriptor));
     return Buffer::Acquire(result);
 }
+ComputePipeline Device::CreateErrorComputePipeline(StringView label) const {
+    auto result = wgpuDeviceCreateErrorComputePipeline(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+    return ComputePipeline::Acquire(result);
+}
 ExternalTexture Device::CreateErrorExternalTexture() const {
     auto result = wgpuDeviceCreateErrorExternalTexture(Get());
     return ExternalTexture::Acquire(result);
+}
+RenderPipeline Device::CreateErrorRenderPipeline(StringView label) const {
+    auto result = wgpuDeviceCreateErrorRenderPipeline(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
+    return RenderPipeline::Acquire(result);
 }
 ShaderModule Device::CreateErrorShaderModule(ShaderModuleDescriptor const * descriptor, StringView errorMessage) const {
     auto result = wgpuDeviceCreateErrorShaderModule(Get(), reinterpret_cast<WGPUShaderModuleDescriptor const *>(descriptor), *reinterpret_cast<WGPUStringView const*>(&errorMessage));
@@ -9140,66 +9357,23 @@ RenderPipeline Device::CreateRenderPipeline(RenderPipelineDescriptor const * des
     auto result = wgpuDeviceCreateRenderPipeline(Get(), reinterpret_cast<WGPURenderPipelineDescriptor const *>(descriptor));
     return RenderPipeline::Acquire(result);
 }
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Device::CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode,F callback, T userdata) const {
-    WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo = {};
+template <typename F, typename T>
+Future Device::CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode, F callback, T userdata) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUCreateRenderPipelineAsyncCallbackInfo, F>::Create(std::move(callback), userdata);
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPUCreatePipelineAsyncStatus status, WGPURenderPipeline pipeline, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<CreatePipelineAsyncStatus>(status), RenderPipeline::Acquire(pipeline), StringView {
-    message.data,
-    message.length
-}, static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPUCreatePipelineAsyncStatus status, WGPURenderPipeline pipeline, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<CreatePipelineAsyncStatus>(status), RenderPipeline::Acquire(pipeline), {detail::StringViewAdapter(message)}, static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
     auto result = wgpuDeviceCreateRenderPipelineAsync(Get(), reinterpret_cast<WGPURenderPipelineDescriptor const *>(descriptor), callbackInfo);
     return Future {
         result.id
     };
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Device::CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode,L callback) const {
-    using F = CreateRenderPipelineAsyncCallback<void>;
-
-    WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo = {};
+template <typename F>
+Future Device::CreateRenderPipelineAsync(RenderPipelineDescriptor const * descriptor, CallbackMode callbackMode, F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUCreateRenderPipelineAsyncCallbackInfo, F>::Create(std::move(callback));
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPUCreatePipelineAsyncStatus status, WGPURenderPipeline pipeline, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<CreatePipelineAsyncStatus>(status), RenderPipeline::Acquire(pipeline), StringView {
-    message.data,
-    message.length
-});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPUCreatePipelineAsyncStatus status, WGPURenderPipeline pipeline, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<CreatePipelineAsyncStatus>(status), RenderPipeline::Acquire(pipeline), {detail::StringViewAdapter(message)});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
     auto result = wgpuDeviceCreateRenderPipelineAsync(Get(), reinterpret_cast<WGPURenderPipelineDescriptor const *>(descriptor), callbackInfo);
     return Future {
-            result.id
-        };
+        result.id
+    };
 }
 ResourceTable Device::CreateResourceTable(ResourceTableDescriptor const * descriptor) const {
     auto result = wgpuDeviceCreateResourceTable(Get(), reinterpret_cast<WGPUResourceTableDescriptor const *>(descriptor));
@@ -9273,66 +9447,23 @@ SharedTextureMemory Device::ImportSharedTextureMemory(SharedTextureMemoryDescrip
 void Device::InjectError(ErrorType type, StringView message) const {
     wgpuDeviceInjectError(Get(), static_cast<WGPUErrorType>(type), *reinterpret_cast<WGPUStringView const*>(&message));
 }
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Device::PopErrorScope(CallbackMode callbackMode,F callback, T userdata) const {
-    WGPUPopErrorScopeCallbackInfo callbackInfo = {};
+template <typename F, typename T>
+Future Device::PopErrorScope(CallbackMode callbackMode, F callback, T userdata) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUPopErrorScopeCallbackInfo, F>::Create(std::move(callback), userdata);
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPUPopErrorScopeStatus status, WGPUErrorType type, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<PopErrorScopeStatus>(status), static_cast<ErrorType>(type), StringView {
-    message.data,
-    message.length
-}, static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPUPopErrorScopeStatus status, WGPUErrorType type, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<PopErrorScopeStatus>(status), static_cast<ErrorType>(type), {detail::StringViewAdapter(message)}, static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
     auto result = wgpuDevicePopErrorScope(Get(), callbackInfo);
     return Future {
         result.id
     };
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Device::PopErrorScope(CallbackMode callbackMode,L callback) const {
-    using F = PopErrorScopeCallback<void>;
-
-    WGPUPopErrorScopeCallbackInfo callbackInfo = {};
+template <typename F>
+Future Device::PopErrorScope(CallbackMode callbackMode, F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUPopErrorScopeCallbackInfo, F>::Create(std::move(callback));
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPUPopErrorScopeStatus status, WGPUErrorType type, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<PopErrorScopeStatus>(status), static_cast<ErrorType>(type), StringView {
-    message.data,
-    message.length
-});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPUPopErrorScopeStatus status, WGPUErrorType type, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<PopErrorScopeStatus>(status), static_cast<ErrorType>(type), {detail::StringViewAdapter(message)});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
     auto result = wgpuDevicePopErrorScope(Get(), callbackInfo);
     return Future {
-            result.id
-        };
+        result.id
+    };
 }
 void Device::PushErrorScope(ErrorFilter filter) const {
     wgpuDevicePushErrorScope(Get(), static_cast<WGPUErrorFilter>(filter));
@@ -9340,57 +9471,14 @@ void Device::PushErrorScope(ErrorFilter filter) const {
 void Device::SetLabel(StringView label) const {
     wgpuDeviceSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
 }
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
+template <typename F, typename T>
 void Device::SetLoggingCallback(F callback, T userdata) const {
-    WGPULoggingCallbackInfo callbackInfo = {};
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPULoggingType type, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<LoggingType>(type), StringView {
-    message.data,
-    message.length
-}, static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPULoggingType type, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<LoggingType>(type), {detail::StringViewAdapter(message)}, static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
+    auto callbackInfo = detail::CallbackInfoHelper<WGPULoggingCallbackInfo, F>::Create(std::move(callback), userdata);
     return wgpuDeviceSetLoggingCallback(Get(), callbackInfo);
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-void Device::SetLoggingCallback(L callback) const {
-    using F = LoggingCallback<void>;
-
-    WGPULoggingCallbackInfo callbackInfo = {};
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPULoggingType type, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<LoggingType>(type), StringView {
-    message.data,
-    message.length
-});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPULoggingType type, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<LoggingType>(type), {detail::StringViewAdapter(message)});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
+template <typename F>
+void Device::SetLoggingCallback(F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPULoggingCallbackInfo, F>::Create(std::move(callback));
     return wgpuDeviceSetLoggingCallback(Get(), callbackInfo);
 }
 void Device::Tick() const {
@@ -9460,66 +9548,23 @@ Bool Instance::HasWGSLLanguageFeature(WGSLLanguageFeatureName feature) const {
 void Instance::ProcessEvents() const {
     wgpuInstanceProcessEvents(Get());
 }
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Instance::RequestAdapter(RequestAdapterOptions const * options, CallbackMode callbackMode,F callback, T userdata) const {
-    WGPURequestAdapterCallbackInfo callbackInfo = {};
+template <typename F, typename T>
+Future Instance::RequestAdapter(RequestAdapterOptions const * options, CallbackMode callbackMode, F callback, T userdata) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPURequestAdapterCallbackInfo, F>::Create(std::move(callback), userdata);
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPURequestAdapterStatus status, WGPUAdapter adapter, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<RequestAdapterStatus>(status), Adapter::Acquire(adapter), StringView {
-    message.data,
-    message.length
-}, static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPURequestAdapterStatus status, WGPUAdapter adapter, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<RequestAdapterStatus>(status), Adapter::Acquire(adapter), {detail::StringViewAdapter(message)}, static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
     auto result = wgpuInstanceRequestAdapter(Get(), reinterpret_cast<WGPURequestAdapterOptions const *>(options), callbackInfo);
     return Future {
         result.id
     };
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Instance::RequestAdapter(RequestAdapterOptions const * options, CallbackMode callbackMode,L callback) const {
-    using F = RequestAdapterCallback<void>;
-
-    WGPURequestAdapterCallbackInfo callbackInfo = {};
+template <typename F>
+Future Instance::RequestAdapter(RequestAdapterOptions const * options, CallbackMode callbackMode, F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPURequestAdapterCallbackInfo, F>::Create(std::move(callback));
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPURequestAdapterStatus status, WGPUAdapter adapter, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<RequestAdapterStatus>(status), Adapter::Acquire(adapter), StringView {
-    message.data,
-    message.length
-});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPURequestAdapterStatus status, WGPUAdapter adapter, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<RequestAdapterStatus>(status), Adapter::Acquire(adapter), {detail::StringViewAdapter(message)});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
     auto result = wgpuInstanceRequestAdapter(Get(), reinterpret_cast<WGPURequestAdapterOptions const *>(options), callbackInfo);
     return Future {
-            result.id
-        };
+        result.id
+    };
 }
 WaitStatus Instance::WaitAny(size_t futureCount, FutureWaitInfo * futures, uint64_t timeoutNS) const {
     auto result = wgpuInstanceWaitAny(Get(), futureCount, reinterpret_cast<WGPUFutureWaitInfo *>(futures), timeoutNS);
@@ -9603,66 +9648,23 @@ void Queue::CopyExternalTextureForBrowser(ImageCopyExternalTexture const * sourc
 void Queue::CopyTextureForBrowser(TexelCopyTextureInfo const * source, TexelCopyTextureInfo const * destination, Extent3D const * copySize, CopyTextureForBrowserOptions const * options) const {
     wgpuQueueCopyTextureForBrowser(Get(), reinterpret_cast<WGPUTexelCopyTextureInfo const *>(source), reinterpret_cast<WGPUTexelCopyTextureInfo const *>(destination), reinterpret_cast<WGPUExtent3D const *>(copySize), reinterpret_cast<WGPUCopyTextureForBrowserOptions const *>(options));
 }
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Queue::OnSubmittedWorkDone(CallbackMode callbackMode,F callback, T userdata) const {
-    WGPUQueueWorkDoneCallbackInfo callbackInfo = {};
+template <typename F, typename T>
+Future Queue::OnSubmittedWorkDone(CallbackMode callbackMode, F callback, T userdata) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUQueueWorkDoneCallbackInfo, F>::Create(std::move(callback), userdata);
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPUQueueWorkDoneStatus status, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<QueueWorkDoneStatus>(status), StringView {
-    message.data,
-    message.length
-}, static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPUQueueWorkDoneStatus status, WGPUStringView message, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<QueueWorkDoneStatus>(status), {detail::StringViewAdapter(message)}, static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
     auto result = wgpuQueueOnSubmittedWorkDone(Get(), callbackInfo);
     return Future {
         result.id
     };
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future Queue::OnSubmittedWorkDone(CallbackMode callbackMode,L callback) const {
-    using F = QueueWorkDoneCallback<void>;
-
-    WGPUQueueWorkDoneCallbackInfo callbackInfo = {};
+template <typename F>
+Future Queue::OnSubmittedWorkDone(CallbackMode callbackMode, F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUQueueWorkDoneCallbackInfo, F>::Create(std::move(callback));
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPUQueueWorkDoneStatus status, WGPUStringView message, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<QueueWorkDoneStatus>(status), StringView {
-    message.data,
-    message.length
-});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPUQueueWorkDoneStatus status, WGPUStringView message, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<QueueWorkDoneStatus>(status), {detail::StringViewAdapter(message)});
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
     auto result = wgpuQueueOnSubmittedWorkDone(Get(), callbackInfo);
     return Future {
-            result.id
-        };
+        result.id
+    };
 }
 void Queue::SetLabel(StringView label) const {
     wgpuQueueSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
@@ -9744,13 +9746,16 @@ uint32_t ResourceTable::GetSize() const {
     auto result = wgpuResourceTableGetSize(Get());
     return result;
 }
-uint32_t ResourceTable::InsertBinding(BindingResource const * resource) const {
-    auto result = wgpuResourceTableInsertBinding(Get(), reinterpret_cast<WGPUBindingResource const *>(resource));
+uint32_t ResourceTable::Insert(BindingResource const * resource) const {
+    auto result = wgpuResourceTableInsert(Get(), reinterpret_cast<WGPUBindingResource const *>(resource));
     return result;
 }
-ConvertibleStatus ResourceTable::RemoveBinding(uint32_t slot) const {
-    auto result = wgpuResourceTableRemoveBinding(Get(), slot);
+ConvertibleStatus ResourceTable::Remove(uint32_t slot) const {
+    auto result = wgpuResourceTableRemove(Get(), slot);
     return static_cast<Status>(result);
+}
+void ResourceTable::SetLabel(StringView label) const {
+    wgpuResourceTableSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
 }
 ConvertibleStatus ResourceTable::Update(uint32_t slot, BindingResource const * resource) const {
     auto result = wgpuResourceTableUpdate(Get(), slot, reinterpret_cast<WGPUBindingResource const *>(resource));
@@ -9793,60 +9798,23 @@ static_assert(alignof(Sampler) == alignof(WGPUSampler), "alignof mismatch for Sa
 
 // ShaderModule implementation
 
-template <typename F, typename T,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future ShaderModule::GetCompilationInfo(CallbackMode callbackMode,F callback, T userdata) const {
-    WGPUCompilationInfoCallbackInfo callbackInfo = {};
+template <typename F, typename T>
+Future ShaderModule::GetCompilationInfo(CallbackMode callbackMode, F callback, T userdata) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUCompilationInfoCallbackInfo, F>::Create(std::move(callback), userdata);
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<F, Cb*>) {
-        callbackInfo.callback = [](WGPUCompilationInfoRequestStatus status, WGPUCompilationInfo const * compilationInfo, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<Cb*>(callback_param);
-            (*cb)(static_cast<CompilationInfoRequestStatus>(status), reinterpret_cast<CompilationInfo const*>(compilationInfo), static_cast<T>(userdata_param));
-        };
-    } else {
-        callbackInfo.callback = [](WGPUCompilationInfoRequestStatus status, WGPUCompilationInfo const * compilationInfo, void* callback_param, void* userdata_param) {
-            auto cb = reinterpret_cast<CbChar*>(callback_param);
-            (*cb)(static_cast<CompilationInfoRequestStatus>(status), reinterpret_cast<CompilationInfo const*>(compilationInfo), static_cast<T>(userdata_param));
-        };
-    }
-    callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-    callbackInfo.userdata2 = reinterpret_cast<void*>(userdata);
     auto result = wgpuShaderModuleGetCompilationInfo(Get(), callbackInfo);
     return Future {
         result.id
     };
 }
-template <typename L,
-          typename Cb,
-          typename CbChar,
-          typename>
-Future ShaderModule::GetCompilationInfo(CallbackMode callbackMode,L callback) const {
-    using F = CompilationInfoCallback<void>;
-
-    WGPUCompilationInfoCallbackInfo callbackInfo = {};
+template <typename F>
+Future ShaderModule::GetCompilationInfo(CallbackMode callbackMode, F callback) const {
+    auto callbackInfo = detail::CallbackInfoHelper<WGPUCompilationInfoCallbackInfo, F>::Create(std::move(callback));
     callbackInfo.mode = static_cast<WGPUCallbackMode>(callbackMode);
-    if constexpr (std::is_convertible_v<L, F*>) {
-        callbackInfo.callback = [](WGPUCompilationInfoRequestStatus status, WGPUCompilationInfo const * compilationInfo, void* callback_param, void*) {
-            auto cb = reinterpret_cast<F*>(callback_param);
-            (*cb)(static_cast<CompilationInfoRequestStatus>(status), reinterpret_cast<CompilationInfo const*>(compilationInfo));
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(+callback);
-        callbackInfo.userdata2 = nullptr;
-    } else {
-        auto* lambda = new L(std::move(callback));
-        callbackInfo.callback = [](WGPUCompilationInfoRequestStatus status, WGPUCompilationInfo const * compilationInfo, void* callback_param, void*) {
-            std::unique_ptr<L> the_lambda(reinterpret_cast<L*>(callback_param));
-            (*the_lambda)(static_cast<CompilationInfoRequestStatus>(status), reinterpret_cast<CompilationInfo const*>(compilationInfo));
-        };
-        callbackInfo.userdata1 = reinterpret_cast<void*>(lambda);
-        callbackInfo.userdata2 = nullptr;
-    }
     auto result = wgpuShaderModuleGetCompilationInfo(Get(), callbackInfo);
     return Future {
-            result.id
-        };
+        result.id
+    };
 }
 void ShaderModule::SetLabel(StringView label) const {
     wgpuShaderModuleSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
@@ -10078,17 +10046,11 @@ uint32_t Texture::GetWidth() const {
     auto result = wgpuTextureGetWidth(Get());
     return result;
 }
-void Texture::Pin(TextureUsage usage) const {
-    wgpuTexturePin(Get(), static_cast<WGPUTextureUsage>(usage));
-}
 void Texture::SetLabel(StringView label) const {
     wgpuTextureSetLabel(Get(), *reinterpret_cast<WGPUStringView const*>(&label));
 }
 void Texture::SetOwnershipForMemoryDump(uint64_t ownerGuid) const {
     wgpuTextureSetOwnershipForMemoryDump(Get(), ownerGuid);
-}
-void Texture::Unpin() const {
-    wgpuTextureUnpin(Get());
 }
 
 
@@ -10220,9 +10182,6 @@ void RenderBundleEncoder::SetLabel(StringView label) const {
 void RenderBundleEncoder::SetPipeline(RenderPipeline const& pipeline) const {
     wgpuRenderBundleEncoderSetPipeline(Get(), pipeline.Get());
 }
-void RenderBundleEncoder::SetResourceTable(ResourceTable const& table) const {
-    wgpuRenderBundleEncoderSetResourceTable(Get(), table.Get());
-}
 void RenderBundleEncoder::SetVertexBuffer(uint32_t slot, Buffer const& buffer, uint64_t offset, uint64_t size) const {
     wgpuRenderBundleEncoderSetVertexBuffer(Get(), slot, buffer.Get(), offset, size);
 }
@@ -10340,22 +10299,22 @@ static_assert(alignof(RenderPassEncoder) == alignof(WGPURenderPassEncoder), "ali
 
 
 // Free Functions
-static inline Instance CreateInstance(InstanceDescriptor const * descriptor = nullptr) {
+inline Instance CreateInstance(InstanceDescriptor const * descriptor = nullptr) {
     auto result = wgpuCreateInstance(reinterpret_cast<WGPUInstanceDescriptor const *>(descriptor));
     return Instance::Acquire(result);
 }
-static inline void GetInstanceFeatures(SupportedInstanceFeatures * features) {
+inline void GetInstanceFeatures(SupportedInstanceFeatures * features) {
     wgpuGetInstanceFeatures(reinterpret_cast<WGPUSupportedInstanceFeatures *>(features));
 }
-static inline Status GetInstanceLimits(InstanceLimits * limits) {
+inline Status GetInstanceLimits(InstanceLimits * limits) {
     auto result = wgpuGetInstanceLimits(reinterpret_cast<WGPUInstanceLimits *>(limits));
     return static_cast<Status>(result);
 }
-static inline Bool HasInstanceFeature(InstanceFeatureName feature) {
+inline Bool HasInstanceFeature(InstanceFeatureName feature) {
     auto result = wgpuHasInstanceFeature(static_cast<WGPUInstanceFeatureName>(feature));
     return result;
 }
-static inline Proc GetProcAddress(StringView procName) {
+inline Proc GetProcAddress(StringView procName) {
     auto result = wgpuGetProcAddress(*reinterpret_cast<WGPUStringView const*>(&procName));
     return reinterpret_cast<Proc>(result);
 }

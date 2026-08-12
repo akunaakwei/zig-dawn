@@ -114,6 +114,7 @@ bool IsIntelXeLPG(PCIVendorID vendorId, PCIDeviceID deviceId);
 bool IsIntelXe2LPG(PCIVendorID vendorId, PCIDeviceID deviceId);
 bool IsIntelXe2HPG(PCIVendorID vendorId, PCIDeviceID deviceId);
 bool IsIntelXe3LPG(PCIVendorID vendorId, PCIDeviceID deviceId);
+bool IsIntelXe3LPGXS(PCIVendorID vendorId, PCIDeviceID deviceId);
 
 // Mesa architectures
 bool IsMesaSoftware(PCIVendorID vendorId, PCIDeviceID deviceId);

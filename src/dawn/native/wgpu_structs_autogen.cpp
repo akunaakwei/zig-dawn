@@ -4,7 +4,7 @@
 #include <cstring>
 #include <tuple>
 
-#include "dawn/common/Assert.h"
+#include "src/utils/assert.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 // error: 'offsetof' within non-standard-layout type 'wgpu::XXX' is conditionally-supported
@@ -27,6 +27,8 @@ namespace dawn::native {
         return data == rhs.data && length == rhs.length;
     }
 
+    // NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
+
 
     static_assert(sizeof(AdapterPropertiesD3D) == sizeof(WGPUAdapterPropertiesD3D), "sizeof mismatch for AdapterPropertiesD3D");
     static_assert(alignof(AdapterPropertiesD3D) == alignof(WGPUAdapterPropertiesD3D), "alignof mismatch for AdapterPropertiesD3D");
@@ -39,11 +41,9 @@ namespace dawn::native {
                  "offsetof mismatch for AdapterPropertiesD3D::shaderModel");
 
     bool AdapterPropertiesD3D::operator==(const AdapterPropertiesD3D& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            shaderModel
-        ) == std::tie(
-            rhs.shaderModel
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (shaderModel != rhs.shaderModel) { return false; }
+        return true;
     }
 
 
@@ -68,48 +68,14 @@ namespace dawn::native {
                  "offsetof mismatch for AdapterPropertiesDrm::renderMinor");
 
     bool AdapterPropertiesDrm::operator==(const AdapterPropertiesDrm& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            hasPrimary,
-            hasRender,
-            primaryMajor,
-            primaryMinor,
-            renderMajor,
-            renderMinor
-        ) == std::tie(
-            rhs.hasPrimary,
-            rhs.hasRender,
-            rhs.primaryMajor,
-            rhs.primaryMinor,
-            rhs.renderMajor,
-            rhs.renderMinor
-        );
-    }
-
-
-    static_assert(sizeof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs) == sizeof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs), "sizeof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
-    static_assert(alignof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs) == alignof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs), "alignof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs");
-
-    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, nextInChain) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, chain) + offsetof(WGPUChainedStruct, next),
-            "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::nextInChain");
-    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, sType) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, chain) + offsetof(WGPUChainedStruct, sType),
-            "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::sType");
-    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, minExplicitComputeSubgroupSize) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, minExplicitComputeSubgroupSize),
-                 "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::minExplicitComputeSubgroupSize");
-    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxExplicitComputeSubgroupSize) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxExplicitComputeSubgroupSize),
-                 "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::maxExplicitComputeSubgroupSize");
-    static_assert(offsetof(AdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxComputeWorkgroupSubgroups) == offsetof(WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs, maxComputeWorkgroupSubgroups),
-                 "offsetof mismatch for AdapterPropertiesExplicitComputeSubgroupSizeConfigs::maxComputeWorkgroupSubgroups");
-
-    bool AdapterPropertiesExplicitComputeSubgroupSizeConfigs::operator==(const AdapterPropertiesExplicitComputeSubgroupSizeConfigs& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            minExplicitComputeSubgroupSize,
-            maxExplicitComputeSubgroupSize,
-            maxComputeWorkgroupSubgroups
-        ) == std::tie(
-            rhs.minExplicitComputeSubgroupSize,
-            rhs.maxExplicitComputeSubgroupSize,
-            rhs.maxComputeWorkgroupSubgroups
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (hasPrimary != rhs.hasPrimary) { return false; }
+        if (hasRender != rhs.hasRender) { return false; }
+        if (primaryMajor != rhs.primaryMajor) { return false; }
+        if (primaryMinor != rhs.primaryMinor) { return false; }
+        if (renderMajor != rhs.renderMajor) { return false; }
+        if (renderMinor != rhs.renderMinor) { return false; }
+        return true;
     }
 
 
@@ -124,11 +90,9 @@ namespace dawn::native {
                  "offsetof mismatch for AdapterPropertiesVk::driverVersion");
 
     bool AdapterPropertiesVk::operator==(const AdapterPropertiesVk& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            driverVersion
-        ) == std::tie(
-            rhs.driverVersion
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (driverVersion != rhs.driverVersion) { return false; }
+        return true;
     }
 
 
@@ -143,11 +107,9 @@ namespace dawn::native {
                  "offsetof mismatch for AdapterPropertiesWGPU::backendType");
 
     bool AdapterPropertiesWGPU::operator==(const AdapterPropertiesWGPU& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            backendType
-        ) == std::tie(
-            rhs.backendType
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (backendType != rhs.backendType) { return false; }
+        return true;
     }
 
 
@@ -168,19 +130,13 @@ namespace dawn::native {
                  "offsetof mismatch for BindingResource::textureView");
 
     bool BindingResource::operator==(const BindingResource& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            buffer,
-            offset,
-            size,
-            sampler,
-            textureView
-        ) == std::tie(
-            rhs.buffer,
-            rhs.offset,
-            rhs.size,
-            rhs.sampler,
-            rhs.textureView
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (buffer != rhs.buffer) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (size != rhs.size) { return false; }
+        if (sampler != rhs.sampler) { return false; }
+        if (textureView != rhs.textureView) { return false; }
+        return true;
     }
 
 
@@ -208,15 +164,10 @@ namespace dawn::native {
         return copy;
     }
     bool BlendComponent::operator==(const BlendComponent& rhs) const {
-        return  std::tie(
-            operation,
-            srcFactor,
-            dstFactor
-        ) == std::tie(
-            rhs.operation,
-            rhs.srcFactor,
-            rhs.dstFactor
-        );
+        if (operation != rhs.operation) { return false; }
+        if (srcFactor != rhs.srcFactor) { return false; }
+        if (dstFactor != rhs.dstFactor) { return false; }
+        return true;
     }
 
 
@@ -243,15 +194,11 @@ namespace dawn::native {
         return copy;
     }
     bool BufferBindingLayout::operator==(const BufferBindingLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            type,
-            hasDynamicOffset,
-            minBindingSize
-        ) == std::tie(
-            rhs.type,
-            rhs.hasDynamicOffset,
-            rhs.minBindingSize
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (type != rhs.type) { return false; }
+        if (hasDynamicOffset != rhs.hasDynamicOffset) { return false; }
+        if (minBindingSize != rhs.minBindingSize) { return false; }
+        return true;
     }
 
 
@@ -270,15 +217,11 @@ namespace dawn::native {
                  "offsetof mismatch for BufferHostMappedPointer::userdata");
 
     bool BufferHostMappedPointer::operator==(const BufferHostMappedPointer& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            pointer,
-            disposeCallback,
-            userdata
-        ) == std::tie(
-            rhs.pointer,
-            rhs.disposeCallback,
-            rhs.userdata
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (pointer != rhs.pointer) { return false; }
+        if (disposeCallback != rhs.disposeCallback) { return false; }
+        if (userdata != rhs.userdata) { return false; }
+        return true;
     }
 
 
@@ -295,17 +238,11 @@ namespace dawn::native {
                  "offsetof mismatch for Color::a");
 
     bool Color::operator==(const Color& rhs) const {
-        return  std::tie(
-            r,
-            g,
-            b,
-            a
-        ) == std::tie(
-            rhs.r,
-            rhs.g,
-            rhs.b,
-            rhs.a
-        );
+        if (r != rhs.r) { return false; }
+        if (g != rhs.g) { return false; }
+        if (b != rhs.b) { return false; }
+        if (a != rhs.a) { return false; }
+        return true;
     }
 
 
@@ -322,19 +259,17 @@ namespace dawn::native {
                  "offsetof mismatch for ColorSpaceDawn::yCbCrRange");
     static_assert(offsetof(ColorSpaceDawn, yCbCrMatrix) == offsetof(WGPUColorSpaceDawn, yCbCrMatrix),
                  "offsetof mismatch for ColorSpaceDawn::yCbCrMatrix");
+    static_assert(offsetof(ColorSpaceDawn, hdrReferenceWhiteLuminance) == offsetof(WGPUColorSpaceDawn, hdrReferenceWhiteLuminance),
+                 "offsetof mismatch for ColorSpaceDawn::hdrReferenceWhiteLuminance");
 
     bool ColorSpaceDawn::operator==(const ColorSpaceDawn& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            primaries,
-            transfer,
-            yCbCrRange,
-            yCbCrMatrix
-        ) == std::tie(
-            rhs.primaries,
-            rhs.transfer,
-            rhs.yCbCrRange,
-            rhs.yCbCrMatrix
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (primaries != rhs.primaries) { return false; }
+        if (transfer != rhs.transfer) { return false; }
+        if (yCbCrRange != rhs.yCbCrRange) { return false; }
+        if (yCbCrMatrix != rhs.yCbCrMatrix) { return false; }
+        if (hdrReferenceWhiteLuminance != rhs.hdrReferenceWhiteLuminance) { return false; }
+        return true;
     }
 
 
@@ -349,11 +284,9 @@ namespace dawn::native {
                  "offsetof mismatch for ColorTargetStateExpandResolveTextureDawn::enabled");
 
     bool ColorTargetStateExpandResolveTextureDawn::operator==(const ColorTargetStateExpandResolveTextureDawn& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            enabled
-        ) == std::tie(
-            rhs.enabled
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (enabled != rhs.enabled) { return false; }
+        return true;
     }
 
 
@@ -366,11 +299,9 @@ namespace dawn::native {
                  "offsetof mismatch for CommandBufferDescriptor::label");
 
     bool CommandBufferDescriptor::operator==(const CommandBufferDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
@@ -391,17 +322,12 @@ namespace dawn::native {
                  "offsetof mismatch for CompatibilityModeLimits::maxStorageTexturesInFragmentStage");
 
     bool CompatibilityModeLimits::operator==(const CompatibilityModeLimits& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            maxStorageBuffersInVertexStage,
-            maxStorageTexturesInVertexStage,
-            maxStorageBuffersInFragmentStage,
-            maxStorageTexturesInFragmentStage
-        ) == std::tie(
-            rhs.maxStorageBuffersInVertexStage,
-            rhs.maxStorageTexturesInVertexStage,
-            rhs.maxStorageBuffersInFragmentStage,
-            rhs.maxStorageTexturesInFragmentStage
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (maxStorageBuffersInVertexStage != rhs.maxStorageBuffersInVertexStage) { return false; }
+        if (maxStorageTexturesInVertexStage != rhs.maxStorageTexturesInVertexStage) { return false; }
+        if (maxStorageBuffersInFragmentStage != rhs.maxStorageBuffersInFragmentStage) { return false; }
+        if (maxStorageTexturesInFragmentStage != rhs.maxStorageTexturesInFragmentStage) { return false; }
+        return true;
     }
 
 
@@ -416,13 +342,10 @@ namespace dawn::native {
                  "offsetof mismatch for ConstantEntry::value");
 
     bool ConstantEntry::operator==(const ConstantEntry& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            key,
-            value
-        ) == std::tie(
-            rhs.key,
-            rhs.value
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (key != rhs.key) { return false; }
+        if (value != rhs.value) { return false; }
+        return true;
     }
 
 
@@ -449,25 +372,16 @@ namespace dawn::native {
                  "offsetof mismatch for CopyTextureForBrowserOptions::internalUsage");
 
     bool CopyTextureForBrowserOptions::operator==(const CopyTextureForBrowserOptions& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            flipY,
-            needsColorSpaceConversion,
-            srcAlphaMode,
-            srcTransferFunctionParameters,
-            conversionMatrix,
-            dstTransferFunctionParameters,
-            dstAlphaMode,
-            internalUsage
-        ) == std::tie(
-            rhs.flipY,
-            rhs.needsColorSpaceConversion,
-            rhs.srcAlphaMode,
-            rhs.srcTransferFunctionParameters,
-            rhs.conversionMatrix,
-            rhs.dstTransferFunctionParameters,
-            rhs.dstAlphaMode,
-            rhs.internalUsage
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (flipY != rhs.flipY) { return false; }
+        if (needsColorSpaceConversion != rhs.needsColorSpaceConversion) { return false; }
+        if (srcAlphaMode != rhs.srcAlphaMode) { return false; }
+        if (srcTransferFunctionParameters != rhs.srcTransferFunctionParameters) { return false; }
+        if (conversionMatrix != rhs.conversionMatrix) { return false; }
+        if (dstTransferFunctionParameters != rhs.dstTransferFunctionParameters) { return false; }
+        if (dstAlphaMode != rhs.dstAlphaMode) { return false; }
+        if (internalUsage != rhs.internalUsage) { return false; }
+        return true;
     }
 
 
@@ -482,11 +396,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnAdapterPropertiesPowerPreference::powerPreference");
 
     bool DawnAdapterPropertiesPowerPreference::operator==(const DawnAdapterPropertiesPowerPreference& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            powerPreference
-        ) == std::tie(
-            rhs.powerPreference
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (powerPreference != rhs.powerPreference) { return false; }
+        return true;
     }
 
 
@@ -501,11 +413,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnBufferDescriptorErrorInfoFromWireClient::outOfMemory");
 
     bool DawnBufferDescriptorErrorInfoFromWireClient::operator==(const DawnBufferDescriptorErrorInfoFromWireClient& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            outOfMemory
-        ) == std::tie(
-            rhs.outOfMemory
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (outOfMemory != rhs.outOfMemory) { return false; }
+        return true;
     }
 
 
@@ -518,25 +428,15 @@ namespace dawn::native {
             "offsetof mismatch for DawnCacheDeviceDescriptor::sType");
     static_assert(offsetof(DawnCacheDeviceDescriptor, isolationKey) == offsetof(WGPUDawnCacheDeviceDescriptor, isolationKey),
                  "offsetof mismatch for DawnCacheDeviceDescriptor::isolationKey");
-    static_assert(offsetof(DawnCacheDeviceDescriptor, loadDataFunction) == offsetof(WGPUDawnCacheDeviceDescriptor, loadDataFunction),
-                 "offsetof mismatch for DawnCacheDeviceDescriptor::loadDataFunction");
-    static_assert(offsetof(DawnCacheDeviceDescriptor, storeDataFunction) == offsetof(WGPUDawnCacheDeviceDescriptor, storeDataFunction),
-                 "offsetof mismatch for DawnCacheDeviceDescriptor::storeDataFunction");
-    static_assert(offsetof(DawnCacheDeviceDescriptor, functionUserdata) == offsetof(WGPUDawnCacheDeviceDescriptor, functionUserdata),
-                 "offsetof mismatch for DawnCacheDeviceDescriptor::functionUserdata");
+    static_assert(offsetof(DawnCacheDeviceDescriptor, dawnLoadCacheDataCallbackInfo) == offsetof(WGPUDawnCacheDeviceDescriptor, dawnLoadCacheDataCallbackInfo),
+                 "offsetof mismatch for DawnCacheDeviceDescriptor::dawnLoadCacheDataCallbackInfo");
+    static_assert(offsetof(DawnCacheDeviceDescriptor, dawnStoreCacheDataCallbackInfo) == offsetof(WGPUDawnCacheDeviceDescriptor, dawnStoreCacheDataCallbackInfo),
+                 "offsetof mismatch for DawnCacheDeviceDescriptor::dawnStoreCacheDataCallbackInfo");
 
     bool DawnCacheDeviceDescriptor::operator==(const DawnCacheDeviceDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            isolationKey,
-            loadDataFunction,
-            storeDataFunction,
-            functionUserdata
-        ) == std::tie(
-            rhs.isolationKey,
-            rhs.loadDataFunction,
-            rhs.storeDataFunction,
-            rhs.functionUserdata
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (isolationKey != rhs.isolationKey) { return false; }
+        return true;
     }
 
 
@@ -555,15 +455,11 @@ namespace dawn::native {
                  "offsetof mismatch for DawnCompilationMessageUtf16::length");
 
     bool DawnCompilationMessageUtf16::operator==(const DawnCompilationMessageUtf16& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            linePos,
-            offset,
-            length
-        ) == std::tie(
-            rhs.linePos,
-            rhs.offset,
-            rhs.length
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (linePos != rhs.linePos) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (length != rhs.length) { return false; }
+        return true;
     }
 
 
@@ -578,11 +474,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnConsumeAdapterDescriptor::consumeAdapter");
 
     bool DawnConsumeAdapterDescriptor::operator==(const DawnConsumeAdapterDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            consumeAdapter
-        ) == std::tie(
-            rhs.consumeAdapter
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (consumeAdapter != rhs.consumeAdapter) { return false; }
+        return true;
     }
 
 
@@ -597,11 +491,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnDeviceAllocatorControl::allocatorHeapBlockSize");
 
     bool DawnDeviceAllocatorControl::operator==(const DawnDeviceAllocatorControl& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            allocatorHeapBlockSize
-        ) == std::tie(
-            rhs.allocatorHeapBlockSize
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (allocatorHeapBlockSize != rhs.allocatorHeapBlockSize) { return false; }
+        return true;
     }
 
 
@@ -614,13 +506,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnDrmFormatProperties::modifierPlaneCount");
 
     bool DawnDrmFormatProperties::operator==(const DawnDrmFormatProperties& rhs) const {
-        return  std::tie(
-            modifier,
-            modifierPlaneCount
-        ) == std::tie(
-            rhs.modifier,
-            rhs.modifierPlaneCount
-        );
+        if (modifier != rhs.modifier) { return false; }
+        if (modifierPlaneCount != rhs.modifierPlaneCount) { return false; }
+        return true;
     }
 
 
@@ -635,11 +523,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnEncoderInternalUsageDescriptor::useInternalUsages");
 
     bool DawnEncoderInternalUsageDescriptor::operator==(const DawnEncoderInternalUsageDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            useInternalUsages
-        ) == std::tie(
-            rhs.useInternalUsages
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (useInternalUsages != rhs.useInternalUsages) { return false; }
+        return true;
     }
 
 
@@ -658,15 +544,11 @@ namespace dawn::native {
                  "offsetof mismatch for DawnFakeBufferOOMForTesting::fakeOOMAtDevice");
 
     bool DawnFakeBufferOOMForTesting::operator==(const DawnFakeBufferOOMForTesting& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            fakeOOMAtWireClientMap,
-            fakeOOMAtNativeMap,
-            fakeOOMAtDevice
-        ) == std::tie(
-            rhs.fakeOOMAtWireClientMap,
-            rhs.fakeOOMAtNativeMap,
-            rhs.fakeOOMAtDevice
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (fakeOOMAtWireClientMap != rhs.fakeOOMAtWireClientMap) { return false; }
+        if (fakeOOMAtNativeMap != rhs.fakeOOMAtNativeMap) { return false; }
+        if (fakeOOMAtDevice != rhs.fakeOOMAtDevice) { return false; }
+        return true;
     }
 
 
@@ -679,9 +561,8 @@ namespace dawn::native {
             "offsetof mismatch for DawnFakeDeviceInitializeErrorForTesting::sType");
 
     bool DawnFakeDeviceInitializeErrorForTesting::operator==(const DawnFakeDeviceInitializeErrorForTesting& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-        ) == std::tie(
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        return true;
     }
 
 
@@ -696,11 +577,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnHostMappedPointerLimits::hostMappedPointerAlignment");
 
     bool DawnHostMappedPointerLimits::operator==(const DawnHostMappedPointerLimits& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            hostMappedPointerAlignment
-        ) == std::tie(
-            rhs.hostMappedPointerAlignment
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (hostMappedPointerAlignment != rhs.hostMappedPointerAlignment) { return false; }
+        return true;
     }
 
 
@@ -715,11 +594,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnInjectedInvalidSType::invalidSType");
 
     bool DawnInjectedInvalidSType::operator==(const DawnInjectedInvalidSType& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            invalidSType
-        ) == std::tie(
-            rhs.invalidSType
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (invalidSType != rhs.invalidSType) { return false; }
+        return true;
     }
 
 
@@ -734,11 +611,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnRenderPassSampleCount::sampleCount");
 
     bool DawnRenderPassSampleCount::operator==(const DawnRenderPassSampleCount& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            sampleCount
-        ) == std::tie(
-            rhs.sampleCount
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (sampleCount != rhs.sampleCount) { return false; }
+        return true;
     }
 
 
@@ -753,11 +628,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnShaderModuleSPIRVOptionsDescriptor::allowNonUniformDerivatives");
 
     bool DawnShaderModuleSPIRVOptionsDescriptor::operator==(const DawnShaderModuleSPIRVOptionsDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            allowNonUniformDerivatives
-        ) == std::tie(
-            rhs.allowNonUniformDerivatives
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (allowNonUniformDerivatives != rhs.allowNonUniformDerivatives) { return false; }
+        return true;
     }
 
 
@@ -772,11 +645,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnTexelCopyBufferRowAlignmentLimits::minTexelCopyBufferRowAlignment");
 
     bool DawnTexelCopyBufferRowAlignmentLimits::operator==(const DawnTexelCopyBufferRowAlignmentLimits& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            minTexelCopyBufferRowAlignment
-        ) == std::tie(
-            rhs.minTexelCopyBufferRowAlignment
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (minTexelCopyBufferRowAlignment != rhs.minTexelCopyBufferRowAlignment) { return false; }
+        return true;
     }
 
 
@@ -791,11 +662,9 @@ namespace dawn::native {
                  "offsetof mismatch for DawnTextureInternalUsageDescriptor::internalUsage");
 
     bool DawnTextureInternalUsageDescriptor::operator==(const DawnTextureInternalUsageDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            internalUsage
-        ) == std::tie(
-            rhs.internalUsage
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (internalUsage != rhs.internalUsage) { return false; }
+        return true;
     }
 
 
@@ -806,27 +675,28 @@ namespace dawn::native {
             "offsetof mismatch for DawnTogglesDescriptor::nextInChain");
     static_assert(offsetof(DawnTogglesDescriptor, sType) == offsetof(WGPUDawnTogglesDescriptor, chain) + offsetof(WGPUChainedStruct, sType),
             "offsetof mismatch for DawnTogglesDescriptor::sType");
-    static_assert(offsetof(DawnTogglesDescriptor, enabledToggleCount) == offsetof(WGPUDawnTogglesDescriptor, enabledToggleCount),
-                 "offsetof mismatch for DawnTogglesDescriptor::enabledToggleCount");
-    static_assert(offsetof(DawnTogglesDescriptor, enabledToggles) == offsetof(WGPUDawnTogglesDescriptor, enabledToggles),
-                 "offsetof mismatch for DawnTogglesDescriptor::enabledToggles");
-    static_assert(offsetof(DawnTogglesDescriptor, disabledToggleCount) == offsetof(WGPUDawnTogglesDescriptor, disabledToggleCount),
-                 "offsetof mismatch for DawnTogglesDescriptor::disabledToggleCount");
-    static_assert(offsetof(DawnTogglesDescriptor, disabledToggles) == offsetof(WGPUDawnTogglesDescriptor, disabledToggles),
-                 "offsetof mismatch for DawnTogglesDescriptor::disabledToggles");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using DawnTogglesDescriptorenabledTogglesSpan = decltype(std::declval<DawnTogglesDescriptor>().enabledToggles);
+    
+    static_assert(offsetof(DawnTogglesDescriptor, enabledToggles) + DawnTogglesDescriptorenabledTogglesSpan::GetOffsetOfSize() == offsetof(WGPUDawnTogglesDescriptor, enabledToggleCount),
+                 "offsetof mismatch for DawnTogglesDescriptor::enabledToggles::mSize");
+    static_assert(offsetof(DawnTogglesDescriptor, enabledToggles) + DawnTogglesDescriptorenabledTogglesSpan::GetOffsetOfData() == offsetof(WGPUDawnTogglesDescriptor, enabledToggles),
+                 "offsetof mismatch for DawnTogglesDescriptor::enabledToggles::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using DawnTogglesDescriptordisabledTogglesSpan = decltype(std::declval<DawnTogglesDescriptor>().disabledToggles);
+    
+    static_assert(offsetof(DawnTogglesDescriptor, disabledToggles) + DawnTogglesDescriptordisabledTogglesSpan::GetOffsetOfSize() == offsetof(WGPUDawnTogglesDescriptor, disabledToggleCount),
+                 "offsetof mismatch for DawnTogglesDescriptor::disabledToggles::mSize");
+    static_assert(offsetof(DawnTogglesDescriptor, disabledToggles) + DawnTogglesDescriptordisabledTogglesSpan::GetOffsetOfData() == offsetof(WGPUDawnTogglesDescriptor, disabledToggles),
+                 "offsetof mismatch for DawnTogglesDescriptor::disabledToggles::mData");
 
     bool DawnTogglesDescriptor::operator==(const DawnTogglesDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            enabledToggleCount,
-            enabledToggles,
-            disabledToggleCount,
-            disabledToggles
-        ) == std::tie(
-            rhs.enabledToggleCount,
-            rhs.enabledToggles,
-            rhs.disabledToggleCount,
-            rhs.disabledToggles
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (enabledToggles.size() != rhs.enabledToggles.size()) { return false; }
+        if (enabledToggles.data() != rhs.enabledToggles.data()) { return false; }
+        if (disabledToggles.size() != rhs.disabledToggles.size()) { return false; }
+        if (disabledToggles.data() != rhs.disabledToggles.data()) { return false; }
+        return true;
     }
 
 
@@ -837,19 +707,19 @@ namespace dawn::native {
             "offsetof mismatch for DawnWGSLBlocklist::nextInChain");
     static_assert(offsetof(DawnWGSLBlocklist, sType) == offsetof(WGPUDawnWGSLBlocklist, chain) + offsetof(WGPUChainedStruct, sType),
             "offsetof mismatch for DawnWGSLBlocklist::sType");
-    static_assert(offsetof(DawnWGSLBlocklist, blocklistedFeatureCount) == offsetof(WGPUDawnWGSLBlocklist, blocklistedFeatureCount),
-                 "offsetof mismatch for DawnWGSLBlocklist::blocklistedFeatureCount");
-    static_assert(offsetof(DawnWGSLBlocklist, blocklistedFeatures) == offsetof(WGPUDawnWGSLBlocklist, blocklistedFeatures),
-                 "offsetof mismatch for DawnWGSLBlocklist::blocklistedFeatures");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using DawnWGSLBlocklistblocklistedFeaturesSpan = decltype(std::declval<DawnWGSLBlocklist>().blocklistedFeatures);
+    
+    static_assert(offsetof(DawnWGSLBlocklist, blocklistedFeatures) + DawnWGSLBlocklistblocklistedFeaturesSpan::GetOffsetOfSize() == offsetof(WGPUDawnWGSLBlocklist, blocklistedFeatureCount),
+                 "offsetof mismatch for DawnWGSLBlocklist::blocklistedFeatures::mSize");
+    static_assert(offsetof(DawnWGSLBlocklist, blocklistedFeatures) + DawnWGSLBlocklistblocklistedFeaturesSpan::GetOffsetOfData() == offsetof(WGPUDawnWGSLBlocklist, blocklistedFeatures),
+                 "offsetof mismatch for DawnWGSLBlocklist::blocklistedFeatures::mData");
 
     bool DawnWGSLBlocklist::operator==(const DawnWGSLBlocklist& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            blocklistedFeatureCount,
-            blocklistedFeatures
-        ) == std::tie(
-            rhs.blocklistedFeatureCount,
-            rhs.blocklistedFeatures
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (blocklistedFeatures.size() != rhs.blocklistedFeatures.size()) { return false; }
+        if (blocklistedFeatures.data() != rhs.blocklistedFeatures.data()) { return false; }
+        return true;
     }
 
 
@@ -868,15 +738,11 @@ namespace dawn::native {
                  "offsetof mismatch for DawnWireWGSLControl::enableTesting");
 
     bool DawnWireWGSLControl::operator==(const DawnWireWGSLControl& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            enableExperimental,
-            enableUnsafe,
-            enableTesting
-        ) == std::tie(
-            rhs.enableExperimental,
-            rhs.enableUnsafe,
-            rhs.enableTesting
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (enableExperimental != rhs.enableExperimental) { return false; }
+        if (enableUnsafe != rhs.enableUnsafe) { return false; }
+        if (enableTesting != rhs.enableTesting) { return false; }
+        return true;
     }
 
 
@@ -889,13 +755,9 @@ namespace dawn::native {
                  "offsetof mismatch for Extent2D::height");
 
     bool Extent2D::operator==(const Extent2D& rhs) const {
-        return  std::tie(
-            width,
-            height
-        ) == std::tie(
-            rhs.width,
-            rhs.height
-        );
+        if (width != rhs.width) { return false; }
+        if (height != rhs.height) { return false; }
+        return true;
     }
 
 
@@ -910,15 +772,10 @@ namespace dawn::native {
                  "offsetof mismatch for Extent3D::depthOrArrayLayers");
 
     bool Extent3D::operator==(const Extent3D& rhs) const {
-        return  std::tie(
-            width,
-            height,
-            depthOrArrayLayers
-        ) == std::tie(
-            rhs.width,
-            rhs.height,
-            rhs.depthOrArrayLayers
-        );
+        if (width != rhs.width) { return false; }
+        if (height != rhs.height) { return false; }
+        if (depthOrArrayLayers != rhs.depthOrArrayLayers) { return false; }
+        return true;
     }
 
 
@@ -933,11 +790,9 @@ namespace dawn::native {
                  "offsetof mismatch for ExternalTextureBindingEntry::externalTexture");
 
     bool ExternalTextureBindingEntry::operator==(const ExternalTextureBindingEntry& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            externalTexture
-        ) == std::tie(
-            rhs.externalTexture
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (externalTexture != rhs.externalTexture) { return false; }
+        return true;
     }
 
 
@@ -950,9 +805,8 @@ namespace dawn::native {
             "offsetof mismatch for ExternalTextureBindingLayout::sType");
 
     bool ExternalTextureBindingLayout::operator==(const ExternalTextureBindingLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-        ) == std::tie(
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        return true;
     }
 
 
@@ -963,11 +817,8 @@ namespace dawn::native {
                  "offsetof mismatch for Future::id");
 
     bool Future::operator==(const Future& rhs) const {
-        return  std::tie(
-            id
-        ) == std::tie(
-            rhs.id
-        );
+        if (id != rhs.id) { return false; }
+        return true;
     }
 
 
@@ -980,11 +831,9 @@ namespace dawn::native {
                  "offsetof mismatch for InstanceLimits::timedWaitAnyMaxCount");
 
     bool InstanceLimits::operator==(const InstanceLimits& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            timedWaitAnyMaxCount
-        ) == std::tie(
-            rhs.timedWaitAnyMaxCount
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (timedWaitAnyMaxCount != rhs.timedWaitAnyMaxCount) { return false; }
+        return true;
     }
 
 
@@ -997,13 +846,9 @@ namespace dawn::native {
                  "offsetof mismatch for MemoryHeapInfo::size");
 
     bool MemoryHeapInfo::operator==(const MemoryHeapInfo& rhs) const {
-        return  std::tie(
-            properties,
-            size
-        ) == std::tie(
-            rhs.properties,
-            rhs.size
-        );
+        if (properties != rhs.properties) { return false; }
+        if (size != rhs.size) { return false; }
+        return true;
     }
 
 
@@ -1020,15 +865,11 @@ namespace dawn::native {
                  "offsetof mismatch for MultisampleState::alphaToCoverageEnabled");
 
     bool MultisampleState::operator==(const MultisampleState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            count,
-            mask,
-            alphaToCoverageEnabled
-        ) == std::tie(
-            rhs.count,
-            rhs.mask,
-            rhs.alphaToCoverageEnabled
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (count != rhs.count) { return false; }
+        if (mask != rhs.mask) { return false; }
+        if (alphaToCoverageEnabled != rhs.alphaToCoverageEnabled) { return false; }
+        return true;
     }
 
 
@@ -1041,13 +882,9 @@ namespace dawn::native {
                  "offsetof mismatch for Origin2D::y");
 
     bool Origin2D::operator==(const Origin2D& rhs) const {
-        return  std::tie(
-            x,
-            y
-        ) == std::tie(
-            rhs.x,
-            rhs.y
-        );
+        if (x != rhs.x) { return false; }
+        if (y != rhs.y) { return false; }
+        return true;
     }
 
 
@@ -1062,15 +899,10 @@ namespace dawn::native {
                  "offsetof mismatch for Origin3D::z");
 
     bool Origin3D::operator==(const Origin3D& rhs) const {
-        return  std::tie(
-            x,
-            y,
-            z
-        ) == std::tie(
-            rhs.x,
-            rhs.y,
-            rhs.z
-        );
+        if (x != rhs.x) { return false; }
+        if (y != rhs.y) { return false; }
+        if (z != rhs.z) { return false; }
+        return true;
     }
 
 
@@ -1087,15 +919,11 @@ namespace dawn::native {
                  "offsetof mismatch for PassTimestampWrites::endOfPassWriteIndex");
 
     bool PassTimestampWrites::operator==(const PassTimestampWrites& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            querySet,
-            beginningOfPassWriteIndex,
-            endOfPassWriteIndex
-        ) == std::tie(
-            rhs.querySet,
-            rhs.beginningOfPassWriteIndex,
-            rhs.endOfPassWriteIndex
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (querySet != rhs.querySet) { return false; }
+        if (beginningOfPassWriteIndex != rhs.beginningOfPassWriteIndex) { return false; }
+        if (endOfPassWriteIndex != rhs.endOfPassWriteIndex) { return false; }
+        return true;
     }
 
 
@@ -1110,11 +938,9 @@ namespace dawn::native {
                  "offsetof mismatch for PipelineLayoutResourceTable::usesResourceTable");
 
     bool PipelineLayoutResourceTable::operator==(const PipelineLayoutResourceTable& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            usesResourceTable
-        ) == std::tie(
-            rhs.usesResourceTable
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (usesResourceTable != rhs.usesResourceTable) { return false; }
+        return true;
     }
 
 
@@ -1129,13 +955,10 @@ namespace dawn::native {
                  "offsetof mismatch for PipelineLayoutStorageAttachment::format");
 
     bool PipelineLayoutStorageAttachment::operator==(const PipelineLayoutStorageAttachment& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            offset,
-            format
-        ) == std::tie(
-            rhs.offset,
-            rhs.format
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (format != rhs.format) { return false; }
+        return true;
     }
 
 
@@ -1172,19 +995,13 @@ namespace dawn::native {
         return copy;
     }
     bool PrimitiveState::operator==(const PrimitiveState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            topology,
-            stripIndexFormat,
-            frontFace,
-            cullMode,
-            unclippedDepth
-        ) == std::tie(
-            rhs.topology,
-            rhs.stripIndexFormat,
-            rhs.frontFace,
-            rhs.cullMode,
-            rhs.unclippedDepth
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (topology != rhs.topology) { return false; }
+        if (stripIndexFormat != rhs.stripIndexFormat) { return false; }
+        if (frontFace != rhs.frontFace) { return false; }
+        if (cullMode != rhs.cullMode) { return false; }
+        if (unclippedDepth != rhs.unclippedDepth) { return false; }
+        return true;
     }
 
 
@@ -1201,15 +1018,11 @@ namespace dawn::native {
                  "offsetof mismatch for QuerySetDescriptor::count");
 
     bool QuerySetDescriptor::operator==(const QuerySetDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            type,
-            count
-        ) == std::tie(
-            rhs.label,
-            rhs.type,
-            rhs.count
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (type != rhs.type) { return false; }
+        if (count != rhs.count) { return false; }
+        return true;
     }
 
 
@@ -1222,11 +1035,9 @@ namespace dawn::native {
                  "offsetof mismatch for QueueDescriptor::label");
 
     bool QueueDescriptor::operator==(const QueueDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
@@ -1239,52 +1050,26 @@ namespace dawn::native {
                  "offsetof mismatch for RenderBundleDescriptor::label");
 
     bool RenderBundleDescriptor::operator==(const RenderBundleDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
-    static_assert(sizeof(RenderBundleEncoderDescriptor) == sizeof(WGPURenderBundleEncoderDescriptor), "sizeof mismatch for RenderBundleEncoderDescriptor");
-    static_assert(alignof(RenderBundleEncoderDescriptor) == alignof(WGPURenderBundleEncoderDescriptor), "alignof mismatch for RenderBundleEncoderDescriptor");
+    static_assert(sizeof(RenderBundleEncoderResourceTable) == sizeof(WGPURenderBundleEncoderResourceTable), "sizeof mismatch for RenderBundleEncoderResourceTable");
+    static_assert(alignof(RenderBundleEncoderResourceTable) == alignof(WGPURenderBundleEncoderResourceTable), "alignof mismatch for RenderBundleEncoderResourceTable");
 
-    static_assert(offsetof(RenderBundleEncoderDescriptor, nextInChain) == offsetof(WGPURenderBundleEncoderDescriptor, nextInChain),
-            "offsetof mismatch for RenderBundleEncoderDescriptor::nextInChain");
-    static_assert(offsetof(RenderBundleEncoderDescriptor, label) == offsetof(WGPURenderBundleEncoderDescriptor, label),
-                 "offsetof mismatch for RenderBundleEncoderDescriptor::label");
-    static_assert(offsetof(RenderBundleEncoderDescriptor, colorFormatCount) == offsetof(WGPURenderBundleEncoderDescriptor, colorFormatCount),
-                 "offsetof mismatch for RenderBundleEncoderDescriptor::colorFormatCount");
-    static_assert(offsetof(RenderBundleEncoderDescriptor, colorFormats) == offsetof(WGPURenderBundleEncoderDescriptor, colorFormats),
-                 "offsetof mismatch for RenderBundleEncoderDescriptor::colorFormats");
-    static_assert(offsetof(RenderBundleEncoderDescriptor, depthStencilFormat) == offsetof(WGPURenderBundleEncoderDescriptor, depthStencilFormat),
-                 "offsetof mismatch for RenderBundleEncoderDescriptor::depthStencilFormat");
-    static_assert(offsetof(RenderBundleEncoderDescriptor, sampleCount) == offsetof(WGPURenderBundleEncoderDescriptor, sampleCount),
-                 "offsetof mismatch for RenderBundleEncoderDescriptor::sampleCount");
-    static_assert(offsetof(RenderBundleEncoderDescriptor, depthReadOnly) == offsetof(WGPURenderBundleEncoderDescriptor, depthReadOnly),
-                 "offsetof mismatch for RenderBundleEncoderDescriptor::depthReadOnly");
-    static_assert(offsetof(RenderBundleEncoderDescriptor, stencilReadOnly) == offsetof(WGPURenderBundleEncoderDescriptor, stencilReadOnly),
-                 "offsetof mismatch for RenderBundleEncoderDescriptor::stencilReadOnly");
+    static_assert(offsetof(RenderBundleEncoderResourceTable, nextInChain) == offsetof(WGPURenderBundleEncoderResourceTable, chain) + offsetof(WGPUChainedStruct, next),
+            "offsetof mismatch for RenderBundleEncoderResourceTable::nextInChain");
+    static_assert(offsetof(RenderBundleEncoderResourceTable, sType) == offsetof(WGPURenderBundleEncoderResourceTable, chain) + offsetof(WGPUChainedStruct, sType),
+            "offsetof mismatch for RenderBundleEncoderResourceTable::sType");
+    static_assert(offsetof(RenderBundleEncoderResourceTable, usesResourceTable) == offsetof(WGPURenderBundleEncoderResourceTable, usesResourceTable),
+                 "offsetof mismatch for RenderBundleEncoderResourceTable::usesResourceTable");
 
-    bool RenderBundleEncoderDescriptor::operator==(const RenderBundleEncoderDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            colorFormatCount,
-            colorFormats,
-            depthStencilFormat,
-            sampleCount,
-            depthReadOnly,
-            stencilReadOnly
-        ) == std::tie(
-            rhs.label,
-            rhs.colorFormatCount,
-            rhs.colorFormats,
-            rhs.depthStencilFormat,
-            rhs.sampleCount,
-            rhs.depthReadOnly,
-            rhs.stencilReadOnly
-        );
+    bool RenderBundleEncoderResourceTable::operator==(const RenderBundleEncoderResourceTable& rhs) const {
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (usesResourceTable != rhs.usesResourceTable) { return false; }
+        return true;
     }
 
 
@@ -1313,27 +1098,17 @@ namespace dawn::native {
                  "offsetof mismatch for RenderPassDepthStencilAttachment::stencilReadOnly");
 
     bool RenderPassDepthStencilAttachment::operator==(const RenderPassDepthStencilAttachment& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            view,
-            depthLoadOp,
-            depthStoreOp,
-            depthClearValue,
-            depthReadOnly,
-            stencilLoadOp,
-            stencilStoreOp,
-            stencilClearValue,
-            stencilReadOnly
-        ) == std::tie(
-            rhs.view,
-            rhs.depthLoadOp,
-            rhs.depthStoreOp,
-            rhs.depthClearValue,
-            rhs.depthReadOnly,
-            rhs.stencilLoadOp,
-            rhs.stencilStoreOp,
-            rhs.stencilClearValue,
-            rhs.stencilReadOnly
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (view != rhs.view) { return false; }
+        if (depthLoadOp != rhs.depthLoadOp) { return false; }
+        if (depthStoreOp != rhs.depthStoreOp) { return false; }
+        if (depthClearValue != rhs.depthClearValue) { return false; }
+        if (depthReadOnly != rhs.depthReadOnly) { return false; }
+        if (stencilLoadOp != rhs.stencilLoadOp) { return false; }
+        if (stencilStoreOp != rhs.stencilStoreOp) { return false; }
+        if (stencilClearValue != rhs.stencilClearValue) { return false; }
+        if (stencilReadOnly != rhs.stencilReadOnly) { return false; }
+        return true;
     }
 
 
@@ -1358,21 +1133,14 @@ namespace dawn::native {
                  "offsetof mismatch for RenderPassDescriptorResolveRect::height");
 
     bool RenderPassDescriptorResolveRect::operator==(const RenderPassDescriptorResolveRect& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            colorOffsetX,
-            colorOffsetY,
-            resolveOffsetX,
-            resolveOffsetY,
-            width,
-            height
-        ) == std::tie(
-            rhs.colorOffsetX,
-            rhs.colorOffsetY,
-            rhs.resolveOffsetX,
-            rhs.resolveOffsetY,
-            rhs.width,
-            rhs.height
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (colorOffsetX != rhs.colorOffsetX) { return false; }
+        if (colorOffsetY != rhs.colorOffsetY) { return false; }
+        if (resolveOffsetX != rhs.resolveOffsetX) { return false; }
+        if (resolveOffsetY != rhs.resolveOffsetY) { return false; }
+        if (width != rhs.width) { return false; }
+        if (height != rhs.height) { return false; }
+        return true;
     }
 
 
@@ -1387,11 +1155,9 @@ namespace dawn::native {
                  "offsetof mismatch for RenderPassMaxDrawCount::maxDrawCount");
 
     bool RenderPassMaxDrawCount::operator==(const RenderPassMaxDrawCount& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            maxDrawCount
-        ) == std::tie(
-            rhs.maxDrawCount
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (maxDrawCount != rhs.maxDrawCount) { return false; }
+        return true;
     }
 
 
@@ -1404,9 +1170,8 @@ namespace dawn::native {
             "offsetof mismatch for RequestAdapterWebGPUBackendOptions::sType");
 
     bool RequestAdapterWebGPUBackendOptions::operator==(const RequestAdapterWebGPUBackendOptions& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-        ) == std::tie(
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        return true;
     }
 
 
@@ -1421,11 +1186,9 @@ namespace dawn::native {
                  "offsetof mismatch for RequestAdapterWebXROptions::xrCompatible");
 
     bool RequestAdapterWebXROptions::operator==(const RequestAdapterWebXROptions& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            xrCompatible
-        ) == std::tie(
-            rhs.xrCompatible
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (xrCompatible != rhs.xrCompatible) { return false; }
+        return true;
     }
 
 
@@ -1440,13 +1203,10 @@ namespace dawn::native {
                  "offsetof mismatch for ResourceTableDescriptor::size");
 
     bool ResourceTableDescriptor::operator==(const ResourceTableDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            size
-        ) == std::tie(
-            rhs.label,
-            rhs.size
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (size != rhs.size) { return false; }
+        return true;
     }
 
 
@@ -1467,11 +1227,9 @@ namespace dawn::native {
         return copy;
     }
     bool SamplerBindingLayout::operator==(const SamplerBindingLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            type
-        ) == std::tie(
-            rhs.type
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (type != rhs.type) { return false; }
+        return true;
     }
 
 
@@ -1486,11 +1244,9 @@ namespace dawn::native {
                  "offsetof mismatch for ShaderModuleCompilationOptions::strictMath");
 
     bool ShaderModuleCompilationOptions::operator==(const ShaderModuleCompilationOptions& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            strictMath
-        ) == std::tie(
-            rhs.strictMath
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (strictMath != rhs.strictMath) { return false; }
+        return true;
     }
 
 
@@ -1507,13 +1263,10 @@ namespace dawn::native {
                  "offsetof mismatch for ShaderSourceSPIRV::code");
 
     bool ShaderSourceSPIRV::operator==(const ShaderSourceSPIRV& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            codeSize,
-            code
-        ) == std::tie(
-            rhs.codeSize,
-            rhs.code
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (codeSize != rhs.codeSize) { return false; }
+        if (code != rhs.code) { return false; }
+        return true;
     }
 
 
@@ -1528,11 +1281,9 @@ namespace dawn::native {
                  "offsetof mismatch for ShaderSourceWGSL::code");
 
     bool ShaderSourceWGSL::operator==(const ShaderSourceWGSL& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            code
-        ) == std::tie(
-            rhs.code
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (code != rhs.code) { return false; }
+        return true;
     }
 
 
@@ -1543,48 +1294,29 @@ namespace dawn::native {
             "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::nextInChain");
     static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, initialized) == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, initialized),
                  "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::initialized");
-    static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, fenceCount) == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, fenceCount),
-                 "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::fenceCount");
-    static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, fences) == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, fences),
-                 "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::fences");
-    static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, signaledValues) == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, signaledValues),
-                 "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::signaledValues");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedBufferMemoryBeginAccessDescriptorfencesSpan = decltype(std::declval<SharedBufferMemoryBeginAccessDescriptor>().fences);
+    
+    static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, fences) + SharedBufferMemoryBeginAccessDescriptorfencesSpan::GetOffsetOfSize() == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, fenceCount),
+                 "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::fences::mSize");
+    static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, fences) + SharedBufferMemoryBeginAccessDescriptorfencesSpan::GetOffsetOfData() == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, fences),
+                 "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::fences::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedBufferMemoryBeginAccessDescriptorsignaledValuesSpan = decltype(std::declval<SharedBufferMemoryBeginAccessDescriptor>().signaledValues);
+    
+    static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, signaledValues) + SharedBufferMemoryBeginAccessDescriptorsignaledValuesSpan::GetOffsetOfSize() == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, signaledValueCount),
+                 "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::signaledValues::mSize");
+    static_assert(offsetof(SharedBufferMemoryBeginAccessDescriptor, signaledValues) + SharedBufferMemoryBeginAccessDescriptorsignaledValuesSpan::GetOffsetOfData() == offsetof(WGPUSharedBufferMemoryBeginAccessDescriptor, signaledValues),
+                 "offsetof mismatch for SharedBufferMemoryBeginAccessDescriptor::signaledValues::mData");
 
     bool SharedBufferMemoryBeginAccessDescriptor::operator==(const SharedBufferMemoryBeginAccessDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            initialized,
-            fenceCount,
-            fences,
-            signaledValues
-        ) == std::tie(
-            rhs.initialized,
-            rhs.fenceCount,
-            rhs.fences,
-            rhs.signaledValues
-        );
-    }
-
-
-    static_assert(sizeof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor) == sizeof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor), "sizeof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor");
-    static_assert(alignof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor) == alignof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor), "alignof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor");
-
-    static_assert(offsetof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, nextInChain) == offsetof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, chain) + offsetof(WGPUChainedStruct, next),
-            "offsetof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::nextInChain");
-    static_assert(offsetof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, sType) == offsetof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, chain) + offsetof(WGPUChainedStruct, sType),
-            "offsetof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::sType");
-    static_assert(offsetof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, handle) == offsetof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, handle),
-                 "offsetof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::handle");
-    static_assert(offsetof(SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, size) == offsetof(WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor, size),
-                 "offsetof mismatch for SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::size");
-
-    bool SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::operator==(const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle,
-            size
-        ) == std::tie(
-            rhs.handle,
-            rhs.size
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (initialized != rhs.initialized) { return false; }
+        if (fences.size() != rhs.fences.size()) { return false; }
+        if (fences.data() != rhs.fences.data()) { return false; }
+        if (signaledValues.size() != rhs.signaledValues.size()) { return false; }
+        if (signaledValues.data() != rhs.signaledValues.data()) { return false; }
+        return true;
     }
 
 
@@ -1595,25 +1327,49 @@ namespace dawn::native {
             "offsetof mismatch for SharedBufferMemoryEndAccessState::nextInChain");
     static_assert(offsetof(SharedBufferMemoryEndAccessState, initialized) == offsetof(WGPUSharedBufferMemoryEndAccessState, initialized),
                  "offsetof mismatch for SharedBufferMemoryEndAccessState::initialized");
-    static_assert(offsetof(SharedBufferMemoryEndAccessState, fenceCount) == offsetof(WGPUSharedBufferMemoryEndAccessState, fenceCount),
-                 "offsetof mismatch for SharedBufferMemoryEndAccessState::fenceCount");
-    static_assert(offsetof(SharedBufferMemoryEndAccessState, fences) == offsetof(WGPUSharedBufferMemoryEndAccessState, fences),
-                 "offsetof mismatch for SharedBufferMemoryEndAccessState::fences");
-    static_assert(offsetof(SharedBufferMemoryEndAccessState, signaledValues) == offsetof(WGPUSharedBufferMemoryEndAccessState, signaledValues),
-                 "offsetof mismatch for SharedBufferMemoryEndAccessState::signaledValues");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedBufferMemoryEndAccessStatefencesSpan = decltype(std::declval<SharedBufferMemoryEndAccessState>().fences);
+    
+    static_assert(offsetof(SharedBufferMemoryEndAccessState, fences) + SharedBufferMemoryEndAccessStatefencesSpan::GetOffsetOfSize() == offsetof(WGPUSharedBufferMemoryEndAccessState, fenceCount),
+                 "offsetof mismatch for SharedBufferMemoryEndAccessState::fences::mSize");
+    static_assert(offsetof(SharedBufferMemoryEndAccessState, fences) + SharedBufferMemoryEndAccessStatefencesSpan::GetOffsetOfData() == offsetof(WGPUSharedBufferMemoryEndAccessState, fences),
+                 "offsetof mismatch for SharedBufferMemoryEndAccessState::fences::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedBufferMemoryEndAccessStatesignaledValuesSpan = decltype(std::declval<SharedBufferMemoryEndAccessState>().signaledValues);
+    
+    static_assert(offsetof(SharedBufferMemoryEndAccessState, signaledValues) + SharedBufferMemoryEndAccessStatesignaledValuesSpan::GetOffsetOfSize() == offsetof(WGPUSharedBufferMemoryEndAccessState, signaledValueCount),
+                 "offsetof mismatch for SharedBufferMemoryEndAccessState::signaledValues::mSize");
+    static_assert(offsetof(SharedBufferMemoryEndAccessState, signaledValues) + SharedBufferMemoryEndAccessStatesignaledValuesSpan::GetOffsetOfData() == offsetof(WGPUSharedBufferMemoryEndAccessState, signaledValues),
+                 "offsetof mismatch for SharedBufferMemoryEndAccessState::signaledValues::mData");
 
     bool SharedBufferMemoryEndAccessState::operator==(const SharedBufferMemoryEndAccessState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            initialized,
-            fenceCount,
-            fences,
-            signaledValues
-        ) == std::tie(
-            rhs.initialized,
-            rhs.fenceCount,
-            rhs.fences,
-            rhs.signaledValues
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (initialized != rhs.initialized) { return false; }
+        if (fences.size() != rhs.fences.size()) { return false; }
+        if (fences.data() != rhs.fences.data()) { return false; }
+        if (signaledValues.size() != rhs.signaledValues.size()) { return false; }
+        if (signaledValues.data() != rhs.signaledValues.data()) { return false; }
+        return true;
+    }
+
+
+    static_assert(sizeof(SharedBufferMemoryFromWindowsHandleDescriptor) == sizeof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor), "sizeof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor");
+    static_assert(alignof(SharedBufferMemoryFromWindowsHandleDescriptor) == alignof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor), "alignof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor");
+
+    static_assert(offsetof(SharedBufferMemoryFromWindowsHandleDescriptor, nextInChain) == offsetof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor, chain) + offsetof(WGPUChainedStruct, next),
+            "offsetof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor::nextInChain");
+    static_assert(offsetof(SharedBufferMemoryFromWindowsHandleDescriptor, sType) == offsetof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor, chain) + offsetof(WGPUChainedStruct, sType),
+            "offsetof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor::sType");
+    static_assert(offsetof(SharedBufferMemoryFromWindowsHandleDescriptor, handle) == offsetof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor, handle),
+                 "offsetof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor::handle");
+    static_assert(offsetof(SharedBufferMemoryFromWindowsHandleDescriptor, size) == offsetof(WGPUSharedBufferMemoryFromWindowsHandleDescriptor, size),
+                 "offsetof mismatch for SharedBufferMemoryFromWindowsHandleDescriptor::size");
+
+    bool SharedBufferMemoryFromWindowsHandleDescriptor::operator==(const SharedBufferMemoryFromWindowsHandleDescriptor& rhs) const {
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        if (size != rhs.size) { return false; }
+        return true;
     }
 
 
@@ -1628,13 +1384,10 @@ namespace dawn::native {
                  "offsetof mismatch for SharedBufferMemoryProperties::size");
 
     bool SharedBufferMemoryProperties::operator==(const SharedBufferMemoryProperties& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            usage,
-            size
-        ) == std::tie(
-            rhs.usage,
-            rhs.size
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (usage != rhs.usage) { return false; }
+        if (size != rhs.size) { return false; }
+        return true;
     }
 
 
@@ -1649,11 +1402,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceDXGISharedHandleDescriptor::handle");
 
     bool SharedFenceDXGISharedHandleDescriptor::operator==(const SharedFenceDXGISharedHandleDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1668,11 +1419,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceDXGISharedHandleExportInfo::handle");
 
     bool SharedFenceDXGISharedHandleExportInfo::operator==(const SharedFenceDXGISharedHandleExportInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1687,11 +1436,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceEGLSyncDescriptor::sync");
 
     bool SharedFenceEGLSyncDescriptor::operator==(const SharedFenceEGLSyncDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            sync
-        ) == std::tie(
-            rhs.sync
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (sync != rhs.sync) { return false; }
+        return true;
     }
 
 
@@ -1706,11 +1453,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceEGLSyncExportInfo::sync");
 
     bool SharedFenceEGLSyncExportInfo::operator==(const SharedFenceEGLSyncExportInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            sync
-        ) == std::tie(
-            rhs.sync
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (sync != rhs.sync) { return false; }
+        return true;
     }
 
 
@@ -1725,11 +1470,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceMTLSharedEventDescriptor::sharedEvent");
 
     bool SharedFenceMTLSharedEventDescriptor::operator==(const SharedFenceMTLSharedEventDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            sharedEvent
-        ) == std::tie(
-            rhs.sharedEvent
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (sharedEvent != rhs.sharedEvent) { return false; }
+        return true;
     }
 
 
@@ -1744,11 +1487,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceMTLSharedEventExportInfo::sharedEvent");
 
     bool SharedFenceMTLSharedEventExportInfo::operator==(const SharedFenceMTLSharedEventExportInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            sharedEvent
-        ) == std::tie(
-            rhs.sharedEvent
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (sharedEvent != rhs.sharedEvent) { return false; }
+        return true;
     }
 
 
@@ -1763,11 +1504,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceSyncFDDescriptor::handle");
 
     bool SharedFenceSyncFDDescriptor::operator==(const SharedFenceSyncFDDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1782,11 +1521,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceSyncFDExportInfo::handle");
 
     bool SharedFenceSyncFDExportInfo::operator==(const SharedFenceSyncFDExportInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1801,11 +1538,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceVkSemaphoreOpaqueFDDescriptor::handle");
 
     bool SharedFenceVkSemaphoreOpaqueFDDescriptor::operator==(const SharedFenceVkSemaphoreOpaqueFDDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1820,11 +1555,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceVkSemaphoreOpaqueFDExportInfo::handle");
 
     bool SharedFenceVkSemaphoreOpaqueFDExportInfo::operator==(const SharedFenceVkSemaphoreOpaqueFDExportInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1839,11 +1572,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceVkSemaphoreZirconHandleDescriptor::handle");
 
     bool SharedFenceVkSemaphoreZirconHandleDescriptor::operator==(const SharedFenceVkSemaphoreZirconHandleDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1858,11 +1589,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceVkSemaphoreZirconHandleExportInfo::handle");
 
     bool SharedFenceVkSemaphoreZirconHandleExportInfo::operator==(const SharedFenceVkSemaphoreZirconHandleExportInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1877,11 +1606,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryAHardwareBufferDescriptor::handle");
 
     bool SharedTextureMemoryAHardwareBufferDescriptor::operator==(const SharedTextureMemoryAHardwareBufferDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle
-        ) == std::tie(
-            rhs.handle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        return true;
     }
 
 
@@ -1896,11 +1623,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryD3D11BeginState::requiresEndAccessFence");
 
     bool SharedTextureMemoryD3D11BeginState::operator==(const SharedTextureMemoryD3D11BeginState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            requiresEndAccessFence
-        ) == std::tie(
-            rhs.requiresEndAccessFence
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (requiresEndAccessFence != rhs.requiresEndAccessFence) { return false; }
+        return true;
     }
 
 
@@ -1915,11 +1640,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryD3DSwapchainBeginState::isSwapchain");
 
     bool SharedTextureMemoryD3DSwapchainBeginState::operator==(const SharedTextureMemoryD3DSwapchainBeginState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            isSwapchain
-        ) == std::tie(
-            rhs.isSwapchain
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (isSwapchain != rhs.isSwapchain) { return false; }
+        return true;
     }
 
 
@@ -1934,15 +1657,10 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryDmaBufPlane::stride");
 
     bool SharedTextureMemoryDmaBufPlane::operator==(const SharedTextureMemoryDmaBufPlane& rhs) const {
-        return  std::tie(
-            fd,
-            offset,
-            stride
-        ) == std::tie(
-            rhs.fd,
-            rhs.offset,
-            rhs.stride
-        );
+        if (fd != rhs.fd) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (stride != rhs.stride) { return false; }
+        return true;
     }
 
 
@@ -1959,13 +1677,10 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryDXGISharedHandleDescriptor::useKeyedMutex");
 
     bool SharedTextureMemoryDXGISharedHandleDescriptor::operator==(const SharedTextureMemoryDXGISharedHandleDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            handle,
-            useKeyedMutex
-        ) == std::tie(
-            rhs.handle,
-            rhs.useKeyedMutex
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (handle != rhs.handle) { return false; }
+        if (useKeyedMutex != rhs.useKeyedMutex) { return false; }
+        return true;
     }
 
 
@@ -1980,11 +1695,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryEGLImageDescriptor::image");
 
     bool SharedTextureMemoryEGLImageDescriptor::operator==(const SharedTextureMemoryEGLImageDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            image
-        ) == std::tie(
-            rhs.image
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (image != rhs.image) { return false; }
+        return true;
     }
 
 
@@ -2001,13 +1714,10 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryIOSurfaceDescriptor::allowStorageBinding");
 
     bool SharedTextureMemoryIOSurfaceDescriptor::operator==(const SharedTextureMemoryIOSurfaceDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            ioSurface,
-            allowStorageBinding
-        ) == std::tie(
-            rhs.ioSurface,
-            rhs.allowStorageBinding
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (ioSurface != rhs.ioSurface) { return false; }
+        if (allowStorageBinding != rhs.allowStorageBinding) { return false; }
+        return true;
     }
 
 
@@ -2030,19 +1740,13 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryOpaqueFDDescriptor::dedicatedAllocation");
 
     bool SharedTextureMemoryOpaqueFDDescriptor::operator==(const SharedTextureMemoryOpaqueFDDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            vkImageCreateInfo,
-            memoryFD,
-            memoryTypeIndex,
-            allocationSize,
-            dedicatedAllocation
-        ) == std::tie(
-            rhs.vkImageCreateInfo,
-            rhs.memoryFD,
-            rhs.memoryTypeIndex,
-            rhs.allocationSize,
-            rhs.dedicatedAllocation
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (vkImageCreateInfo != rhs.vkImageCreateInfo) { return false; }
+        if (memoryFD != rhs.memoryFD) { return false; }
+        if (memoryTypeIndex != rhs.memoryTypeIndex) { return false; }
+        if (allocationSize != rhs.allocationSize) { return false; }
+        if (dedicatedAllocation != rhs.dedicatedAllocation) { return false; }
+        return true;
     }
 
 
@@ -2057,11 +1761,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryVkDedicatedAllocationDescriptor::dedicatedAllocation");
 
     bool SharedTextureMemoryVkDedicatedAllocationDescriptor::operator==(const SharedTextureMemoryVkDedicatedAllocationDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            dedicatedAllocation
-        ) == std::tie(
-            rhs.dedicatedAllocation
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (dedicatedAllocation != rhs.dedicatedAllocation) { return false; }
+        return true;
     }
 
 
@@ -2078,13 +1780,10 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryVkImageLayoutBeginState::newLayout");
 
     bool SharedTextureMemoryVkImageLayoutBeginState::operator==(const SharedTextureMemoryVkImageLayoutBeginState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            oldLayout,
-            newLayout
-        ) == std::tie(
-            rhs.oldLayout,
-            rhs.newLayout
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (oldLayout != rhs.oldLayout) { return false; }
+        if (newLayout != rhs.newLayout) { return false; }
+        return true;
     }
 
 
@@ -2101,13 +1800,10 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryVkImageLayoutEndState::newLayout");
 
     bool SharedTextureMemoryVkImageLayoutEndState::operator==(const SharedTextureMemoryVkImageLayoutEndState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            oldLayout,
-            newLayout
-        ) == std::tie(
-            rhs.oldLayout,
-            rhs.newLayout
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (oldLayout != rhs.oldLayout) { return false; }
+        if (newLayout != rhs.newLayout) { return false; }
+        return true;
     }
 
 
@@ -2124,13 +1820,10 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryZirconHandleDescriptor::allocationSize");
 
     bool SharedTextureMemoryZirconHandleDescriptor::operator==(const SharedTextureMemoryZirconHandleDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            memoryFD,
-            allocationSize
-        ) == std::tie(
-            rhs.memoryFD,
-            rhs.allocationSize
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (memoryFD != rhs.memoryFD) { return false; }
+        if (allocationSize != rhs.allocationSize) { return false; }
+        return true;
     }
 
 
@@ -2147,13 +1840,10 @@ namespace dawn::native {
                  "offsetof mismatch for StaticSamplerBindingLayout::sampledTextureBinding");
 
     bool StaticSamplerBindingLayout::operator==(const StaticSamplerBindingLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            sampler,
-            sampledTextureBinding
-        ) == std::tie(
-            rhs.sampler,
-            rhs.sampledTextureBinding
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (sampler != rhs.sampler) { return false; }
+        if (sampledTextureBinding != rhs.sampledTextureBinding) { return false; }
+        return true;
     }
 
 
@@ -2186,17 +1876,11 @@ namespace dawn::native {
         return copy;
     }
     bool StencilFaceState::operator==(const StencilFaceState& rhs) const {
-        return  std::tie(
-            compare,
-            failOp,
-            depthFailOp,
-            passOp
-        ) == std::tie(
-            rhs.compare,
-            rhs.failOp,
-            rhs.depthFailOp,
-            rhs.passOp
-        );
+        if (compare != rhs.compare) { return false; }
+        if (failOp != rhs.failOp) { return false; }
+        if (depthFailOp != rhs.depthFailOp) { return false; }
+        if (passOp != rhs.passOp) { return false; }
+        return true;
     }
 
 
@@ -2225,15 +1909,11 @@ namespace dawn::native {
         return copy;
     }
     bool StorageTextureBindingLayout::operator==(const StorageTextureBindingLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            access,
-            format,
-            viewDimension
-        ) == std::tie(
-            rhs.access,
-            rhs.format,
-            rhs.viewDimension
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (access != rhs.access) { return false; }
+        if (format != rhs.format) { return false; }
+        if (viewDimension != rhs.viewDimension) { return false; }
+        return true;
     }
 
 
@@ -2252,76 +1932,66 @@ namespace dawn::native {
                  "offsetof mismatch for SubgroupMatrixConfig::K");
 
     bool SubgroupMatrixConfig::operator==(const SubgroupMatrixConfig& rhs) const {
-        return  std::tie(
-            componentType,
-            resultComponentType,
-            M,
-            N,
-            K
-        ) == std::tie(
-            rhs.componentType,
-            rhs.resultComponentType,
-            rhs.M,
-            rhs.N,
-            rhs.K
-        );
+        if (componentType != rhs.componentType) { return false; }
+        if (resultComponentType != rhs.resultComponentType) { return false; }
+        if (M != rhs.M) { return false; }
+        if (N != rhs.N) { return false; }
+        if (K != rhs.K) { return false; }
+        return true;
     }
 
 
     static_assert(sizeof(SupportedFeatures) == sizeof(WGPUSupportedFeatures), "sizeof mismatch for SupportedFeatures");
     static_assert(alignof(SupportedFeatures) == alignof(WGPUSupportedFeatures), "alignof mismatch for SupportedFeatures");
 
-    static_assert(offsetof(SupportedFeatures, featureCount) == offsetof(WGPUSupportedFeatures, featureCount),
-                 "offsetof mismatch for SupportedFeatures::featureCount");
-    static_assert(offsetof(SupportedFeatures, features) == offsetof(WGPUSupportedFeatures, features),
-                 "offsetof mismatch for SupportedFeatures::features");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SupportedFeaturesfeaturesSpan = decltype(std::declval<SupportedFeatures>().features);
+    
+    static_assert(offsetof(SupportedFeatures, features) + SupportedFeaturesfeaturesSpan::GetOffsetOfSize() == offsetof(WGPUSupportedFeatures, featureCount),
+                 "offsetof mismatch for SupportedFeatures::features::mSize");
+    static_assert(offsetof(SupportedFeatures, features) + SupportedFeaturesfeaturesSpan::GetOffsetOfData() == offsetof(WGPUSupportedFeatures, features),
+                 "offsetof mismatch for SupportedFeatures::features::mData");
 
     bool SupportedFeatures::operator==(const SupportedFeatures& rhs) const {
-        return  std::tie(
-            featureCount,
-            features
-        ) == std::tie(
-            rhs.featureCount,
-            rhs.features
-        );
+        if (features.size() != rhs.features.size()) { return false; }
+        if (features.data() != rhs.features.data()) { return false; }
+        return true;
     }
 
 
     static_assert(sizeof(SupportedInstanceFeatures) == sizeof(WGPUSupportedInstanceFeatures), "sizeof mismatch for SupportedInstanceFeatures");
     static_assert(alignof(SupportedInstanceFeatures) == alignof(WGPUSupportedInstanceFeatures), "alignof mismatch for SupportedInstanceFeatures");
 
-    static_assert(offsetof(SupportedInstanceFeatures, featureCount) == offsetof(WGPUSupportedInstanceFeatures, featureCount),
-                 "offsetof mismatch for SupportedInstanceFeatures::featureCount");
-    static_assert(offsetof(SupportedInstanceFeatures, features) == offsetof(WGPUSupportedInstanceFeatures, features),
-                 "offsetof mismatch for SupportedInstanceFeatures::features");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SupportedInstanceFeaturesfeaturesSpan = decltype(std::declval<SupportedInstanceFeatures>().features);
+    
+    static_assert(offsetof(SupportedInstanceFeatures, features) + SupportedInstanceFeaturesfeaturesSpan::GetOffsetOfSize() == offsetof(WGPUSupportedInstanceFeatures, featureCount),
+                 "offsetof mismatch for SupportedInstanceFeatures::features::mSize");
+    static_assert(offsetof(SupportedInstanceFeatures, features) + SupportedInstanceFeaturesfeaturesSpan::GetOffsetOfData() == offsetof(WGPUSupportedInstanceFeatures, features),
+                 "offsetof mismatch for SupportedInstanceFeatures::features::mData");
 
     bool SupportedInstanceFeatures::operator==(const SupportedInstanceFeatures& rhs) const {
-        return  std::tie(
-            featureCount,
-            features
-        ) == std::tie(
-            rhs.featureCount,
-            rhs.features
-        );
+        if (features.size() != rhs.features.size()) { return false; }
+        if (features.data() != rhs.features.data()) { return false; }
+        return true;
     }
 
 
     static_assert(sizeof(SupportedWGSLLanguageFeatures) == sizeof(WGPUSupportedWGSLLanguageFeatures), "sizeof mismatch for SupportedWGSLLanguageFeatures");
     static_assert(alignof(SupportedWGSLLanguageFeatures) == alignof(WGPUSupportedWGSLLanguageFeatures), "alignof mismatch for SupportedWGSLLanguageFeatures");
 
-    static_assert(offsetof(SupportedWGSLLanguageFeatures, featureCount) == offsetof(WGPUSupportedWGSLLanguageFeatures, featureCount),
-                 "offsetof mismatch for SupportedWGSLLanguageFeatures::featureCount");
-    static_assert(offsetof(SupportedWGSLLanguageFeatures, features) == offsetof(WGPUSupportedWGSLLanguageFeatures, features),
-                 "offsetof mismatch for SupportedWGSLLanguageFeatures::features");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SupportedWGSLLanguageFeaturesfeaturesSpan = decltype(std::declval<SupportedWGSLLanguageFeatures>().features);
+    
+    static_assert(offsetof(SupportedWGSLLanguageFeatures, features) + SupportedWGSLLanguageFeaturesfeaturesSpan::GetOffsetOfSize() == offsetof(WGPUSupportedWGSLLanguageFeatures, featureCount),
+                 "offsetof mismatch for SupportedWGSLLanguageFeatures::features::mSize");
+    static_assert(offsetof(SupportedWGSLLanguageFeatures, features) + SupportedWGSLLanguageFeaturesfeaturesSpan::GetOffsetOfData() == offsetof(WGPUSupportedWGSLLanguageFeatures, features),
+                 "offsetof mismatch for SupportedWGSLLanguageFeatures::features::mData");
 
     bool SupportedWGSLLanguageFeatures::operator==(const SupportedWGSLLanguageFeatures& rhs) const {
-        return  std::tie(
-            featureCount,
-            features
-        ) == std::tie(
-            rhs.featureCount,
-            rhs.features
-        );
+        if (features.size() != rhs.features.size()) { return false; }
+        if (features.data() != rhs.features.data()) { return false; }
+        return true;
     }
 
 
@@ -2332,37 +2002,38 @@ namespace dawn::native {
             "offsetof mismatch for SurfaceCapabilities::nextInChain");
     static_assert(offsetof(SurfaceCapabilities, usages) == offsetof(WGPUSurfaceCapabilities, usages),
                  "offsetof mismatch for SurfaceCapabilities::usages");
-    static_assert(offsetof(SurfaceCapabilities, formatCount) == offsetof(WGPUSurfaceCapabilities, formatCount),
-                 "offsetof mismatch for SurfaceCapabilities::formatCount");
-    static_assert(offsetof(SurfaceCapabilities, formats) == offsetof(WGPUSurfaceCapabilities, formats),
-                 "offsetof mismatch for SurfaceCapabilities::formats");
-    static_assert(offsetof(SurfaceCapabilities, presentModeCount) == offsetof(WGPUSurfaceCapabilities, presentModeCount),
-                 "offsetof mismatch for SurfaceCapabilities::presentModeCount");
-    static_assert(offsetof(SurfaceCapabilities, presentModes) == offsetof(WGPUSurfaceCapabilities, presentModes),
-                 "offsetof mismatch for SurfaceCapabilities::presentModes");
-    static_assert(offsetof(SurfaceCapabilities, alphaModeCount) == offsetof(WGPUSurfaceCapabilities, alphaModeCount),
-                 "offsetof mismatch for SurfaceCapabilities::alphaModeCount");
-    static_assert(offsetof(SurfaceCapabilities, alphaModes) == offsetof(WGPUSurfaceCapabilities, alphaModes),
-                 "offsetof mismatch for SurfaceCapabilities::alphaModes");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SurfaceCapabilitiesformatsSpan = decltype(std::declval<SurfaceCapabilities>().formats);
+    
+    static_assert(offsetof(SurfaceCapabilities, formats) + SurfaceCapabilitiesformatsSpan::GetOffsetOfSize() == offsetof(WGPUSurfaceCapabilities, formatCount),
+                 "offsetof mismatch for SurfaceCapabilities::formats::mSize");
+    static_assert(offsetof(SurfaceCapabilities, formats) + SurfaceCapabilitiesformatsSpan::GetOffsetOfData() == offsetof(WGPUSurfaceCapabilities, formats),
+                 "offsetof mismatch for SurfaceCapabilities::formats::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SurfaceCapabilitiespresentModesSpan = decltype(std::declval<SurfaceCapabilities>().presentModes);
+    
+    static_assert(offsetof(SurfaceCapabilities, presentModes) + SurfaceCapabilitiespresentModesSpan::GetOffsetOfSize() == offsetof(WGPUSurfaceCapabilities, presentModeCount),
+                 "offsetof mismatch for SurfaceCapabilities::presentModes::mSize");
+    static_assert(offsetof(SurfaceCapabilities, presentModes) + SurfaceCapabilitiespresentModesSpan::GetOffsetOfData() == offsetof(WGPUSurfaceCapabilities, presentModes),
+                 "offsetof mismatch for SurfaceCapabilities::presentModes::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SurfaceCapabilitiesalphaModesSpan = decltype(std::declval<SurfaceCapabilities>().alphaModes);
+    
+    static_assert(offsetof(SurfaceCapabilities, alphaModes) + SurfaceCapabilitiesalphaModesSpan::GetOffsetOfSize() == offsetof(WGPUSurfaceCapabilities, alphaModeCount),
+                 "offsetof mismatch for SurfaceCapabilities::alphaModes::mSize");
+    static_assert(offsetof(SurfaceCapabilities, alphaModes) + SurfaceCapabilitiesalphaModesSpan::GetOffsetOfData() == offsetof(WGPUSurfaceCapabilities, alphaModes),
+                 "offsetof mismatch for SurfaceCapabilities::alphaModes::mData");
 
     bool SurfaceCapabilities::operator==(const SurfaceCapabilities& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            usages,
-            formatCount,
-            formats,
-            presentModeCount,
-            presentModes,
-            alphaModeCount,
-            alphaModes
-        ) == std::tie(
-            rhs.usages,
-            rhs.formatCount,
-            rhs.formats,
-            rhs.presentModeCount,
-            rhs.presentModes,
-            rhs.alphaModeCount,
-            rhs.alphaModes
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (usages != rhs.usages) { return false; }
+        if (formats.size() != rhs.formats.size()) { return false; }
+        if (formats.data() != rhs.formats.data()) { return false; }
+        if (presentModes.size() != rhs.presentModes.size()) { return false; }
+        if (presentModes.data() != rhs.presentModes.data()) { return false; }
+        if (alphaModes.size() != rhs.alphaModes.size()) { return false; }
+        if (alphaModes.data() != rhs.alphaModes.data()) { return false; }
+        return true;
     }
 
 
@@ -2379,13 +2050,10 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceColorManagement::toneMappingMode");
 
     bool SurfaceColorManagement::operator==(const SurfaceColorManagement& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            colorSpace,
-            toneMappingMode
-        ) == std::tie(
-            rhs.colorSpace,
-            rhs.toneMappingMode
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (colorSpace != rhs.colorSpace) { return false; }
+        if (toneMappingMode != rhs.toneMappingMode) { return false; }
+        return true;
     }
 
 
@@ -2404,10 +2072,13 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceConfiguration::width");
     static_assert(offsetof(SurfaceConfiguration, height) == offsetof(WGPUSurfaceConfiguration, height),
                  "offsetof mismatch for SurfaceConfiguration::height");
-    static_assert(offsetof(SurfaceConfiguration, viewFormatCount) == offsetof(WGPUSurfaceConfiguration, viewFormatCount),
-                 "offsetof mismatch for SurfaceConfiguration::viewFormatCount");
-    static_assert(offsetof(SurfaceConfiguration, viewFormats) == offsetof(WGPUSurfaceConfiguration, viewFormats),
-                 "offsetof mismatch for SurfaceConfiguration::viewFormats");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SurfaceConfigurationviewFormatsSpan = decltype(std::declval<SurfaceConfiguration>().viewFormats);
+    
+    static_assert(offsetof(SurfaceConfiguration, viewFormats) + SurfaceConfigurationviewFormatsSpan::GetOffsetOfSize() == offsetof(WGPUSurfaceConfiguration, viewFormatCount),
+                 "offsetof mismatch for SurfaceConfiguration::viewFormats::mSize");
+    static_assert(offsetof(SurfaceConfiguration, viewFormats) + SurfaceConfigurationviewFormatsSpan::GetOffsetOfData() == offsetof(WGPUSurfaceConfiguration, viewFormats),
+                 "offsetof mismatch for SurfaceConfiguration::viewFormats::mData");
     static_assert(offsetof(SurfaceConfiguration, alphaMode) == offsetof(WGPUSurfaceConfiguration, alphaMode),
                  "offsetof mismatch for SurfaceConfiguration::alphaMode");
     static_assert(offsetof(SurfaceConfiguration, presentMode) == offsetof(WGPUSurfaceConfiguration, presentMode),
@@ -2421,7 +2092,6 @@ namespace dawn::native {
         copy.usage = usage;
         copy.width = width;
         copy.height = height;
-        copy.viewFormatCount = viewFormatCount;
         copy.viewFormats = viewFormats;
         copy.alphaMode = alphaMode;
         copy.presentMode = (presentMode == wgpu::PresentMode::Undefined)
@@ -2430,27 +2100,17 @@ namespace dawn::native {
         return copy;
     }
     bool SurfaceConfiguration::operator==(const SurfaceConfiguration& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            device,
-            format,
-            usage,
-            width,
-            height,
-            viewFormatCount,
-            viewFormats,
-            alphaMode,
-            presentMode
-        ) == std::tie(
-            rhs.device,
-            rhs.format,
-            rhs.usage,
-            rhs.width,
-            rhs.height,
-            rhs.viewFormatCount,
-            rhs.viewFormats,
-            rhs.alphaMode,
-            rhs.presentMode
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (device != rhs.device) { return false; }
+        if (format != rhs.format) { return false; }
+        if (usage != rhs.usage) { return false; }
+        if (width != rhs.width) { return false; }
+        if (height != rhs.height) { return false; }
+        if (viewFormats.size() != rhs.viewFormats.size()) { return false; }
+        if (viewFormats.data() != rhs.viewFormats.data()) { return false; }
+        if (alphaMode != rhs.alphaMode) { return false; }
+        if (presentMode != rhs.presentMode) { return false; }
+        return true;
     }
 
 
@@ -2465,11 +2125,9 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceDescriptorFromWindowsCoreWindow::coreWindow");
 
     bool SurfaceDescriptorFromWindowsCoreWindow::operator==(const SurfaceDescriptorFromWindowsCoreWindow& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            coreWindow
-        ) == std::tie(
-            rhs.coreWindow
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (coreWindow != rhs.coreWindow) { return false; }
+        return true;
     }
 
 
@@ -2484,11 +2142,9 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceDescriptorFromWindowsUWPSwapChainPanel::swapChainPanel");
 
     bool SurfaceDescriptorFromWindowsUWPSwapChainPanel::operator==(const SurfaceDescriptorFromWindowsUWPSwapChainPanel& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            swapChainPanel
-        ) == std::tie(
-            rhs.swapChainPanel
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (swapChainPanel != rhs.swapChainPanel) { return false; }
+        return true;
     }
 
 
@@ -2503,11 +2159,9 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceDescriptorFromWindowsWinUISwapChainPanel::swapChainPanel");
 
     bool SurfaceDescriptorFromWindowsWinUISwapChainPanel::operator==(const SurfaceDescriptorFromWindowsWinUISwapChainPanel& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            swapChainPanel
-        ) == std::tie(
-            rhs.swapChainPanel
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (swapChainPanel != rhs.swapChainPanel) { return false; }
+        return true;
     }
 
 
@@ -2522,11 +2176,9 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceSourceAndroidNativeWindow::window");
 
     bool SurfaceSourceAndroidNativeWindow::operator==(const SurfaceSourceAndroidNativeWindow& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            window
-        ) == std::tie(
-            rhs.window
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (window != rhs.window) { return false; }
+        return true;
     }
 
 
@@ -2541,11 +2193,9 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceSourceMetalLayer::layer");
 
     bool SurfaceSourceMetalLayer::operator==(const SurfaceSourceMetalLayer& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            layer
-        ) == std::tie(
-            rhs.layer
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (layer != rhs.layer) { return false; }
+        return true;
     }
 
 
@@ -2562,13 +2212,10 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceSourceWaylandSurface::surface");
 
     bool SurfaceSourceWaylandSurface::operator==(const SurfaceSourceWaylandSurface& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            display,
-            surface
-        ) == std::tie(
-            rhs.display,
-            rhs.surface
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (display != rhs.display) { return false; }
+        if (surface != rhs.surface) { return false; }
+        return true;
     }
 
 
@@ -2585,13 +2232,10 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceSourceWindowsHWND::hwnd");
 
     bool SurfaceSourceWindowsHWND::operator==(const SurfaceSourceWindowsHWND& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            hinstance,
-            hwnd
-        ) == std::tie(
-            rhs.hinstance,
-            rhs.hwnd
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (hinstance != rhs.hinstance) { return false; }
+        if (hwnd != rhs.hwnd) { return false; }
+        return true;
     }
 
 
@@ -2608,13 +2252,10 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceSourceXCBWindow::window");
 
     bool SurfaceSourceXCBWindow::operator==(const SurfaceSourceXCBWindow& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            connection,
-            window
-        ) == std::tie(
-            rhs.connection,
-            rhs.window
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (connection != rhs.connection) { return false; }
+        if (window != rhs.window) { return false; }
+        return true;
     }
 
 
@@ -2631,13 +2272,10 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceSourceXlibWindow::window");
 
     bool SurfaceSourceXlibWindow::operator==(const SurfaceSourceXlibWindow& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            display,
-            window
-        ) == std::tie(
-            rhs.display,
-            rhs.window
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (display != rhs.display) { return false; }
+        if (window != rhs.window) { return false; }
+        return true;
     }
 
 
@@ -2652,13 +2290,10 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceTexture::status");
 
     bool SurfaceTexture::operator==(const SurfaceTexture& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            texture,
-            status
-        ) == std::tie(
-            rhs.texture,
-            rhs.status
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (texture != rhs.texture) { return false; }
+        if (status != rhs.status) { return false; }
+        return true;
     }
 
 
@@ -2673,11 +2308,9 @@ namespace dawn::native {
                  "offsetof mismatch for TexelBufferBindingEntry::texelBufferView");
 
     bool TexelBufferBindingEntry::operator==(const TexelBufferBindingEntry& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            texelBufferView
-        ) == std::tie(
-            rhs.texelBufferView
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (texelBufferView != rhs.texelBufferView) { return false; }
+        return true;
     }
 
 
@@ -2704,13 +2337,10 @@ namespace dawn::native {
         return copy;
     }
     bool TexelBufferBindingLayout::operator==(const TexelBufferBindingLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            access,
-            format
-        ) == std::tie(
-            rhs.access,
-            rhs.format
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (access != rhs.access) { return false; }
+        if (format != rhs.format) { return false; }
+        return true;
     }
 
 
@@ -2729,17 +2359,12 @@ namespace dawn::native {
                  "offsetof mismatch for TexelBufferViewDescriptor::size");
 
     bool TexelBufferViewDescriptor::operator==(const TexelBufferViewDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            format,
-            offset,
-            size
-        ) == std::tie(
-            rhs.label,
-            rhs.format,
-            rhs.offset,
-            rhs.size
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (format != rhs.format) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (size != rhs.size) { return false; }
+        return true;
     }
 
 
@@ -2754,15 +2379,10 @@ namespace dawn::native {
                  "offsetof mismatch for TexelCopyBufferLayout::rowsPerImage");
 
     bool TexelCopyBufferLayout::operator==(const TexelCopyBufferLayout& rhs) const {
-        return  std::tie(
-            offset,
-            bytesPerRow,
-            rowsPerImage
-        ) == std::tie(
-            rhs.offset,
-            rhs.bytesPerRow,
-            rhs.rowsPerImage
-        );
+        if (offset != rhs.offset) { return false; }
+        if (bytesPerRow != rhs.bytesPerRow) { return false; }
+        if (rowsPerImage != rhs.rowsPerImage) { return false; }
+        return true;
     }
 
 
@@ -2791,15 +2411,11 @@ namespace dawn::native {
         return copy;
     }
     bool TextureBindingLayout::operator==(const TextureBindingLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            sampleType,
-            viewDimension,
-            multisampled
-        ) == std::tie(
-            rhs.sampleType,
-            rhs.viewDimension,
-            rhs.multisampled
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (sampleType != rhs.sampleType) { return false; }
+        if (viewDimension != rhs.viewDimension) { return false; }
+        if (multisampled != rhs.multisampled) { return false; }
+        return true;
     }
 
 
@@ -2814,11 +2430,9 @@ namespace dawn::native {
                  "offsetof mismatch for TextureBindingViewDimension::textureBindingViewDimension");
 
     bool TextureBindingViewDimension::operator==(const TextureBindingViewDimension& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            textureBindingViewDimension
-        ) == std::tie(
-            rhs.textureBindingViewDimension
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (textureBindingViewDimension != rhs.textureBindingViewDimension) { return false; }
+        return true;
     }
 
 
@@ -2851,17 +2465,11 @@ namespace dawn::native {
         return copy;
     }
     bool TextureComponentSwizzle::operator==(const TextureComponentSwizzle& rhs) const {
-        return  std::tie(
-            r,
-            g,
-            b,
-            a
-        ) == std::tie(
-            rhs.r,
-            rhs.g,
-            rhs.b,
-            rhs.a
-        );
+        if (r != rhs.r) { return false; }
+        if (g != rhs.g) { return false; }
+        if (b != rhs.b) { return false; }
+        if (a != rhs.a) { return false; }
+        return true;
     }
 
 
@@ -2878,15 +2486,11 @@ namespace dawn::native {
                  "offsetof mismatch for VertexAttribute::shaderLocation");
 
     bool VertexAttribute::operator==(const VertexAttribute& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            format,
-            offset,
-            shaderLocation
-        ) == std::tie(
-            rhs.format,
-            rhs.offset,
-            rhs.shaderLocation
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (format != rhs.format) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (shaderLocation != rhs.shaderLocation) { return false; }
+        return true;
     }
 
 
@@ -2943,33 +2547,20 @@ namespace dawn::native {
         return copy;
     }
     bool YCbCrVkDescriptor::operator==(const YCbCrVkDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            vkFormat,
-            vkYCbCrModel,
-            vkYCbCrRange,
-            vkComponentSwizzleRed,
-            vkComponentSwizzleGreen,
-            vkComponentSwizzleBlue,
-            vkComponentSwizzleAlpha,
-            vkXChromaOffset,
-            vkYChromaOffset,
-            vkChromaFilter,
-            forceExplicitReconstruction,
-            externalFormat
-        ) == std::tie(
-            rhs.vkFormat,
-            rhs.vkYCbCrModel,
-            rhs.vkYCbCrRange,
-            rhs.vkComponentSwizzleRed,
-            rhs.vkComponentSwizzleGreen,
-            rhs.vkComponentSwizzleBlue,
-            rhs.vkComponentSwizzleAlpha,
-            rhs.vkXChromaOffset,
-            rhs.vkYChromaOffset,
-            rhs.vkChromaFilter,
-            rhs.forceExplicitReconstruction,
-            rhs.externalFormat
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (vkFormat != rhs.vkFormat) { return false; }
+        if (vkYCbCrModel != rhs.vkYCbCrModel) { return false; }
+        if (vkYCbCrRange != rhs.vkYCbCrRange) { return false; }
+        if (vkComponentSwizzleRed != rhs.vkComponentSwizzleRed) { return false; }
+        if (vkComponentSwizzleGreen != rhs.vkComponentSwizzleGreen) { return false; }
+        if (vkComponentSwizzleBlue != rhs.vkComponentSwizzleBlue) { return false; }
+        if (vkComponentSwizzleAlpha != rhs.vkComponentSwizzleAlpha) { return false; }
+        if (vkXChromaOffset != rhs.vkXChromaOffset) { return false; }
+        if (vkYChromaOffset != rhs.vkYChromaOffset) { return false; }
+        if (vkChromaFilter != rhs.vkChromaFilter) { return false; }
+        if (forceExplicitReconstruction != rhs.forceExplicitReconstruction) { return false; }
+        if (externalFormat != rhs.externalFormat) { return false; }
+        return true;
     }
 
 
@@ -2980,19 +2571,19 @@ namespace dawn::native {
             "offsetof mismatch for AdapterPropertiesMemoryHeaps::nextInChain");
     static_assert(offsetof(AdapterPropertiesMemoryHeaps, sType) == offsetof(WGPUAdapterPropertiesMemoryHeaps, chain) + offsetof(WGPUChainedStruct, sType),
             "offsetof mismatch for AdapterPropertiesMemoryHeaps::sType");
-    static_assert(offsetof(AdapterPropertiesMemoryHeaps, heapCount) == offsetof(WGPUAdapterPropertiesMemoryHeaps, heapCount),
-                 "offsetof mismatch for AdapterPropertiesMemoryHeaps::heapCount");
-    static_assert(offsetof(AdapterPropertiesMemoryHeaps, heapInfo) == offsetof(WGPUAdapterPropertiesMemoryHeaps, heapInfo),
-                 "offsetof mismatch for AdapterPropertiesMemoryHeaps::heapInfo");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using AdapterPropertiesMemoryHeapsheapInfoSpan = decltype(std::declval<AdapterPropertiesMemoryHeaps>().heapInfo);
+    
+    static_assert(offsetof(AdapterPropertiesMemoryHeaps, heapInfo) + AdapterPropertiesMemoryHeapsheapInfoSpan::GetOffsetOfSize() == offsetof(WGPUAdapterPropertiesMemoryHeaps, heapCount),
+                 "offsetof mismatch for AdapterPropertiesMemoryHeaps::heapInfo::mSize");
+    static_assert(offsetof(AdapterPropertiesMemoryHeaps, heapInfo) + AdapterPropertiesMemoryHeapsheapInfoSpan::GetOffsetOfData() == offsetof(WGPUAdapterPropertiesMemoryHeaps, heapInfo),
+                 "offsetof mismatch for AdapterPropertiesMemoryHeaps::heapInfo::mData");
 
     bool AdapterPropertiesMemoryHeaps::operator==(const AdapterPropertiesMemoryHeaps& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            heapCount,
-            heapInfo
-        ) == std::tie(
-            rhs.heapCount,
-            rhs.heapInfo
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (heapInfo.size() != rhs.heapInfo.size()) { return false; }
+        if (heapInfo.data() != rhs.heapInfo.data()) { return false; }
+        return true;
     }
 
 
@@ -3003,19 +2594,19 @@ namespace dawn::native {
             "offsetof mismatch for AdapterPropertiesSubgroupMatrixConfigs::nextInChain");
     static_assert(offsetof(AdapterPropertiesSubgroupMatrixConfigs, sType) == offsetof(WGPUAdapterPropertiesSubgroupMatrixConfigs, chain) + offsetof(WGPUChainedStruct, sType),
             "offsetof mismatch for AdapterPropertiesSubgroupMatrixConfigs::sType");
-    static_assert(offsetof(AdapterPropertiesSubgroupMatrixConfigs, configCount) == offsetof(WGPUAdapterPropertiesSubgroupMatrixConfigs, configCount),
-                 "offsetof mismatch for AdapterPropertiesSubgroupMatrixConfigs::configCount");
-    static_assert(offsetof(AdapterPropertiesSubgroupMatrixConfigs, configs) == offsetof(WGPUAdapterPropertiesSubgroupMatrixConfigs, configs),
-                 "offsetof mismatch for AdapterPropertiesSubgroupMatrixConfigs::configs");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using AdapterPropertiesSubgroupMatrixConfigsconfigsSpan = decltype(std::declval<AdapterPropertiesSubgroupMatrixConfigs>().configs);
+    
+    static_assert(offsetof(AdapterPropertiesSubgroupMatrixConfigs, configs) + AdapterPropertiesSubgroupMatrixConfigsconfigsSpan::GetOffsetOfSize() == offsetof(WGPUAdapterPropertiesSubgroupMatrixConfigs, configCount),
+                 "offsetof mismatch for AdapterPropertiesSubgroupMatrixConfigs::configs::mSize");
+    static_assert(offsetof(AdapterPropertiesSubgroupMatrixConfigs, configs) + AdapterPropertiesSubgroupMatrixConfigsconfigsSpan::GetOffsetOfData() == offsetof(WGPUAdapterPropertiesSubgroupMatrixConfigs, configs),
+                 "offsetof mismatch for AdapterPropertiesSubgroupMatrixConfigs::configs::mData");
 
     bool AdapterPropertiesSubgroupMatrixConfigs::operator==(const AdapterPropertiesSubgroupMatrixConfigs& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            configCount,
-            configs
-        ) == std::tie(
-            rhs.configCount,
-            rhs.configs
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (configs.size() != rhs.configs.size()) { return false; }
+        if (configs.data() != rhs.configs.data()) { return false; }
+        return true;
     }
 
 
@@ -3031,11 +2622,8 @@ namespace dawn::native {
         return copy;
     }
     bool AHardwareBufferProperties::operator==(const AHardwareBufferProperties& rhs) const {
-        return  std::tie(
-            yCbCrInfo
-        ) == std::tie(
-            rhs.yCbCrInfo
-        );
+        if (yCbCrInfo != rhs.yCbCrInfo) { return false; }
+        return true;
     }
 
 
@@ -3058,21 +2646,14 @@ namespace dawn::native {
                  "offsetof mismatch for BindGroupEntry::textureView");
 
     bool BindGroupEntry::operator==(const BindGroupEntry& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            binding,
-            buffer,
-            offset,
-            size,
-            sampler,
-            textureView
-        ) == std::tie(
-            rhs.binding,
-            rhs.buffer,
-            rhs.offset,
-            rhs.size,
-            rhs.sampler,
-            rhs.textureView
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (binding != rhs.binding) { return false; }
+        if (buffer != rhs.buffer) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (size != rhs.size) { return false; }
+        if (sampler != rhs.sampler) { return false; }
+        if (textureView != rhs.textureView) { return false; }
+        return true;
     }
 
 
@@ -3109,23 +2690,15 @@ namespace dawn::native {
         return copy;
     }
     bool BindGroupLayoutEntry::operator==(const BindGroupLayoutEntry& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            binding,
-            visibility,
-            bindingArraySize,
-            buffer,
-            sampler,
-            texture,
-            storageTexture
-        ) == std::tie(
-            rhs.binding,
-            rhs.visibility,
-            rhs.bindingArraySize,
-            rhs.buffer,
-            rhs.sampler,
-            rhs.texture,
-            rhs.storageTexture
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (binding != rhs.binding) { return false; }
+        if (visibility != rhs.visibility) { return false; }
+        if (bindingArraySize != rhs.bindingArraySize) { return false; }
+        if (buffer != rhs.buffer) { return false; }
+        if (sampler != rhs.sampler) { return false; }
+        if (texture != rhs.texture) { return false; }
+        if (storageTexture != rhs.storageTexture) { return false; }
+        return true;
     }
 
 
@@ -3144,13 +2717,9 @@ namespace dawn::native {
         return copy;
     }
     bool BlendState::operator==(const BlendState& rhs) const {
-        return  std::tie(
-            color,
-            alpha
-        ) == std::tie(
-            rhs.color,
-            rhs.alpha
-        );
+        if (color != rhs.color) { return false; }
+        if (alpha != rhs.alpha) { return false; }
+        return true;
     }
 
 
@@ -3169,17 +2738,12 @@ namespace dawn::native {
                  "offsetof mismatch for BufferDescriptor::mappedAtCreation");
 
     bool BufferDescriptor::operator==(const BufferDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            usage,
-            size,
-            mappedAtCreation
-        ) == std::tie(
-            rhs.label,
-            rhs.usage,
-            rhs.size,
-            rhs.mappedAtCreation
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (usage != rhs.usage) { return false; }
+        if (size != rhs.size) { return false; }
+        if (mappedAtCreation != rhs.mappedAtCreation) { return false; }
+        return true;
     }
 
 
@@ -3192,11 +2756,9 @@ namespace dawn::native {
                  "offsetof mismatch for CommandEncoderDescriptor::label");
 
     bool CommandEncoderDescriptor::operator==(const CommandEncoderDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
@@ -3219,21 +2781,14 @@ namespace dawn::native {
                  "offsetof mismatch for CompilationMessage::length");
 
     bool CompilationMessage::operator==(const CompilationMessage& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            message,
-            type,
-            lineNum,
-            linePos,
-            offset,
-            length
-        ) == std::tie(
-            rhs.message,
-            rhs.type,
-            rhs.lineNum,
-            rhs.linePos,
-            rhs.offset,
-            rhs.length
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (message != rhs.message) { return false; }
+        if (type != rhs.type) { return false; }
+        if (lineNum != rhs.lineNum) { return false; }
+        if (linePos != rhs.linePos) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (length != rhs.length) { return false; }
+        return true;
     }
 
 
@@ -3248,13 +2803,10 @@ namespace dawn::native {
                  "offsetof mismatch for ComputePassDescriptor::timestampWrites");
 
     bool ComputePassDescriptor::operator==(const ComputePassDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            timestampWrites
-        ) == std::tie(
-            rhs.label,
-            rhs.timestampWrites
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (timestampWrites != rhs.timestampWrites) { return false; }
+        return true;
     }
 
 
@@ -3267,23 +2819,21 @@ namespace dawn::native {
                  "offsetof mismatch for ComputeState::module");
     static_assert(offsetof(ComputeState, entryPoint) == offsetof(WGPUComputeState, entryPoint),
                  "offsetof mismatch for ComputeState::entryPoint");
-    static_assert(offsetof(ComputeState, constantCount) == offsetof(WGPUComputeState, constantCount),
-                 "offsetof mismatch for ComputeState::constantCount");
-    static_assert(offsetof(ComputeState, constants) == offsetof(WGPUComputeState, constants),
-                 "offsetof mismatch for ComputeState::constants");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using ComputeStateconstantsSpan = decltype(std::declval<ComputeState>().constants);
+    
+    static_assert(offsetof(ComputeState, constants) + ComputeStateconstantsSpan::GetOffsetOfSize() == offsetof(WGPUComputeState, constantCount),
+                 "offsetof mismatch for ComputeState::constants::mSize");
+    static_assert(offsetof(ComputeState, constants) + ComputeStateconstantsSpan::GetOffsetOfData() == offsetof(WGPUComputeState, constants),
+                 "offsetof mismatch for ComputeState::constants::mData");
 
     bool ComputeState::operator==(const ComputeState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            module,
-            entryPoint,
-            constantCount,
-            constants
-        ) == std::tie(
-            rhs.module,
-            rhs.entryPoint,
-            rhs.constantCount,
-            rhs.constants
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (module != rhs.module) { return false; }
+        if (entryPoint != rhs.entryPoint) { return false; }
+        if (constants.size() != rhs.constants.size()) { return false; }
+        if (constants.data() != rhs.constants.data()) { return false; }
+        return true;
     }
 
 
@@ -3294,19 +2844,19 @@ namespace dawn::native {
             "offsetof mismatch for DawnDrmFormatCapabilities::nextInChain");
     static_assert(offsetof(DawnDrmFormatCapabilities, sType) == offsetof(WGPUDawnDrmFormatCapabilities, chain) + offsetof(WGPUChainedStruct, sType),
             "offsetof mismatch for DawnDrmFormatCapabilities::sType");
-    static_assert(offsetof(DawnDrmFormatCapabilities, propertiesCount) == offsetof(WGPUDawnDrmFormatCapabilities, propertiesCount),
-                 "offsetof mismatch for DawnDrmFormatCapabilities::propertiesCount");
-    static_assert(offsetof(DawnDrmFormatCapabilities, properties) == offsetof(WGPUDawnDrmFormatCapabilities, properties),
-                 "offsetof mismatch for DawnDrmFormatCapabilities::properties");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using DawnDrmFormatCapabilitiespropertiesSpan = decltype(std::declval<DawnDrmFormatCapabilities>().properties);
+    
+    static_assert(offsetof(DawnDrmFormatCapabilities, properties) + DawnDrmFormatCapabilitiespropertiesSpan::GetOffsetOfSize() == offsetof(WGPUDawnDrmFormatCapabilities, propertiesCount),
+                 "offsetof mismatch for DawnDrmFormatCapabilities::properties::mSize");
+    static_assert(offsetof(DawnDrmFormatCapabilities, properties) + DawnDrmFormatCapabilitiespropertiesSpan::GetOffsetOfData() == offsetof(WGPUDawnDrmFormatCapabilities, properties),
+                 "offsetof mismatch for DawnDrmFormatCapabilities::properties::mData");
 
     bool DawnDrmFormatCapabilities::operator==(const DawnDrmFormatCapabilities& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            propertiesCount,
-            properties
-        ) == std::tie(
-            rhs.propertiesCount,
-            rhs.properties
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (properties.size() != rhs.properties.size()) { return false; }
+        if (properties.data() != rhs.properties.data()) { return false; }
+        return true;
     }
 
 
@@ -3352,29 +2902,18 @@ namespace dawn::native {
         return copy;
     }
     bool DepthStencilState::operator==(const DepthStencilState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            format,
-            depthWriteEnabled,
-            depthCompare,
-            stencilFront,
-            stencilBack,
-            stencilReadMask,
-            stencilWriteMask,
-            depthBias,
-            depthBiasSlopeScale,
-            depthBiasClamp
-        ) == std::tie(
-            rhs.format,
-            rhs.depthWriteEnabled,
-            rhs.depthCompare,
-            rhs.stencilFront,
-            rhs.stencilBack,
-            rhs.stencilReadMask,
-            rhs.stencilWriteMask,
-            rhs.depthBias,
-            rhs.depthBiasSlopeScale,
-            rhs.depthBiasClamp
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (format != rhs.format) { return false; }
+        if (depthWriteEnabled != rhs.depthWriteEnabled) { return false; }
+        if (depthCompare != rhs.depthCompare) { return false; }
+        if (stencilFront != rhs.stencilFront) { return false; }
+        if (stencilBack != rhs.stencilBack) { return false; }
+        if (stencilReadMask != rhs.stencilReadMask) { return false; }
+        if (stencilWriteMask != rhs.stencilWriteMask) { return false; }
+        if (depthBias != rhs.depthBias) { return false; }
+        if (depthBiasSlopeScale != rhs.depthBiasSlopeScale) { return false; }
+        if (depthBiasClamp != rhs.depthBiasClamp) { return false; }
+        return true;
     }
 
 
@@ -3411,35 +2950,21 @@ namespace dawn::native {
                  "offsetof mismatch for ExternalTextureDescriptor::rotation");
 
     bool ExternalTextureDescriptor::operator==(const ExternalTextureDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            plane0,
-            plane1,
-            cropOrigin,
-            cropSize,
-            apparentSize,
-            doYuvToRgbConversionOnly,
-            yuvToRgbConversionMatrix,
-            srcTransferFunctionParameters,
-            dstTransferFunctionParameters,
-            gamutConversionMatrix,
-            mirrored,
-            rotation
-        ) == std::tie(
-            rhs.label,
-            rhs.plane0,
-            rhs.plane1,
-            rhs.cropOrigin,
-            rhs.cropSize,
-            rhs.apparentSize,
-            rhs.doYuvToRgbConversionOnly,
-            rhs.yuvToRgbConversionMatrix,
-            rhs.srcTransferFunctionParameters,
-            rhs.dstTransferFunctionParameters,
-            rhs.gamutConversionMatrix,
-            rhs.mirrored,
-            rhs.rotation
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (plane0 != rhs.plane0) { return false; }
+        if (plane1 != rhs.plane1) { return false; }
+        if (cropOrigin != rhs.cropOrigin) { return false; }
+        if (cropSize != rhs.cropSize) { return false; }
+        if (apparentSize != rhs.apparentSize) { return false; }
+        if (doYuvToRgbConversionOnly != rhs.doYuvToRgbConversionOnly) { return false; }
+        if (yuvToRgbConversionMatrix != rhs.yuvToRgbConversionMatrix) { return false; }
+        if (srcTransferFunctionParameters != rhs.srcTransferFunctionParameters) { return false; }
+        if (dstTransferFunctionParameters != rhs.dstTransferFunctionParameters) { return false; }
+        if (gamutConversionMatrix != rhs.gamutConversionMatrix) { return false; }
+        if (mirrored != rhs.mirrored) { return false; }
+        if (rotation != rhs.rotation) { return false; }
+        return true;
     }
 
 
@@ -3452,13 +2977,9 @@ namespace dawn::native {
                  "offsetof mismatch for FutureWaitInfo::completed");
 
     bool FutureWaitInfo::operator==(const FutureWaitInfo& rhs) const {
-        return  std::tie(
-            future,
-            completed
-        ) == std::tie(
-            rhs.future,
-            rhs.completed
-        );
+        if (future != rhs.future) { return false; }
+        if (completed != rhs.completed) { return false; }
+        return true;
     }
 
 
@@ -3475,15 +2996,11 @@ namespace dawn::native {
                  "offsetof mismatch for ImageCopyExternalTexture::naturalSize");
 
     bool ImageCopyExternalTexture::operator==(const ImageCopyExternalTexture& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            externalTexture,
-            origin,
-            naturalSize
-        ) == std::tie(
-            rhs.externalTexture,
-            rhs.origin,
-            rhs.naturalSize
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (externalTexture != rhs.externalTexture) { return false; }
+        if (origin != rhs.origin) { return false; }
+        if (naturalSize != rhs.naturalSize) { return false; }
+        return true;
     }
 
 
@@ -3492,23 +3009,22 @@ namespace dawn::native {
 
     static_assert(offsetof(InstanceDescriptor, nextInChain) == offsetof(WGPUInstanceDescriptor, nextInChain),
             "offsetof mismatch for InstanceDescriptor::nextInChain");
-    static_assert(offsetof(InstanceDescriptor, requiredFeatureCount) == offsetof(WGPUInstanceDescriptor, requiredFeatureCount),
-                 "offsetof mismatch for InstanceDescriptor::requiredFeatureCount");
-    static_assert(offsetof(InstanceDescriptor, requiredFeatures) == offsetof(WGPUInstanceDescriptor, requiredFeatures),
-                 "offsetof mismatch for InstanceDescriptor::requiredFeatures");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using InstanceDescriptorrequiredFeaturesSpan = decltype(std::declval<InstanceDescriptor>().requiredFeatures);
+    
+    static_assert(offsetof(InstanceDescriptor, requiredFeatures) + InstanceDescriptorrequiredFeaturesSpan::GetOffsetOfSize() == offsetof(WGPUInstanceDescriptor, requiredFeatureCount),
+                 "offsetof mismatch for InstanceDescriptor::requiredFeatures::mSize");
+    static_assert(offsetof(InstanceDescriptor, requiredFeatures) + InstanceDescriptorrequiredFeaturesSpan::GetOffsetOfData() == offsetof(WGPUInstanceDescriptor, requiredFeatures),
+                 "offsetof mismatch for InstanceDescriptor::requiredFeatures::mData");
     static_assert(offsetof(InstanceDescriptor, requiredLimits) == offsetof(WGPUInstanceDescriptor, requiredLimits),
                  "offsetof mismatch for InstanceDescriptor::requiredLimits");
 
     bool InstanceDescriptor::operator==(const InstanceDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            requiredFeatureCount,
-            requiredFeatures,
-            requiredLimits
-        ) == std::tie(
-            rhs.requiredFeatureCount,
-            rhs.requiredFeatures,
-            rhs.requiredLimits
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (requiredFeatures.size() != rhs.requiredFeatures.size()) { return false; }
+        if (requiredFeatures.data() != rhs.requiredFeatures.data()) { return false; }
+        if (requiredLimits != rhs.requiredLimits) { return false; }
+        return true;
     }
 
 
@@ -3583,73 +3099,40 @@ namespace dawn::native {
                  "offsetof mismatch for Limits::maxImmediateSize");
 
     bool Limits::operator==(const Limits& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            maxTextureDimension1D,
-            maxTextureDimension2D,
-            maxTextureDimension3D,
-            maxTextureArrayLayers,
-            maxBindGroups,
-            maxBindGroupsPlusVertexBuffers,
-            maxBindingsPerBindGroup,
-            maxDynamicUniformBuffersPerPipelineLayout,
-            maxDynamicStorageBuffersPerPipelineLayout,
-            maxSampledTexturesPerShaderStage,
-            maxSamplersPerShaderStage,
-            maxStorageBuffersPerShaderStage,
-            maxStorageTexturesPerShaderStage,
-            maxUniformBuffersPerShaderStage,
-            maxUniformBufferBindingSize,
-            maxStorageBufferBindingSize,
-            minUniformBufferOffsetAlignment,
-            minStorageBufferOffsetAlignment,
-            maxVertexBuffers,
-            maxBufferSize,
-            maxVertexAttributes,
-            maxVertexBufferArrayStride,
-            maxInterStageShaderVariables,
-            maxColorAttachments,
-            maxColorAttachmentBytesPerSample,
-            maxComputeWorkgroupStorageSize,
-            maxComputeInvocationsPerWorkgroup,
-            maxComputeWorkgroupSizeX,
-            maxComputeWorkgroupSizeY,
-            maxComputeWorkgroupSizeZ,
-            maxComputeWorkgroupsPerDimension,
-            maxImmediateSize
-        ) == std::tie(
-            rhs.maxTextureDimension1D,
-            rhs.maxTextureDimension2D,
-            rhs.maxTextureDimension3D,
-            rhs.maxTextureArrayLayers,
-            rhs.maxBindGroups,
-            rhs.maxBindGroupsPlusVertexBuffers,
-            rhs.maxBindingsPerBindGroup,
-            rhs.maxDynamicUniformBuffersPerPipelineLayout,
-            rhs.maxDynamicStorageBuffersPerPipelineLayout,
-            rhs.maxSampledTexturesPerShaderStage,
-            rhs.maxSamplersPerShaderStage,
-            rhs.maxStorageBuffersPerShaderStage,
-            rhs.maxStorageTexturesPerShaderStage,
-            rhs.maxUniformBuffersPerShaderStage,
-            rhs.maxUniformBufferBindingSize,
-            rhs.maxStorageBufferBindingSize,
-            rhs.minUniformBufferOffsetAlignment,
-            rhs.minStorageBufferOffsetAlignment,
-            rhs.maxVertexBuffers,
-            rhs.maxBufferSize,
-            rhs.maxVertexAttributes,
-            rhs.maxVertexBufferArrayStride,
-            rhs.maxInterStageShaderVariables,
-            rhs.maxColorAttachments,
-            rhs.maxColorAttachmentBytesPerSample,
-            rhs.maxComputeWorkgroupStorageSize,
-            rhs.maxComputeInvocationsPerWorkgroup,
-            rhs.maxComputeWorkgroupSizeX,
-            rhs.maxComputeWorkgroupSizeY,
-            rhs.maxComputeWorkgroupSizeZ,
-            rhs.maxComputeWorkgroupsPerDimension,
-            rhs.maxImmediateSize
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (maxTextureDimension1D != rhs.maxTextureDimension1D) { return false; }
+        if (maxTextureDimension2D != rhs.maxTextureDimension2D) { return false; }
+        if (maxTextureDimension3D != rhs.maxTextureDimension3D) { return false; }
+        if (maxTextureArrayLayers != rhs.maxTextureArrayLayers) { return false; }
+        if (maxBindGroups != rhs.maxBindGroups) { return false; }
+        if (maxBindGroupsPlusVertexBuffers != rhs.maxBindGroupsPlusVertexBuffers) { return false; }
+        if (maxBindingsPerBindGroup != rhs.maxBindingsPerBindGroup) { return false; }
+        if (maxDynamicUniformBuffersPerPipelineLayout != rhs.maxDynamicUniformBuffersPerPipelineLayout) { return false; }
+        if (maxDynamicStorageBuffersPerPipelineLayout != rhs.maxDynamicStorageBuffersPerPipelineLayout) { return false; }
+        if (maxSampledTexturesPerShaderStage != rhs.maxSampledTexturesPerShaderStage) { return false; }
+        if (maxSamplersPerShaderStage != rhs.maxSamplersPerShaderStage) { return false; }
+        if (maxStorageBuffersPerShaderStage != rhs.maxStorageBuffersPerShaderStage) { return false; }
+        if (maxStorageTexturesPerShaderStage != rhs.maxStorageTexturesPerShaderStage) { return false; }
+        if (maxUniformBuffersPerShaderStage != rhs.maxUniformBuffersPerShaderStage) { return false; }
+        if (maxUniformBufferBindingSize != rhs.maxUniformBufferBindingSize) { return false; }
+        if (maxStorageBufferBindingSize != rhs.maxStorageBufferBindingSize) { return false; }
+        if (minUniformBufferOffsetAlignment != rhs.minUniformBufferOffsetAlignment) { return false; }
+        if (minStorageBufferOffsetAlignment != rhs.minStorageBufferOffsetAlignment) { return false; }
+        if (maxVertexBuffers != rhs.maxVertexBuffers) { return false; }
+        if (maxBufferSize != rhs.maxBufferSize) { return false; }
+        if (maxVertexAttributes != rhs.maxVertexAttributes) { return false; }
+        if (maxVertexBufferArrayStride != rhs.maxVertexBufferArrayStride) { return false; }
+        if (maxInterStageShaderVariables != rhs.maxInterStageShaderVariables) { return false; }
+        if (maxColorAttachments != rhs.maxColorAttachments) { return false; }
+        if (maxColorAttachmentBytesPerSample != rhs.maxColorAttachmentBytesPerSample) { return false; }
+        if (maxComputeWorkgroupStorageSize != rhs.maxComputeWorkgroupStorageSize) { return false; }
+        if (maxComputeInvocationsPerWorkgroup != rhs.maxComputeInvocationsPerWorkgroup) { return false; }
+        if (maxComputeWorkgroupSizeX != rhs.maxComputeWorkgroupSizeX) { return false; }
+        if (maxComputeWorkgroupSizeY != rhs.maxComputeWorkgroupSizeY) { return false; }
+        if (maxComputeWorkgroupSizeZ != rhs.maxComputeWorkgroupSizeZ) { return false; }
+        if (maxComputeWorkgroupsPerDimension != rhs.maxComputeWorkgroupsPerDimension) { return false; }
+        if (maxImmediateSize != rhs.maxImmediateSize) { return false; }
+        return true;
     }
 
 
@@ -3662,21 +3145,56 @@ namespace dawn::native {
             "offsetof mismatch for PipelineLayoutPixelLocalStorage::sType");
     static_assert(offsetof(PipelineLayoutPixelLocalStorage, totalPixelLocalStorageSize) == offsetof(WGPUPipelineLayoutPixelLocalStorage, totalPixelLocalStorageSize),
                  "offsetof mismatch for PipelineLayoutPixelLocalStorage::totalPixelLocalStorageSize");
-    static_assert(offsetof(PipelineLayoutPixelLocalStorage, storageAttachmentCount) == offsetof(WGPUPipelineLayoutPixelLocalStorage, storageAttachmentCount),
-                 "offsetof mismatch for PipelineLayoutPixelLocalStorage::storageAttachmentCount");
-    static_assert(offsetof(PipelineLayoutPixelLocalStorage, storageAttachments) == offsetof(WGPUPipelineLayoutPixelLocalStorage, storageAttachments),
-                 "offsetof mismatch for PipelineLayoutPixelLocalStorage::storageAttachments");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using PipelineLayoutPixelLocalStoragestorageAttachmentsSpan = decltype(std::declval<PipelineLayoutPixelLocalStorage>().storageAttachments);
+    
+    static_assert(offsetof(PipelineLayoutPixelLocalStorage, storageAttachments) + PipelineLayoutPixelLocalStoragestorageAttachmentsSpan::GetOffsetOfSize() == offsetof(WGPUPipelineLayoutPixelLocalStorage, storageAttachmentCount),
+                 "offsetof mismatch for PipelineLayoutPixelLocalStorage::storageAttachments::mSize");
+    static_assert(offsetof(PipelineLayoutPixelLocalStorage, storageAttachments) + PipelineLayoutPixelLocalStoragestorageAttachmentsSpan::GetOffsetOfData() == offsetof(WGPUPipelineLayoutPixelLocalStorage, storageAttachments),
+                 "offsetof mismatch for PipelineLayoutPixelLocalStorage::storageAttachments::mData");
 
     bool PipelineLayoutPixelLocalStorage::operator==(const PipelineLayoutPixelLocalStorage& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            totalPixelLocalStorageSize,
-            storageAttachmentCount,
-            storageAttachments
-        ) == std::tie(
-            rhs.totalPixelLocalStorageSize,
-            rhs.storageAttachmentCount,
-            rhs.storageAttachments
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (totalPixelLocalStorageSize != rhs.totalPixelLocalStorageSize) { return false; }
+        if (storageAttachments.size() != rhs.storageAttachments.size()) { return false; }
+        if (storageAttachments.data() != rhs.storageAttachments.data()) { return false; }
+        return true;
+    }
+
+
+    static_assert(sizeof(RenderBundleEncoderDescriptor) == sizeof(WGPURenderBundleEncoderDescriptor), "sizeof mismatch for RenderBundleEncoderDescriptor");
+    static_assert(alignof(RenderBundleEncoderDescriptor) == alignof(WGPURenderBundleEncoderDescriptor), "alignof mismatch for RenderBundleEncoderDescriptor");
+
+    static_assert(offsetof(RenderBundleEncoderDescriptor, nextInChain) == offsetof(WGPURenderBundleEncoderDescriptor, nextInChain),
+            "offsetof mismatch for RenderBundleEncoderDescriptor::nextInChain");
+    static_assert(offsetof(RenderBundleEncoderDescriptor, label) == offsetof(WGPURenderBundleEncoderDescriptor, label),
+                 "offsetof mismatch for RenderBundleEncoderDescriptor::label");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using RenderBundleEncoderDescriptorcolorFormatsSpan = decltype(std::declval<RenderBundleEncoderDescriptor>().colorFormats);
+    
+    static_assert(offsetof(RenderBundleEncoderDescriptor, colorFormats) + RenderBundleEncoderDescriptorcolorFormatsSpan::GetOffsetOfSize() == offsetof(WGPURenderBundleEncoderDescriptor, colorFormatCount),
+                 "offsetof mismatch for RenderBundleEncoderDescriptor::colorFormats::mSize");
+    static_assert(offsetof(RenderBundleEncoderDescriptor, colorFormats) + RenderBundleEncoderDescriptorcolorFormatsSpan::GetOffsetOfData() == offsetof(WGPURenderBundleEncoderDescriptor, colorFormats),
+                 "offsetof mismatch for RenderBundleEncoderDescriptor::colorFormats::mData");
+    static_assert(offsetof(RenderBundleEncoderDescriptor, depthStencilFormat) == offsetof(WGPURenderBundleEncoderDescriptor, depthStencilFormat),
+                 "offsetof mismatch for RenderBundleEncoderDescriptor::depthStencilFormat");
+    static_assert(offsetof(RenderBundleEncoderDescriptor, sampleCount) == offsetof(WGPURenderBundleEncoderDescriptor, sampleCount),
+                 "offsetof mismatch for RenderBundleEncoderDescriptor::sampleCount");
+    static_assert(offsetof(RenderBundleEncoderDescriptor, depthReadOnly) == offsetof(WGPURenderBundleEncoderDescriptor, depthReadOnly),
+                 "offsetof mismatch for RenderBundleEncoderDescriptor::depthReadOnly");
+    static_assert(offsetof(RenderBundleEncoderDescriptor, stencilReadOnly) == offsetof(WGPURenderBundleEncoderDescriptor, stencilReadOnly),
+                 "offsetof mismatch for RenderBundleEncoderDescriptor::stencilReadOnly");
+
+    bool RenderBundleEncoderDescriptor::operator==(const RenderBundleEncoderDescriptor& rhs) const {
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (colorFormats.size() != rhs.colorFormats.size()) { return false; }
+        if (colorFormats.data() != rhs.colorFormats.data()) { return false; }
+        if (depthStencilFormat != rhs.depthStencilFormat) { return false; }
+        if (sampleCount != rhs.sampleCount) { return false; }
+        if (depthReadOnly != rhs.depthReadOnly) { return false; }
+        if (stencilReadOnly != rhs.stencilReadOnly) { return false; }
+        return true;
     }
 
 
@@ -3699,21 +3217,14 @@ namespace dawn::native {
                  "offsetof mismatch for RenderPassColorAttachment::clearValue");
 
     bool RenderPassColorAttachment::operator==(const RenderPassColorAttachment& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            view,
-            depthSlice,
-            resolveTarget,
-            loadOp,
-            storeOp,
-            clearValue
-        ) == std::tie(
-            rhs.view,
-            rhs.depthSlice,
-            rhs.resolveTarget,
-            rhs.loadOp,
-            rhs.storeOp,
-            rhs.clearValue
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (view != rhs.view) { return false; }
+        if (depthSlice != rhs.depthSlice) { return false; }
+        if (resolveTarget != rhs.resolveTarget) { return false; }
+        if (loadOp != rhs.loadOp) { return false; }
+        if (storeOp != rhs.storeOp) { return false; }
+        if (clearValue != rhs.clearValue) { return false; }
+        return true;
     }
 
 
@@ -3730,13 +3241,10 @@ namespace dawn::native {
                  "offsetof mismatch for RenderPassRenderAreaRect::size");
 
     bool RenderPassRenderAreaRect::operator==(const RenderPassRenderAreaRect& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            origin,
-            size
-        ) == std::tie(
-            rhs.origin,
-            rhs.size
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (origin != rhs.origin) { return false; }
+        if (size != rhs.size) { return false; }
+        return true;
     }
 
 
@@ -3757,19 +3265,13 @@ namespace dawn::native {
                  "offsetof mismatch for RenderPassStorageAttachment::clearValue");
 
     bool RenderPassStorageAttachment::operator==(const RenderPassStorageAttachment& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            offset,
-            storage,
-            loadOp,
-            storeOp,
-            clearValue
-        ) == std::tie(
-            rhs.offset,
-            rhs.storage,
-            rhs.loadOp,
-            rhs.storeOp,
-            rhs.clearValue
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (offset != rhs.offset) { return false; }
+        if (storage != rhs.storage) { return false; }
+        if (loadOp != rhs.loadOp) { return false; }
+        if (storeOp != rhs.storeOp) { return false; }
+        if (clearValue != rhs.clearValue) { return false; }
+        return true;
     }
 
 
@@ -3802,19 +3304,13 @@ namespace dawn::native {
         return copy;
     }
     bool RequestAdapterOptions::operator==(const RequestAdapterOptions& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            featureLevel,
-            powerPreference,
-            forceFallbackAdapter,
-            backendType,
-            compatibleSurface
-        ) == std::tie(
-            rhs.featureLevel,
-            rhs.powerPreference,
-            rhs.forceFallbackAdapter,
-            rhs.backendType,
-            rhs.compatibleSurface
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (featureLevel != rhs.featureLevel) { return false; }
+        if (powerPreference != rhs.powerPreference) { return false; }
+        if (forceFallbackAdapter != rhs.forceFallbackAdapter) { return false; }
+        if (backendType != rhs.backendType) { return false; }
+        if (compatibleSurface != rhs.compatibleSurface) { return false; }
+        return true;
     }
 
 
@@ -3875,31 +3371,19 @@ namespace dawn::native {
         return copy;
     }
     bool SamplerDescriptor::operator==(const SamplerDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            addressModeU,
-            addressModeV,
-            addressModeW,
-            magFilter,
-            minFilter,
-            mipmapFilter,
-            lodMinClamp,
-            lodMaxClamp,
-            compare,
-            maxAnisotropy
-        ) == std::tie(
-            rhs.label,
-            rhs.addressModeU,
-            rhs.addressModeV,
-            rhs.addressModeW,
-            rhs.magFilter,
-            rhs.minFilter,
-            rhs.mipmapFilter,
-            rhs.lodMinClamp,
-            rhs.lodMaxClamp,
-            rhs.compare,
-            rhs.maxAnisotropy
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (addressModeU != rhs.addressModeU) { return false; }
+        if (addressModeV != rhs.addressModeV) { return false; }
+        if (addressModeW != rhs.addressModeW) { return false; }
+        if (magFilter != rhs.magFilter) { return false; }
+        if (minFilter != rhs.minFilter) { return false; }
+        if (mipmapFilter != rhs.mipmapFilter) { return false; }
+        if (lodMinClamp != rhs.lodMinClamp) { return false; }
+        if (lodMaxClamp != rhs.lodMaxClamp) { return false; }
+        if (compare != rhs.compare) { return false; }
+        if (maxAnisotropy != rhs.maxAnisotropy) { return false; }
+        return true;
     }
 
 
@@ -3912,11 +3396,9 @@ namespace dawn::native {
                  "offsetof mismatch for ShaderModuleDescriptor::label");
 
     bool ShaderModuleDescriptor::operator==(const ShaderModuleDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
@@ -3929,11 +3411,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedBufferMemoryDescriptor::label");
 
     bool SharedBufferMemoryDescriptor::operator==(const SharedBufferMemoryDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
@@ -3946,11 +3426,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceDescriptor::label");
 
     bool SharedFenceDescriptor::operator==(const SharedFenceDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
@@ -3963,11 +3441,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedFenceExportInfo::type");
 
     bool SharedFenceExportInfo::operator==(const SharedFenceExportInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            type
-        ) == std::tie(
-            rhs.type
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (type != rhs.type) { return false; }
+        return true;
     }
 
 
@@ -3989,11 +3465,9 @@ namespace dawn::native {
         return copy;
     }
     bool SharedTextureMemoryAHardwareBufferProperties::operator==(const SharedTextureMemoryAHardwareBufferProperties& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            yCbCrInfo
-        ) == std::tie(
-            rhs.yCbCrInfo
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (yCbCrInfo != rhs.yCbCrInfo) { return false; }
+        return true;
     }
 
 
@@ -4006,27 +3480,30 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::concurrentRead");
     static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, initialized) == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, initialized),
                  "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::initialized");
-    static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, fenceCount) == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, fenceCount),
-                 "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::fenceCount");
-    static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, fences) == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, fences),
-                 "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::fences");
-    static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, signaledValues) == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, signaledValues),
-                 "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::signaledValues");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedTextureMemoryBeginAccessDescriptorfencesSpan = decltype(std::declval<SharedTextureMemoryBeginAccessDescriptor>().fences);
+    
+    static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, fences) + SharedTextureMemoryBeginAccessDescriptorfencesSpan::GetOffsetOfSize() == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, fenceCount),
+                 "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::fences::mSize");
+    static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, fences) + SharedTextureMemoryBeginAccessDescriptorfencesSpan::GetOffsetOfData() == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, fences),
+                 "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::fences::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedTextureMemoryBeginAccessDescriptorsignaledValuesSpan = decltype(std::declval<SharedTextureMemoryBeginAccessDescriptor>().signaledValues);
+    
+    static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, signaledValues) + SharedTextureMemoryBeginAccessDescriptorsignaledValuesSpan::GetOffsetOfSize() == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, signaledValueCount),
+                 "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::signaledValues::mSize");
+    static_assert(offsetof(SharedTextureMemoryBeginAccessDescriptor, signaledValues) + SharedTextureMemoryBeginAccessDescriptorsignaledValuesSpan::GetOffsetOfData() == offsetof(WGPUSharedTextureMemoryBeginAccessDescriptor, signaledValues),
+                 "offsetof mismatch for SharedTextureMemoryBeginAccessDescriptor::signaledValues::mData");
 
     bool SharedTextureMemoryBeginAccessDescriptor::operator==(const SharedTextureMemoryBeginAccessDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            concurrentRead,
-            initialized,
-            fenceCount,
-            fences,
-            signaledValues
-        ) == std::tie(
-            rhs.concurrentRead,
-            rhs.initialized,
-            rhs.fenceCount,
-            rhs.fences,
-            rhs.signaledValues
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (concurrentRead != rhs.concurrentRead) { return false; }
+        if (initialized != rhs.initialized) { return false; }
+        if (fences.size() != rhs.fences.size()) { return false; }
+        if (fences.data() != rhs.fences.data()) { return false; }
+        if (signaledValues.size() != rhs.signaledValues.size()) { return false; }
+        if (signaledValues.data() != rhs.signaledValues.data()) { return false; }
+        return true;
     }
 
 
@@ -4043,25 +3520,22 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryDmaBufDescriptor::drmFormat");
     static_assert(offsetof(SharedTextureMemoryDmaBufDescriptor, drmModifier) == offsetof(WGPUSharedTextureMemoryDmaBufDescriptor, drmModifier),
                  "offsetof mismatch for SharedTextureMemoryDmaBufDescriptor::drmModifier");
-    static_assert(offsetof(SharedTextureMemoryDmaBufDescriptor, planeCount) == offsetof(WGPUSharedTextureMemoryDmaBufDescriptor, planeCount),
-                 "offsetof mismatch for SharedTextureMemoryDmaBufDescriptor::planeCount");
-    static_assert(offsetof(SharedTextureMemoryDmaBufDescriptor, planes) == offsetof(WGPUSharedTextureMemoryDmaBufDescriptor, planes),
-                 "offsetof mismatch for SharedTextureMemoryDmaBufDescriptor::planes");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedTextureMemoryDmaBufDescriptorplanesSpan = decltype(std::declval<SharedTextureMemoryDmaBufDescriptor>().planes);
+    
+    static_assert(offsetof(SharedTextureMemoryDmaBufDescriptor, planes) + SharedTextureMemoryDmaBufDescriptorplanesSpan::GetOffsetOfSize() == offsetof(WGPUSharedTextureMemoryDmaBufDescriptor, planeCount),
+                 "offsetof mismatch for SharedTextureMemoryDmaBufDescriptor::planes::mSize");
+    static_assert(offsetof(SharedTextureMemoryDmaBufDescriptor, planes) + SharedTextureMemoryDmaBufDescriptorplanesSpan::GetOffsetOfData() == offsetof(WGPUSharedTextureMemoryDmaBufDescriptor, planes),
+                 "offsetof mismatch for SharedTextureMemoryDmaBufDescriptor::planes::mData");
 
     bool SharedTextureMemoryDmaBufDescriptor::operator==(const SharedTextureMemoryDmaBufDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            size,
-            drmFormat,
-            drmModifier,
-            planeCount,
-            planes
-        ) == std::tie(
-            rhs.size,
-            rhs.drmFormat,
-            rhs.drmModifier,
-            rhs.planeCount,
-            rhs.planes
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (size != rhs.size) { return false; }
+        if (drmFormat != rhs.drmFormat) { return false; }
+        if (drmModifier != rhs.drmModifier) { return false; }
+        if (planes.size() != rhs.planes.size()) { return false; }
+        if (planes.data() != rhs.planes.data()) { return false; }
+        return true;
     }
 
 
@@ -4076,11 +3550,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryMetalEndAccessState::commandsScheduledFuture");
 
     bool SharedTextureMemoryMetalEndAccessState::operator==(const SharedTextureMemoryMetalEndAccessState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            commandsScheduledFuture
-        ) == std::tie(
-            rhs.commandsScheduledFuture
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (commandsScheduledFuture != rhs.commandsScheduledFuture) { return false; }
+        return true;
     }
 
 
@@ -4093,11 +3565,9 @@ namespace dawn::native {
                  "offsetof mismatch for SurfaceDescriptor::label");
 
     bool SurfaceDescriptor::operator==(const SurfaceDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
@@ -4110,13 +3580,9 @@ namespace dawn::native {
                  "offsetof mismatch for TexelCopyBufferInfo::buffer");
 
     bool TexelCopyBufferInfo::operator==(const TexelCopyBufferInfo& rhs) const {
-        return  std::tie(
-            layout,
-            buffer
-        ) == std::tie(
-            rhs.layout,
-            rhs.buffer
-        );
+        if (layout != rhs.layout) { return false; }
+        if (buffer != rhs.buffer) { return false; }
+        return true;
     }
 
 
@@ -4143,17 +3609,11 @@ namespace dawn::native {
         return copy;
     }
     bool TexelCopyTextureInfo::operator==(const TexelCopyTextureInfo& rhs) const {
-        return  std::tie(
-            texture,
-            mipLevel,
-            origin,
-            aspect
-        ) == std::tie(
-            rhs.texture,
-            rhs.mipLevel,
-            rhs.origin,
-            rhs.aspect
-        );
+        if (texture != rhs.texture) { return false; }
+        if (mipLevel != rhs.mipLevel) { return false; }
+        if (origin != rhs.origin) { return false; }
+        if (aspect != rhs.aspect) { return false; }
+        return true;
     }
 
 
@@ -4175,11 +3635,9 @@ namespace dawn::native {
         return copy;
     }
     bool TextureComponentSwizzleDescriptor::operator==(const TextureComponentSwizzleDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            swizzle
-        ) == std::tie(
-            rhs.swizzle
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (swizzle != rhs.swizzle) { return false; }
+        return true;
     }
 
 
@@ -4202,10 +3660,13 @@ namespace dawn::native {
                  "offsetof mismatch for TextureDescriptor::mipLevelCount");
     static_assert(offsetof(TextureDescriptor, sampleCount) == offsetof(WGPUTextureDescriptor, sampleCount),
                  "offsetof mismatch for TextureDescriptor::sampleCount");
-    static_assert(offsetof(TextureDescriptor, viewFormatCount) == offsetof(WGPUTextureDescriptor, viewFormatCount),
-                 "offsetof mismatch for TextureDescriptor::viewFormatCount");
-    static_assert(offsetof(TextureDescriptor, viewFormats) == offsetof(WGPUTextureDescriptor, viewFormats),
-                 "offsetof mismatch for TextureDescriptor::viewFormats");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using TextureDescriptorviewFormatsSpan = decltype(std::declval<TextureDescriptor>().viewFormats);
+    
+    static_assert(offsetof(TextureDescriptor, viewFormats) + TextureDescriptorviewFormatsSpan::GetOffsetOfSize() == offsetof(WGPUTextureDescriptor, viewFormatCount),
+                 "offsetof mismatch for TextureDescriptor::viewFormats::mSize");
+    static_assert(offsetof(TextureDescriptor, viewFormats) + TextureDescriptorviewFormatsSpan::GetOffsetOfData() == offsetof(WGPUTextureDescriptor, viewFormats),
+                 "offsetof mismatch for TextureDescriptor::viewFormats::mData");
 
     TextureDescriptor TextureDescriptor::WithTrivialFrontendDefaults() const {
         TextureDescriptor copy;
@@ -4219,32 +3680,21 @@ namespace dawn::native {
         copy.format = format;
         copy.mipLevelCount = mipLevelCount;
         copy.sampleCount = sampleCount;
-        copy.viewFormatCount = viewFormatCount;
         copy.viewFormats = viewFormats;
         return copy;
     }
     bool TextureDescriptor::operator==(const TextureDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            usage,
-            dimension,
-            size,
-            format,
-            mipLevelCount,
-            sampleCount,
-            viewFormatCount,
-            viewFormats
-        ) == std::tie(
-            rhs.label,
-            rhs.usage,
-            rhs.dimension,
-            rhs.size,
-            rhs.format,
-            rhs.mipLevelCount,
-            rhs.sampleCount,
-            rhs.viewFormatCount,
-            rhs.viewFormats
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (usage != rhs.usage) { return false; }
+        if (dimension != rhs.dimension) { return false; }
+        if (size != rhs.size) { return false; }
+        if (format != rhs.format) { return false; }
+        if (mipLevelCount != rhs.mipLevelCount) { return false; }
+        if (sampleCount != rhs.sampleCount) { return false; }
+        if (viewFormats.size() != rhs.viewFormats.size()) { return false; }
+        if (viewFormats.data() != rhs.viewFormats.data()) { return false; }
+        return true;
     }
 
 
@@ -4257,23 +3707,21 @@ namespace dawn::native {
                  "offsetof mismatch for VertexBufferLayout::stepMode");
     static_assert(offsetof(VertexBufferLayout, arrayStride) == offsetof(WGPUVertexBufferLayout, arrayStride),
                  "offsetof mismatch for VertexBufferLayout::arrayStride");
-    static_assert(offsetof(VertexBufferLayout, attributeCount) == offsetof(WGPUVertexBufferLayout, attributeCount),
-                 "offsetof mismatch for VertexBufferLayout::attributeCount");
-    static_assert(offsetof(VertexBufferLayout, attributes) == offsetof(WGPUVertexBufferLayout, attributes),
-                 "offsetof mismatch for VertexBufferLayout::attributes");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using VertexBufferLayoutattributesSpan = decltype(std::declval<VertexBufferLayout>().attributes);
+    
+    static_assert(offsetof(VertexBufferLayout, attributes) + VertexBufferLayoutattributesSpan::GetOffsetOfSize() == offsetof(WGPUVertexBufferLayout, attributeCount),
+                 "offsetof mismatch for VertexBufferLayout::attributes::mSize");
+    static_assert(offsetof(VertexBufferLayout, attributes) + VertexBufferLayoutattributesSpan::GetOffsetOfData() == offsetof(WGPUVertexBufferLayout, attributes),
+                 "offsetof mismatch for VertexBufferLayout::attributes::mData");
 
     bool VertexBufferLayout::operator==(const VertexBufferLayout& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            stepMode,
-            arrayStride,
-            attributeCount,
-            attributes
-        ) == std::tie(
-            rhs.stepMode,
-            rhs.arrayStride,
-            rhs.attributeCount,
-            rhs.attributes
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (stepMode != rhs.stepMode) { return false; }
+        if (arrayStride != rhs.arrayStride) { return false; }
+        if (attributes.size() != rhs.attributes.size()) { return false; }
+        if (attributes.data() != rhs.attributes.data()) { return false; }
+        return true;
     }
 
 
@@ -4304,29 +3752,18 @@ namespace dawn::native {
                  "offsetof mismatch for AdapterInfo::subgroupMaxSize");
 
     bool AdapterInfo::operator==(const AdapterInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            vendor,
-            architecture,
-            device,
-            description,
-            backendType,
-            adapterType,
-            vendorID,
-            deviceID,
-            subgroupMinSize,
-            subgroupMaxSize
-        ) == std::tie(
-            rhs.vendor,
-            rhs.architecture,
-            rhs.device,
-            rhs.description,
-            rhs.backendType,
-            rhs.adapterType,
-            rhs.vendorID,
-            rhs.deviceID,
-            rhs.subgroupMinSize,
-            rhs.subgroupMaxSize
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (vendor != rhs.vendor) { return false; }
+        if (architecture != rhs.architecture) { return false; }
+        if (device != rhs.device) { return false; }
+        if (description != rhs.description) { return false; }
+        if (backendType != rhs.backendType) { return false; }
+        if (adapterType != rhs.adapterType) { return false; }
+        if (vendorID != rhs.vendorID) { return false; }
+        if (deviceID != rhs.deviceID) { return false; }
+        if (subgroupMinSize != rhs.subgroupMinSize) { return false; }
+        if (subgroupMaxSize != rhs.subgroupMaxSize) { return false; }
+        return true;
     }
 
 
@@ -4339,23 +3776,21 @@ namespace dawn::native {
                  "offsetof mismatch for BindGroupDescriptor::label");
     static_assert(offsetof(BindGroupDescriptor, layout) == offsetof(WGPUBindGroupDescriptor, layout),
                  "offsetof mismatch for BindGroupDescriptor::layout");
-    static_assert(offsetof(BindGroupDescriptor, entryCount) == offsetof(WGPUBindGroupDescriptor, entryCount),
-                 "offsetof mismatch for BindGroupDescriptor::entryCount");
-    static_assert(offsetof(BindGroupDescriptor, entries) == offsetof(WGPUBindGroupDescriptor, entries),
-                 "offsetof mismatch for BindGroupDescriptor::entries");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using BindGroupDescriptorentriesSpan = decltype(std::declval<BindGroupDescriptor>().entries);
+    
+    static_assert(offsetof(BindGroupDescriptor, entries) + BindGroupDescriptorentriesSpan::GetOffsetOfSize() == offsetof(WGPUBindGroupDescriptor, entryCount),
+                 "offsetof mismatch for BindGroupDescriptor::entries::mSize");
+    static_assert(offsetof(BindGroupDescriptor, entries) + BindGroupDescriptorentriesSpan::GetOffsetOfData() == offsetof(WGPUBindGroupDescriptor, entries),
+                 "offsetof mismatch for BindGroupDescriptor::entries::mData");
 
     bool BindGroupDescriptor::operator==(const BindGroupDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            layout,
-            entryCount,
-            entries
-        ) == std::tie(
-            rhs.label,
-            rhs.layout,
-            rhs.entryCount,
-            rhs.entries
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (layout != rhs.layout) { return false; }
+        if (entries.size() != rhs.entries.size()) { return false; }
+        if (entries.data() != rhs.entries.data()) { return false; }
+        return true;
     }
 
 
@@ -4366,21 +3801,20 @@ namespace dawn::native {
             "offsetof mismatch for BindGroupLayoutDescriptor::nextInChain");
     static_assert(offsetof(BindGroupLayoutDescriptor, label) == offsetof(WGPUBindGroupLayoutDescriptor, label),
                  "offsetof mismatch for BindGroupLayoutDescriptor::label");
-    static_assert(offsetof(BindGroupLayoutDescriptor, entryCount) == offsetof(WGPUBindGroupLayoutDescriptor, entryCount),
-                 "offsetof mismatch for BindGroupLayoutDescriptor::entryCount");
-    static_assert(offsetof(BindGroupLayoutDescriptor, entries) == offsetof(WGPUBindGroupLayoutDescriptor, entries),
-                 "offsetof mismatch for BindGroupLayoutDescriptor::entries");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using BindGroupLayoutDescriptorentriesSpan = decltype(std::declval<BindGroupLayoutDescriptor>().entries);
+    
+    static_assert(offsetof(BindGroupLayoutDescriptor, entries) + BindGroupLayoutDescriptorentriesSpan::GetOffsetOfSize() == offsetof(WGPUBindGroupLayoutDescriptor, entryCount),
+                 "offsetof mismatch for BindGroupLayoutDescriptor::entries::mSize");
+    static_assert(offsetof(BindGroupLayoutDescriptor, entries) + BindGroupLayoutDescriptorentriesSpan::GetOffsetOfData() == offsetof(WGPUBindGroupLayoutDescriptor, entries),
+                 "offsetof mismatch for BindGroupLayoutDescriptor::entries::mData");
 
     bool BindGroupLayoutDescriptor::operator==(const BindGroupLayoutDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            entryCount,
-            entries
-        ) == std::tie(
-            rhs.label,
-            rhs.entryCount,
-            rhs.entries
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (entries.size() != rhs.entries.size()) { return false; }
+        if (entries.data() != rhs.entries.data()) { return false; }
+        return true;
     }
 
 
@@ -4397,15 +3831,11 @@ namespace dawn::native {
                  "offsetof mismatch for ColorTargetState::writeMask");
 
     bool ColorTargetState::operator==(const ColorTargetState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            format,
-            blend,
-            writeMask
-        ) == std::tie(
-            rhs.format,
-            rhs.blend,
-            rhs.writeMask
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (format != rhs.format) { return false; }
+        if (blend != rhs.blend) { return false; }
+        if (writeMask != rhs.writeMask) { return false; }
+        return true;
     }
 
 
@@ -4414,19 +3844,19 @@ namespace dawn::native {
 
     static_assert(offsetof(CompilationInfo, nextInChain) == offsetof(WGPUCompilationInfo, nextInChain),
             "offsetof mismatch for CompilationInfo::nextInChain");
-    static_assert(offsetof(CompilationInfo, messageCount) == offsetof(WGPUCompilationInfo, messageCount),
-                 "offsetof mismatch for CompilationInfo::messageCount");
-    static_assert(offsetof(CompilationInfo, messages) == offsetof(WGPUCompilationInfo, messages),
-                 "offsetof mismatch for CompilationInfo::messages");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using CompilationInfomessagesSpan = decltype(std::declval<CompilationInfo>().messages);
+    
+    static_assert(offsetof(CompilationInfo, messages) + CompilationInfomessagesSpan::GetOffsetOfSize() == offsetof(WGPUCompilationInfo, messageCount),
+                 "offsetof mismatch for CompilationInfo::messages::mSize");
+    static_assert(offsetof(CompilationInfo, messages) + CompilationInfomessagesSpan::GetOffsetOfData() == offsetof(WGPUCompilationInfo, messages),
+                 "offsetof mismatch for CompilationInfo::messages::mData");
 
     bool CompilationInfo::operator==(const CompilationInfo& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            messageCount,
-            messages
-        ) == std::tie(
-            rhs.messageCount,
-            rhs.messages
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (messages.size() != rhs.messages.size()) { return false; }
+        if (messages.data() != rhs.messages.data()) { return false; }
+        return true;
     }
 
 
@@ -4443,15 +3873,11 @@ namespace dawn::native {
                  "offsetof mismatch for ComputePipelineDescriptor::compute");
 
     bool ComputePipelineDescriptor::operator==(const ComputePipelineDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            layout,
-            compute
-        ) == std::tie(
-            rhs.label,
-            rhs.layout,
-            rhs.compute
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (layout != rhs.layout) { return false; }
+        if (compute != rhs.compute) { return false; }
+        return true;
     }
 
 
@@ -4462,9 +3888,8 @@ namespace dawn::native {
             "offsetof mismatch for DawnFormatCapabilities::nextInChain");
 
     bool DawnFormatCapabilities::operator==(const DawnFormatCapabilities& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-        ) == std::tie(
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        return true;
     }
 
 
@@ -4475,10 +3900,13 @@ namespace dawn::native {
             "offsetof mismatch for DeviceDescriptor::nextInChain");
     static_assert(offsetof(DeviceDescriptor, label) == offsetof(WGPUDeviceDescriptor, label),
                  "offsetof mismatch for DeviceDescriptor::label");
-    static_assert(offsetof(DeviceDescriptor, requiredFeatureCount) == offsetof(WGPUDeviceDescriptor, requiredFeatureCount),
-                 "offsetof mismatch for DeviceDescriptor::requiredFeatureCount");
-    static_assert(offsetof(DeviceDescriptor, requiredFeatures) == offsetof(WGPUDeviceDescriptor, requiredFeatures),
-                 "offsetof mismatch for DeviceDescriptor::requiredFeatures");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using DeviceDescriptorrequiredFeaturesSpan = decltype(std::declval<DeviceDescriptor>().requiredFeatures);
+    
+    static_assert(offsetof(DeviceDescriptor, requiredFeatures) + DeviceDescriptorrequiredFeaturesSpan::GetOffsetOfSize() == offsetof(WGPUDeviceDescriptor, requiredFeatureCount),
+                 "offsetof mismatch for DeviceDescriptor::requiredFeatures::mSize");
+    static_assert(offsetof(DeviceDescriptor, requiredFeatures) + DeviceDescriptorrequiredFeaturesSpan::GetOffsetOfData() == offsetof(WGPUDeviceDescriptor, requiredFeatures),
+                 "offsetof mismatch for DeviceDescriptor::requiredFeatures::mData");
     static_assert(offsetof(DeviceDescriptor, requiredLimits) == offsetof(WGPUDeviceDescriptor, requiredLimits),
                  "offsetof mismatch for DeviceDescriptor::requiredLimits");
     static_assert(offsetof(DeviceDescriptor, defaultQueue) == offsetof(WGPUDeviceDescriptor, defaultQueue),
@@ -4489,19 +3917,13 @@ namespace dawn::native {
                  "offsetof mismatch for DeviceDescriptor::uncapturedErrorCallbackInfo");
 
     bool DeviceDescriptor::operator==(const DeviceDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            requiredFeatureCount,
-            requiredFeatures,
-            requiredLimits,
-            defaultQueue
-        ) == std::tie(
-            rhs.label,
-            rhs.requiredFeatureCount,
-            rhs.requiredFeatures,
-            rhs.requiredLimits,
-            rhs.defaultQueue
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (requiredFeatures.size() != rhs.requiredFeatures.size()) { return false; }
+        if (requiredFeatures.data() != rhs.requiredFeatures.data()) { return false; }
+        if (requiredLimits != rhs.requiredLimits) { return false; }
+        if (defaultQueue != rhs.defaultQueue) { return false; }
+        return true;
     }
 
 
@@ -4512,25 +3934,23 @@ namespace dawn::native {
             "offsetof mismatch for PipelineLayoutDescriptor::nextInChain");
     static_assert(offsetof(PipelineLayoutDescriptor, label) == offsetof(WGPUPipelineLayoutDescriptor, label),
                  "offsetof mismatch for PipelineLayoutDescriptor::label");
-    static_assert(offsetof(PipelineLayoutDescriptor, bindGroupLayoutCount) == offsetof(WGPUPipelineLayoutDescriptor, bindGroupLayoutCount),
-                 "offsetof mismatch for PipelineLayoutDescriptor::bindGroupLayoutCount");
-    static_assert(offsetof(PipelineLayoutDescriptor, bindGroupLayouts) == offsetof(WGPUPipelineLayoutDescriptor, bindGroupLayouts),
-                 "offsetof mismatch for PipelineLayoutDescriptor::bindGroupLayouts");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using PipelineLayoutDescriptorbindGroupLayoutsSpan = decltype(std::declval<PipelineLayoutDescriptor>().bindGroupLayouts);
+    
+    static_assert(offsetof(PipelineLayoutDescriptor, bindGroupLayouts) + PipelineLayoutDescriptorbindGroupLayoutsSpan::GetOffsetOfSize() == offsetof(WGPUPipelineLayoutDescriptor, bindGroupLayoutCount),
+                 "offsetof mismatch for PipelineLayoutDescriptor::bindGroupLayouts::mSize");
+    static_assert(offsetof(PipelineLayoutDescriptor, bindGroupLayouts) + PipelineLayoutDescriptorbindGroupLayoutsSpan::GetOffsetOfData() == offsetof(WGPUPipelineLayoutDescriptor, bindGroupLayouts),
+                 "offsetof mismatch for PipelineLayoutDescriptor::bindGroupLayouts::mData");
     static_assert(offsetof(PipelineLayoutDescriptor, immediateSize) == offsetof(WGPUPipelineLayoutDescriptor, immediateSize),
                  "offsetof mismatch for PipelineLayoutDescriptor::immediateSize");
 
     bool PipelineLayoutDescriptor::operator==(const PipelineLayoutDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            bindGroupLayoutCount,
-            bindGroupLayouts,
-            immediateSize
-        ) == std::tie(
-            rhs.label,
-            rhs.bindGroupLayoutCount,
-            rhs.bindGroupLayouts,
-            rhs.immediateSize
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (bindGroupLayouts.size() != rhs.bindGroupLayouts.size()) { return false; }
+        if (bindGroupLayouts.data() != rhs.bindGroupLayouts.data()) { return false; }
+        if (immediateSize != rhs.immediateSize) { return false; }
+        return true;
     }
 
 
@@ -4543,21 +3963,20 @@ namespace dawn::native {
             "offsetof mismatch for RenderPassPixelLocalStorage::sType");
     static_assert(offsetof(RenderPassPixelLocalStorage, totalPixelLocalStorageSize) == offsetof(WGPURenderPassPixelLocalStorage, totalPixelLocalStorageSize),
                  "offsetof mismatch for RenderPassPixelLocalStorage::totalPixelLocalStorageSize");
-    static_assert(offsetof(RenderPassPixelLocalStorage, storageAttachmentCount) == offsetof(WGPURenderPassPixelLocalStorage, storageAttachmentCount),
-                 "offsetof mismatch for RenderPassPixelLocalStorage::storageAttachmentCount");
-    static_assert(offsetof(RenderPassPixelLocalStorage, storageAttachments) == offsetof(WGPURenderPassPixelLocalStorage, storageAttachments),
-                 "offsetof mismatch for RenderPassPixelLocalStorage::storageAttachments");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using RenderPassPixelLocalStoragestorageAttachmentsSpan = decltype(std::declval<RenderPassPixelLocalStorage>().storageAttachments);
+    
+    static_assert(offsetof(RenderPassPixelLocalStorage, storageAttachments) + RenderPassPixelLocalStoragestorageAttachmentsSpan::GetOffsetOfSize() == offsetof(WGPURenderPassPixelLocalStorage, storageAttachmentCount),
+                 "offsetof mismatch for RenderPassPixelLocalStorage::storageAttachments::mSize");
+    static_assert(offsetof(RenderPassPixelLocalStorage, storageAttachments) + RenderPassPixelLocalStoragestorageAttachmentsSpan::GetOffsetOfData() == offsetof(WGPURenderPassPixelLocalStorage, storageAttachments),
+                 "offsetof mismatch for RenderPassPixelLocalStorage::storageAttachments::mData");
 
     bool RenderPassPixelLocalStorage::operator==(const RenderPassPixelLocalStorage& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            totalPixelLocalStorageSize,
-            storageAttachmentCount,
-            storageAttachments
-        ) == std::tie(
-            rhs.totalPixelLocalStorageSize,
-            rhs.storageAttachmentCount,
-            rhs.storageAttachments
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (totalPixelLocalStorageSize != rhs.totalPixelLocalStorageSize) { return false; }
+        if (storageAttachments.size() != rhs.storageAttachments.size()) { return false; }
+        if (storageAttachments.data() != rhs.storageAttachments.data()) { return false; }
+        return true;
     }
 
 
@@ -4570,11 +3989,9 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryDescriptor::label");
 
     bool SharedTextureMemoryDescriptor::operator==(const SharedTextureMemoryDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label
-        ) == std::tie(
-            rhs.label
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        return true;
     }
 
 
@@ -4585,25 +4002,29 @@ namespace dawn::native {
             "offsetof mismatch for SharedTextureMemoryEndAccessState::nextInChain");
     static_assert(offsetof(SharedTextureMemoryEndAccessState, initialized) == offsetof(WGPUSharedTextureMemoryEndAccessState, initialized),
                  "offsetof mismatch for SharedTextureMemoryEndAccessState::initialized");
-    static_assert(offsetof(SharedTextureMemoryEndAccessState, fenceCount) == offsetof(WGPUSharedTextureMemoryEndAccessState, fenceCount),
-                 "offsetof mismatch for SharedTextureMemoryEndAccessState::fenceCount");
-    static_assert(offsetof(SharedTextureMemoryEndAccessState, fences) == offsetof(WGPUSharedTextureMemoryEndAccessState, fences),
-                 "offsetof mismatch for SharedTextureMemoryEndAccessState::fences");
-    static_assert(offsetof(SharedTextureMemoryEndAccessState, signaledValues) == offsetof(WGPUSharedTextureMemoryEndAccessState, signaledValues),
-                 "offsetof mismatch for SharedTextureMemoryEndAccessState::signaledValues");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedTextureMemoryEndAccessStatefencesSpan = decltype(std::declval<SharedTextureMemoryEndAccessState>().fences);
+    
+    static_assert(offsetof(SharedTextureMemoryEndAccessState, fences) + SharedTextureMemoryEndAccessStatefencesSpan::GetOffsetOfSize() == offsetof(WGPUSharedTextureMemoryEndAccessState, fenceCount),
+                 "offsetof mismatch for SharedTextureMemoryEndAccessState::fences::mSize");
+    static_assert(offsetof(SharedTextureMemoryEndAccessState, fences) + SharedTextureMemoryEndAccessStatefencesSpan::GetOffsetOfData() == offsetof(WGPUSharedTextureMemoryEndAccessState, fences),
+                 "offsetof mismatch for SharedTextureMemoryEndAccessState::fences::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using SharedTextureMemoryEndAccessStatesignaledValuesSpan = decltype(std::declval<SharedTextureMemoryEndAccessState>().signaledValues);
+    
+    static_assert(offsetof(SharedTextureMemoryEndAccessState, signaledValues) + SharedTextureMemoryEndAccessStatesignaledValuesSpan::GetOffsetOfSize() == offsetof(WGPUSharedTextureMemoryEndAccessState, signaledValueCount),
+                 "offsetof mismatch for SharedTextureMemoryEndAccessState::signaledValues::mSize");
+    static_assert(offsetof(SharedTextureMemoryEndAccessState, signaledValues) + SharedTextureMemoryEndAccessStatesignaledValuesSpan::GetOffsetOfData() == offsetof(WGPUSharedTextureMemoryEndAccessState, signaledValues),
+                 "offsetof mismatch for SharedTextureMemoryEndAccessState::signaledValues::mData");
 
     bool SharedTextureMemoryEndAccessState::operator==(const SharedTextureMemoryEndAccessState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            initialized,
-            fenceCount,
-            fences,
-            signaledValues
-        ) == std::tie(
-            rhs.initialized,
-            rhs.fenceCount,
-            rhs.fences,
-            rhs.signaledValues
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (initialized != rhs.initialized) { return false; }
+        if (fences.size() != rhs.fences.size()) { return false; }
+        if (fences.data() != rhs.fences.data()) { return false; }
+        if (signaledValues.size() != rhs.signaledValues.size()) { return false; }
+        if (signaledValues.data() != rhs.signaledValues.data()) { return false; }
+        return true;
     }
 
 
@@ -4620,15 +4041,11 @@ namespace dawn::native {
                  "offsetof mismatch for SharedTextureMemoryProperties::format");
 
     bool SharedTextureMemoryProperties::operator==(const SharedTextureMemoryProperties& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            usage,
-            size,
-            format
-        ) == std::tie(
-            rhs.usage,
-            rhs.size,
-            rhs.format
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (usage != rhs.usage) { return false; }
+        if (size != rhs.size) { return false; }
+        if (format != rhs.format) { return false; }
+        return true;
     }
 
 
@@ -4673,27 +4090,17 @@ namespace dawn::native {
         return copy;
     }
     bool TextureViewDescriptor::operator==(const TextureViewDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            format,
-            dimension,
-            baseMipLevel,
-            mipLevelCount,
-            baseArrayLayer,
-            arrayLayerCount,
-            aspect,
-            usage
-        ) == std::tie(
-            rhs.label,
-            rhs.format,
-            rhs.dimension,
-            rhs.baseMipLevel,
-            rhs.mipLevelCount,
-            rhs.baseArrayLayer,
-            rhs.arrayLayerCount,
-            rhs.aspect,
-            rhs.usage
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (format != rhs.format) { return false; }
+        if (dimension != rhs.dimension) { return false; }
+        if (baseMipLevel != rhs.baseMipLevel) { return false; }
+        if (mipLevelCount != rhs.mipLevelCount) { return false; }
+        if (baseArrayLayer != rhs.baseArrayLayer) { return false; }
+        if (arrayLayerCount != rhs.arrayLayerCount) { return false; }
+        if (aspect != rhs.aspect) { return false; }
+        if (usage != rhs.usage) { return false; }
+        return true;
     }
 
 
@@ -4706,31 +4113,30 @@ namespace dawn::native {
                  "offsetof mismatch for VertexState::module");
     static_assert(offsetof(VertexState, entryPoint) == offsetof(WGPUVertexState, entryPoint),
                  "offsetof mismatch for VertexState::entryPoint");
-    static_assert(offsetof(VertexState, constantCount) == offsetof(WGPUVertexState, constantCount),
-                 "offsetof mismatch for VertexState::constantCount");
-    static_assert(offsetof(VertexState, constants) == offsetof(WGPUVertexState, constants),
-                 "offsetof mismatch for VertexState::constants");
-    static_assert(offsetof(VertexState, bufferCount) == offsetof(WGPUVertexState, bufferCount),
-                 "offsetof mismatch for VertexState::bufferCount");
-    static_assert(offsetof(VertexState, buffers) == offsetof(WGPUVertexState, buffers),
-                 "offsetof mismatch for VertexState::buffers");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using VertexStateconstantsSpan = decltype(std::declval<VertexState>().constants);
+    
+    static_assert(offsetof(VertexState, constants) + VertexStateconstantsSpan::GetOffsetOfSize() == offsetof(WGPUVertexState, constantCount),
+                 "offsetof mismatch for VertexState::constants::mSize");
+    static_assert(offsetof(VertexState, constants) + VertexStateconstantsSpan::GetOffsetOfData() == offsetof(WGPUVertexState, constants),
+                 "offsetof mismatch for VertexState::constants::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using VertexStatebuffersSpan = decltype(std::declval<VertexState>().buffers);
+    
+    static_assert(offsetof(VertexState, buffers) + VertexStatebuffersSpan::GetOffsetOfSize() == offsetof(WGPUVertexState, bufferCount),
+                 "offsetof mismatch for VertexState::buffers::mSize");
+    static_assert(offsetof(VertexState, buffers) + VertexStatebuffersSpan::GetOffsetOfData() == offsetof(WGPUVertexState, buffers),
+                 "offsetof mismatch for VertexState::buffers::mData");
 
     bool VertexState::operator==(const VertexState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            module,
-            entryPoint,
-            constantCount,
-            constants,
-            bufferCount,
-            buffers
-        ) == std::tie(
-            rhs.module,
-            rhs.entryPoint,
-            rhs.constantCount,
-            rhs.constants,
-            rhs.bufferCount,
-            rhs.buffers
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (module != rhs.module) { return false; }
+        if (entryPoint != rhs.entryPoint) { return false; }
+        if (constants.size() != rhs.constants.size()) { return false; }
+        if (constants.data() != rhs.constants.data()) { return false; }
+        if (buffers.size() != rhs.buffers.size()) { return false; }
+        if (buffers.data() != rhs.buffers.data()) { return false; }
+        return true;
     }
 
 
@@ -4743,31 +4149,30 @@ namespace dawn::native {
                  "offsetof mismatch for FragmentState::module");
     static_assert(offsetof(FragmentState, entryPoint) == offsetof(WGPUFragmentState, entryPoint),
                  "offsetof mismatch for FragmentState::entryPoint");
-    static_assert(offsetof(FragmentState, constantCount) == offsetof(WGPUFragmentState, constantCount),
-                 "offsetof mismatch for FragmentState::constantCount");
-    static_assert(offsetof(FragmentState, constants) == offsetof(WGPUFragmentState, constants),
-                 "offsetof mismatch for FragmentState::constants");
-    static_assert(offsetof(FragmentState, targetCount) == offsetof(WGPUFragmentState, targetCount),
-                 "offsetof mismatch for FragmentState::targetCount");
-    static_assert(offsetof(FragmentState, targets) == offsetof(WGPUFragmentState, targets),
-                 "offsetof mismatch for FragmentState::targets");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using FragmentStateconstantsSpan = decltype(std::declval<FragmentState>().constants);
+    
+    static_assert(offsetof(FragmentState, constants) + FragmentStateconstantsSpan::GetOffsetOfSize() == offsetof(WGPUFragmentState, constantCount),
+                 "offsetof mismatch for FragmentState::constants::mSize");
+    static_assert(offsetof(FragmentState, constants) + FragmentStateconstantsSpan::GetOffsetOfData() == offsetof(WGPUFragmentState, constants),
+                 "offsetof mismatch for FragmentState::constants::mData");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using FragmentStatetargetsSpan = decltype(std::declval<FragmentState>().targets);
+    
+    static_assert(offsetof(FragmentState, targets) + FragmentStatetargetsSpan::GetOffsetOfSize() == offsetof(WGPUFragmentState, targetCount),
+                 "offsetof mismatch for FragmentState::targets::mSize");
+    static_assert(offsetof(FragmentState, targets) + FragmentStatetargetsSpan::GetOffsetOfData() == offsetof(WGPUFragmentState, targets),
+                 "offsetof mismatch for FragmentState::targets::mData");
 
     bool FragmentState::operator==(const FragmentState& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            module,
-            entryPoint,
-            constantCount,
-            constants,
-            targetCount,
-            targets
-        ) == std::tie(
-            rhs.module,
-            rhs.entryPoint,
-            rhs.constantCount,
-            rhs.constants,
-            rhs.targetCount,
-            rhs.targets
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (module != rhs.module) { return false; }
+        if (entryPoint != rhs.entryPoint) { return false; }
+        if (constants.size() != rhs.constants.size()) { return false; }
+        if (constants.data() != rhs.constants.data()) { return false; }
+        if (targets.size() != rhs.targets.size()) { return false; }
+        if (targets.data() != rhs.targets.data()) { return false; }
+        return true;
     }
 
 
@@ -4778,10 +4183,13 @@ namespace dawn::native {
             "offsetof mismatch for RenderPassDescriptor::nextInChain");
     static_assert(offsetof(RenderPassDescriptor, label) == offsetof(WGPURenderPassDescriptor, label),
                  "offsetof mismatch for RenderPassDescriptor::label");
-    static_assert(offsetof(RenderPassDescriptor, colorAttachmentCount) == offsetof(WGPURenderPassDescriptor, colorAttachmentCount),
-                 "offsetof mismatch for RenderPassDescriptor::colorAttachmentCount");
-    static_assert(offsetof(RenderPassDescriptor, colorAttachments) == offsetof(WGPURenderPassDescriptor, colorAttachments),
-                 "offsetof mismatch for RenderPassDescriptor::colorAttachments");
+    // TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using RenderPassDescriptorcolorAttachmentsSpan = decltype(std::declval<RenderPassDescriptor>().colorAttachments);
+    
+    static_assert(offsetof(RenderPassDescriptor, colorAttachments) + RenderPassDescriptorcolorAttachmentsSpan::GetOffsetOfSize() == offsetof(WGPURenderPassDescriptor, colorAttachmentCount),
+                 "offsetof mismatch for RenderPassDescriptor::colorAttachments::mSize");
+    static_assert(offsetof(RenderPassDescriptor, colorAttachments) + RenderPassDescriptorcolorAttachmentsSpan::GetOffsetOfData() == offsetof(WGPURenderPassDescriptor, colorAttachments),
+                 "offsetof mismatch for RenderPassDescriptor::colorAttachments::mData");
     static_assert(offsetof(RenderPassDescriptor, depthStencilAttachment) == offsetof(WGPURenderPassDescriptor, depthStencilAttachment),
                  "offsetof mismatch for RenderPassDescriptor::depthStencilAttachment");
     static_assert(offsetof(RenderPassDescriptor, occlusionQuerySet) == offsetof(WGPURenderPassDescriptor, occlusionQuerySet),
@@ -4790,21 +4198,14 @@ namespace dawn::native {
                  "offsetof mismatch for RenderPassDescriptor::timestampWrites");
 
     bool RenderPassDescriptor::operator==(const RenderPassDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            colorAttachmentCount,
-            colorAttachments,
-            depthStencilAttachment,
-            occlusionQuerySet,
-            timestampWrites
-        ) == std::tie(
-            rhs.label,
-            rhs.colorAttachmentCount,
-            rhs.colorAttachments,
-            rhs.depthStencilAttachment,
-            rhs.occlusionQuerySet,
-            rhs.timestampWrites
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (colorAttachments.size() != rhs.colorAttachments.size()) { return false; }
+        if (colorAttachments.data() != rhs.colorAttachments.data()) { return false; }
+        if (depthStencilAttachment != rhs.depthStencilAttachment) { return false; }
+        if (occlusionQuerySet != rhs.occlusionQuerySet) { return false; }
+        if (timestampWrites != rhs.timestampWrites) { return false; }
+        return true;
     }
 
 
@@ -4841,24 +4242,18 @@ namespace dawn::native {
         return copy;
     }
     bool RenderPipelineDescriptor::operator==(const RenderPipelineDescriptor& rhs) const {
-        return (nextInChain == rhs.nextInChain) && std::tie(
-            label,
-            layout,
-            vertex,
-            primitive,
-            depthStencil,
-            multisample,
-            fragment
-        ) == std::tie(
-            rhs.label,
-            rhs.layout,
-            rhs.vertex,
-            rhs.primitive,
-            rhs.depthStencil,
-            rhs.multisample,
-            rhs.fragment
-        );
+if (nextInChain != rhs.nextInChain) { return false; }
+        if (label != rhs.label) { return false; }
+        if (layout != rhs.layout) { return false; }
+        if (vertex != rhs.vertex) { return false; }
+        if (primitive != rhs.primitive) { return false; }
+        if (depthStencil != rhs.depthStencil) { return false; }
+        if (multisample != rhs.multisample) { return false; }
+        if (fragment != rhs.fragment) { return false; }
+        return true;
     }
+
+    // NOLINTEND(bugprone-invalid-enum-default-initialization)
 
 
     // SharedBufferMemoryEndAccessState
@@ -4868,11 +4263,9 @@ namespace dawn::native {
 
     SharedBufferMemoryEndAccessState::SharedBufferMemoryEndAccessState(SharedBufferMemoryEndAccessState&& rhs)
     : initialized(rhs.initialized),
-      fenceCount(rhs.fenceCount),
       fences(rhs.fences),
       signaledValues(rhs.signaledValues){
         rhs.initialized = {};
-        rhs.fenceCount = {};
         rhs.fences = {};
         rhs.signaledValues = {};
     }
@@ -4883,21 +4276,22 @@ namespace dawn::native {
         }
         FreeMembers();
         this->initialized = std::move(rhs.initialized);
-        this->fenceCount = std::move(rhs.fenceCount);
         this->fences = std::move(rhs.fences);
         this->signaledValues = std::move(rhs.signaledValues);
         rhs.initialized = {};
-        rhs.fenceCount = {};
         rhs.fences = {};
         rhs.signaledValues = {};
         return *this;
     }
 
     void SharedBufferMemoryEndAccessState::FreeMembers() {
-        bool needsFreeing = false;        if (this->fences != nullptr) { needsFreeing = true; }        if (this->signaledValues != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->fences.empty()) { needsFreeing = true; }
+        if (!this->signaledValues.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APISharedBufferMemoryEndAccessStateFreeMembers(*reinterpret_cast<WGPUSharedBufferMemoryEndAccessState*>(this));
         }
     }
+
 
     // SupportedFeatures
     SupportedFeatures::~SupportedFeatures() {
@@ -4905,9 +4299,7 @@ namespace dawn::native {
     }
 
     SupportedFeatures::SupportedFeatures(SupportedFeatures&& rhs)
-    : featureCount(rhs.featureCount),
-      features(rhs.features){
-        rhs.featureCount = {};
+    : features(rhs.features){
         rhs.features = {};
     }
 
@@ -4916,18 +4308,18 @@ namespace dawn::native {
             return *this;
         }
         FreeMembers();
-        this->featureCount = std::move(rhs.featureCount);
         this->features = std::move(rhs.features);
-        rhs.featureCount = {};
         rhs.features = {};
         return *this;
     }
 
     void SupportedFeatures::FreeMembers() {
-        bool needsFreeing = false;        if (this->features != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->features.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APISupportedFeaturesFreeMembers(*reinterpret_cast<WGPUSupportedFeatures*>(this));
         }
     }
+
 
     // SupportedInstanceFeatures
     SupportedInstanceFeatures::~SupportedInstanceFeatures() {
@@ -4935,9 +4327,7 @@ namespace dawn::native {
     }
 
     SupportedInstanceFeatures::SupportedInstanceFeatures(SupportedInstanceFeatures&& rhs)
-    : featureCount(rhs.featureCount),
-      features(rhs.features){
-        rhs.featureCount = {};
+    : features(rhs.features){
         rhs.features = {};
     }
 
@@ -4946,18 +4336,18 @@ namespace dawn::native {
             return *this;
         }
         FreeMembers();
-        this->featureCount = std::move(rhs.featureCount);
         this->features = std::move(rhs.features);
-        rhs.featureCount = {};
         rhs.features = {};
         return *this;
     }
 
     void SupportedInstanceFeatures::FreeMembers() {
-        bool needsFreeing = false;        if (this->features != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->features.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APISupportedInstanceFeaturesFreeMembers(*reinterpret_cast<WGPUSupportedInstanceFeatures*>(this));
         }
     }
+
 
     // SupportedWGSLLanguageFeatures
     SupportedWGSLLanguageFeatures::~SupportedWGSLLanguageFeatures() {
@@ -4965,9 +4355,7 @@ namespace dawn::native {
     }
 
     SupportedWGSLLanguageFeatures::SupportedWGSLLanguageFeatures(SupportedWGSLLanguageFeatures&& rhs)
-    : featureCount(rhs.featureCount),
-      features(rhs.features){
-        rhs.featureCount = {};
+    : features(rhs.features){
         rhs.features = {};
     }
 
@@ -4976,18 +4364,18 @@ namespace dawn::native {
             return *this;
         }
         FreeMembers();
-        this->featureCount = std::move(rhs.featureCount);
         this->features = std::move(rhs.features);
-        rhs.featureCount = {};
         rhs.features = {};
         return *this;
     }
 
     void SupportedWGSLLanguageFeatures::FreeMembers() {
-        bool needsFreeing = false;        if (this->features != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->features.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APISupportedWGSLLanguageFeaturesFreeMembers(*reinterpret_cast<WGPUSupportedWGSLLanguageFeatures*>(this));
         }
     }
+
 
     // SurfaceCapabilities
     SurfaceCapabilities::~SurfaceCapabilities() {
@@ -4996,18 +4384,12 @@ namespace dawn::native {
 
     SurfaceCapabilities::SurfaceCapabilities(SurfaceCapabilities&& rhs)
     : usages(rhs.usages),
-      formatCount(rhs.formatCount),
       formats(rhs.formats),
-      presentModeCount(rhs.presentModeCount),
       presentModes(rhs.presentModes),
-      alphaModeCount(rhs.alphaModeCount),
       alphaModes(rhs.alphaModes){
         rhs.usages = {};
-        rhs.formatCount = {};
         rhs.formats = {};
-        rhs.presentModeCount = {};
         rhs.presentModes = {};
-        rhs.alphaModeCount = {};
         rhs.alphaModes = {};
     }
 
@@ -5017,27 +4399,25 @@ namespace dawn::native {
         }
         FreeMembers();
         this->usages = std::move(rhs.usages);
-        this->formatCount = std::move(rhs.formatCount);
         this->formats = std::move(rhs.formats);
-        this->presentModeCount = std::move(rhs.presentModeCount);
         this->presentModes = std::move(rhs.presentModes);
-        this->alphaModeCount = std::move(rhs.alphaModeCount);
         this->alphaModes = std::move(rhs.alphaModes);
         rhs.usages = {};
-        rhs.formatCount = {};
         rhs.formats = {};
-        rhs.presentModeCount = {};
         rhs.presentModes = {};
-        rhs.alphaModeCount = {};
         rhs.alphaModes = {};
         return *this;
     }
 
     void SurfaceCapabilities::FreeMembers() {
-        bool needsFreeing = false;        if (this->formats != nullptr) { needsFreeing = true; }        if (this->presentModes != nullptr) { needsFreeing = true; }        if (this->alphaModes != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->formats.empty()) { needsFreeing = true; }
+        if (!this->presentModes.empty()) { needsFreeing = true; }
+        if (!this->alphaModes.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APISurfaceCapabilitiesFreeMembers(*reinterpret_cast<WGPUSurfaceCapabilities*>(this));
         }
     }
+
 
     // AdapterPropertiesMemoryHeaps
     AdapterPropertiesMemoryHeaps::~AdapterPropertiesMemoryHeaps() {
@@ -5045,9 +4425,7 @@ namespace dawn::native {
     }
 
     AdapterPropertiesMemoryHeaps::AdapterPropertiesMemoryHeaps(AdapterPropertiesMemoryHeaps&& rhs)
-    : heapCount(rhs.heapCount),
-      heapInfo(rhs.heapInfo){
-        rhs.heapCount = {};
+    : heapInfo(rhs.heapInfo){
         rhs.heapInfo = {};
     }
 
@@ -5056,18 +4434,18 @@ namespace dawn::native {
             return *this;
         }
         FreeMembers();
-        this->heapCount = std::move(rhs.heapCount);
         this->heapInfo = std::move(rhs.heapInfo);
-        rhs.heapCount = {};
         rhs.heapInfo = {};
         return *this;
     }
 
     void AdapterPropertiesMemoryHeaps::FreeMembers() {
-        bool needsFreeing = false;        if (this->heapInfo != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->heapInfo.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APIAdapterPropertiesMemoryHeapsFreeMembers(*reinterpret_cast<WGPUAdapterPropertiesMemoryHeaps*>(this));
         }
     }
+
 
     // AdapterPropertiesSubgroupMatrixConfigs
     AdapterPropertiesSubgroupMatrixConfigs::~AdapterPropertiesSubgroupMatrixConfigs() {
@@ -5075,9 +4453,7 @@ namespace dawn::native {
     }
 
     AdapterPropertiesSubgroupMatrixConfigs::AdapterPropertiesSubgroupMatrixConfigs(AdapterPropertiesSubgroupMatrixConfigs&& rhs)
-    : configCount(rhs.configCount),
-      configs(rhs.configs){
-        rhs.configCount = {};
+    : configs(rhs.configs){
         rhs.configs = {};
     }
 
@@ -5086,18 +4462,18 @@ namespace dawn::native {
             return *this;
         }
         FreeMembers();
-        this->configCount = std::move(rhs.configCount);
         this->configs = std::move(rhs.configs);
-        rhs.configCount = {};
         rhs.configs = {};
         return *this;
     }
 
     void AdapterPropertiesSubgroupMatrixConfigs::FreeMembers() {
-        bool needsFreeing = false;        if (this->configs != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->configs.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APIAdapterPropertiesSubgroupMatrixConfigsFreeMembers(*reinterpret_cast<WGPUAdapterPropertiesSubgroupMatrixConfigs*>(this));
         }
     }
+
 
     // DawnDrmFormatCapabilities
     DawnDrmFormatCapabilities::~DawnDrmFormatCapabilities() {
@@ -5105,9 +4481,7 @@ namespace dawn::native {
     }
 
     DawnDrmFormatCapabilities::DawnDrmFormatCapabilities(DawnDrmFormatCapabilities&& rhs)
-    : propertiesCount(rhs.propertiesCount),
-      properties(rhs.properties){
-        rhs.propertiesCount = {};
+    : properties(rhs.properties){
         rhs.properties = {};
     }
 
@@ -5116,18 +4490,18 @@ namespace dawn::native {
             return *this;
         }
         FreeMembers();
-        this->propertiesCount = std::move(rhs.propertiesCount);
         this->properties = std::move(rhs.properties);
-        rhs.propertiesCount = {};
         rhs.properties = {};
         return *this;
     }
 
     void DawnDrmFormatCapabilities::FreeMembers() {
-        bool needsFreeing = false;        if (this->properties != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->properties.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APIDawnDrmFormatCapabilitiesFreeMembers(*reinterpret_cast<WGPUDawnDrmFormatCapabilities*>(this));
         }
     }
+
 
     // AdapterInfo
     AdapterInfo::~AdapterInfo() {
@@ -5191,6 +4565,7 @@ namespace dawn::native {
         }
     }
 
+
     // SharedTextureMemoryEndAccessState
     SharedTextureMemoryEndAccessState::~SharedTextureMemoryEndAccessState() {
         FreeMembers();
@@ -5198,11 +4573,9 @@ namespace dawn::native {
 
     SharedTextureMemoryEndAccessState::SharedTextureMemoryEndAccessState(SharedTextureMemoryEndAccessState&& rhs)
     : initialized(rhs.initialized),
-      fenceCount(rhs.fenceCount),
       fences(rhs.fences),
       signaledValues(rhs.signaledValues){
         rhs.initialized = {};
-        rhs.fenceCount = {};
         rhs.fences = {};
         rhs.signaledValues = {};
     }
@@ -5213,18 +4586,18 @@ namespace dawn::native {
         }
         FreeMembers();
         this->initialized = std::move(rhs.initialized);
-        this->fenceCount = std::move(rhs.fenceCount);
         this->fences = std::move(rhs.fences);
         this->signaledValues = std::move(rhs.signaledValues);
         rhs.initialized = {};
-        rhs.fenceCount = {};
         rhs.fences = {};
         rhs.signaledValues = {};
         return *this;
     }
 
     void SharedTextureMemoryEndAccessState::FreeMembers() {
-        bool needsFreeing = false;        if (this->fences != nullptr) { needsFreeing = true; }        if (this->signaledValues != nullptr) { needsFreeing = true; }if (needsFreeing) {
+        bool needsFreeing = false;        if (!this->fences.empty()) { needsFreeing = true; }
+        if (!this->signaledValues.empty()) { needsFreeing = true; }
+if (needsFreeing) {
             APISharedTextureMemoryEndAccessStateFreeMembers(*reinterpret_cast<WGPUSharedTextureMemoryEndAccessState*>(this));
         }
     }

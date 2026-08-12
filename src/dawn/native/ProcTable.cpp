@@ -1,78 +1,88 @@
 
-#include "dawn/native/dawn_platform.h"
-#include "dawn/native/DawnNative.h"
-
 #include <algorithm>
 #include <vector>
 
-#include "dawn/native/Adapter.h"
-#include "dawn/native/BindGroup.h"
-#include "dawn/native/BindGroupLayout.h"
-#include "dawn/native/Buffer.h"
-#include "dawn/native/CommandBuffer.h"
-#include "dawn/native/CommandEncoder.h"
-#include "dawn/native/ComputePipeline.h"
-#include "dawn/native/Device.h"
-#include "dawn/native/ExternalTexture.h"
-#include "dawn/native/Instance.h"
-#include "dawn/native/PipelineLayout.h"
-#include "dawn/native/QuerySet.h"
-#include "dawn/native/Queue.h"
-#include "dawn/native/RenderBundle.h"
-#include "dawn/native/RenderPipeline.h"
-#include "dawn/native/ResourceTable.h"
-#include "dawn/native/Sampler.h"
-#include "dawn/native/ShaderModule.h"
-#include "dawn/native/SharedBufferMemory.h"
-#include "dawn/native/SharedFence.h"
-#include "dawn/native/SharedTextureMemory.h"
-#include "dawn/native/Surface.h"
-#include "dawn/native/TexelBufferView.h"
-#include "dawn/native/Texture.h"
-#include "dawn/native/ComputePassEncoder.h"
-#include "dawn/native/RenderBundleEncoder.h"
-#include "dawn/native/RenderPassEncoder.h"
+#include "src/dawn/native/dawn_platform.h"
+#include "dawn/native/DawnNative.h"
+#include "dawn/dawn_version.h"
+#include "src/utils/numeric.h"
+#include "src/utils/span.h"
 
+#include "src/dawn/native/Adapter.h"
+#include "src/dawn/native/BindGroup.h"
+#include "src/dawn/native/BindGroupLayout.h"
+#include "src/dawn/native/Buffer.h"
+#include "src/dawn/native/CommandBuffer.h"
+#include "src/dawn/native/CommandEncoder.h"
+#include "src/dawn/native/ComputePipeline.h"
+#include "src/dawn/native/Device.h"
+#include "src/dawn/native/ExternalTexture.h"
+#include "src/dawn/native/Instance.h"
+#include "src/dawn/native/PipelineLayout.h"
+#include "src/dawn/native/QuerySet.h"
+#include "src/dawn/native/Queue.h"
+#include "src/dawn/native/RenderBundle.h"
+#include "src/dawn/native/RenderPipeline.h"
+#include "src/dawn/native/ResourceTable.h"
+#include "src/dawn/native/Sampler.h"
+#include "src/dawn/native/ShaderModule.h"
+#include "src/dawn/native/SharedBufferMemory.h"
+#include "src/dawn/native/SharedFence.h"
+#include "src/dawn/native/SharedTextureMemory.h"
+#include "src/dawn/native/Surface.h"
+#include "src/dawn/native/TexelBufferView.h"
+#include "src/dawn/native/Texture.h"
+#include "src/dawn/native/ComputePassEncoder.h"
+#include "src/dawn/native/RenderBundleEncoder.h"
+#include "src/dawn/native/RenderPassEncoder.h"
 namespace dawn::native {
 
     WGPUDevice NativeAdapterCreateDevice(WGPUAdapter cSelf, WGPUDeviceDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<DeviceDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateDevice(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<DeviceDescriptor const *>(descriptor);
+auto result =self->APICreateDevice(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeAdapterGetFeatures(WGPUAdapter cSelf, WGPUSupportedFeatures * features) {
         auto self = FromAPI(cSelf);
 
-        auto features_ = reinterpret_cast<SupportedFeatures *>(features);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIGetFeatures(features_);
+        
+auto features_ = reinterpret_cast<SupportedFeatures *>(features);
+self->APIGetFeatures(features_);
+
     }
 
     WGPUStatus NativeAdapterGetFormatCapabilities(WGPUAdapter cSelf, WGPUTextureFormat format, WGPUDawnFormatCapabilities * capabilities) {
         auto self = FromAPI(cSelf);
 
-        auto format_ = static_cast<wgpu::TextureFormat>(format);
-        auto capabilities_ = reinterpret_cast<DawnFormatCapabilities *>(capabilities);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetFormatCapabilities(format_, capabilities_);
-        return ToAPI(result);
+        
+auto format_ = static_cast<wgpu::TextureFormat>(format);
+auto capabilities_ = reinterpret_cast<DawnFormatCapabilities *>(capabilities);
+auto result =self->APIGetFormatCapabilities(format_, capabilities_);
+return ToAPI(result);
+
     }
 
     WGPUStatus NativeAdapterGetInfo(WGPUAdapter cSelf, WGPUAdapterInfo * info) {
         auto self = FromAPI(cSelf);
 
-        auto info_ = reinterpret_cast<AdapterInfo *>(info);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetInfo(info_);
-        return ToAPI(result);
+        
+auto info_ = reinterpret_cast<AdapterInfo *>(info);
+auto result =self->APIGetInfo(info_);
+return ToAPI(result);
+
     }
 
     WGPUInstance NativeAdapterGetInstance(WGPUAdapter cSelf) {
@@ -80,39 +90,47 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetInstance();
-        return ToAPI(result);
+        
+auto result =self->APIGetInstance();
+return ToAPI(result);
+
     }
 
     WGPUStatus NativeAdapterGetLimits(WGPUAdapter cSelf, WGPULimits * limits) {
         auto self = FromAPI(cSelf);
 
-        auto limits_ = reinterpret_cast<Limits *>(limits);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetLimits(limits_);
-        return ToAPI(result);
+        
+auto limits_ = reinterpret_cast<Limits *>(limits);
+auto result =self->APIGetLimits(limits_);
+return ToAPI(result);
+
     }
 
     WGPUBool NativeAdapterHasFeature(WGPUAdapter cSelf, WGPUFeatureName feature) {
         auto self = FromAPI(cSelf);
 
-        auto feature_ = static_cast<wgpu::FeatureName>(feature);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIHasFeature(feature_);
-        return result;
+        
+auto feature_ = static_cast<wgpu::FeatureName>(feature);
+auto result =self->APIHasFeature(feature_);
+return result;
+
     }
 
     WGPUFuture NativeAdapterRequestDevice(WGPUAdapter cSelf, WGPUDeviceDescriptor const * descriptor, WGPURequestDeviceCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<DeviceDescriptor const *>(descriptor);
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIRequestDevice(descriptor_, callbackInfo_);
-        return *ToAPI(&result);
+        
+auto descriptor_ = reinterpret_cast<DeviceDescriptor const *>(descriptor);
+auto callbackInfo_ = callbackInfo;
+auto result =self->APIRequestDevice(descriptor_, callbackInfo_);
+return *ToAPI(&result);
+
     }
 
     void NativeAdapterAddRef(WGPUAdapter cSelf) {
@@ -120,7 +138,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeAdapterRelease(WGPUAdapter cSelf) {
@@ -128,37 +148,41 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeAdapterInfoFreeMembers(WGPUAdapterInfo cSelf) {
+        
+        
+APIAdapterInfoFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APIAdapterInfoFreeMembers(cSelf);
     }
 
     void NativeAdapterPropertiesMemoryHeapsFreeMembers(WGPUAdapterPropertiesMemoryHeaps cSelf) {
+        
+        
+APIAdapterPropertiesMemoryHeapsFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APIAdapterPropertiesMemoryHeapsFreeMembers(cSelf);
     }
 
     void NativeAdapterPropertiesSubgroupMatrixConfigsFreeMembers(WGPUAdapterPropertiesSubgroupMatrixConfigs cSelf) {
+        
+        
+APIAdapterPropertiesSubgroupMatrixConfigsFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APIAdapterPropertiesSubgroupMatrixConfigsFreeMembers(cSelf);
     }
 
     void NativeBindGroupSetLabel(WGPUBindGroup cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeBindGroupAddRef(WGPUBindGroup cSelf) {
@@ -166,7 +190,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeBindGroupRelease(WGPUBindGroup cSelf) {
@@ -174,16 +200,20 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeBindGroupLayoutSetLabel(WGPUBindGroupLayout cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeBindGroupLayoutAddRef(WGPUBindGroupLayout cSelf) {
@@ -191,7 +221,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeBindGroupLayoutRelease(WGPUBindGroupLayout cSelf) {
@@ -199,18 +231,22 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUTexelBufferView NativeBufferCreateTexelView(WGPUBuffer cSelf, WGPUTexelBufferViewDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<TexelBufferViewDescriptor const *>(descriptor);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateTexelView(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<TexelBufferViewDescriptor const *>(descriptor);
+auto result =self->APICreateTexelView(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeBufferDestroy(WGPUBuffer cSelf) {
@@ -218,29 +254,35 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDestroy();
+        
+self->APIDestroy();
+
     }
 
     void const * NativeBufferGetConstMappedRange(WGPUBuffer cSelf, size_t offset, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto offset_ = offset;
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetConstMappedRange(offset_, size_);
-        return result;
+        
+auto offset_ = offset;
+auto size_ = size;
+auto result =self->APIGetConstMappedRange(offset_, size_);
+return result;
+
     }
 
     void * NativeBufferGetMappedRange(WGPUBuffer cSelf, size_t offset, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto offset_ = offset;
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetMappedRange(offset_, size_);
-        return result;
+        
+auto offset_ = offset;
+auto size_ = size;
+auto result =self->APIGetMappedRange(offset_, size_);
+return result;
+
     }
 
     WGPUBufferMapState NativeBufferGetMapState(WGPUBuffer cSelf) {
@@ -248,8 +290,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetMapState();
-        return ToAPI(result);
+        
+auto result =self->APIGetMapState();
+return ToAPI(result);
+
     }
 
     uint64_t NativeBufferGetSize(WGPUBuffer cSelf) {
@@ -257,8 +301,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetSize();
-        return result;
+        
+auto result =self->APIGetSize();
+return result;
+
     }
 
     WGPUBufferUsage NativeBufferGetUsage(WGPUBuffer cSelf) {
@@ -266,42 +312,54 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetUsage();
-        return ToAPI(result);
+        
+auto result =self->APIGetUsage();
+return ToAPI(result);
+
     }
 
     WGPUFuture NativeBufferMapAsync(WGPUBuffer cSelf, WGPUMapMode mode, size_t offset, size_t size, WGPUBufferMapCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto mode_ = static_cast<wgpu::MapMode>(mode);
-        auto offset_ = offset;
-        auto size_ = size;
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIMapAsync(mode_, offset_, size_, callbackInfo_);
-        return *ToAPI(&result);
+        
+auto mode_ = static_cast<wgpu::MapMode>(mode);
+auto offset_ = offset;
+auto size_ = size;
+auto callbackInfo_ = callbackInfo;
+auto result =self->APIMapAsync(mode_, offset_, size_, callbackInfo_);
+return *ToAPI(&result);
+
     }
 
     WGPUStatus NativeBufferReadMappedRange(WGPUBuffer cSelf, size_t offset, void * data, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto offset_ = offset;
-        auto data_ = reinterpret_cast<void *>(data);
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIReadMappedRange(offset_, data_, size_);
-        return ToAPI(result);
+        
+auto offset_ = offset;
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using dataSpanT = std::byte;
+auto dataSize_ = checked_cast<size_t>(size);
+auto dataPtr = reinterpret_cast<dataSpanT*>(data);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto data_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, dataSpanT>(dataPtr, dataSize_));
+auto result =self->APIReadMappedRange(offset_, data_);
+return ToAPI(result);
+
     }
 
     void NativeBufferSetLabel(WGPUBuffer cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeBufferUnmap(WGPUBuffer cSelf) {
@@ -309,19 +367,27 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIUnmap();
+        
+self->APIUnmap();
+
     }
 
     WGPUStatus NativeBufferWriteMappedRange(WGPUBuffer cSelf, size_t offset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto offset_ = offset;
-        auto data_ = reinterpret_cast<void const *>(data);
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIWriteMappedRange(offset_, data_, size_);
-        return ToAPI(result);
+        
+auto offset_ = offset;
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using dataSpanT = const std::byte;
+auto dataSize_ = checked_cast<size_t>(size);
+auto dataPtr = reinterpret_cast<dataSpanT*>(data);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto data_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, dataSpanT>(dataPtr, dataSize_));
+auto result =self->APIWriteMappedRange(offset_, data_);
+return ToAPI(result);
+
     }
 
     void NativeBufferAddRef(WGPUBuffer cSelf) {
@@ -329,7 +395,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeBufferRelease(WGPUBuffer cSelf) {
@@ -337,16 +405,20 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeCommandBufferSetLabel(WGPUCommandBuffer cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeCommandBufferAddRef(WGPUCommandBuffer cSelf) {
@@ -354,7 +426,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeCommandBufferRelease(WGPUCommandBuffer cSelf) {
@@ -362,112 +436,134 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUComputePassEncoder NativeCommandEncoderBeginComputePass(WGPUCommandEncoder cSelf, WGPUComputePassDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<ComputePassDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIBeginComputePass(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<ComputePassDescriptor const *>(descriptor);
+auto result =self->APIBeginComputePass(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPURenderPassEncoder NativeCommandEncoderBeginRenderPass(WGPUCommandEncoder cSelf, WGPURenderPassDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<RenderPassDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIBeginRenderPass(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<RenderPassDescriptor const *>(descriptor);
+auto result =self->APIBeginRenderPass(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeCommandEncoderClearBuffer(WGPUCommandEncoder cSelf, WGPUBuffer buffer, uint64_t offset, uint64_t size) {
         auto self = FromAPI(cSelf);
 
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto offset_ = offset;
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIClearBuffer(buffer_, offset_, size_);
+        
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto offset_ = offset;
+auto size_ = size;
+self->APIClearBuffer(buffer_, offset_, size_);
+
     }
 
     void NativeCommandEncoderCopyBufferToBuffer(WGPUCommandEncoder cSelf, WGPUBuffer source, uint64_t sourceOffset, WGPUBuffer destination, uint64_t destinationOffset, uint64_t size) {
         auto self = FromAPI(cSelf);
 
-        auto source_ = reinterpret_cast<BufferBase*>(source);
-        auto sourceOffset_ = sourceOffset;
-        auto destination_ = reinterpret_cast<BufferBase*>(destination);
-        auto destinationOffset_ = destinationOffset;
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APICopyBufferToBuffer(source_, sourceOffset_, destination_, destinationOffset_, size_);
+        
+auto source_ = reinterpret_cast<BufferBase*>(source);
+auto sourceOffset_ = sourceOffset;
+auto destination_ = reinterpret_cast<BufferBase*>(destination);
+auto destinationOffset_ = destinationOffset;
+auto size_ = size;
+self->APICopyBufferToBuffer(source_, sourceOffset_, destination_, destinationOffset_, size_);
+
     }
 
     void NativeCommandEncoderCopyBufferToTexture(WGPUCommandEncoder cSelf, WGPUTexelCopyBufferInfo const * source, WGPUTexelCopyTextureInfo const * destination, WGPUExtent3D const * copySize) {
         auto self = FromAPI(cSelf);
 
-        auto source_ = reinterpret_cast<TexelCopyBufferInfo const *>(source);
-        auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
-        auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APICopyBufferToTexture(source_, destination_, copySize_);
+        
+auto source_ = reinterpret_cast<TexelCopyBufferInfo const *>(source);
+auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
+auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
+self->APICopyBufferToTexture(source_, destination_, copySize_);
+
     }
 
     void NativeCommandEncoderCopyTextureToBuffer(WGPUCommandEncoder cSelf, WGPUTexelCopyTextureInfo const * source, WGPUTexelCopyBufferInfo const * destination, WGPUExtent3D const * copySize) {
         auto self = FromAPI(cSelf);
 
-        auto source_ = reinterpret_cast<TexelCopyTextureInfo const *>(source);
-        auto destination_ = reinterpret_cast<TexelCopyBufferInfo const *>(destination);
-        auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APICopyTextureToBuffer(source_, destination_, copySize_);
+        
+auto source_ = reinterpret_cast<TexelCopyTextureInfo const *>(source);
+auto destination_ = reinterpret_cast<TexelCopyBufferInfo const *>(destination);
+auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
+self->APICopyTextureToBuffer(source_, destination_, copySize_);
+
     }
 
     void NativeCommandEncoderCopyTextureToTexture(WGPUCommandEncoder cSelf, WGPUTexelCopyTextureInfo const * source, WGPUTexelCopyTextureInfo const * destination, WGPUExtent3D const * copySize) {
         auto self = FromAPI(cSelf);
 
-        auto source_ = reinterpret_cast<TexelCopyTextureInfo const *>(source);
-        auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
-        auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APICopyTextureToTexture(source_, destination_, copySize_);
+        
+auto source_ = reinterpret_cast<TexelCopyTextureInfo const *>(source);
+auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
+auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
+self->APICopyTextureToTexture(source_, destination_, copySize_);
+
     }
 
     WGPUCommandBuffer NativeCommandEncoderFinish(WGPUCommandEncoder cSelf, WGPUCommandBufferDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<CommandBufferDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIFinish(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<CommandBufferDescriptor const *>(descriptor);
+auto result =self->APIFinish(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeCommandEncoderInjectValidationError(WGPUCommandEncoder cSelf, WGPUStringView message) {
         auto self = FromAPI(cSelf);
 
-        auto message_ = *reinterpret_cast<StringView*>(&message);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIInjectValidationError(message_);
+        
+auto message_ = *reinterpret_cast<StringView*>(&message);
+self->APIInjectValidationError(message_);
+
     }
 
     void NativeCommandEncoderInsertDebugMarker(WGPUCommandEncoder cSelf, WGPUStringView markerLabel) {
         auto self = FromAPI(cSelf);
 
-        auto markerLabel_ = *reinterpret_cast<StringView*>(&markerLabel);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIInsertDebugMarker(markerLabel_);
+        
+auto markerLabel_ = *reinterpret_cast<StringView*>(&markerLabel);
+self->APIInsertDebugMarker(markerLabel_);
+
     }
 
     void NativeCommandEncoderPopDebugGroup(WGPUCommandEncoder cSelf) {
@@ -475,60 +571,76 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPopDebugGroup();
+        
+self->APIPopDebugGroup();
+
     }
 
     void NativeCommandEncoderPushDebugGroup(WGPUCommandEncoder cSelf, WGPUStringView groupLabel) {
         auto self = FromAPI(cSelf);
 
-        auto groupLabel_ = *reinterpret_cast<StringView*>(&groupLabel);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPushDebugGroup(groupLabel_);
+        
+auto groupLabel_ = *reinterpret_cast<StringView*>(&groupLabel);
+self->APIPushDebugGroup(groupLabel_);
+
     }
 
     void NativeCommandEncoderResolveQuerySet(WGPUCommandEncoder cSelf, WGPUQuerySet querySet, uint32_t firstQuery, uint32_t queryCount, WGPUBuffer destination, uint64_t destinationOffset) {
         auto self = FromAPI(cSelf);
 
-        auto querySet_ = reinterpret_cast<QuerySetBase*>(querySet);
-        auto firstQuery_ = firstQuery;
-        auto queryCount_ = queryCount;
-        auto destination_ = reinterpret_cast<BufferBase*>(destination);
-        auto destinationOffset_ = destinationOffset;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIResolveQuerySet(querySet_, firstQuery_, queryCount_, destination_, destinationOffset_);
+        
+auto querySet_ = reinterpret_cast<QuerySetBase*>(querySet);
+auto firstQuery_ = firstQuery;
+auto queryCount_ = queryCount;
+auto destination_ = reinterpret_cast<BufferBase*>(destination);
+auto destinationOffset_ = destinationOffset;
+self->APIResolveQuerySet(querySet_, firstQuery_, queryCount_, destination_, destinationOffset_);
+
     }
 
     void NativeCommandEncoderSetLabel(WGPUCommandEncoder cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
-    void NativeCommandEncoderWriteBuffer(WGPUCommandEncoder cSelf, WGPUBuffer buffer, uint64_t bufferOffset, uint8_t const * data, uint64_t size) {
+    void NativeCommandEncoderWriteBuffer(WGPUCommandEncoder cSelf, WGPUBuffer buffer, uint64_t bufferOffset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto bufferOffset_ = bufferOffset;
-        auto data_ = reinterpret_cast<uint8_t const *>(data);
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIWriteBuffer(buffer_, bufferOffset_, data_, size_);
+        
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto bufferOffset_ = bufferOffset;
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using dataSpanT = const std::byte;
+auto dataSize_ = checked_cast<size_t>(size);
+auto dataPtr = reinterpret_cast<dataSpanT*>(data);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto data_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, dataSpanT>(dataPtr, dataSize_));
+self->APIWriteBuffer(buffer_, bufferOffset_, data_);
+
     }
 
     void NativeCommandEncoderWriteTimestamp(WGPUCommandEncoder cSelf, WGPUQuerySet querySet, uint32_t queryIndex) {
         auto self = FromAPI(cSelf);
 
-        auto querySet_ = reinterpret_cast<QuerySetBase*>(querySet);
-        auto queryIndex_ = queryIndex;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIWriteTimestamp(querySet_, queryIndex_);
+        
+auto querySet_ = reinterpret_cast<QuerySetBase*>(querySet);
+auto queryIndex_ = queryIndex;
+self->APIWriteTimestamp(querySet_, queryIndex_);
+
     }
 
     void NativeCommandEncoderAddRef(WGPUCommandEncoder cSelf) {
@@ -536,7 +648,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeCommandEncoderRelease(WGPUCommandEncoder cSelf) {
@@ -544,28 +658,34 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeComputePassEncoderDispatchWorkgroups(WGPUComputePassEncoder cSelf, uint32_t workgroupCountX, uint32_t workgroupCountY, uint32_t workgroupCountZ) {
         auto self = FromAPI(cSelf);
 
-        auto workgroupCountX_ = workgroupCountX;
-        auto workgroupCountY_ = workgroupCountY;
-        auto workgroupCountZ_ = workgroupCountZ;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDispatchWorkgroups(workgroupCountX_, workgroupCountY_, workgroupCountZ_);
+        
+auto workgroupCountX_ = workgroupCountX;
+auto workgroupCountY_ = workgroupCountY;
+auto workgroupCountZ_ = workgroupCountZ;
+self->APIDispatchWorkgroups(workgroupCountX_, workgroupCountY_, workgroupCountZ_);
+
     }
 
     void NativeComputePassEncoderDispatchWorkgroupsIndirect(WGPUComputePassEncoder cSelf, WGPUBuffer indirectBuffer, uint64_t indirectOffset) {
         auto self = FromAPI(cSelf);
 
-        auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
-        auto indirectOffset_ = indirectOffset;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDispatchWorkgroupsIndirect(indirectBuffer_, indirectOffset_);
+        
+auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
+auto indirectOffset_ = indirectOffset;
+self->APIDispatchWorkgroupsIndirect(indirectBuffer_, indirectOffset_);
+
     }
 
     void NativeComputePassEncoderEnd(WGPUComputePassEncoder cSelf) {
@@ -573,16 +693,20 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIEnd();
+        
+self->APIEnd();
+
     }
 
     void NativeComputePassEncoderInsertDebugMarker(WGPUComputePassEncoder cSelf, WGPUStringView markerLabel) {
         auto self = FromAPI(cSelf);
 
-        auto markerLabel_ = *reinterpret_cast<StringView*>(&markerLabel);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIInsertDebugMarker(markerLabel_);
+        
+auto markerLabel_ = *reinterpret_cast<StringView*>(&markerLabel);
+self->APIInsertDebugMarker(markerLabel_);
+
     }
 
     void NativeComputePassEncoderPopDebugGroup(WGPUComputePassEncoder cSelf) {
@@ -590,76 +714,100 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPopDebugGroup();
+        
+self->APIPopDebugGroup();
+
     }
 
     void NativeComputePassEncoderPushDebugGroup(WGPUComputePassEncoder cSelf, WGPUStringView groupLabel) {
         auto self = FromAPI(cSelf);
 
-        auto groupLabel_ = *reinterpret_cast<StringView*>(&groupLabel);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPushDebugGroup(groupLabel_);
+        
+auto groupLabel_ = *reinterpret_cast<StringView*>(&groupLabel);
+self->APIPushDebugGroup(groupLabel_);
+
     }
 
     void NativeComputePassEncoderSetBindGroup(WGPUComputePassEncoder cSelf, uint32_t groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) {
         auto self = FromAPI(cSelf);
 
-        auto groupIndex_ = groupIndex;
-        auto group_ = reinterpret_cast<BindGroupBase*>(group);
-        auto dynamicOffsetCount_ = dynamicOffsetCount;
-        auto dynamicOffsets_ = reinterpret_cast<uint32_t const *>(dynamicOffsets);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetBindGroup(groupIndex_, group_, dynamicOffsetCount_, dynamicOffsets_);
+        
+auto groupIndex_ = groupIndex;
+auto group_ = reinterpret_cast<BindGroupBase*>(group);
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+using dynamicOffsetsSpanT = std::remove_pointer_t<uint32_t const *>;
+auto dynamicOffsetsSize_ = checked_cast<BindingIndex>(dynamicOffsetCount);
+auto dynamicOffsetsPtr = reinterpret_cast<dynamicOffsetsSpanT*>(dynamicOffsets);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto dynamicOffsets_ = DAWN_UNSAFE_BUFFERS(ityp::span<BindingIndex, dynamicOffsetsSpanT>(dynamicOffsetsPtr, dynamicOffsetsSize_));
+self->APISetBindGroup(groupIndex_, group_, dynamicOffsets_);
+
     }
 
     void NativeComputePassEncoderSetImmediates(WGPUComputePassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto offset_ = offset;
-        auto data_ = reinterpret_cast<void const *>(data);
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetImmediates(offset_, data_, size_);
+        
+auto offset_ = offset;
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using dataSpanT = const std::byte;
+auto dataSize_ = checked_cast<size_t>(size);
+auto dataPtr = reinterpret_cast<dataSpanT*>(data);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto data_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, dataSpanT>(dataPtr, dataSize_));
+self->APISetImmediates(offset_, data_);
+
     }
 
     void NativeComputePassEncoderSetLabel(WGPUComputePassEncoder cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeComputePassEncoderSetPipeline(WGPUComputePassEncoder cSelf, WGPUComputePipeline pipeline) {
         auto self = FromAPI(cSelf);
 
-        auto pipeline_ = reinterpret_cast<ComputePipelineBase*>(pipeline);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetPipeline(pipeline_);
+        
+auto pipeline_ = reinterpret_cast<ComputePipelineBase*>(pipeline);
+self->APISetPipeline(pipeline_);
+
     }
 
     void NativeComputePassEncoderSetResourceTable(WGPUComputePassEncoder cSelf, WGPUResourceTable table) {
         auto self = FromAPI(cSelf);
 
-        auto table_ = reinterpret_cast<ResourceTableBase*>(table);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetResourceTable(table_);
+        
+auto table_ = reinterpret_cast<ResourceTableBase*>(table);
+self->APISetResourceTable(table_);
+
     }
 
     void NativeComputePassEncoderWriteTimestamp(WGPUComputePassEncoder cSelf, WGPUQuerySet querySet, uint32_t queryIndex) {
         auto self = FromAPI(cSelf);
 
-        auto querySet_ = reinterpret_cast<QuerySetBase*>(querySet);
-        auto queryIndex_ = queryIndex;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIWriteTimestamp(querySet_, queryIndex_);
+        
+auto querySet_ = reinterpret_cast<QuerySetBase*>(querySet);
+auto queryIndex_ = queryIndex;
+self->APIWriteTimestamp(querySet_, queryIndex_);
+
     }
 
     void NativeComputePassEncoderAddRef(WGPUComputePassEncoder cSelf) {
@@ -667,7 +815,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeComputePassEncoderRelease(WGPUComputePassEncoder cSelf) {
@@ -675,26 +825,32 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUBindGroupLayout NativeComputePipelineGetBindGroupLayout(WGPUComputePipeline cSelf, uint32_t groupIndex) {
         auto self = FromAPI(cSelf);
 
-        auto groupIndex_ = groupIndex;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetBindGroupLayout(groupIndex_);
-        return ToAPI(result);
+        
+auto groupIndex_ = groupIndex;
+auto result =self->APIGetBindGroupLayout(groupIndex_);
+return ToAPI(result);
+
     }
 
     void NativeComputePipelineSetLabel(WGPUComputePipeline cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeComputePipelineAddRef(WGPUComputePipeline cSelf) {
@@ -702,7 +858,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeComputePipelineRelease(WGPUComputePipeline cSelf) {
@@ -710,87 +868,116 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeDawnDrmFormatCapabilitiesFreeMembers(WGPUDawnDrmFormatCapabilities cSelf) {
+        
+        
+APIDawnDrmFormatCapabilitiesFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APIDawnDrmFormatCapabilitiesFreeMembers(cSelf);
     }
 
     WGPUBindGroup NativeDeviceCreateBindGroup(WGPUDevice cSelf, WGPUBindGroupDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<BindGroupDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateBindGroup(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<BindGroupDescriptor const *>(descriptor);
+auto result =self->APICreateBindGroup(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUBindGroupLayout NativeDeviceCreateBindGroupLayout(WGPUDevice cSelf, WGPUBindGroupLayoutDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<BindGroupLayoutDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateBindGroupLayout(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<BindGroupLayoutDescriptor const *>(descriptor);
+auto result =self->APICreateBindGroupLayout(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUBuffer NativeDeviceCreateBuffer(WGPUDevice cSelf, WGPUBufferDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<BufferDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateBuffer(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<BufferDescriptor const *>(descriptor);
+auto result =self->APICreateBuffer(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUCommandEncoder NativeDeviceCreateCommandEncoder(WGPUDevice cSelf, WGPUCommandEncoderDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<CommandEncoderDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateCommandEncoder(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<CommandEncoderDescriptor const *>(descriptor);
+auto result =self->APICreateCommandEncoder(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUComputePipeline NativeDeviceCreateComputePipeline(WGPUDevice cSelf, WGPUComputePipelineDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<ComputePipelineDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateComputePipeline(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<ComputePipelineDescriptor const *>(descriptor);
+auto result =self->APICreateComputePipeline(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUFuture NativeDeviceCreateComputePipelineAsync(WGPUDevice cSelf, WGPUComputePipelineDescriptor const * descriptor, WGPUCreateComputePipelineAsyncCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<ComputePipelineDescriptor const *>(descriptor);
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateComputePipelineAsync(descriptor_, callbackInfo_);
-        return *ToAPI(&result);
+        
+auto descriptor_ = reinterpret_cast<ComputePipelineDescriptor const *>(descriptor);
+auto callbackInfo_ = callbackInfo;
+auto result =self->APICreateComputePipelineAsync(descriptor_, callbackInfo_);
+return *ToAPI(&result);
+
     }
 
     WGPUBuffer NativeDeviceCreateErrorBuffer(WGPUDevice cSelf, WGPUBufferDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<BufferDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateErrorBuffer(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<BufferDescriptor const *>(descriptor);
+auto result =self->APICreateErrorBuffer(descriptor_);
+return ToAPI(result);
+
+    }
+
+    WGPUComputePipeline NativeDeviceCreateErrorComputePipeline(WGPUDevice cSelf, WGPUStringView label) {
+        auto self = FromAPI(cSelf);
+
+        auto device = self;
+        auto deviceGuard = device->GetGuard();
+
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+auto result =self->APICreateErrorComputePipeline(label_);
+return ToAPI(result);
+
     }
 
     WGPUExternalTexture NativeDeviceCreateErrorExternalTexture(WGPUDevice cSelf) {
@@ -799,137 +986,176 @@ namespace dawn::native {
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateErrorExternalTexture();
-        return ToAPI(result);
+        
+auto result =self->APICreateErrorExternalTexture();
+return ToAPI(result);
+
+    }
+
+    WGPURenderPipeline NativeDeviceCreateErrorRenderPipeline(WGPUDevice cSelf, WGPUStringView label) {
+        auto self = FromAPI(cSelf);
+
+        auto device = self;
+        auto deviceGuard = device->GetGuard();
+
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+auto result =self->APICreateErrorRenderPipeline(label_);
+return ToAPI(result);
+
     }
 
     WGPUShaderModule NativeDeviceCreateErrorShaderModule(WGPUDevice cSelf, WGPUShaderModuleDescriptor const * descriptor, WGPUStringView errorMessage) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<ShaderModuleDescriptor const *>(descriptor);
-        auto errorMessage_ = *reinterpret_cast<StringView*>(&errorMessage);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateErrorShaderModule(descriptor_, errorMessage_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<ShaderModuleDescriptor const *>(descriptor);
+auto errorMessage_ = *reinterpret_cast<StringView*>(&errorMessage);
+auto result =self->APICreateErrorShaderModule(descriptor_, errorMessage_);
+return ToAPI(result);
+
     }
 
     WGPUTexture NativeDeviceCreateErrorTexture(WGPUDevice cSelf, WGPUTextureDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<TextureDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateErrorTexture(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<TextureDescriptor const *>(descriptor);
+auto result =self->APICreateErrorTexture(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUExternalTexture NativeDeviceCreateExternalTexture(WGPUDevice cSelf, WGPUExternalTextureDescriptor const * externalTextureDescriptor) {
         auto self = FromAPI(cSelf);
 
-        auto externalTextureDescriptor_ = reinterpret_cast<ExternalTextureDescriptor const *>(externalTextureDescriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateExternalTexture(externalTextureDescriptor_);
-        return ToAPI(result);
+        
+auto externalTextureDescriptor_ = reinterpret_cast<ExternalTextureDescriptor const *>(externalTextureDescriptor);
+auto result =self->APICreateExternalTexture(externalTextureDescriptor_);
+return ToAPI(result);
+
     }
 
     WGPUPipelineLayout NativeDeviceCreatePipelineLayout(WGPUDevice cSelf, WGPUPipelineLayoutDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<PipelineLayoutDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreatePipelineLayout(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<PipelineLayoutDescriptor const *>(descriptor);
+auto result =self->APICreatePipelineLayout(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUQuerySet NativeDeviceCreateQuerySet(WGPUDevice cSelf, WGPUQuerySetDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<QuerySetDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateQuerySet(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<QuerySetDescriptor const *>(descriptor);
+auto result =self->APICreateQuerySet(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPURenderBundleEncoder NativeDeviceCreateRenderBundleEncoder(WGPUDevice cSelf, WGPURenderBundleEncoderDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<RenderBundleEncoderDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateRenderBundleEncoder(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<RenderBundleEncoderDescriptor const *>(descriptor);
+auto result =self->APICreateRenderBundleEncoder(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPURenderPipeline NativeDeviceCreateRenderPipeline(WGPUDevice cSelf, WGPURenderPipelineDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<RenderPipelineDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateRenderPipeline(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<RenderPipelineDescriptor const *>(descriptor);
+auto result =self->APICreateRenderPipeline(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUFuture NativeDeviceCreateRenderPipelineAsync(WGPUDevice cSelf, WGPURenderPipelineDescriptor const * descriptor, WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<RenderPipelineDescriptor const *>(descriptor);
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateRenderPipelineAsync(descriptor_, callbackInfo_);
-        return *ToAPI(&result);
+        
+auto descriptor_ = reinterpret_cast<RenderPipelineDescriptor const *>(descriptor);
+auto callbackInfo_ = callbackInfo;
+auto result =self->APICreateRenderPipelineAsync(descriptor_, callbackInfo_);
+return *ToAPI(&result);
+
     }
 
     WGPUResourceTable NativeDeviceCreateResourceTable(WGPUDevice cSelf, WGPUResourceTableDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<ResourceTableDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateResourceTable(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<ResourceTableDescriptor const *>(descriptor);
+auto result =self->APICreateResourceTable(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUSampler NativeDeviceCreateSampler(WGPUDevice cSelf, WGPUSamplerDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<SamplerDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateSampler(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<SamplerDescriptor const *>(descriptor);
+auto result =self->APICreateSampler(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUShaderModule NativeDeviceCreateShaderModule(WGPUDevice cSelf, WGPUShaderModuleDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<ShaderModuleDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateShaderModule(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<ShaderModuleDescriptor const *>(descriptor);
+auto result =self->APICreateShaderModule(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUTexture NativeDeviceCreateTexture(WGPUDevice cSelf, WGPUTextureDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<TextureDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateTexture(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<TextureDescriptor const *>(descriptor);
+auto result =self->APICreateTexture(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeDeviceDestroy(WGPUDevice cSelf) {
@@ -938,18 +1164,22 @@ namespace dawn::native {
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        self->APIDestroy();
+        
+self->APIDestroy();
+
     }
 
     void NativeDeviceForceLoss(WGPUDevice cSelf, WGPUDeviceLostReason type, WGPUStringView message) {
         auto self = FromAPI(cSelf);
 
-        auto type_ = static_cast<wgpu::DeviceLostReason>(type);
-        auto message_ = *reinterpret_cast<StringView*>(&message);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        self->APIForceLoss(type_, message_);
+        
+auto type_ = static_cast<wgpu::DeviceLostReason>(type);
+auto message_ = *reinterpret_cast<StringView*>(&message);
+self->APIForceLoss(type_, message_);
+
     }
 
     WGPUAdapter NativeDeviceGetAdapter(WGPUDevice cSelf) {
@@ -957,49 +1187,59 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetAdapter();
-        return ToAPI(result);
+        
+auto result =self->APIGetAdapter();
+return ToAPI(result);
+
     }
 
     WGPUStatus NativeDeviceGetAdapterInfo(WGPUDevice cSelf, WGPUAdapterInfo * adapterInfo) {
         auto self = FromAPI(cSelf);
 
-        auto adapterInfo_ = reinterpret_cast<AdapterInfo *>(adapterInfo);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetAdapterInfo(adapterInfo_);
-        return ToAPI(result);
+        
+auto adapterInfo_ = reinterpret_cast<AdapterInfo *>(adapterInfo);
+auto result =self->APIGetAdapterInfo(adapterInfo_);
+return ToAPI(result);
+
     }
 
     WGPUStatus NativeDeviceGetAHardwareBufferProperties(WGPUDevice cSelf, void * handle, WGPUAHardwareBufferProperties * properties) {
         auto self = FromAPI(cSelf);
 
-        auto handle_ = handle;
-        auto properties_ = reinterpret_cast<AHardwareBufferProperties *>(properties);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIGetAHardwareBufferProperties(handle_, properties_);
-        return ToAPI(result);
+        
+auto handle_ = handle;
+auto properties_ = reinterpret_cast<AHardwareBufferProperties *>(properties);
+auto result =self->APIGetAHardwareBufferProperties(handle_, properties_);
+return ToAPI(result);
+
     }
 
     void NativeDeviceGetFeatures(WGPUDevice cSelf, WGPUSupportedFeatures * features) {
         auto self = FromAPI(cSelf);
 
-        auto features_ = reinterpret_cast<SupportedFeatures *>(features);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIGetFeatures(features_);
+        
+auto features_ = reinterpret_cast<SupportedFeatures *>(features);
+self->APIGetFeatures(features_);
+
     }
 
     WGPUStatus NativeDeviceGetLimits(WGPUDevice cSelf, WGPULimits * limits) {
         auto self = FromAPI(cSelf);
 
-        auto limits_ = reinterpret_cast<Limits *>(limits);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetLimits(limits_);
-        return ToAPI(result);
+        
+auto limits_ = reinterpret_cast<Limits *>(limits);
+auto result =self->APIGetLimits(limits_);
+return ToAPI(result);
+
     }
 
     WGPUFuture NativeDeviceGetLostFuture(WGPUDevice cSelf) {
@@ -1007,8 +1247,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetLostFuture();
-        return *ToAPI(&result);
+        
+auto result =self->APIGetLostFuture();
+return *ToAPI(&result);
+
     }
 
     WGPUQueue NativeDeviceGetQueue(WGPUDevice cSelf) {
@@ -1016,101 +1258,121 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetQueue();
-        return ToAPI(result);
+        
+auto result =self->APIGetQueue();
+return ToAPI(result);
+
     }
 
     WGPUBool NativeDeviceHasFeature(WGPUDevice cSelf, WGPUFeatureName feature) {
         auto self = FromAPI(cSelf);
 
-        auto feature_ = static_cast<wgpu::FeatureName>(feature);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIHasFeature(feature_);
-        return result;
+        
+auto feature_ = static_cast<wgpu::FeatureName>(feature);
+auto result =self->APIHasFeature(feature_);
+return result;
+
     }
 
     WGPUSharedBufferMemory NativeDeviceImportSharedBufferMemory(WGPUDevice cSelf, WGPUSharedBufferMemoryDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<SharedBufferMemoryDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIImportSharedBufferMemory(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<SharedBufferMemoryDescriptor const *>(descriptor);
+auto result =self->APIImportSharedBufferMemory(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUSharedFence NativeDeviceImportSharedFence(WGPUDevice cSelf, WGPUSharedFenceDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<SharedFenceDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIImportSharedFence(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<SharedFenceDescriptor const *>(descriptor);
+auto result =self->APIImportSharedFence(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUSharedTextureMemory NativeDeviceImportSharedTextureMemory(WGPUDevice cSelf, WGPUSharedTextureMemoryDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<SharedTextureMemoryDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIImportSharedTextureMemory(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<SharedTextureMemoryDescriptor const *>(descriptor);
+auto result =self->APIImportSharedTextureMemory(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeDeviceInjectError(WGPUDevice cSelf, WGPUErrorType type, WGPUStringView message) {
         auto self = FromAPI(cSelf);
 
-        auto type_ = static_cast<wgpu::ErrorType>(type);
-        auto message_ = *reinterpret_cast<StringView*>(&message);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        self->APIInjectError(type_, message_);
+        
+auto type_ = static_cast<wgpu::ErrorType>(type);
+auto message_ = *reinterpret_cast<StringView*>(&message);
+self->APIInjectError(type_, message_);
+
     }
 
     WGPUFuture NativeDevicePopErrorScope(WGPUDevice cSelf, WGPUPopErrorScopeCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIPopErrorScope(callbackInfo_);
-        return *ToAPI(&result);
+        
+auto callbackInfo_ = callbackInfo;
+auto result =self->APIPopErrorScope(callbackInfo_);
+return *ToAPI(&result);
+
     }
 
     void NativeDevicePushErrorScope(WGPUDevice cSelf, WGPUErrorFilter filter) {
         auto self = FromAPI(cSelf);
 
-        auto filter_ = static_cast<wgpu::ErrorFilter>(filter);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        self->APIPushErrorScope(filter_);
+        
+auto filter_ = static_cast<wgpu::ErrorFilter>(filter);
+self->APIPushErrorScope(filter_);
+
     }
 
     void NativeDeviceSetLabel(WGPUDevice cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeDeviceSetLoggingCallback(WGPUDevice cSelf, WGPULoggingCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLoggingCallback(callbackInfo_);
+        
+auto callbackInfo_ = callbackInfo;
+self->APISetLoggingCallback(callbackInfo_);
+
     }
 
     void NativeDeviceTick(WGPUDevice cSelf) {
@@ -1118,17 +1380,21 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APITick();
+        
+self->APITick();
+
     }
 
     void NativeDeviceValidateTextureDescriptor(WGPUDevice cSelf, WGPUTextureDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<TextureDescriptor const *>(descriptor);
         auto device = self;
         auto deviceGuard = device->GetGuard();
 
-        self->APIValidateTextureDescriptor(descriptor_);
+        
+auto descriptor_ = reinterpret_cast<TextureDescriptor const *>(descriptor);
+self->APIValidateTextureDescriptor(descriptor_);
+
     }
 
     void NativeDeviceAddRef(WGPUDevice cSelf) {
@@ -1136,7 +1402,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeDeviceRelease(WGPUDevice cSelf) {
@@ -1144,7 +1412,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeExternalTextureDestroy(WGPUExternalTexture cSelf) {
@@ -1153,7 +1423,9 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APIDestroy();
+        
+self->APIDestroy();
+
     }
 
     void NativeExternalTextureExpire(WGPUExternalTexture cSelf) {
@@ -1162,7 +1434,9 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APIExpire();
+        
+self->APIExpire();
+
     }
 
     void NativeExternalTextureRefresh(WGPUExternalTexture cSelf) {
@@ -1171,16 +1445,20 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APIRefresh();
+        
+self->APIRefresh();
+
     }
 
     void NativeExternalTextureSetLabel(WGPUExternalTexture cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeExternalTextureAddRef(WGPUExternalTexture cSelf) {
@@ -1188,7 +1466,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeExternalTextureRelease(WGPUExternalTexture cSelf) {
@@ -1196,36 +1476,44 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUSurface NativeInstanceCreateSurface(WGPUInstance cSelf, WGPUSurfaceDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<SurfaceDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateSurface(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<SurfaceDescriptor const *>(descriptor);
+auto result =self->APICreateSurface(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeInstanceGetWGSLLanguageFeatures(WGPUInstance cSelf, WGPUSupportedWGSLLanguageFeatures * features) {
         auto self = FromAPI(cSelf);
 
-        auto features_ = reinterpret_cast<SupportedWGSLLanguageFeatures *>(features);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIGetWGSLLanguageFeatures(features_);
+        
+auto features_ = reinterpret_cast<SupportedWGSLLanguageFeatures *>(features);
+self->APIGetWGSLLanguageFeatures(features_);
+
     }
 
     WGPUBool NativeInstanceHasWGSLLanguageFeature(WGPUInstance cSelf, WGPUWGSLLanguageFeatureName feature) {
         auto self = FromAPI(cSelf);
 
-        auto feature_ = static_cast<wgpu::WGSLLanguageFeatureName>(feature);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIHasWGSLLanguageFeature(feature_);
-        return result;
+        
+auto feature_ = static_cast<wgpu::WGSLLanguageFeatureName>(feature);
+auto result =self->APIHasWGSLLanguageFeature(feature_);
+return result;
+
     }
 
     void NativeInstanceProcessEvents(WGPUInstance cSelf) {
@@ -1233,30 +1521,40 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIProcessEvents();
+        
+self->APIProcessEvents();
+
     }
 
     WGPUFuture NativeInstanceRequestAdapter(WGPUInstance cSelf, WGPURequestAdapterOptions const * options, WGPURequestAdapterCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto options_ = reinterpret_cast<RequestAdapterOptions const *>(options);
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIRequestAdapter(options_, callbackInfo_);
-        return *ToAPI(&result);
+        
+auto options_ = reinterpret_cast<RequestAdapterOptions const *>(options);
+auto callbackInfo_ = callbackInfo;
+auto result =self->APIRequestAdapter(options_, callbackInfo_);
+return *ToAPI(&result);
+
     }
 
     WGPUWaitStatus NativeInstanceWaitAny(WGPUInstance cSelf, size_t futureCount, WGPUFutureWaitInfo * futures, uint64_t timeoutNS) {
         auto self = FromAPI(cSelf);
 
-        auto futureCount_ = futureCount;
-        auto futures_ = reinterpret_cast<FutureWaitInfo *>(futures);
-        auto timeoutNS_ = timeoutNS;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIWaitAny(futureCount_, futures_, timeoutNS_);
-        return ToAPI(result);
+        
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+using futuresSpanT = std::remove_pointer_t<FutureWaitInfo *>;
+auto futuresSize_ = checked_cast<size_t>(futureCount);
+auto futuresPtr = reinterpret_cast<futuresSpanT*>(futures);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto futures_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, futuresSpanT>(futuresPtr, futuresSize_));
+auto timeoutNS_ = timeoutNS;
+auto result =self->APIWaitAny(futures_, timeoutNS_);
+return ToAPI(result);
+
     }
 
     void NativeInstanceAddRef(WGPUInstance cSelf) {
@@ -1264,7 +1562,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeInstanceRelease(WGPUInstance cSelf) {
@@ -1272,16 +1572,20 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativePipelineLayoutSetLabel(WGPUPipelineLayout cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativePipelineLayoutAddRef(WGPUPipelineLayout cSelf) {
@@ -1289,7 +1593,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativePipelineLayoutRelease(WGPUPipelineLayout cSelf) {
@@ -1297,7 +1603,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeQuerySetDestroy(WGPUQuerySet cSelf) {
@@ -1306,7 +1614,9 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APIDestroy();
+        
+self->APIDestroy();
+
     }
 
     uint32_t NativeQuerySetGetCount(WGPUQuerySet cSelf) {
@@ -1315,8 +1625,10 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIGetCount();
-        return result;
+        
+auto result =self->APIGetCount();
+return result;
+
     }
 
     WGPUQueryType NativeQuerySetGetType(WGPUQuerySet cSelf) {
@@ -1325,17 +1637,21 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIGetType();
-        return ToAPI(result);
+        
+auto result =self->APIGetType();
+return ToAPI(result);
+
     }
 
     void NativeQuerySetSetLabel(WGPUQuerySet cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeQuerySetAddRef(WGPUQuerySet cSelf) {
@@ -1343,7 +1659,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeQuerySetRelease(WGPUQuerySet cSelf) {
@@ -1351,90 +1669,118 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeQueueCopyExternalTextureForBrowser(WGPUQueue cSelf, WGPUImageCopyExternalTexture const * source, WGPUTexelCopyTextureInfo const * destination, WGPUExtent3D const * copySize, WGPUCopyTextureForBrowserOptions const * options) {
         auto self = FromAPI(cSelf);
 
-        auto source_ = reinterpret_cast<ImageCopyExternalTexture const *>(source);
-        auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
-        auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
-        auto options_ = reinterpret_cast<CopyTextureForBrowserOptions const *>(options);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APICopyExternalTextureForBrowser(source_, destination_, copySize_, options_);
+        
+auto source_ = reinterpret_cast<ImageCopyExternalTexture const *>(source);
+auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
+auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
+auto options_ = reinterpret_cast<CopyTextureForBrowserOptions const *>(options);
+self->APICopyExternalTextureForBrowser(source_, destination_, copySize_, options_);
+
     }
 
     void NativeQueueCopyTextureForBrowser(WGPUQueue cSelf, WGPUTexelCopyTextureInfo const * source, WGPUTexelCopyTextureInfo const * destination, WGPUExtent3D const * copySize, WGPUCopyTextureForBrowserOptions const * options) {
         auto self = FromAPI(cSelf);
 
-        auto source_ = reinterpret_cast<TexelCopyTextureInfo const *>(source);
-        auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
-        auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
-        auto options_ = reinterpret_cast<CopyTextureForBrowserOptions const *>(options);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APICopyTextureForBrowser(source_, destination_, copySize_, options_);
+        
+auto source_ = reinterpret_cast<TexelCopyTextureInfo const *>(source);
+auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
+auto copySize_ = reinterpret_cast<Extent3D const *>(copySize);
+auto options_ = reinterpret_cast<CopyTextureForBrowserOptions const *>(options);
+self->APICopyTextureForBrowser(source_, destination_, copySize_, options_);
+
     }
 
     WGPUFuture NativeQueueOnSubmittedWorkDone(WGPUQueue cSelf, WGPUQueueWorkDoneCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIOnSubmittedWorkDone(callbackInfo_);
-        return *ToAPI(&result);
+        
+auto callbackInfo_ = callbackInfo;
+auto result =self->APIOnSubmittedWorkDone(callbackInfo_);
+return *ToAPI(&result);
+
     }
 
     void NativeQueueSetLabel(WGPUQueue cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeQueueSubmit(WGPUQueue cSelf, size_t commandCount, WGPUCommandBuffer const * commands) {
         auto self = FromAPI(cSelf);
 
-        auto commandCount_ = commandCount;
-        auto commands_ = reinterpret_cast<CommandBufferBase* const *>(commands);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APISubmit(commandCount_, commands_);
+        
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+using commandsSpanT = std::remove_pointer_t<CommandBufferBase* const *>;
+auto commandsSize_ = checked_cast<size_t>(commandCount);
+auto commandsPtr = reinterpret_cast<commandsSpanT*>(commands);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto commands_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, commandsSpanT>(commandsPtr, commandsSize_));
+self->APISubmit(commands_);
+
     }
 
     void NativeQueueWriteBuffer(WGPUQueue cSelf, WGPUBuffer buffer, uint64_t bufferOffset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto bufferOffset_ = bufferOffset;
-        auto data_ = reinterpret_cast<void const *>(data);
-        auto size_ = size;
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APIWriteBuffer(buffer_, bufferOffset_, data_, size_);
+        
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto bufferOffset_ = bufferOffset;
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using dataSpanT = const std::byte;
+auto dataSize_ = checked_cast<size_t>(size);
+auto dataPtr = reinterpret_cast<dataSpanT*>(data);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto data_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, dataSpanT>(dataPtr, dataSize_));
+self->APIWriteBuffer(buffer_, bufferOffset_, data_);
+
     }
 
     void NativeQueueWriteTexture(WGPUQueue cSelf, WGPUTexelCopyTextureInfo const * destination, void const * data, size_t dataSize, WGPUTexelCopyBufferLayout const * dataLayout, WGPUExtent3D const * writeSize) {
         auto self = FromAPI(cSelf);
 
-        auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
-        auto data_ = reinterpret_cast<void const *>(data);
-        auto dataSize_ = dataSize;
-        auto dataLayout_ = reinterpret_cast<TexelCopyBufferLayout const *>(dataLayout);
-        auto writeSize_ = reinterpret_cast<Extent3D const *>(writeSize);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APIWriteTexture(destination_, data_, dataSize_, dataLayout_, writeSize_);
+        
+auto destination_ = reinterpret_cast<TexelCopyTextureInfo const *>(destination);
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using dataSpanT = const std::byte;
+auto dataSize_ = checked_cast<size_t>(dataSize);
+auto dataPtr = reinterpret_cast<dataSpanT*>(data);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto data_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, dataSpanT>(dataPtr, dataSize_));
+auto dataLayout_ = reinterpret_cast<TexelCopyBufferLayout const *>(dataLayout);
+auto writeSize_ = reinterpret_cast<Extent3D const *>(writeSize);
+self->APIWriteTexture(destination_, data_, dataLayout_, writeSize_);
+
     }
 
     void NativeQueueAddRef(WGPUQueue cSelf) {
@@ -1442,7 +1788,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeQueueRelease(WGPUQueue cSelf) {
@@ -1450,16 +1798,20 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeRenderBundleSetLabel(WGPURenderBundle cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeRenderBundleAddRef(WGPURenderBundle cSelf) {
@@ -1467,7 +1819,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeRenderBundleRelease(WGPURenderBundle cSelf) {
@@ -1475,71 +1829,85 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeRenderBundleEncoderDraw(WGPURenderBundleEncoder cSelf, uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) {
         auto self = FromAPI(cSelf);
 
-        auto vertexCount_ = vertexCount;
-        auto instanceCount_ = instanceCount;
-        auto firstVertex_ = firstVertex;
-        auto firstInstance_ = firstInstance;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDraw(vertexCount_, instanceCount_, firstVertex_, firstInstance_);
+        
+auto vertexCount_ = vertexCount;
+auto instanceCount_ = instanceCount;
+auto firstVertex_ = firstVertex;
+auto firstInstance_ = firstInstance;
+self->APIDraw(vertexCount_, instanceCount_, firstVertex_, firstInstance_);
+
     }
 
     void NativeRenderBundleEncoderDrawIndexed(WGPURenderBundleEncoder cSelf, uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t baseVertex, uint32_t firstInstance) {
         auto self = FromAPI(cSelf);
 
-        auto indexCount_ = indexCount;
-        auto instanceCount_ = instanceCount;
-        auto firstIndex_ = firstIndex;
-        auto baseVertex_ = baseVertex;
-        auto firstInstance_ = firstInstance;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDrawIndexed(indexCount_, instanceCount_, firstIndex_, baseVertex_, firstInstance_);
+        
+auto indexCount_ = indexCount;
+auto instanceCount_ = instanceCount;
+auto firstIndex_ = firstIndex;
+auto baseVertex_ = baseVertex;
+auto firstInstance_ = firstInstance;
+self->APIDrawIndexed(indexCount_, instanceCount_, firstIndex_, baseVertex_, firstInstance_);
+
     }
 
     void NativeRenderBundleEncoderDrawIndexedIndirect(WGPURenderBundleEncoder cSelf, WGPUBuffer indirectBuffer, uint64_t indirectOffset) {
         auto self = FromAPI(cSelf);
 
-        auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
-        auto indirectOffset_ = indirectOffset;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDrawIndexedIndirect(indirectBuffer_, indirectOffset_);
+        
+auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
+auto indirectOffset_ = indirectOffset;
+self->APIDrawIndexedIndirect(indirectBuffer_, indirectOffset_);
+
     }
 
     void NativeRenderBundleEncoderDrawIndirect(WGPURenderBundleEncoder cSelf, WGPUBuffer indirectBuffer, uint64_t indirectOffset) {
         auto self = FromAPI(cSelf);
 
-        auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
-        auto indirectOffset_ = indirectOffset;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDrawIndirect(indirectBuffer_, indirectOffset_);
+        
+auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
+auto indirectOffset_ = indirectOffset;
+self->APIDrawIndirect(indirectBuffer_, indirectOffset_);
+
     }
 
     WGPURenderBundle NativeRenderBundleEncoderFinish(WGPURenderBundleEncoder cSelf, WGPURenderBundleDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<RenderBundleDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIFinish(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<RenderBundleDescriptor const *>(descriptor);
+auto result =self->APIFinish(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeRenderBundleEncoderInsertDebugMarker(WGPURenderBundleEncoder cSelf, WGPUStringView markerLabel) {
         auto self = FromAPI(cSelf);
 
-        auto markerLabel_ = *reinterpret_cast<StringView*>(&markerLabel);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIInsertDebugMarker(markerLabel_);
+        
+auto markerLabel_ = *reinterpret_cast<StringView*>(&markerLabel);
+self->APIInsertDebugMarker(markerLabel_);
+
     }
 
     void NativeRenderBundleEncoderPopDebugGroup(WGPURenderBundleEncoder cSelf) {
@@ -1547,90 +1915,105 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPopDebugGroup();
+        
+self->APIPopDebugGroup();
+
     }
 
     void NativeRenderBundleEncoderPushDebugGroup(WGPURenderBundleEncoder cSelf, WGPUStringView groupLabel) {
         auto self = FromAPI(cSelf);
 
-        auto groupLabel_ = *reinterpret_cast<StringView*>(&groupLabel);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPushDebugGroup(groupLabel_);
+        
+auto groupLabel_ = *reinterpret_cast<StringView*>(&groupLabel);
+self->APIPushDebugGroup(groupLabel_);
+
     }
 
     void NativeRenderBundleEncoderSetBindGroup(WGPURenderBundleEncoder cSelf, uint32_t groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) {
         auto self = FromAPI(cSelf);
 
-        auto groupIndex_ = groupIndex;
-        auto group_ = reinterpret_cast<BindGroupBase*>(group);
-        auto dynamicOffsetCount_ = dynamicOffsetCount;
-        auto dynamicOffsets_ = reinterpret_cast<uint32_t const *>(dynamicOffsets);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetBindGroup(groupIndex_, group_, dynamicOffsetCount_, dynamicOffsets_);
+        
+auto groupIndex_ = groupIndex;
+auto group_ = reinterpret_cast<BindGroupBase*>(group);
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+using dynamicOffsetsSpanT = std::remove_pointer_t<uint32_t const *>;
+auto dynamicOffsetsSize_ = checked_cast<BindingIndex>(dynamicOffsetCount);
+auto dynamicOffsetsPtr = reinterpret_cast<dynamicOffsetsSpanT*>(dynamicOffsets);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto dynamicOffsets_ = DAWN_UNSAFE_BUFFERS(ityp::span<BindingIndex, dynamicOffsetsSpanT>(dynamicOffsetsPtr, dynamicOffsetsSize_));
+self->APISetBindGroup(groupIndex_, group_, dynamicOffsets_);
+
     }
 
     void NativeRenderBundleEncoderSetImmediates(WGPURenderBundleEncoder cSelf, uint32_t offset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto offset_ = offset;
-        auto data_ = reinterpret_cast<void const *>(data);
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetImmediates(offset_, data_, size_);
+        
+auto offset_ = offset;
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using dataSpanT = const std::byte;
+auto dataSize_ = checked_cast<size_t>(size);
+auto dataPtr = reinterpret_cast<dataSpanT*>(data);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto data_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, dataSpanT>(dataPtr, dataSize_));
+self->APISetImmediates(offset_, data_);
+
     }
 
     void NativeRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) {
         auto self = FromAPI(cSelf);
 
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto format_ = static_cast<wgpu::IndexFormat>(format);
-        auto offset_ = offset;
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetIndexBuffer(buffer_, format_, offset_, size_);
+        
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto format_ = static_cast<wgpu::IndexFormat>(format);
+auto offset_ = offset;
+auto size_ = size;
+self->APISetIndexBuffer(buffer_, format_, offset_, size_);
+
     }
 
     void NativeRenderBundleEncoderSetLabel(WGPURenderBundleEncoder cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder cSelf, WGPURenderPipeline pipeline) {
         auto self = FromAPI(cSelf);
 
-        auto pipeline_ = reinterpret_cast<RenderPipelineBase*>(pipeline);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetPipeline(pipeline_);
-    }
+        
+auto pipeline_ = reinterpret_cast<RenderPipelineBase*>(pipeline);
+self->APISetPipeline(pipeline_);
 
-    void NativeRenderBundleEncoderSetResourceTable(WGPURenderBundleEncoder cSelf, WGPUResourceTable table) {
-        auto self = FromAPI(cSelf);
-
-        auto table_ = reinterpret_cast<ResourceTableBase*>(table);
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        self->APISetResourceTable(table_);
     }
 
     void NativeRenderBundleEncoderSetVertexBuffer(WGPURenderBundleEncoder cSelf, uint32_t slot, WGPUBuffer buffer, uint64_t offset, uint64_t size) {
         auto self = FromAPI(cSelf);
 
-        auto slot_ = slot;
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto offset_ = offset;
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetVertexBuffer(slot_, buffer_, offset_, size_);
+        
+auto slot_ = slot;
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto offset_ = offset;
+auto size_ = size;
+self->APISetVertexBuffer(slot_, buffer_, offset_, size_);
+
     }
 
     void NativeRenderBundleEncoderAddRef(WGPURenderBundleEncoder cSelf) {
@@ -1638,7 +2021,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeRenderBundleEncoderRelease(WGPURenderBundleEncoder cSelf) {
@@ -1646,61 +2031,73 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeRenderPassEncoderBeginOcclusionQuery(WGPURenderPassEncoder cSelf, uint32_t queryIndex) {
         auto self = FromAPI(cSelf);
 
-        auto queryIndex_ = queryIndex;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIBeginOcclusionQuery(queryIndex_);
+        
+auto queryIndex_ = queryIndex;
+self->APIBeginOcclusionQuery(queryIndex_);
+
     }
 
     void NativeRenderPassEncoderDraw(WGPURenderPassEncoder cSelf, uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) {
         auto self = FromAPI(cSelf);
 
-        auto vertexCount_ = vertexCount;
-        auto instanceCount_ = instanceCount;
-        auto firstVertex_ = firstVertex;
-        auto firstInstance_ = firstInstance;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDraw(vertexCount_, instanceCount_, firstVertex_, firstInstance_);
+        
+auto vertexCount_ = vertexCount;
+auto instanceCount_ = instanceCount;
+auto firstVertex_ = firstVertex;
+auto firstInstance_ = firstInstance;
+self->APIDraw(vertexCount_, instanceCount_, firstVertex_, firstInstance_);
+
     }
 
     void NativeRenderPassEncoderDrawIndexed(WGPURenderPassEncoder cSelf, uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t baseVertex, uint32_t firstInstance) {
         auto self = FromAPI(cSelf);
 
-        auto indexCount_ = indexCount;
-        auto instanceCount_ = instanceCount;
-        auto firstIndex_ = firstIndex;
-        auto baseVertex_ = baseVertex;
-        auto firstInstance_ = firstInstance;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDrawIndexed(indexCount_, instanceCount_, firstIndex_, baseVertex_, firstInstance_);
+        
+auto indexCount_ = indexCount;
+auto instanceCount_ = instanceCount;
+auto firstIndex_ = firstIndex;
+auto baseVertex_ = baseVertex;
+auto firstInstance_ = firstInstance;
+self->APIDrawIndexed(indexCount_, instanceCount_, firstIndex_, baseVertex_, firstInstance_);
+
     }
 
     void NativeRenderPassEncoderDrawIndexedIndirect(WGPURenderPassEncoder cSelf, WGPUBuffer indirectBuffer, uint64_t indirectOffset) {
         auto self = FromAPI(cSelf);
 
-        auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
-        auto indirectOffset_ = indirectOffset;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDrawIndexedIndirect(indirectBuffer_, indirectOffset_);
+        
+auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
+auto indirectOffset_ = indirectOffset;
+self->APIDrawIndexedIndirect(indirectBuffer_, indirectOffset_);
+
     }
 
     void NativeRenderPassEncoderDrawIndirect(WGPURenderPassEncoder cSelf, WGPUBuffer indirectBuffer, uint64_t indirectOffset) {
         auto self = FromAPI(cSelf);
 
-        auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
-        auto indirectOffset_ = indirectOffset;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDrawIndirect(indirectBuffer_, indirectOffset_);
+        
+auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
+auto indirectOffset_ = indirectOffset;
+self->APIDrawIndirect(indirectBuffer_, indirectOffset_);
+
     }
 
     void NativeRenderPassEncoderEnd(WGPURenderPassEncoder cSelf) {
@@ -1708,7 +2105,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIEnd();
+        
+self->APIEnd();
+
     }
 
     void NativeRenderPassEncoderEndOcclusionQuery(WGPURenderPassEncoder cSelf) {
@@ -1716,52 +2115,66 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIEndOcclusionQuery();
+        
+self->APIEndOcclusionQuery();
+
     }
 
     void NativeRenderPassEncoderExecuteBundles(WGPURenderPassEncoder cSelf, size_t bundleCount, WGPURenderBundle const * bundles) {
         auto self = FromAPI(cSelf);
 
-        auto bundleCount_ = bundleCount;
-        auto bundles_ = reinterpret_cast<RenderBundleBase* const *>(bundles);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIExecuteBundles(bundleCount_, bundles_);
+        
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+using bundlesSpanT = std::remove_pointer_t<RenderBundleBase* const *>;
+auto bundlesSize_ = checked_cast<size_t>(bundleCount);
+auto bundlesPtr = reinterpret_cast<bundlesSpanT*>(bundles);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto bundles_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, bundlesSpanT>(bundlesPtr, bundlesSize_));
+self->APIExecuteBundles(bundles_);
+
     }
 
     void NativeRenderPassEncoderInsertDebugMarker(WGPURenderPassEncoder cSelf, WGPUStringView markerLabel) {
         auto self = FromAPI(cSelf);
 
-        auto markerLabel_ = *reinterpret_cast<StringView*>(&markerLabel);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIInsertDebugMarker(markerLabel_);
+        
+auto markerLabel_ = *reinterpret_cast<StringView*>(&markerLabel);
+self->APIInsertDebugMarker(markerLabel_);
+
     }
 
     void NativeRenderPassEncoderMultiDrawIndexedIndirect(WGPURenderPassEncoder cSelf, WGPUBuffer indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, WGPUBuffer drawCountBuffer, uint64_t drawCountBufferOffset) {
         auto self = FromAPI(cSelf);
 
-        auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
-        auto indirectOffset_ = indirectOffset;
-        auto maxDrawCount_ = maxDrawCount;
-        auto drawCountBuffer_ = reinterpret_cast<BufferBase*>(drawCountBuffer);
-        auto drawCountBufferOffset_ = drawCountBufferOffset;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIMultiDrawIndexedIndirect(indirectBuffer_, indirectOffset_, maxDrawCount_, drawCountBuffer_, drawCountBufferOffset_);
+        
+auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
+auto indirectOffset_ = indirectOffset;
+auto maxDrawCount_ = maxDrawCount;
+auto drawCountBuffer_ = reinterpret_cast<BufferBase*>(drawCountBuffer);
+auto drawCountBufferOffset_ = drawCountBufferOffset;
+self->APIMultiDrawIndexedIndirect(indirectBuffer_, indirectOffset_, maxDrawCount_, drawCountBuffer_, drawCountBufferOffset_);
+
     }
 
     void NativeRenderPassEncoderMultiDrawIndirect(WGPURenderPassEncoder cSelf, WGPUBuffer indirectBuffer, uint64_t indirectOffset, uint32_t maxDrawCount, WGPUBuffer drawCountBuffer, uint64_t drawCountBufferOffset) {
         auto self = FromAPI(cSelf);
 
-        auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
-        auto indirectOffset_ = indirectOffset;
-        auto maxDrawCount_ = maxDrawCount;
-        auto drawCountBuffer_ = reinterpret_cast<BufferBase*>(drawCountBuffer);
-        auto drawCountBufferOffset_ = drawCountBufferOffset;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIMultiDrawIndirect(indirectBuffer_, indirectOffset_, maxDrawCount_, drawCountBuffer_, drawCountBufferOffset_);
+        
+auto indirectBuffer_ = reinterpret_cast<BufferBase*>(indirectBuffer);
+auto indirectOffset_ = indirectOffset;
+auto maxDrawCount_ = maxDrawCount;
+auto drawCountBuffer_ = reinterpret_cast<BufferBase*>(drawCountBuffer);
+auto drawCountBufferOffset_ = drawCountBufferOffset;
+self->APIMultiDrawIndirect(indirectBuffer_, indirectOffset_, maxDrawCount_, drawCountBuffer_, drawCountBufferOffset_);
+
     }
 
     void NativeRenderPassEncoderPixelLocalStorageBarrier(WGPURenderPassEncoder cSelf) {
@@ -1769,7 +2182,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPixelLocalStorageBarrier();
+        
+self->APIPixelLocalStorageBarrier();
+
     }
 
     void NativeRenderPassEncoderPopDebugGroup(WGPURenderPassEncoder cSelf) {
@@ -1777,144 +2192,180 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPopDebugGroup();
+        
+self->APIPopDebugGroup();
+
     }
 
     void NativeRenderPassEncoderPushDebugGroup(WGPURenderPassEncoder cSelf, WGPUStringView groupLabel) {
         auto self = FromAPI(cSelf);
 
-        auto groupLabel_ = *reinterpret_cast<StringView*>(&groupLabel);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIPushDebugGroup(groupLabel_);
+        
+auto groupLabel_ = *reinterpret_cast<StringView*>(&groupLabel);
+self->APIPushDebugGroup(groupLabel_);
+
     }
 
     void NativeRenderPassEncoderSetBindGroup(WGPURenderPassEncoder cSelf, uint32_t groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32_t const * dynamicOffsets) {
         auto self = FromAPI(cSelf);
 
-        auto groupIndex_ = groupIndex;
-        auto group_ = reinterpret_cast<BindGroupBase*>(group);
-        auto dynamicOffsetCount_ = dynamicOffsetCount;
-        auto dynamicOffsets_ = reinterpret_cast<uint32_t const *>(dynamicOffsets);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetBindGroup(groupIndex_, group_, dynamicOffsetCount_, dynamicOffsets_);
+        
+auto groupIndex_ = groupIndex;
+auto group_ = reinterpret_cast<BindGroupBase*>(group);
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+using dynamicOffsetsSpanT = std::remove_pointer_t<uint32_t const *>;
+auto dynamicOffsetsSize_ = checked_cast<BindingIndex>(dynamicOffsetCount);
+auto dynamicOffsetsPtr = reinterpret_cast<dynamicOffsetsSpanT*>(dynamicOffsets);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto dynamicOffsets_ = DAWN_UNSAFE_BUFFERS(ityp::span<BindingIndex, dynamicOffsetsSpanT>(dynamicOffsetsPtr, dynamicOffsetsSize_));
+self->APISetBindGroup(groupIndex_, group_, dynamicOffsets_);
+
     }
 
     void NativeRenderPassEncoderSetBlendConstant(WGPURenderPassEncoder cSelf, WGPUColor const * color) {
         auto self = FromAPI(cSelf);
 
-        auto color_ = reinterpret_cast<Color const *>(color);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetBlendConstant(color_);
+        
+auto color_ = reinterpret_cast<Color const *>(color);
+self->APISetBlendConstant(color_);
+
     }
 
     void NativeRenderPassEncoderSetImmediates(WGPURenderPassEncoder cSelf, uint32_t offset, void const * data, size_t size) {
         auto self = FromAPI(cSelf);
 
-        auto offset_ = offset;
-        auto data_ = reinterpret_cast<void const *>(data);
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetImmediates(offset_, data_, size_);
+        
+auto offset_ = offset;
+// TODO(https://crbug.com/524405497): Support fixed-length spans.
+    using dataSpanT = const std::byte;
+auto dataSize_ = checked_cast<size_t>(size);
+auto dataPtr = reinterpret_cast<dataSpanT*>(data);
+// SAFETY: The webgpu.h user is required to pass valid ranges of objects.
+auto data_ = DAWN_UNSAFE_BUFFERS(ityp::span<size_t, dataSpanT>(dataPtr, dataSize_));
+self->APISetImmediates(offset_, data_);
+
     }
 
     void NativeRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder cSelf, WGPUBuffer buffer, WGPUIndexFormat format, uint64_t offset, uint64_t size) {
         auto self = FromAPI(cSelf);
 
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto format_ = static_cast<wgpu::IndexFormat>(format);
-        auto offset_ = offset;
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetIndexBuffer(buffer_, format_, offset_, size_);
+        
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto format_ = static_cast<wgpu::IndexFormat>(format);
+auto offset_ = offset;
+auto size_ = size;
+self->APISetIndexBuffer(buffer_, format_, offset_, size_);
+
     }
 
     void NativeRenderPassEncoderSetLabel(WGPURenderPassEncoder cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeRenderPassEncoderSetPipeline(WGPURenderPassEncoder cSelf, WGPURenderPipeline pipeline) {
         auto self = FromAPI(cSelf);
 
-        auto pipeline_ = reinterpret_cast<RenderPipelineBase*>(pipeline);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetPipeline(pipeline_);
+        
+auto pipeline_ = reinterpret_cast<RenderPipelineBase*>(pipeline);
+self->APISetPipeline(pipeline_);
+
     }
 
     void NativeRenderPassEncoderSetResourceTable(WGPURenderPassEncoder cSelf, WGPUResourceTable table) {
         auto self = FromAPI(cSelf);
 
-        auto table_ = reinterpret_cast<ResourceTableBase*>(table);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetResourceTable(table_);
+        
+auto table_ = reinterpret_cast<ResourceTableBase*>(table);
+self->APISetResourceTable(table_);
+
     }
 
     void NativeRenderPassEncoderSetScissorRect(WGPURenderPassEncoder cSelf, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
         auto self = FromAPI(cSelf);
 
-        auto x_ = x;
-        auto y_ = y;
-        auto width_ = width;
-        auto height_ = height;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetScissorRect(x_, y_, width_, height_);
+        
+auto x_ = x;
+auto y_ = y;
+auto width_ = width;
+auto height_ = height;
+self->APISetScissorRect(x_, y_, width_, height_);
+
     }
 
     void NativeRenderPassEncoderSetStencilReference(WGPURenderPassEncoder cSelf, uint32_t reference) {
         auto self = FromAPI(cSelf);
 
-        auto reference_ = reference;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetStencilReference(reference_);
+        
+auto reference_ = reference;
+self->APISetStencilReference(reference_);
+
     }
 
     void NativeRenderPassEncoderSetVertexBuffer(WGPURenderPassEncoder cSelf, uint32_t slot, WGPUBuffer buffer, uint64_t offset, uint64_t size) {
         auto self = FromAPI(cSelf);
 
-        auto slot_ = slot;
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto offset_ = offset;
-        auto size_ = size;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetVertexBuffer(slot_, buffer_, offset_, size_);
+        
+auto slot_ = slot;
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto offset_ = offset;
+auto size_ = size;
+self->APISetVertexBuffer(slot_, buffer_, offset_, size_);
+
     }
 
     void NativeRenderPassEncoderSetViewport(WGPURenderPassEncoder cSelf, float x, float y, float width, float height, float minDepth, float maxDepth) {
         auto self = FromAPI(cSelf);
 
-        auto x_ = x;
-        auto y_ = y;
-        auto width_ = width;
-        auto height_ = height;
-        auto minDepth_ = minDepth;
-        auto maxDepth_ = maxDepth;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetViewport(x_, y_, width_, height_, minDepth_, maxDepth_);
+        
+auto x_ = x;
+auto y_ = y;
+auto width_ = width;
+auto height_ = height;
+auto minDepth_ = minDepth;
+auto maxDepth_ = maxDepth;
+self->APISetViewport(x_, y_, width_, height_, minDepth_, maxDepth_);
+
     }
 
     void NativeRenderPassEncoderWriteTimestamp(WGPURenderPassEncoder cSelf, WGPUQuerySet querySet, uint32_t queryIndex) {
         auto self = FromAPI(cSelf);
 
-        auto querySet_ = reinterpret_cast<QuerySetBase*>(querySet);
-        auto queryIndex_ = queryIndex;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIWriteTimestamp(querySet_, queryIndex_);
+        
+auto querySet_ = reinterpret_cast<QuerySetBase*>(querySet);
+auto queryIndex_ = queryIndex;
+self->APIWriteTimestamp(querySet_, queryIndex_);
+
     }
 
     void NativeRenderPassEncoderAddRef(WGPURenderPassEncoder cSelf) {
@@ -1922,7 +2373,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeRenderPassEncoderRelease(WGPURenderPassEncoder cSelf) {
@@ -1930,26 +2383,32 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUBindGroupLayout NativeRenderPipelineGetBindGroupLayout(WGPURenderPipeline cSelf, uint32_t groupIndex) {
         auto self = FromAPI(cSelf);
 
-        auto groupIndex_ = groupIndex;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetBindGroupLayout(groupIndex_);
-        return ToAPI(result);
+        
+auto groupIndex_ = groupIndex;
+auto result =self->APIGetBindGroupLayout(groupIndex_);
+return ToAPI(result);
+
     }
 
     void NativeRenderPipelineSetLabel(WGPURenderPipeline cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeRenderPipelineAddRef(WGPURenderPipeline cSelf) {
@@ -1957,7 +2416,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeRenderPipelineRelease(WGPURenderPipeline cSelf) {
@@ -1965,7 +2426,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeResourceTableDestroy(WGPUResourceTable cSelf) {
@@ -1974,7 +2437,9 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APIDestroy();
+        
+self->APIDestroy();
+
     }
 
     uint32_t NativeResourceTableGetSize(WGPUResourceTable cSelf) {
@@ -1982,42 +2447,61 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetSize();
-        return result;
+        
+auto result =self->APIGetSize();
+return result;
+
     }
 
-    uint32_t NativeResourceTableInsertBinding(WGPUResourceTable cSelf, WGPUBindingResource const * resource) {
+    uint32_t NativeResourceTableInsert(WGPUResourceTable cSelf, WGPUBindingResource const * resource) {
         auto self = FromAPI(cSelf);
 
-        auto resource_ = reinterpret_cast<BindingResource const *>(resource);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIInsertBinding(resource_);
-        return result;
+        
+auto resource_ = reinterpret_cast<BindingResource const *>(resource);
+auto result =self->APIInsert(resource_);
+return result;
+
     }
 
-    WGPUStatus NativeResourceTableRemoveBinding(WGPUResourceTable cSelf, uint32_t slot) {
+    WGPUStatus NativeResourceTableRemove(WGPUResourceTable cSelf, uint32_t slot) {
         auto self = FromAPI(cSelf);
 
-        auto slot_ = slot;
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIRemoveBinding(slot_);
-        return ToAPI(result);
+        
+auto slot_ = slot;
+auto result =self->APIRemove(slot_);
+return ToAPI(result);
+
+    }
+
+    void NativeResourceTableSetLabel(WGPUResourceTable cSelf, WGPUStringView label) {
+        auto self = FromAPI(cSelf);
+
+        // This method is specified to not use AutoLock in json script or it returns a future.
+
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     WGPUStatus NativeResourceTableUpdate(WGPUResourceTable cSelf, uint32_t slot, WGPUBindingResource const * resource) {
         auto self = FromAPI(cSelf);
 
-        auto slot_ = slot;
-        auto resource_ = reinterpret_cast<BindingResource const *>(resource);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIUpdate(slot_, resource_);
-        return ToAPI(result);
+        
+auto slot_ = slot;
+auto resource_ = reinterpret_cast<BindingResource const *>(resource);
+auto result =self->APIUpdate(slot_, resource_);
+return ToAPI(result);
+
     }
 
     void NativeResourceTableAddRef(WGPUResourceTable cSelf) {
@@ -2025,7 +2509,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeResourceTableRelease(WGPUResourceTable cSelf) {
@@ -2033,16 +2519,20 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeSamplerSetLabel(WGPUSampler cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeSamplerAddRef(WGPUSampler cSelf) {
@@ -2050,7 +2540,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeSamplerRelease(WGPUSampler cSelf) {
@@ -2058,26 +2550,32 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUFuture NativeShaderModuleGetCompilationInfo(WGPUShaderModule cSelf, WGPUCompilationInfoCallbackInfo callbackInfo) {
         auto self = FromAPI(cSelf);
 
-        auto callbackInfo_ = callbackInfo;
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetCompilationInfo(callbackInfo_);
-        return *ToAPI(&result);
+        
+auto callbackInfo_ = callbackInfo;
+auto result =self->APIGetCompilationInfo(callbackInfo_);
+return *ToAPI(&result);
+
     }
 
     void NativeShaderModuleSetLabel(WGPUShaderModule cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeShaderModuleAddRef(WGPUShaderModule cSelf) {
@@ -2085,7 +2583,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeShaderModuleRelease(WGPUShaderModule cSelf) {
@@ -2093,53 +2593,63 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUStatus NativeSharedBufferMemoryBeginAccess(WGPUSharedBufferMemory cSelf, WGPUBuffer buffer, WGPUSharedBufferMemoryBeginAccessDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto descriptor_ = reinterpret_cast<SharedBufferMemoryBeginAccessDescriptor const *>(descriptor);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIBeginAccess(buffer_, descriptor_);
-        return ToAPI(result);
+        
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto descriptor_ = reinterpret_cast<SharedBufferMemoryBeginAccessDescriptor const *>(descriptor);
+auto result =self->APIBeginAccess(buffer_, descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUBuffer NativeSharedBufferMemoryCreateBuffer(WGPUSharedBufferMemory cSelf, WGPUBufferDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<BufferDescriptor const *>(descriptor);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateBuffer(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<BufferDescriptor const *>(descriptor);
+auto result =self->APICreateBuffer(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUStatus NativeSharedBufferMemoryEndAccess(WGPUSharedBufferMemory cSelf, WGPUBuffer buffer, WGPUSharedBufferMemoryEndAccessState * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
-        auto descriptor_ = reinterpret_cast<SharedBufferMemoryEndAccessState *>(descriptor);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIEndAccess(buffer_, descriptor_);
-        return ToAPI(result);
+        
+auto buffer_ = reinterpret_cast<BufferBase*>(buffer);
+auto descriptor_ = reinterpret_cast<SharedBufferMemoryEndAccessState *>(descriptor);
+auto result =self->APIEndAccess(buffer_, descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUStatus NativeSharedBufferMemoryGetProperties(WGPUSharedBufferMemory cSelf, WGPUSharedBufferMemoryProperties * properties) {
         auto self = FromAPI(cSelf);
 
-        auto properties_ = reinterpret_cast<SharedBufferMemoryProperties *>(properties);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIGetProperties(properties_);
-        return ToAPI(result);
+        
+auto properties_ = reinterpret_cast<SharedBufferMemoryProperties *>(properties);
+auto result =self->APIGetProperties(properties_);
+return ToAPI(result);
+
     }
 
     WGPUBool NativeSharedBufferMemoryIsDeviceLost(WGPUSharedBufferMemory cSelf) {
@@ -2148,17 +2658,21 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIIsDeviceLost();
-        return result;
+        
+auto result =self->APIIsDeviceLost();
+return result;
+
     }
 
     void NativeSharedBufferMemorySetLabel(WGPUSharedBufferMemory cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeSharedBufferMemoryAddRef(WGPUSharedBufferMemory cSelf) {
@@ -2166,7 +2680,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeSharedBufferMemoryRelease(WGPUSharedBufferMemory cSelf) {
@@ -2174,34 +2690,40 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeSharedBufferMemoryEndAccessStateFreeMembers(WGPUSharedBufferMemoryEndAccessState cSelf) {
+        
+        
+APISharedBufferMemoryEndAccessStateFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APISharedBufferMemoryEndAccessStateFreeMembers(cSelf);
     }
 
     void NativeSharedFenceExportInfo(WGPUSharedFence cSelf, WGPUSharedFenceExportInfo * info) {
         auto self = FromAPI(cSelf);
 
-        auto info_ = reinterpret_cast<SharedFenceExportInfo *>(info);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APIExportInfo(info_);
+        
+auto info_ = reinterpret_cast<SharedFenceExportInfo *>(info);
+self->APIExportInfo(info_);
+
     }
 
     void NativeSharedFenceSetLabel(WGPUSharedFence cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeSharedFenceAddRef(WGPUSharedFence cSelf) {
@@ -2209,7 +2731,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeSharedFenceRelease(WGPUSharedFence cSelf) {
@@ -2217,53 +2741,63 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUStatus NativeSharedTextureMemoryBeginAccess(WGPUSharedTextureMemory cSelf, WGPUTexture texture, WGPUSharedTextureMemoryBeginAccessDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto texture_ = reinterpret_cast<TextureBase*>(texture);
-        auto descriptor_ = reinterpret_cast<SharedTextureMemoryBeginAccessDescriptor const *>(descriptor);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIBeginAccess(texture_, descriptor_);
-        return ToAPI(result);
+        
+auto texture_ = reinterpret_cast<TextureBase*>(texture);
+auto descriptor_ = reinterpret_cast<SharedTextureMemoryBeginAccessDescriptor const *>(descriptor);
+auto result =self->APIBeginAccess(texture_, descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUTexture NativeSharedTextureMemoryCreateTexture(WGPUSharedTextureMemory cSelf, WGPUTextureDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<TextureDescriptor const *>(descriptor);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateTexture(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<TextureDescriptor const *>(descriptor);
+auto result =self->APICreateTexture(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUStatus NativeSharedTextureMemoryEndAccess(WGPUSharedTextureMemory cSelf, WGPUTexture texture, WGPUSharedTextureMemoryEndAccessState * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto texture_ = reinterpret_cast<TextureBase*>(texture);
-        auto descriptor_ = reinterpret_cast<SharedTextureMemoryEndAccessState *>(descriptor);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIEndAccess(texture_, descriptor_);
-        return ToAPI(result);
+        
+auto texture_ = reinterpret_cast<TextureBase*>(texture);
+auto descriptor_ = reinterpret_cast<SharedTextureMemoryEndAccessState *>(descriptor);
+auto result =self->APIEndAccess(texture_, descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUStatus NativeSharedTextureMemoryGetProperties(WGPUSharedTextureMemory cSelf, WGPUSharedTextureMemoryProperties * properties) {
         auto self = FromAPI(cSelf);
 
-        auto properties_ = reinterpret_cast<SharedTextureMemoryProperties *>(properties);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIGetProperties(properties_);
-        return ToAPI(result);
+        
+auto properties_ = reinterpret_cast<SharedTextureMemoryProperties *>(properties);
+auto result =self->APIGetProperties(properties_);
+return ToAPI(result);
+
     }
 
     WGPUBool NativeSharedTextureMemoryIsDeviceLost(WGPUSharedTextureMemory cSelf) {
@@ -2272,17 +2806,21 @@ namespace dawn::native {
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APIIsDeviceLost();
-        return result;
+        
+auto result =self->APIIsDeviceLost();
+return result;
+
     }
 
     void NativeSharedTextureMemorySetLabel(WGPUSharedTextureMemory cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeSharedTextureMemoryAddRef(WGPUSharedTextureMemory cSelf) {
@@ -2290,7 +2828,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeSharedTextureMemoryRelease(WGPUSharedTextureMemory cSelf) {
@@ -2298,64 +2838,72 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeSharedTextureMemoryEndAccessStateFreeMembers(WGPUSharedTextureMemoryEndAccessState cSelf) {
+        
+        
+APISharedTextureMemoryEndAccessStateFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APISharedTextureMemoryEndAccessStateFreeMembers(cSelf);
     }
 
     void NativeSupportedFeaturesFreeMembers(WGPUSupportedFeatures cSelf) {
+        
+        
+APISupportedFeaturesFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APISupportedFeaturesFreeMembers(cSelf);
     }
 
     void NativeSupportedInstanceFeaturesFreeMembers(WGPUSupportedInstanceFeatures cSelf) {
+        
+        
+APISupportedInstanceFeaturesFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APISupportedInstanceFeaturesFreeMembers(cSelf);
     }
 
     void NativeSupportedWGSLLanguageFeaturesFreeMembers(WGPUSupportedWGSLLanguageFeatures cSelf) {
+        
+        
+APISupportedWGSLLanguageFeaturesFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APISupportedWGSLLanguageFeaturesFreeMembers(cSelf);
     }
 
     void NativeSurfaceConfigure(WGPUSurface cSelf, WGPUSurfaceConfiguration const * config) {
         auto self = FromAPI(cSelf);
 
-        auto config_ = reinterpret_cast<SurfaceConfiguration const *>(config);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIConfigure(config_);
+        
+auto config_ = reinterpret_cast<SurfaceConfiguration const *>(config);
+self->APIConfigure(config_);
+
     }
 
     WGPUStatus NativeSurfaceGetCapabilities(WGPUSurface cSelf, WGPUAdapter adapter, WGPUSurfaceCapabilities * capabilities) {
         auto self = FromAPI(cSelf);
 
-        auto adapter_ = reinterpret_cast<AdapterBase*>(adapter);
-        auto capabilities_ = reinterpret_cast<SurfaceCapabilities *>(capabilities);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetCapabilities(adapter_, capabilities_);
-        return ToAPI(result);
+        
+auto adapter_ = reinterpret_cast<AdapterBase*>(adapter);
+auto capabilities_ = reinterpret_cast<SurfaceCapabilities *>(capabilities);
+auto result =self->APIGetCapabilities(adapter_, capabilities_);
+return ToAPI(result);
+
     }
 
     void NativeSurfaceGetCurrentTexture(WGPUSurface cSelf, WGPUSurfaceTexture * surfaceTexture) {
         auto self = FromAPI(cSelf);
 
-        auto surfaceTexture_ = reinterpret_cast<SurfaceTexture *>(surfaceTexture);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIGetCurrentTexture(surfaceTexture_);
+        
+auto surfaceTexture_ = reinterpret_cast<SurfaceTexture *>(surfaceTexture);
+self->APIGetCurrentTexture(surfaceTexture_);
+
     }
 
     WGPUStatus NativeSurfacePresent(WGPUSurface cSelf) {
@@ -2363,17 +2911,21 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIPresent();
-        return ToAPI(result);
+        
+auto result =self->APIPresent();
+return ToAPI(result);
+
     }
 
     void NativeSurfaceSetLabel(WGPUSurface cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeSurfaceUnconfigure(WGPUSurface cSelf) {
@@ -2381,7 +2933,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIUnconfigure();
+        
+self->APIUnconfigure();
+
     }
 
     void NativeSurfaceAddRef(WGPUSurface cSelf) {
@@ -2389,7 +2943,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeSurfaceRelease(WGPUSurface cSelf) {
@@ -2397,23 +2953,27 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities cSelf) {
+        
+        
+APISurfaceCapabilitiesFreeMembers(cSelf);
 
-        // This method is specified to not use AutoLock in json script or it returns a future.
-
-        APISurfaceCapabilitiesFreeMembers(cSelf);
     }
 
     void NativeTexelBufferViewSetLabel(WGPUTexelBufferView cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeTexelBufferViewAddRef(WGPUTexelBufferView cSelf) {
@@ -2421,7 +2981,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeTexelBufferViewRelease(WGPUTexelBufferView cSelf) {
@@ -2429,28 +2991,34 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUTextureView NativeTextureCreateErrorView(WGPUTexture cSelf, WGPUTextureViewDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<TextureViewDescriptor const *>(descriptor);
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        auto result =        self->APICreateErrorView(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<TextureViewDescriptor const *>(descriptor);
+auto result =self->APICreateErrorView(descriptor_);
+return ToAPI(result);
+
     }
 
     WGPUTextureView NativeTextureCreateView(WGPUTexture cSelf, WGPUTextureViewDescriptor const * descriptor) {
         auto self = FromAPI(cSelf);
 
-        auto descriptor_ = reinterpret_cast<TextureViewDescriptor const *>(descriptor);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APICreateView(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<TextureViewDescriptor const *>(descriptor);
+auto result =self->APICreateView(descriptor_);
+return ToAPI(result);
+
     }
 
     void NativeTextureDestroy(WGPUTexture cSelf) {
@@ -2458,7 +3026,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIDestroy();
+        
+self->APIDestroy();
+
     }
 
     uint32_t NativeTextureGetDepthOrArrayLayers(WGPUTexture cSelf) {
@@ -2466,8 +3036,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetDepthOrArrayLayers();
-        return result;
+        
+auto result =self->APIGetDepthOrArrayLayers();
+return result;
+
     }
 
     WGPUTextureDimension NativeTextureGetDimension(WGPUTexture cSelf) {
@@ -2475,8 +3047,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetDimension();
-        return ToAPI(result);
+        
+auto result =self->APIGetDimension();
+return ToAPI(result);
+
     }
 
     WGPUTextureFormat NativeTextureGetFormat(WGPUTexture cSelf) {
@@ -2484,8 +3058,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetFormat();
-        return ToAPI(result);
+        
+auto result =self->APIGetFormat();
+return ToAPI(result);
+
     }
 
     uint32_t NativeTextureGetHeight(WGPUTexture cSelf) {
@@ -2493,8 +3069,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetHeight();
-        return result;
+        
+auto result =self->APIGetHeight();
+return result;
+
     }
 
     uint32_t NativeTextureGetMipLevelCount(WGPUTexture cSelf) {
@@ -2502,8 +3080,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetMipLevelCount();
-        return result;
+        
+auto result =self->APIGetMipLevelCount();
+return result;
+
     }
 
     uint32_t NativeTextureGetSampleCount(WGPUTexture cSelf) {
@@ -2511,8 +3091,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetSampleCount();
-        return result;
+        
+auto result =self->APIGetSampleCount();
+return result;
+
     }
 
     WGPUTextureViewDimension NativeTextureGetTextureBindingViewDimension(WGPUTexture cSelf) {
@@ -2520,8 +3102,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetTextureBindingViewDimension();
-        return ToAPI(result);
+        
+auto result =self->APIGetTextureBindingViewDimension();
+return ToAPI(result);
+
     }
 
     WGPUTextureUsage NativeTextureGetUsage(WGPUTexture cSelf) {
@@ -2529,8 +3113,10 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetUsage();
-        return ToAPI(result);
+        
+auto result =self->APIGetUsage();
+return ToAPI(result);
+
     }
 
     uint32_t NativeTextureGetWidth(WGPUTexture cSelf) {
@@ -2538,46 +3124,33 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        auto result =        self->APIGetWidth();
-        return result;
-    }
+        
+auto result =self->APIGetWidth();
+return result;
 
-    void NativeTexturePin(WGPUTexture cSelf, WGPUTextureUsage usage) {
-        auto self = FromAPI(cSelf);
-
-        auto usage_ = static_cast<wgpu::TextureUsage>(usage);
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
-
-        self->APIPin(usage_);
     }
 
     void NativeTextureSetLabel(WGPUTexture cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeTextureSetOwnershipForMemoryDump(WGPUTexture cSelf, uint64_t ownerGuid) {
         auto self = FromAPI(cSelf);
 
-        auto ownerGuid_ = ownerGuid;
         auto device = self->GetDevice();
         auto deviceGuard = device->GetGuard();
 
-        self->APISetOwnershipForMemoryDump(ownerGuid_);
-    }
+        
+auto ownerGuid_ = ownerGuid;
+self->APISetOwnershipForMemoryDump(ownerGuid_);
 
-    void NativeTextureUnpin(WGPUTexture cSelf) {
-        auto self = FromAPI(cSelf);
-
-        auto device = self->GetDevice();
-        auto deviceGuard = device->GetGuard();
-
-        self->APIUnpin();
     }
 
     void NativeTextureAddRef(WGPUTexture cSelf) {
@@ -2585,7 +3158,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeTextureRelease(WGPUTexture cSelf) {
@@ -2593,16 +3168,20 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     void NativeTextureViewSetLabel(WGPUTextureView cSelf, WGPUStringView label) {
         auto self = FromAPI(cSelf);
 
-        auto label_ = *reinterpret_cast<StringView*>(&label);
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APISetLabel(label_);
+        
+auto label_ = *reinterpret_cast<StringView*>(&label);
+self->APISetLabel(label_);
+
     }
 
     void NativeTextureViewAddRef(WGPUTextureView cSelf) {
@@ -2610,7 +3189,9 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIAddRef();
+        
+self->APIAddRef();
+
     }
 
     void NativeTextureViewRelease(WGPUTextureView cSelf) {
@@ -2618,27 +3199,37 @@ namespace dawn::native {
 
         // This method is specified to not use AutoLock in json script or it returns a future.
 
-        self->APIRelease();
+        
+self->APIRelease();
+
     }
 
     WGPUInstance NativeCreateInstance(WGPUInstanceDescriptor const * descriptor) {
-        auto descriptor_ = reinterpret_cast<InstanceDescriptor const *>(descriptor);
-        auto result =        APICreateInstance(descriptor_);
-        return ToAPI(result);
+        
+auto descriptor_ = reinterpret_cast<InstanceDescriptor const *>(descriptor);
+auto result =APICreateInstance(descriptor_);
+return ToAPI(result);
+
     }
     void NativeGetInstanceFeatures(WGPUSupportedInstanceFeatures * features) {
-        auto features_ = reinterpret_cast<SupportedInstanceFeatures *>(features);
-        APIGetInstanceFeatures(features_);
+        
+auto features_ = reinterpret_cast<SupportedInstanceFeatures *>(features);
+APIGetInstanceFeatures(features_);
+
     }
     WGPUStatus NativeGetInstanceLimits(WGPUInstanceLimits * limits) {
-        auto limits_ = reinterpret_cast<InstanceLimits *>(limits);
-        auto result =        APIGetInstanceLimits(limits_);
-        return ToAPI(result);
+        
+auto limits_ = reinterpret_cast<InstanceLimits *>(limits);
+auto result =APIGetInstanceLimits(limits_);
+return ToAPI(result);
+
     }
     WGPUBool NativeHasInstanceFeature(WGPUInstanceFeatureName feature) {
-        auto feature_ = static_cast<wgpu::InstanceFeatureName>(feature);
-        auto result =        APIHasInstanceFeature(feature_);
-        return result;
+        
+auto feature_ = static_cast<wgpu::InstanceFeatureName>(feature);
+auto result =APIHasInstanceFeature(feature_);
+return result;
+
     }
 
     namespace {
@@ -2729,7 +3320,9 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeDeviceCreateComputePipeline), "wgpuDeviceCreateComputePipeline" },
             { reinterpret_cast<WGPUProc>(NativeDeviceCreateComputePipelineAsync), "wgpuDeviceCreateComputePipelineAsync" },
             { reinterpret_cast<WGPUProc>(NativeDeviceCreateErrorBuffer), "wgpuDeviceCreateErrorBuffer" },
+            { reinterpret_cast<WGPUProc>(NativeDeviceCreateErrorComputePipeline), "wgpuDeviceCreateErrorComputePipeline" },
             { reinterpret_cast<WGPUProc>(NativeDeviceCreateErrorExternalTexture), "wgpuDeviceCreateErrorExternalTexture" },
+            { reinterpret_cast<WGPUProc>(NativeDeviceCreateErrorRenderPipeline), "wgpuDeviceCreateErrorRenderPipeline" },
             { reinterpret_cast<WGPUProc>(NativeDeviceCreateErrorShaderModule), "wgpuDeviceCreateErrorShaderModule" },
             { reinterpret_cast<WGPUProc>(NativeDeviceCreateErrorTexture), "wgpuDeviceCreateErrorTexture" },
             { reinterpret_cast<WGPUProc>(NativeDeviceCreateExternalTexture), "wgpuDeviceCreateExternalTexture" },
@@ -2811,7 +3404,6 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetIndexBuffer), "wgpuRenderBundleEncoderSetIndexBuffer" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetLabel), "wgpuRenderBundleEncoderSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetPipeline), "wgpuRenderBundleEncoderSetPipeline" },
-            { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetResourceTable), "wgpuRenderBundleEncoderSetResourceTable" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleEncoderSetVertexBuffer), "wgpuRenderBundleEncoderSetVertexBuffer" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleRelease), "wgpuRenderBundleRelease" },
             { reinterpret_cast<WGPUProc>(NativeRenderBundleSetLabel), "wgpuRenderBundleSetLabel" },
@@ -2850,9 +3442,10 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeResourceTableAddRef), "wgpuResourceTableAddRef" },
             { reinterpret_cast<WGPUProc>(NativeResourceTableDestroy), "wgpuResourceTableDestroy" },
             { reinterpret_cast<WGPUProc>(NativeResourceTableGetSize), "wgpuResourceTableGetSize" },
-            { reinterpret_cast<WGPUProc>(NativeResourceTableInsertBinding), "wgpuResourceTableInsertBinding" },
+            { reinterpret_cast<WGPUProc>(NativeResourceTableInsert), "wgpuResourceTableInsert" },
             { reinterpret_cast<WGPUProc>(NativeResourceTableRelease), "wgpuResourceTableRelease" },
-            { reinterpret_cast<WGPUProc>(NativeResourceTableRemoveBinding), "wgpuResourceTableRemoveBinding" },
+            { reinterpret_cast<WGPUProc>(NativeResourceTableRemove), "wgpuResourceTableRemove" },
+            { reinterpret_cast<WGPUProc>(NativeResourceTableSetLabel), "wgpuResourceTableSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeResourceTableUpdate), "wgpuResourceTableUpdate" },
             { reinterpret_cast<WGPUProc>(NativeSamplerAddRef), "wgpuSamplerAddRef" },
             { reinterpret_cast<WGPUProc>(NativeSamplerRelease), "wgpuSamplerRelease" },
@@ -2911,11 +3504,9 @@ namespace dawn::native {
             { reinterpret_cast<WGPUProc>(NativeTextureGetTextureBindingViewDimension), "wgpuTextureGetTextureBindingViewDimension" },
             { reinterpret_cast<WGPUProc>(NativeTextureGetUsage), "wgpuTextureGetUsage" },
             { reinterpret_cast<WGPUProc>(NativeTextureGetWidth), "wgpuTextureGetWidth" },
-            { reinterpret_cast<WGPUProc>(NativeTexturePin), "wgpuTexturePin" },
             { reinterpret_cast<WGPUProc>(NativeTextureRelease), "wgpuTextureRelease" },
             { reinterpret_cast<WGPUProc>(NativeTextureSetLabel), "wgpuTextureSetLabel" },
             { reinterpret_cast<WGPUProc>(NativeTextureSetOwnershipForMemoryDump), "wgpuTextureSetOwnershipForMemoryDump" },
-            { reinterpret_cast<WGPUProc>(NativeTextureUnpin), "wgpuTextureUnpin" },
             { reinterpret_cast<WGPUProc>(NativeTextureViewAddRef), "wgpuTextureViewAddRef" },
             { reinterpret_cast<WGPUProc>(NativeTextureViewRelease), "wgpuTextureViewRelease" },
             { reinterpret_cast<WGPUProc>(NativeTextureViewSetLabel), "wgpuTextureViewSetLabel" },
@@ -2977,6 +3568,7 @@ namespace dawn::native {
 
     constexpr DawnProcTable MakeProcTable() {
         DawnProcTable procs = {};
+        std::ranges::copy(dawn::kDawnVersion, procs.version);
         procs.createInstance = NativeCreateInstance;
         procs.getInstanceFeatures = NativeGetInstanceFeatures;
         procs.getInstanceLimits = NativeGetInstanceLimits;
@@ -3062,7 +3654,9 @@ namespace dawn::native {
         procs.deviceCreateComputePipeline = NativeDeviceCreateComputePipeline;
         procs.deviceCreateComputePipelineAsync = NativeDeviceCreateComputePipelineAsync;
         procs.deviceCreateErrorBuffer = NativeDeviceCreateErrorBuffer;
+        procs.deviceCreateErrorComputePipeline = NativeDeviceCreateErrorComputePipeline;
         procs.deviceCreateErrorExternalTexture = NativeDeviceCreateErrorExternalTexture;
+        procs.deviceCreateErrorRenderPipeline = NativeDeviceCreateErrorRenderPipeline;
         procs.deviceCreateErrorShaderModule = NativeDeviceCreateErrorShaderModule;
         procs.deviceCreateErrorTexture = NativeDeviceCreateErrorTexture;
         procs.deviceCreateExternalTexture = NativeDeviceCreateExternalTexture;
@@ -3145,7 +3739,6 @@ namespace dawn::native {
         procs.renderBundleEncoderSetIndexBuffer = NativeRenderBundleEncoderSetIndexBuffer;
         procs.renderBundleEncoderSetLabel = NativeRenderBundleEncoderSetLabel;
         procs.renderBundleEncoderSetPipeline = NativeRenderBundleEncoderSetPipeline;
-        procs.renderBundleEncoderSetResourceTable = NativeRenderBundleEncoderSetResourceTable;
         procs.renderBundleEncoderSetVertexBuffer = NativeRenderBundleEncoderSetVertexBuffer;
         procs.renderBundleEncoderAddRef = NativeRenderBundleEncoderAddRef;
         procs.renderBundleEncoderRelease = NativeRenderBundleEncoderRelease;
@@ -3183,8 +3776,9 @@ namespace dawn::native {
         procs.renderPipelineRelease = NativeRenderPipelineRelease;
         procs.resourceTableDestroy = NativeResourceTableDestroy;
         procs.resourceTableGetSize = NativeResourceTableGetSize;
-        procs.resourceTableInsertBinding = NativeResourceTableInsertBinding;
-        procs.resourceTableRemoveBinding = NativeResourceTableRemoveBinding;
+        procs.resourceTableInsert = NativeResourceTableInsert;
+        procs.resourceTableRemove = NativeResourceTableRemove;
+        procs.resourceTableSetLabel = NativeResourceTableSetLabel;
         procs.resourceTableUpdate = NativeResourceTableUpdate;
         procs.resourceTableAddRef = NativeResourceTableAddRef;
         procs.resourceTableRelease = NativeResourceTableRelease;
@@ -3244,10 +3838,8 @@ namespace dawn::native {
         procs.textureGetTextureBindingViewDimension = NativeTextureGetTextureBindingViewDimension;
         procs.textureGetUsage = NativeTextureGetUsage;
         procs.textureGetWidth = NativeTextureGetWidth;
-        procs.texturePin = NativeTexturePin;
         procs.textureSetLabel = NativeTextureSetLabel;
         procs.textureSetOwnershipForMemoryDump = NativeTextureSetOwnershipForMemoryDump;
-        procs.textureUnpin = NativeTextureUnpin;
         procs.textureAddRef = NativeTextureAddRef;
         procs.textureRelease = NativeTextureRelease;
         procs.textureViewSetLabel = NativeTextureViewSetLabel;

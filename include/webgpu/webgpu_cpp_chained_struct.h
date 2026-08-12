@@ -26,7 +26,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifdef __EMSCRIPTEN__
-#error "Do not include this header. Emscripten already provides headers needed for WebGPU."
+#error "Do not include this header. Use the headers provided by Emdawnwebgpu instead."
 #endif
 
 #ifndef WEBGPU_CPP_CHAINED_STRUCT_H_

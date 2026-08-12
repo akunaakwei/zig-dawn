@@ -25,7 +25,7 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "dawn/native/ChainUtils.h"
+#include "src/dawn/native/ChainUtils.h"
 
 #include <tuple>
 #include <utility>
@@ -60,9 +60,9 @@ template <typename Root, typename UnpackedPtrT, typename AdditionalExts>
 struct AdditionalExtensionUnpacker;
 template <typename Root, typename UnpackedPtrT, typename... Exts>
 struct AdditionalExtensionUnpacker<Root, UnpackedPtrT, detail::AdditionalExtensionsList<Exts...>> {
-    static bool Unpack(typename UnpackedPtrT::TupleType& unpacked,
-                       typename UnpackedPtrT::BitsetType& bitset,
-                       typename UnpackedPtrT::ChainType chain,
+    static bool Unpack(UnpackedPtrT::TupleType& unpacked,
+                       UnpackedPtrT::BitsetType& bitset,
+                       UnpackedPtrT::ChainType chain,
                        bool* duplicate) {
         return ((UnpackExtension<Root, UnpackedPtrT, Exts>(unpacked, bitset, chain, duplicate)) ||
                 ...);
@@ -73,9 +73,9 @@ struct AdditionalExtensionUnpacker<Root, UnpackedPtrT, detail::AdditionalExtensi
 // UnpackedPtr chain helpers.
 //
 template <>
-UnpackedPtr<BindingResource> Unpack<BindingResource>(typename UnpackedPtr<BindingResource>::PtrType chain) {
+UnpackedPtr<BindingResource> Unpack<BindingResource>(UnpackedPtr<BindingResource>::PtrType chain) {
     UnpackedPtr<BindingResource> result(chain);
-    for (typename UnpackedPtr<BindingResource>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindingResource>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -94,9 +94,9 @@ UnpackedPtr<BindingResource> Unpack<BindingResource>(typename UnpackedPtr<Bindin
 }
 template <>
 ResultOrError<UnpackedPtr<BindingResource>> ValidateAndUnpack<BindingResource>(
-    typename UnpackedPtr<BindingResource>::PtrType chain) {
+    UnpackedPtr<BindingResource>::PtrType chain) {
     UnpackedPtr<BindingResource> result(chain);
-    for (typename UnpackedPtr<BindingResource>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindingResource>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -139,9 +139,9 @@ ResultOrError<UnpackedPtr<BindingResource>> ValidateAndUnpack<BindingResource>(
     return result;
 }
 template <>
-UnpackedPtr<BufferBindingLayout> Unpack<BufferBindingLayout>(typename UnpackedPtr<BufferBindingLayout>::PtrType chain) {
+UnpackedPtr<BufferBindingLayout> Unpack<BufferBindingLayout>(UnpackedPtr<BufferBindingLayout>::PtrType chain) {
     UnpackedPtr<BufferBindingLayout> result(chain);
-    for (typename UnpackedPtr<BufferBindingLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BufferBindingLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -160,9 +160,9 @@ UnpackedPtr<BufferBindingLayout> Unpack<BufferBindingLayout>(typename UnpackedPt
 }
 template <>
 ResultOrError<UnpackedPtr<BufferBindingLayout>> ValidateAndUnpack<BufferBindingLayout>(
-    typename UnpackedPtr<BufferBindingLayout>::PtrType chain) {
+    UnpackedPtr<BufferBindingLayout>::PtrType chain) {
     UnpackedPtr<BufferBindingLayout> result(chain);
-    for (typename UnpackedPtr<BufferBindingLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BufferBindingLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -205,9 +205,9 @@ ResultOrError<UnpackedPtr<BufferBindingLayout>> ValidateAndUnpack<BufferBindingL
     return result;
 }
 template <>
-UnpackedPtr<ColorSpaceDawn> Unpack<ColorSpaceDawn>(typename UnpackedPtr<ColorSpaceDawn>::PtrType chain) {
+UnpackedPtr<ColorSpaceDawn> Unpack<ColorSpaceDawn>(UnpackedPtr<ColorSpaceDawn>::PtrType chain) {
     UnpackedPtr<ColorSpaceDawn> result(chain);
-    for (typename UnpackedPtr<ColorSpaceDawn>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ColorSpaceDawn>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -226,9 +226,9 @@ UnpackedPtr<ColorSpaceDawn> Unpack<ColorSpaceDawn>(typename UnpackedPtr<ColorSpa
 }
 template <>
 ResultOrError<UnpackedPtr<ColorSpaceDawn>> ValidateAndUnpack<ColorSpaceDawn>(
-    typename UnpackedPtr<ColorSpaceDawn>::PtrType chain) {
+    UnpackedPtr<ColorSpaceDawn>::PtrType chain) {
     UnpackedPtr<ColorSpaceDawn> result(chain);
-    for (typename UnpackedPtr<ColorSpaceDawn>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ColorSpaceDawn>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -271,9 +271,9 @@ ResultOrError<UnpackedPtr<ColorSpaceDawn>> ValidateAndUnpack<ColorSpaceDawn>(
     return result;
 }
 template <>
-UnpackedPtr<CommandBufferDescriptor> Unpack<CommandBufferDescriptor>(typename UnpackedPtr<CommandBufferDescriptor>::PtrType chain) {
+UnpackedPtr<CommandBufferDescriptor> Unpack<CommandBufferDescriptor>(UnpackedPtr<CommandBufferDescriptor>::PtrType chain) {
     UnpackedPtr<CommandBufferDescriptor> result(chain);
-    for (typename UnpackedPtr<CommandBufferDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CommandBufferDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -292,9 +292,9 @@ UnpackedPtr<CommandBufferDescriptor> Unpack<CommandBufferDescriptor>(typename Un
 }
 template <>
 ResultOrError<UnpackedPtr<CommandBufferDescriptor>> ValidateAndUnpack<CommandBufferDescriptor>(
-    typename UnpackedPtr<CommandBufferDescriptor>::PtrType chain) {
+    UnpackedPtr<CommandBufferDescriptor>::PtrType chain) {
     UnpackedPtr<CommandBufferDescriptor> result(chain);
-    for (typename UnpackedPtr<CommandBufferDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CommandBufferDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -337,9 +337,9 @@ ResultOrError<UnpackedPtr<CommandBufferDescriptor>> ValidateAndUnpack<CommandBuf
     return result;
 }
 template <>
-UnpackedPtr<ConstantEntry> Unpack<ConstantEntry>(typename UnpackedPtr<ConstantEntry>::PtrType chain) {
+UnpackedPtr<ConstantEntry> Unpack<ConstantEntry>(UnpackedPtr<ConstantEntry>::PtrType chain) {
     UnpackedPtr<ConstantEntry> result(chain);
-    for (typename UnpackedPtr<ConstantEntry>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ConstantEntry>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -358,9 +358,9 @@ UnpackedPtr<ConstantEntry> Unpack<ConstantEntry>(typename UnpackedPtr<ConstantEn
 }
 template <>
 ResultOrError<UnpackedPtr<ConstantEntry>> ValidateAndUnpack<ConstantEntry>(
-    typename UnpackedPtr<ConstantEntry>::PtrType chain) {
+    UnpackedPtr<ConstantEntry>::PtrType chain) {
     UnpackedPtr<ConstantEntry> result(chain);
-    for (typename UnpackedPtr<ConstantEntry>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ConstantEntry>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -403,9 +403,9 @@ ResultOrError<UnpackedPtr<ConstantEntry>> ValidateAndUnpack<ConstantEntry>(
     return result;
 }
 template <>
-UnpackedPtr<CopyTextureForBrowserOptions> Unpack<CopyTextureForBrowserOptions>(typename UnpackedPtr<CopyTextureForBrowserOptions>::PtrType chain) {
+UnpackedPtr<CopyTextureForBrowserOptions> Unpack<CopyTextureForBrowserOptions>(UnpackedPtr<CopyTextureForBrowserOptions>::PtrType chain) {
     UnpackedPtr<CopyTextureForBrowserOptions> result(chain);
-    for (typename UnpackedPtr<CopyTextureForBrowserOptions>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CopyTextureForBrowserOptions>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -424,9 +424,9 @@ UnpackedPtr<CopyTextureForBrowserOptions> Unpack<CopyTextureForBrowserOptions>(t
 }
 template <>
 ResultOrError<UnpackedPtr<CopyTextureForBrowserOptions>> ValidateAndUnpack<CopyTextureForBrowserOptions>(
-    typename UnpackedPtr<CopyTextureForBrowserOptions>::PtrType chain) {
+    UnpackedPtr<CopyTextureForBrowserOptions>::PtrType chain) {
     UnpackedPtr<CopyTextureForBrowserOptions> result(chain);
-    for (typename UnpackedPtr<CopyTextureForBrowserOptions>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CopyTextureForBrowserOptions>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -469,9 +469,9 @@ ResultOrError<UnpackedPtr<CopyTextureForBrowserOptions>> ValidateAndUnpack<CopyT
     return result;
 }
 template <>
-UnpackedPtr<InstanceLimits> Unpack<InstanceLimits>(typename UnpackedPtr<InstanceLimits>::PtrType chain) {
+UnpackedPtr<InstanceLimits> Unpack<InstanceLimits>(UnpackedPtr<InstanceLimits>::PtrType chain) {
     UnpackedPtr<InstanceLimits> result(chain);
-    for (typename UnpackedPtr<InstanceLimits>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<InstanceLimits>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -490,9 +490,9 @@ UnpackedPtr<InstanceLimits> Unpack<InstanceLimits>(typename UnpackedPtr<Instance
 }
 template <>
 ResultOrError<UnpackedPtr<InstanceLimits>> ValidateAndUnpack<InstanceLimits>(
-    typename UnpackedPtr<InstanceLimits>::PtrType chain) {
+    UnpackedPtr<InstanceLimits>::PtrType chain) {
     UnpackedPtr<InstanceLimits> result(chain);
-    for (typename UnpackedPtr<InstanceLimits>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<InstanceLimits>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -535,9 +535,9 @@ ResultOrError<UnpackedPtr<InstanceLimits>> ValidateAndUnpack<InstanceLimits>(
     return result;
 }
 template <>
-UnpackedPtr<MultisampleState> Unpack<MultisampleState>(typename UnpackedPtr<MultisampleState>::PtrType chain) {
+UnpackedPtr<MultisampleState> Unpack<MultisampleState>(UnpackedPtr<MultisampleState>::PtrType chain) {
     UnpackedPtr<MultisampleState> result(chain);
-    for (typename UnpackedPtr<MultisampleState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<MultisampleState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -556,9 +556,9 @@ UnpackedPtr<MultisampleState> Unpack<MultisampleState>(typename UnpackedPtr<Mult
 }
 template <>
 ResultOrError<UnpackedPtr<MultisampleState>> ValidateAndUnpack<MultisampleState>(
-    typename UnpackedPtr<MultisampleState>::PtrType chain) {
+    UnpackedPtr<MultisampleState>::PtrType chain) {
     UnpackedPtr<MultisampleState> result(chain);
-    for (typename UnpackedPtr<MultisampleState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<MultisampleState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -601,9 +601,9 @@ ResultOrError<UnpackedPtr<MultisampleState>> ValidateAndUnpack<MultisampleState>
     return result;
 }
 template <>
-UnpackedPtr<PassTimestampWrites> Unpack<PassTimestampWrites>(typename UnpackedPtr<PassTimestampWrites>::PtrType chain) {
+UnpackedPtr<PassTimestampWrites> Unpack<PassTimestampWrites>(UnpackedPtr<PassTimestampWrites>::PtrType chain) {
     UnpackedPtr<PassTimestampWrites> result(chain);
-    for (typename UnpackedPtr<PassTimestampWrites>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<PassTimestampWrites>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -622,9 +622,9 @@ UnpackedPtr<PassTimestampWrites> Unpack<PassTimestampWrites>(typename UnpackedPt
 }
 template <>
 ResultOrError<UnpackedPtr<PassTimestampWrites>> ValidateAndUnpack<PassTimestampWrites>(
-    typename UnpackedPtr<PassTimestampWrites>::PtrType chain) {
+    UnpackedPtr<PassTimestampWrites>::PtrType chain) {
     UnpackedPtr<PassTimestampWrites> result(chain);
-    for (typename UnpackedPtr<PassTimestampWrites>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<PassTimestampWrites>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -667,9 +667,9 @@ ResultOrError<UnpackedPtr<PassTimestampWrites>> ValidateAndUnpack<PassTimestampW
     return result;
 }
 template <>
-UnpackedPtr<PipelineLayoutStorageAttachment> Unpack<PipelineLayoutStorageAttachment>(typename UnpackedPtr<PipelineLayoutStorageAttachment>::PtrType chain) {
+UnpackedPtr<PipelineLayoutStorageAttachment> Unpack<PipelineLayoutStorageAttachment>(UnpackedPtr<PipelineLayoutStorageAttachment>::PtrType chain) {
     UnpackedPtr<PipelineLayoutStorageAttachment> result(chain);
-    for (typename UnpackedPtr<PipelineLayoutStorageAttachment>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<PipelineLayoutStorageAttachment>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -688,9 +688,9 @@ UnpackedPtr<PipelineLayoutStorageAttachment> Unpack<PipelineLayoutStorageAttachm
 }
 template <>
 ResultOrError<UnpackedPtr<PipelineLayoutStorageAttachment>> ValidateAndUnpack<PipelineLayoutStorageAttachment>(
-    typename UnpackedPtr<PipelineLayoutStorageAttachment>::PtrType chain) {
+    UnpackedPtr<PipelineLayoutStorageAttachment>::PtrType chain) {
     UnpackedPtr<PipelineLayoutStorageAttachment> result(chain);
-    for (typename UnpackedPtr<PipelineLayoutStorageAttachment>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<PipelineLayoutStorageAttachment>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -733,9 +733,9 @@ ResultOrError<UnpackedPtr<PipelineLayoutStorageAttachment>> ValidateAndUnpack<Pi
     return result;
 }
 template <>
-UnpackedPtr<PrimitiveState> Unpack<PrimitiveState>(typename UnpackedPtr<PrimitiveState>::PtrType chain) {
+UnpackedPtr<PrimitiveState> Unpack<PrimitiveState>(UnpackedPtr<PrimitiveState>::PtrType chain) {
     UnpackedPtr<PrimitiveState> result(chain);
-    for (typename UnpackedPtr<PrimitiveState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<PrimitiveState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -754,9 +754,9 @@ UnpackedPtr<PrimitiveState> Unpack<PrimitiveState>(typename UnpackedPtr<Primitiv
 }
 template <>
 ResultOrError<UnpackedPtr<PrimitiveState>> ValidateAndUnpack<PrimitiveState>(
-    typename UnpackedPtr<PrimitiveState>::PtrType chain) {
+    UnpackedPtr<PrimitiveState>::PtrType chain) {
     UnpackedPtr<PrimitiveState> result(chain);
-    for (typename UnpackedPtr<PrimitiveState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<PrimitiveState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -799,9 +799,9 @@ ResultOrError<UnpackedPtr<PrimitiveState>> ValidateAndUnpack<PrimitiveState>(
     return result;
 }
 template <>
-UnpackedPtr<QuerySetDescriptor> Unpack<QuerySetDescriptor>(typename UnpackedPtr<QuerySetDescriptor>::PtrType chain) {
+UnpackedPtr<QuerySetDescriptor> Unpack<QuerySetDescriptor>(UnpackedPtr<QuerySetDescriptor>::PtrType chain) {
     UnpackedPtr<QuerySetDescriptor> result(chain);
-    for (typename UnpackedPtr<QuerySetDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<QuerySetDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -820,9 +820,9 @@ UnpackedPtr<QuerySetDescriptor> Unpack<QuerySetDescriptor>(typename UnpackedPtr<
 }
 template <>
 ResultOrError<UnpackedPtr<QuerySetDescriptor>> ValidateAndUnpack<QuerySetDescriptor>(
-    typename UnpackedPtr<QuerySetDescriptor>::PtrType chain) {
+    UnpackedPtr<QuerySetDescriptor>::PtrType chain) {
     UnpackedPtr<QuerySetDescriptor> result(chain);
-    for (typename UnpackedPtr<QuerySetDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<QuerySetDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -865,9 +865,9 @@ ResultOrError<UnpackedPtr<QuerySetDescriptor>> ValidateAndUnpack<QuerySetDescrip
     return result;
 }
 template <>
-UnpackedPtr<QueueDescriptor> Unpack<QueueDescriptor>(typename UnpackedPtr<QueueDescriptor>::PtrType chain) {
+UnpackedPtr<QueueDescriptor> Unpack<QueueDescriptor>(UnpackedPtr<QueueDescriptor>::PtrType chain) {
     UnpackedPtr<QueueDescriptor> result(chain);
-    for (typename UnpackedPtr<QueueDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<QueueDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -886,9 +886,9 @@ UnpackedPtr<QueueDescriptor> Unpack<QueueDescriptor>(typename UnpackedPtr<QueueD
 }
 template <>
 ResultOrError<UnpackedPtr<QueueDescriptor>> ValidateAndUnpack<QueueDescriptor>(
-    typename UnpackedPtr<QueueDescriptor>::PtrType chain) {
+    UnpackedPtr<QueueDescriptor>::PtrType chain) {
     UnpackedPtr<QueueDescriptor> result(chain);
-    for (typename UnpackedPtr<QueueDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<QueueDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -931,9 +931,9 @@ ResultOrError<UnpackedPtr<QueueDescriptor>> ValidateAndUnpack<QueueDescriptor>(
     return result;
 }
 template <>
-UnpackedPtr<RenderBundleDescriptor> Unpack<RenderBundleDescriptor>(typename UnpackedPtr<RenderBundleDescriptor>::PtrType chain) {
+UnpackedPtr<RenderBundleDescriptor> Unpack<RenderBundleDescriptor>(UnpackedPtr<RenderBundleDescriptor>::PtrType chain) {
     UnpackedPtr<RenderBundleDescriptor> result(chain);
-    for (typename UnpackedPtr<RenderBundleDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderBundleDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -952,9 +952,9 @@ UnpackedPtr<RenderBundleDescriptor> Unpack<RenderBundleDescriptor>(typename Unpa
 }
 template <>
 ResultOrError<UnpackedPtr<RenderBundleDescriptor>> ValidateAndUnpack<RenderBundleDescriptor>(
-    typename UnpackedPtr<RenderBundleDescriptor>::PtrType chain) {
+    UnpackedPtr<RenderBundleDescriptor>::PtrType chain) {
     UnpackedPtr<RenderBundleDescriptor> result(chain);
-    for (typename UnpackedPtr<RenderBundleDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderBundleDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -997,75 +997,9 @@ ResultOrError<UnpackedPtr<RenderBundleDescriptor>> ValidateAndUnpack<RenderBundl
     return result;
 }
 template <>
-UnpackedPtr<RenderBundleEncoderDescriptor> Unpack<RenderBundleEncoderDescriptor>(typename UnpackedPtr<RenderBundleEncoderDescriptor>::PtrType chain) {
-    UnpackedPtr<RenderBundleEncoderDescriptor> result(chain);
-    for (typename UnpackedPtr<RenderBundleEncoderDescriptor>::ChainType next = chain->nextInChain;
-         next != nullptr;
-         next = next->nextInChain) {
-        switch (next->sType) {
-            default: {
-                using Unpacker =
-                    AdditionalExtensionUnpacker<
-                        RenderBundleEncoderDescriptor,
-                        UnpackedPtr<RenderBundleEncoderDescriptor>,
-                        detail::AdditionalExtensions<RenderBundleEncoderDescriptor>::List>;
-                Unpacker::Unpack(result.mUnpacked, result.mBitset, next, nullptr);
-                break;
-            }
-        }
-    }
-    return result;
-}
-template <>
-ResultOrError<UnpackedPtr<RenderBundleEncoderDescriptor>> ValidateAndUnpack<RenderBundleEncoderDescriptor>(
-    typename UnpackedPtr<RenderBundleEncoderDescriptor>::PtrType chain) {
-    UnpackedPtr<RenderBundleEncoderDescriptor> result(chain);
-    for (typename UnpackedPtr<RenderBundleEncoderDescriptor>::ChainType next = chain->nextInChain;
-         next != nullptr;
-         next = next->nextInChain) {
-        bool duplicate = false;
-        switch (next->sType) {
-            default: {
-                using Unpacker =
-                    AdditionalExtensionUnpacker<
-                        RenderBundleEncoderDescriptor,
-                        UnpackedPtr<RenderBundleEncoderDescriptor>,
-                        detail::AdditionalExtensions<RenderBundleEncoderDescriptor>::List>;
-                if (!Unpacker::Unpack(result.mUnpacked,
-                                      result.mBitset,
-                                      next,
-                                      &duplicate)) {
-                    if (next->sType == wgpu::SType::DawnInjectedInvalidSType) {
-                        // TODO(crbug.com/399470698): Need to reinterpret cast to base C type
-                        // for now because in/out typing are differentiated in C++ bindings.
-                        auto* ext = reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(next);
-                        return DAWN_VALIDATION_ERROR(
-                            "Unexpected chained struct of type %s found on %s chain.",
-                            wgpu::SType(ext->invalidSType), "RenderBundleEncoderDescriptor"
-                        );
-                    } else {
-                        return DAWN_VALIDATION_ERROR(
-                            "Unexpected chained struct of type %s found on %s chain.",
-                            next->sType, "RenderBundleEncoderDescriptor"
-                        );
-                    }
-                }
-                break;
-            }
-        }
-        if (duplicate) {
-            return DAWN_VALIDATION_ERROR(
-                "Duplicate chained struct of type %s found on %s chain.",
-                next->sType, "RenderBundleEncoderDescriptor"
-            );
-        }
-    }
-    return result;
-}
-template <>
-UnpackedPtr<RenderPassDepthStencilAttachment> Unpack<RenderPassDepthStencilAttachment>(typename UnpackedPtr<RenderPassDepthStencilAttachment>::PtrType chain) {
+UnpackedPtr<RenderPassDepthStencilAttachment> Unpack<RenderPassDepthStencilAttachment>(UnpackedPtr<RenderPassDepthStencilAttachment>::PtrType chain) {
     UnpackedPtr<RenderPassDepthStencilAttachment> result(chain);
-    for (typename UnpackedPtr<RenderPassDepthStencilAttachment>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPassDepthStencilAttachment>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1084,9 +1018,9 @@ UnpackedPtr<RenderPassDepthStencilAttachment> Unpack<RenderPassDepthStencilAttac
 }
 template <>
 ResultOrError<UnpackedPtr<RenderPassDepthStencilAttachment>> ValidateAndUnpack<RenderPassDepthStencilAttachment>(
-    typename UnpackedPtr<RenderPassDepthStencilAttachment>::PtrType chain) {
+    UnpackedPtr<RenderPassDepthStencilAttachment>::PtrType chain) {
     UnpackedPtr<RenderPassDepthStencilAttachment> result(chain);
-    for (typename UnpackedPtr<RenderPassDepthStencilAttachment>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPassDepthStencilAttachment>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1129,9 +1063,9 @@ ResultOrError<UnpackedPtr<RenderPassDepthStencilAttachment>> ValidateAndUnpack<R
     return result;
 }
 template <>
-UnpackedPtr<ResourceTableDescriptor> Unpack<ResourceTableDescriptor>(typename UnpackedPtr<ResourceTableDescriptor>::PtrType chain) {
+UnpackedPtr<ResourceTableDescriptor> Unpack<ResourceTableDescriptor>(UnpackedPtr<ResourceTableDescriptor>::PtrType chain) {
     UnpackedPtr<ResourceTableDescriptor> result(chain);
-    for (typename UnpackedPtr<ResourceTableDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ResourceTableDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1150,9 +1084,9 @@ UnpackedPtr<ResourceTableDescriptor> Unpack<ResourceTableDescriptor>(typename Un
 }
 template <>
 ResultOrError<UnpackedPtr<ResourceTableDescriptor>> ValidateAndUnpack<ResourceTableDescriptor>(
-    typename UnpackedPtr<ResourceTableDescriptor>::PtrType chain) {
+    UnpackedPtr<ResourceTableDescriptor>::PtrType chain) {
     UnpackedPtr<ResourceTableDescriptor> result(chain);
-    for (typename UnpackedPtr<ResourceTableDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ResourceTableDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1195,9 +1129,9 @@ ResultOrError<UnpackedPtr<ResourceTableDescriptor>> ValidateAndUnpack<ResourceTa
     return result;
 }
 template <>
-UnpackedPtr<SamplerBindingLayout> Unpack<SamplerBindingLayout>(typename UnpackedPtr<SamplerBindingLayout>::PtrType chain) {
+UnpackedPtr<SamplerBindingLayout> Unpack<SamplerBindingLayout>(UnpackedPtr<SamplerBindingLayout>::PtrType chain) {
     UnpackedPtr<SamplerBindingLayout> result(chain);
-    for (typename UnpackedPtr<SamplerBindingLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SamplerBindingLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1216,9 +1150,9 @@ UnpackedPtr<SamplerBindingLayout> Unpack<SamplerBindingLayout>(typename Unpacked
 }
 template <>
 ResultOrError<UnpackedPtr<SamplerBindingLayout>> ValidateAndUnpack<SamplerBindingLayout>(
-    typename UnpackedPtr<SamplerBindingLayout>::PtrType chain) {
+    UnpackedPtr<SamplerBindingLayout>::PtrType chain) {
     UnpackedPtr<SamplerBindingLayout> result(chain);
-    for (typename UnpackedPtr<SamplerBindingLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SamplerBindingLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1261,9 +1195,9 @@ ResultOrError<UnpackedPtr<SamplerBindingLayout>> ValidateAndUnpack<SamplerBindin
     return result;
 }
 template <>
-UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor> Unpack<SharedBufferMemoryBeginAccessDescriptor>(typename UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>::PtrType chain) {
+UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor> Unpack<SharedBufferMemoryBeginAccessDescriptor>(UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>::PtrType chain) {
     UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1282,9 +1216,9 @@ UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor> Unpack<SharedBufferMemoryBe
 }
 template <>
 ResultOrError<UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>> ValidateAndUnpack<SharedBufferMemoryBeginAccessDescriptor>(
-    typename UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>::PtrType chain) {
+    UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>::PtrType chain) {
     UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1327,9 +1261,9 @@ ResultOrError<UnpackedPtr<SharedBufferMemoryBeginAccessDescriptor>> ValidateAndU
     return result;
 }
 template <>
-UnpackedPtr<SharedBufferMemoryEndAccessState> Unpack<SharedBufferMemoryEndAccessState>(typename UnpackedPtr<SharedBufferMemoryEndAccessState>::PtrType chain) {
+UnpackedPtr<SharedBufferMemoryEndAccessState> Unpack<SharedBufferMemoryEndAccessState>(UnpackedPtr<SharedBufferMemoryEndAccessState>::PtrType chain) {
     UnpackedPtr<SharedBufferMemoryEndAccessState> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryEndAccessState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedBufferMemoryEndAccessState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1348,9 +1282,9 @@ UnpackedPtr<SharedBufferMemoryEndAccessState> Unpack<SharedBufferMemoryEndAccess
 }
 template <>
 ResultOrError<UnpackedPtr<SharedBufferMemoryEndAccessState>> ValidateAndUnpack<SharedBufferMemoryEndAccessState>(
-    typename UnpackedPtr<SharedBufferMemoryEndAccessState>::PtrType chain) {
+    UnpackedPtr<SharedBufferMemoryEndAccessState>::PtrType chain) {
     UnpackedPtr<SharedBufferMemoryEndAccessState> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryEndAccessState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedBufferMemoryEndAccessState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1393,9 +1327,9 @@ ResultOrError<UnpackedPtr<SharedBufferMemoryEndAccessState>> ValidateAndUnpack<S
     return result;
 }
 template <>
-UnpackedPtr<SharedBufferMemoryProperties> Unpack<SharedBufferMemoryProperties>(typename UnpackedPtr<SharedBufferMemoryProperties>::PtrType chain) {
+UnpackedPtr<SharedBufferMemoryProperties> Unpack<SharedBufferMemoryProperties>(UnpackedPtr<SharedBufferMemoryProperties>::PtrType chain) {
     UnpackedPtr<SharedBufferMemoryProperties> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryProperties>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedBufferMemoryProperties>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1414,9 +1348,9 @@ UnpackedPtr<SharedBufferMemoryProperties> Unpack<SharedBufferMemoryProperties>(t
 }
 template <>
 ResultOrError<UnpackedPtr<SharedBufferMemoryProperties>> ValidateAndUnpack<SharedBufferMemoryProperties>(
-    typename UnpackedPtr<SharedBufferMemoryProperties>::PtrType chain) {
+    UnpackedPtr<SharedBufferMemoryProperties>::PtrType chain) {
     UnpackedPtr<SharedBufferMemoryProperties> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryProperties>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedBufferMemoryProperties>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1459,9 +1393,9 @@ ResultOrError<UnpackedPtr<SharedBufferMemoryProperties>> ValidateAndUnpack<Share
     return result;
 }
 template <>
-UnpackedPtr<StorageTextureBindingLayout> Unpack<StorageTextureBindingLayout>(typename UnpackedPtr<StorageTextureBindingLayout>::PtrType chain) {
+UnpackedPtr<StorageTextureBindingLayout> Unpack<StorageTextureBindingLayout>(UnpackedPtr<StorageTextureBindingLayout>::PtrType chain) {
     UnpackedPtr<StorageTextureBindingLayout> result(chain);
-    for (typename UnpackedPtr<StorageTextureBindingLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<StorageTextureBindingLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1480,9 +1414,9 @@ UnpackedPtr<StorageTextureBindingLayout> Unpack<StorageTextureBindingLayout>(typ
 }
 template <>
 ResultOrError<UnpackedPtr<StorageTextureBindingLayout>> ValidateAndUnpack<StorageTextureBindingLayout>(
-    typename UnpackedPtr<StorageTextureBindingLayout>::PtrType chain) {
+    UnpackedPtr<StorageTextureBindingLayout>::PtrType chain) {
     UnpackedPtr<StorageTextureBindingLayout> result(chain);
-    for (typename UnpackedPtr<StorageTextureBindingLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<StorageTextureBindingLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1525,9 +1459,9 @@ ResultOrError<UnpackedPtr<StorageTextureBindingLayout>> ValidateAndUnpack<Storag
     return result;
 }
 template <>
-UnpackedPtr<SurfaceCapabilities> Unpack<SurfaceCapabilities>(typename UnpackedPtr<SurfaceCapabilities>::PtrType chain) {
+UnpackedPtr<SurfaceCapabilities> Unpack<SurfaceCapabilities>(UnpackedPtr<SurfaceCapabilities>::PtrType chain) {
     UnpackedPtr<SurfaceCapabilities> result(chain);
-    for (typename UnpackedPtr<SurfaceCapabilities>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SurfaceCapabilities>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1546,9 +1480,9 @@ UnpackedPtr<SurfaceCapabilities> Unpack<SurfaceCapabilities>(typename UnpackedPt
 }
 template <>
 ResultOrError<UnpackedPtr<SurfaceCapabilities>> ValidateAndUnpack<SurfaceCapabilities>(
-    typename UnpackedPtr<SurfaceCapabilities>::PtrType chain) {
+    UnpackedPtr<SurfaceCapabilities>::PtrType chain) {
     UnpackedPtr<SurfaceCapabilities> result(chain);
-    for (typename UnpackedPtr<SurfaceCapabilities>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SurfaceCapabilities>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1591,9 +1525,9 @@ ResultOrError<UnpackedPtr<SurfaceCapabilities>> ValidateAndUnpack<SurfaceCapabil
     return result;
 }
 template <>
-UnpackedPtr<SurfaceConfiguration> Unpack<SurfaceConfiguration>(typename UnpackedPtr<SurfaceConfiguration>::PtrType chain) {
+UnpackedPtr<SurfaceConfiguration> Unpack<SurfaceConfiguration>(UnpackedPtr<SurfaceConfiguration>::PtrType chain) {
     UnpackedPtr<SurfaceConfiguration> result(chain);
-    for (typename UnpackedPtr<SurfaceConfiguration>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SurfaceConfiguration>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1612,9 +1546,9 @@ UnpackedPtr<SurfaceConfiguration> Unpack<SurfaceConfiguration>(typename Unpacked
 }
 template <>
 ResultOrError<UnpackedPtr<SurfaceConfiguration>> ValidateAndUnpack<SurfaceConfiguration>(
-    typename UnpackedPtr<SurfaceConfiguration>::PtrType chain) {
+    UnpackedPtr<SurfaceConfiguration>::PtrType chain) {
     UnpackedPtr<SurfaceConfiguration> result(chain);
-    for (typename UnpackedPtr<SurfaceConfiguration>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SurfaceConfiguration>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1657,9 +1591,9 @@ ResultOrError<UnpackedPtr<SurfaceConfiguration>> ValidateAndUnpack<SurfaceConfig
     return result;
 }
 template <>
-UnpackedPtr<SurfaceTexture> Unpack<SurfaceTexture>(typename UnpackedPtr<SurfaceTexture>::PtrType chain) {
+UnpackedPtr<SurfaceTexture> Unpack<SurfaceTexture>(UnpackedPtr<SurfaceTexture>::PtrType chain) {
     UnpackedPtr<SurfaceTexture> result(chain);
-    for (typename UnpackedPtr<SurfaceTexture>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SurfaceTexture>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1678,9 +1612,9 @@ UnpackedPtr<SurfaceTexture> Unpack<SurfaceTexture>(typename UnpackedPtr<SurfaceT
 }
 template <>
 ResultOrError<UnpackedPtr<SurfaceTexture>> ValidateAndUnpack<SurfaceTexture>(
-    typename UnpackedPtr<SurfaceTexture>::PtrType chain) {
+    UnpackedPtr<SurfaceTexture>::PtrType chain) {
     UnpackedPtr<SurfaceTexture> result(chain);
-    for (typename UnpackedPtr<SurfaceTexture>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SurfaceTexture>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1723,9 +1657,9 @@ ResultOrError<UnpackedPtr<SurfaceTexture>> ValidateAndUnpack<SurfaceTexture>(
     return result;
 }
 template <>
-UnpackedPtr<TexelBufferViewDescriptor> Unpack<TexelBufferViewDescriptor>(typename UnpackedPtr<TexelBufferViewDescriptor>::PtrType chain) {
+UnpackedPtr<TexelBufferViewDescriptor> Unpack<TexelBufferViewDescriptor>(UnpackedPtr<TexelBufferViewDescriptor>::PtrType chain) {
     UnpackedPtr<TexelBufferViewDescriptor> result(chain);
-    for (typename UnpackedPtr<TexelBufferViewDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<TexelBufferViewDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1744,9 +1678,9 @@ UnpackedPtr<TexelBufferViewDescriptor> Unpack<TexelBufferViewDescriptor>(typenam
 }
 template <>
 ResultOrError<UnpackedPtr<TexelBufferViewDescriptor>> ValidateAndUnpack<TexelBufferViewDescriptor>(
-    typename UnpackedPtr<TexelBufferViewDescriptor>::PtrType chain) {
+    UnpackedPtr<TexelBufferViewDescriptor>::PtrType chain) {
     UnpackedPtr<TexelBufferViewDescriptor> result(chain);
-    for (typename UnpackedPtr<TexelBufferViewDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<TexelBufferViewDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1789,9 +1723,9 @@ ResultOrError<UnpackedPtr<TexelBufferViewDescriptor>> ValidateAndUnpack<TexelBuf
     return result;
 }
 template <>
-UnpackedPtr<TextureBindingLayout> Unpack<TextureBindingLayout>(typename UnpackedPtr<TextureBindingLayout>::PtrType chain) {
+UnpackedPtr<TextureBindingLayout> Unpack<TextureBindingLayout>(UnpackedPtr<TextureBindingLayout>::PtrType chain) {
     UnpackedPtr<TextureBindingLayout> result(chain);
-    for (typename UnpackedPtr<TextureBindingLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<TextureBindingLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1810,9 +1744,9 @@ UnpackedPtr<TextureBindingLayout> Unpack<TextureBindingLayout>(typename Unpacked
 }
 template <>
 ResultOrError<UnpackedPtr<TextureBindingLayout>> ValidateAndUnpack<TextureBindingLayout>(
-    typename UnpackedPtr<TextureBindingLayout>::PtrType chain) {
+    UnpackedPtr<TextureBindingLayout>::PtrType chain) {
     UnpackedPtr<TextureBindingLayout> result(chain);
-    for (typename UnpackedPtr<TextureBindingLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<TextureBindingLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1855,9 +1789,9 @@ ResultOrError<UnpackedPtr<TextureBindingLayout>> ValidateAndUnpack<TextureBindin
     return result;
 }
 template <>
-UnpackedPtr<VertexAttribute> Unpack<VertexAttribute>(typename UnpackedPtr<VertexAttribute>::PtrType chain) {
+UnpackedPtr<VertexAttribute> Unpack<VertexAttribute>(UnpackedPtr<VertexAttribute>::PtrType chain) {
     UnpackedPtr<VertexAttribute> result(chain);
-    for (typename UnpackedPtr<VertexAttribute>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<VertexAttribute>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -1876,9 +1810,9 @@ UnpackedPtr<VertexAttribute> Unpack<VertexAttribute>(typename UnpackedPtr<Vertex
 }
 template <>
 ResultOrError<UnpackedPtr<VertexAttribute>> ValidateAndUnpack<VertexAttribute>(
-    typename UnpackedPtr<VertexAttribute>::PtrType chain) {
+    UnpackedPtr<VertexAttribute>::PtrType chain) {
     UnpackedPtr<VertexAttribute> result(chain);
-    for (typename UnpackedPtr<VertexAttribute>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<VertexAttribute>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -1921,15 +1855,15 @@ ResultOrError<UnpackedPtr<VertexAttribute>> ValidateAndUnpack<VertexAttribute>(
     return result;
 }
 template <>
-UnpackedPtr<BindGroupEntry> Unpack<BindGroupEntry>(typename UnpackedPtr<BindGroupEntry>::PtrType chain) {
+UnpackedPtr<BindGroupEntry> Unpack<BindGroupEntry>(UnpackedPtr<BindGroupEntry>::PtrType chain) {
     UnpackedPtr<BindGroupEntry> result(chain);
-    for (typename UnpackedPtr<BindGroupEntry>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindGroupEntry>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<ExternalTextureBindingEntry>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupEntry>, ExternalTextureBindingEntry>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupEntry>, ExternalTextureBindingEntry>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -1939,7 +1873,7 @@ UnpackedPtr<BindGroupEntry> Unpack<BindGroupEntry>(typename UnpackedPtr<BindGrou
             }
             case STypeFor<TexelBufferBindingEntry>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupEntry>, TexelBufferBindingEntry>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupEntry>, TexelBufferBindingEntry>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -1962,16 +1896,16 @@ UnpackedPtr<BindGroupEntry> Unpack<BindGroupEntry>(typename UnpackedPtr<BindGrou
 }
 template <>
 ResultOrError<UnpackedPtr<BindGroupEntry>> ValidateAndUnpack<BindGroupEntry>(
-    typename UnpackedPtr<BindGroupEntry>::PtrType chain) {
+    UnpackedPtr<BindGroupEntry>::PtrType chain) {
     UnpackedPtr<BindGroupEntry> result(chain);
-    for (typename UnpackedPtr<BindGroupEntry>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindGroupEntry>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<ExternalTextureBindingEntry>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupEntry>, ExternalTextureBindingEntry>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupEntry>, ExternalTextureBindingEntry>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -1985,7 +1919,7 @@ ResultOrError<UnpackedPtr<BindGroupEntry>> ValidateAndUnpack<BindGroupEntry>(
             }
             case STypeFor<TexelBufferBindingEntry>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupEntry>, TexelBufferBindingEntry>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupEntry>, TexelBufferBindingEntry>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2035,15 +1969,15 @@ ResultOrError<UnpackedPtr<BindGroupEntry>> ValidateAndUnpack<BindGroupEntry>(
     return result;
 }
 template <>
-UnpackedPtr<BindGroupLayoutEntry> Unpack<BindGroupLayoutEntry>(typename UnpackedPtr<BindGroupLayoutEntry>::PtrType chain) {
+UnpackedPtr<BindGroupLayoutEntry> Unpack<BindGroupLayoutEntry>(UnpackedPtr<BindGroupLayoutEntry>::PtrType chain) {
     UnpackedPtr<BindGroupLayoutEntry> result(chain);
-    for (typename UnpackedPtr<BindGroupLayoutEntry>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindGroupLayoutEntry>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<StaticSamplerBindingLayout>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, StaticSamplerBindingLayout>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, StaticSamplerBindingLayout>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2053,7 +1987,7 @@ UnpackedPtr<BindGroupLayoutEntry> Unpack<BindGroupLayoutEntry>(typename Unpacked
             }
             case STypeFor<ExternalTextureBindingLayout>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, ExternalTextureBindingLayout>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, ExternalTextureBindingLayout>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2063,7 +1997,7 @@ UnpackedPtr<BindGroupLayoutEntry> Unpack<BindGroupLayoutEntry>(typename Unpacked
             }
             case STypeFor<TexelBufferBindingLayout>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, TexelBufferBindingLayout>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, TexelBufferBindingLayout>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2086,16 +2020,16 @@ UnpackedPtr<BindGroupLayoutEntry> Unpack<BindGroupLayoutEntry>(typename Unpacked
 }
 template <>
 ResultOrError<UnpackedPtr<BindGroupLayoutEntry>> ValidateAndUnpack<BindGroupLayoutEntry>(
-    typename UnpackedPtr<BindGroupLayoutEntry>::PtrType chain) {
+    UnpackedPtr<BindGroupLayoutEntry>::PtrType chain) {
     UnpackedPtr<BindGroupLayoutEntry> result(chain);
-    for (typename UnpackedPtr<BindGroupLayoutEntry>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindGroupLayoutEntry>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<StaticSamplerBindingLayout>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, StaticSamplerBindingLayout>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, StaticSamplerBindingLayout>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2109,7 +2043,7 @@ ResultOrError<UnpackedPtr<BindGroupLayoutEntry>> ValidateAndUnpack<BindGroupLayo
             }
             case STypeFor<ExternalTextureBindingLayout>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, ExternalTextureBindingLayout>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, ExternalTextureBindingLayout>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2123,7 +2057,7 @@ ResultOrError<UnpackedPtr<BindGroupLayoutEntry>> ValidateAndUnpack<BindGroupLayo
             }
             case STypeFor<TexelBufferBindingLayout>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, TexelBufferBindingLayout>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BindGroupLayoutEntry>, TexelBufferBindingLayout>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2173,15 +2107,15 @@ ResultOrError<UnpackedPtr<BindGroupLayoutEntry>> ValidateAndUnpack<BindGroupLayo
     return result;
 }
 template <>
-UnpackedPtr<BufferDescriptor> Unpack<BufferDescriptor>(typename UnpackedPtr<BufferDescriptor>::PtrType chain) {
+UnpackedPtr<BufferDescriptor> Unpack<BufferDescriptor>(UnpackedPtr<BufferDescriptor>::PtrType chain) {
     UnpackedPtr<BufferDescriptor> result(chain);
-    for (typename UnpackedPtr<BufferDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BufferDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<BufferHostMappedPointer>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, BufferHostMappedPointer>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, BufferHostMappedPointer>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2191,7 +2125,7 @@ UnpackedPtr<BufferDescriptor> Unpack<BufferDescriptor>(typename UnpackedPtr<Buff
             }
             case STypeFor<DawnFakeBufferOOMForTesting>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, DawnFakeBufferOOMForTesting>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, DawnFakeBufferOOMForTesting>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2201,7 +2135,7 @@ UnpackedPtr<BufferDescriptor> Unpack<BufferDescriptor>(typename UnpackedPtr<Buff
             }
             case STypeFor<DawnBufferDescriptorErrorInfoFromWireClient>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, DawnBufferDescriptorErrorInfoFromWireClient>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, DawnBufferDescriptorErrorInfoFromWireClient>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2224,16 +2158,16 @@ UnpackedPtr<BufferDescriptor> Unpack<BufferDescriptor>(typename UnpackedPtr<Buff
 }
 template <>
 ResultOrError<UnpackedPtr<BufferDescriptor>> ValidateAndUnpack<BufferDescriptor>(
-    typename UnpackedPtr<BufferDescriptor>::PtrType chain) {
+    UnpackedPtr<BufferDescriptor>::PtrType chain) {
     UnpackedPtr<BufferDescriptor> result(chain);
-    for (typename UnpackedPtr<BufferDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BufferDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<BufferHostMappedPointer>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, BufferHostMappedPointer>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, BufferHostMappedPointer>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2247,7 +2181,7 @@ ResultOrError<UnpackedPtr<BufferDescriptor>> ValidateAndUnpack<BufferDescriptor>
             }
             case STypeFor<DawnFakeBufferOOMForTesting>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, DawnFakeBufferOOMForTesting>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, DawnFakeBufferOOMForTesting>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2261,7 +2195,7 @@ ResultOrError<UnpackedPtr<BufferDescriptor>> ValidateAndUnpack<BufferDescriptor>
             }
             case STypeFor<DawnBufferDescriptorErrorInfoFromWireClient>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, DawnBufferDescriptorErrorInfoFromWireClient>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<BufferDescriptor>, DawnBufferDescriptorErrorInfoFromWireClient>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2311,15 +2245,15 @@ ResultOrError<UnpackedPtr<BufferDescriptor>> ValidateAndUnpack<BufferDescriptor>
     return result;
 }
 template <>
-UnpackedPtr<CommandEncoderDescriptor> Unpack<CommandEncoderDescriptor>(typename UnpackedPtr<CommandEncoderDescriptor>::PtrType chain) {
+UnpackedPtr<CommandEncoderDescriptor> Unpack<CommandEncoderDescriptor>(UnpackedPtr<CommandEncoderDescriptor>::PtrType chain) {
     UnpackedPtr<CommandEncoderDescriptor> result(chain);
-    for (typename UnpackedPtr<CommandEncoderDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CommandEncoderDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<DawnEncoderInternalUsageDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<CommandEncoderDescriptor>, DawnEncoderInternalUsageDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<CommandEncoderDescriptor>, DawnEncoderInternalUsageDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2342,16 +2276,16 @@ UnpackedPtr<CommandEncoderDescriptor> Unpack<CommandEncoderDescriptor>(typename 
 }
 template <>
 ResultOrError<UnpackedPtr<CommandEncoderDescriptor>> ValidateAndUnpack<CommandEncoderDescriptor>(
-    typename UnpackedPtr<CommandEncoderDescriptor>::PtrType chain) {
+    UnpackedPtr<CommandEncoderDescriptor>::PtrType chain) {
     UnpackedPtr<CommandEncoderDescriptor> result(chain);
-    for (typename UnpackedPtr<CommandEncoderDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CommandEncoderDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<DawnEncoderInternalUsageDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<CommandEncoderDescriptor>, DawnEncoderInternalUsageDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<CommandEncoderDescriptor>, DawnEncoderInternalUsageDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2401,15 +2335,15 @@ ResultOrError<UnpackedPtr<CommandEncoderDescriptor>> ValidateAndUnpack<CommandEn
     return result;
 }
 template <>
-UnpackedPtr<CompilationMessage> Unpack<CompilationMessage>(typename UnpackedPtr<CompilationMessage>::PtrType chain) {
+UnpackedPtr<CompilationMessage> Unpack<CompilationMessage>(UnpackedPtr<CompilationMessage>::PtrType chain) {
     UnpackedPtr<CompilationMessage> result(chain);
-    for (typename UnpackedPtr<CompilationMessage>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CompilationMessage>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<DawnCompilationMessageUtf16>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<CompilationMessage>, DawnCompilationMessageUtf16>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<CompilationMessage>, DawnCompilationMessageUtf16>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2432,16 +2366,16 @@ UnpackedPtr<CompilationMessage> Unpack<CompilationMessage>(typename UnpackedPtr<
 }
 template <>
 ResultOrError<UnpackedPtr<CompilationMessage>> ValidateAndUnpack<CompilationMessage>(
-    typename UnpackedPtr<CompilationMessage>::PtrType chain) {
+    UnpackedPtr<CompilationMessage>::PtrType chain) {
     UnpackedPtr<CompilationMessage> result(chain);
-    for (typename UnpackedPtr<CompilationMessage>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CompilationMessage>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<DawnCompilationMessageUtf16>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<CompilationMessage>, DawnCompilationMessageUtf16>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<CompilationMessage>, DawnCompilationMessageUtf16>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2491,9 +2425,9 @@ ResultOrError<UnpackedPtr<CompilationMessage>> ValidateAndUnpack<CompilationMess
     return result;
 }
 template <>
-UnpackedPtr<ComputePassDescriptor> Unpack<ComputePassDescriptor>(typename UnpackedPtr<ComputePassDescriptor>::PtrType chain) {
+UnpackedPtr<ComputePassDescriptor> Unpack<ComputePassDescriptor>(UnpackedPtr<ComputePassDescriptor>::PtrType chain) {
     UnpackedPtr<ComputePassDescriptor> result(chain);
-    for (typename UnpackedPtr<ComputePassDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ComputePassDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -2512,9 +2446,9 @@ UnpackedPtr<ComputePassDescriptor> Unpack<ComputePassDescriptor>(typename Unpack
 }
 template <>
 ResultOrError<UnpackedPtr<ComputePassDescriptor>> ValidateAndUnpack<ComputePassDescriptor>(
-    typename UnpackedPtr<ComputePassDescriptor>::PtrType chain) {
+    UnpackedPtr<ComputePassDescriptor>::PtrType chain) {
     UnpackedPtr<ComputePassDescriptor> result(chain);
-    for (typename UnpackedPtr<ComputePassDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ComputePassDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -2557,9 +2491,9 @@ ResultOrError<UnpackedPtr<ComputePassDescriptor>> ValidateAndUnpack<ComputePassD
     return result;
 }
 template <>
-UnpackedPtr<ComputeState> Unpack<ComputeState>(typename UnpackedPtr<ComputeState>::PtrType chain) {
+UnpackedPtr<ComputeState> Unpack<ComputeState>(UnpackedPtr<ComputeState>::PtrType chain) {
     UnpackedPtr<ComputeState> result(chain);
-    for (typename UnpackedPtr<ComputeState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ComputeState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -2578,9 +2512,9 @@ UnpackedPtr<ComputeState> Unpack<ComputeState>(typename UnpackedPtr<ComputeState
 }
 template <>
 ResultOrError<UnpackedPtr<ComputeState>> ValidateAndUnpack<ComputeState>(
-    typename UnpackedPtr<ComputeState>::PtrType chain) {
+    UnpackedPtr<ComputeState>::PtrType chain) {
     UnpackedPtr<ComputeState> result(chain);
-    for (typename UnpackedPtr<ComputeState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ComputeState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -2623,9 +2557,9 @@ ResultOrError<UnpackedPtr<ComputeState>> ValidateAndUnpack<ComputeState>(
     return result;
 }
 template <>
-UnpackedPtr<DepthStencilState> Unpack<DepthStencilState>(typename UnpackedPtr<DepthStencilState>::PtrType chain) {
+UnpackedPtr<DepthStencilState> Unpack<DepthStencilState>(UnpackedPtr<DepthStencilState>::PtrType chain) {
     UnpackedPtr<DepthStencilState> result(chain);
-    for (typename UnpackedPtr<DepthStencilState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<DepthStencilState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -2644,9 +2578,9 @@ UnpackedPtr<DepthStencilState> Unpack<DepthStencilState>(typename UnpackedPtr<De
 }
 template <>
 ResultOrError<UnpackedPtr<DepthStencilState>> ValidateAndUnpack<DepthStencilState>(
-    typename UnpackedPtr<DepthStencilState>::PtrType chain) {
+    UnpackedPtr<DepthStencilState>::PtrType chain) {
     UnpackedPtr<DepthStencilState> result(chain);
-    for (typename UnpackedPtr<DepthStencilState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<DepthStencilState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -2689,9 +2623,9 @@ ResultOrError<UnpackedPtr<DepthStencilState>> ValidateAndUnpack<DepthStencilStat
     return result;
 }
 template <>
-UnpackedPtr<ExternalTextureDescriptor> Unpack<ExternalTextureDescriptor>(typename UnpackedPtr<ExternalTextureDescriptor>::PtrType chain) {
+UnpackedPtr<ExternalTextureDescriptor> Unpack<ExternalTextureDescriptor>(UnpackedPtr<ExternalTextureDescriptor>::PtrType chain) {
     UnpackedPtr<ExternalTextureDescriptor> result(chain);
-    for (typename UnpackedPtr<ExternalTextureDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ExternalTextureDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -2710,9 +2644,9 @@ UnpackedPtr<ExternalTextureDescriptor> Unpack<ExternalTextureDescriptor>(typenam
 }
 template <>
 ResultOrError<UnpackedPtr<ExternalTextureDescriptor>> ValidateAndUnpack<ExternalTextureDescriptor>(
-    typename UnpackedPtr<ExternalTextureDescriptor>::PtrType chain) {
+    UnpackedPtr<ExternalTextureDescriptor>::PtrType chain) {
     UnpackedPtr<ExternalTextureDescriptor> result(chain);
-    for (typename UnpackedPtr<ExternalTextureDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ExternalTextureDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -2755,9 +2689,9 @@ ResultOrError<UnpackedPtr<ExternalTextureDescriptor>> ValidateAndUnpack<External
     return result;
 }
 template <>
-UnpackedPtr<ImageCopyExternalTexture> Unpack<ImageCopyExternalTexture>(typename UnpackedPtr<ImageCopyExternalTexture>::PtrType chain) {
+UnpackedPtr<ImageCopyExternalTexture> Unpack<ImageCopyExternalTexture>(UnpackedPtr<ImageCopyExternalTexture>::PtrType chain) {
     UnpackedPtr<ImageCopyExternalTexture> result(chain);
-    for (typename UnpackedPtr<ImageCopyExternalTexture>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ImageCopyExternalTexture>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -2776,9 +2710,9 @@ UnpackedPtr<ImageCopyExternalTexture> Unpack<ImageCopyExternalTexture>(typename 
 }
 template <>
 ResultOrError<UnpackedPtr<ImageCopyExternalTexture>> ValidateAndUnpack<ImageCopyExternalTexture>(
-    typename UnpackedPtr<ImageCopyExternalTexture>::PtrType chain) {
+    UnpackedPtr<ImageCopyExternalTexture>::PtrType chain) {
     UnpackedPtr<ImageCopyExternalTexture> result(chain);
-    for (typename UnpackedPtr<ImageCopyExternalTexture>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ImageCopyExternalTexture>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -2821,15 +2755,15 @@ ResultOrError<UnpackedPtr<ImageCopyExternalTexture>> ValidateAndUnpack<ImageCopy
     return result;
 }
 template <>
-UnpackedPtr<InstanceDescriptor> Unpack<InstanceDescriptor>(typename UnpackedPtr<InstanceDescriptor>::PtrType chain) {
+UnpackedPtr<InstanceDescriptor> Unpack<InstanceDescriptor>(UnpackedPtr<InstanceDescriptor>::PtrType chain) {
     UnpackedPtr<InstanceDescriptor> result(chain);
-    for (typename UnpackedPtr<InstanceDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<InstanceDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<DawnTogglesDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnTogglesDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnTogglesDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2839,7 +2773,7 @@ UnpackedPtr<InstanceDescriptor> Unpack<InstanceDescriptor>(typename UnpackedPtr<
             }
             case STypeFor<DawnWGSLBlocklist>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnWGSLBlocklist>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnWGSLBlocklist>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2849,7 +2783,7 @@ UnpackedPtr<InstanceDescriptor> Unpack<InstanceDescriptor>(typename UnpackedPtr<
             }
             case STypeFor<DawnWireWGSLControl>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnWireWGSLControl>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnWireWGSLControl>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2872,16 +2806,16 @@ UnpackedPtr<InstanceDescriptor> Unpack<InstanceDescriptor>(typename UnpackedPtr<
 }
 template <>
 ResultOrError<UnpackedPtr<InstanceDescriptor>> ValidateAndUnpack<InstanceDescriptor>(
-    typename UnpackedPtr<InstanceDescriptor>::PtrType chain) {
+    UnpackedPtr<InstanceDescriptor>::PtrType chain) {
     UnpackedPtr<InstanceDescriptor> result(chain);
-    for (typename UnpackedPtr<InstanceDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<InstanceDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<DawnTogglesDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnTogglesDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnTogglesDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2895,7 +2829,7 @@ ResultOrError<UnpackedPtr<InstanceDescriptor>> ValidateAndUnpack<InstanceDescrip
             }
             case STypeFor<DawnWGSLBlocklist>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnWGSLBlocklist>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnWGSLBlocklist>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2909,7 +2843,7 @@ ResultOrError<UnpackedPtr<InstanceDescriptor>> ValidateAndUnpack<InstanceDescrip
             }
             case STypeFor<DawnWireWGSLControl>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnWireWGSLControl>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<InstanceDescriptor>, DawnWireWGSLControl>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -2959,15 +2893,15 @@ ResultOrError<UnpackedPtr<InstanceDescriptor>> ValidateAndUnpack<InstanceDescrip
     return result;
 }
 template <>
-UnpackedPtr<Limits> Unpack<Limits>(typename UnpackedPtr<Limits>::PtrType chain) {
+UnpackedPtr<Limits> Unpack<Limits>(UnpackedPtr<Limits>::PtrType chain) {
     UnpackedPtr<Limits> result(chain);
-    for (typename UnpackedPtr<Limits>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<Limits>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<CompatibilityModeLimits>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<Limits>, CompatibilityModeLimits>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<Limits>, CompatibilityModeLimits>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2977,7 +2911,7 @@ UnpackedPtr<Limits> Unpack<Limits>(typename UnpackedPtr<Limits>::PtrType chain) 
             }
             case STypeFor<DawnTexelCopyBufferRowAlignmentLimits>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<Limits>, DawnTexelCopyBufferRowAlignmentLimits>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<Limits>, DawnTexelCopyBufferRowAlignmentLimits>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -2987,7 +2921,7 @@ UnpackedPtr<Limits> Unpack<Limits>(typename UnpackedPtr<Limits>::PtrType chain) 
             }
             case STypeFor<DawnHostMappedPointerLimits>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<Limits>, DawnHostMappedPointerLimits>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<Limits>, DawnHostMappedPointerLimits>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3010,16 +2944,16 @@ UnpackedPtr<Limits> Unpack<Limits>(typename UnpackedPtr<Limits>::PtrType chain) 
 }
 template <>
 ResultOrError<UnpackedPtr<Limits>> ValidateAndUnpack<Limits>(
-    typename UnpackedPtr<Limits>::PtrType chain) {
+    UnpackedPtr<Limits>::PtrType chain) {
     UnpackedPtr<Limits> result(chain);
-    for (typename UnpackedPtr<Limits>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<Limits>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<CompatibilityModeLimits>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<Limits>, CompatibilityModeLimits>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<Limits>, CompatibilityModeLimits>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3033,7 +2967,7 @@ ResultOrError<UnpackedPtr<Limits>> ValidateAndUnpack<Limits>(
             }
             case STypeFor<DawnTexelCopyBufferRowAlignmentLimits>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<Limits>, DawnTexelCopyBufferRowAlignmentLimits>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<Limits>, DawnTexelCopyBufferRowAlignmentLimits>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3047,7 +2981,7 @@ ResultOrError<UnpackedPtr<Limits>> ValidateAndUnpack<Limits>(
             }
             case STypeFor<DawnHostMappedPointerLimits>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<Limits>, DawnHostMappedPointerLimits>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<Limits>, DawnHostMappedPointerLimits>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3097,9 +3031,99 @@ ResultOrError<UnpackedPtr<Limits>> ValidateAndUnpack<Limits>(
     return result;
 }
 template <>
-UnpackedPtr<RenderPassColorAttachment> Unpack<RenderPassColorAttachment>(typename UnpackedPtr<RenderPassColorAttachment>::PtrType chain) {
+UnpackedPtr<RenderBundleEncoderDescriptor> Unpack<RenderBundleEncoderDescriptor>(UnpackedPtr<RenderBundleEncoderDescriptor>::PtrType chain) {
+    UnpackedPtr<RenderBundleEncoderDescriptor> result(chain);
+    for (UnpackedPtr<RenderBundleEncoderDescriptor>::ChainType next = chain->nextInChain;
+         next != nullptr;
+         next = next->nextInChain) {
+        switch (next->sType) {
+            case STypeFor<RenderBundleEncoderResourceTable>: {
+                using ExtPtrType =
+                    detail::PtrTypeFor<UnpackedPtr<RenderBundleEncoderDescriptor>, RenderBundleEncoderResourceTable>::Type;
+                std::get<ExtPtrType>(result.mUnpacked) =
+                    static_cast<ExtPtrType>(next);
+                result.mBitset.set(
+                    detail::UnpackedPtrIndexOf<UnpackedPtr<RenderBundleEncoderDescriptor>, ExtPtrType>
+                );
+                break;
+            }
+            default: {
+                using Unpacker =
+                    AdditionalExtensionUnpacker<
+                        RenderBundleEncoderDescriptor,
+                        UnpackedPtr<RenderBundleEncoderDescriptor>,
+                        detail::AdditionalExtensions<RenderBundleEncoderDescriptor>::List>;
+                Unpacker::Unpack(result.mUnpacked, result.mBitset, next, nullptr);
+                break;
+            }
+        }
+    }
+    return result;
+}
+template <>
+ResultOrError<UnpackedPtr<RenderBundleEncoderDescriptor>> ValidateAndUnpack<RenderBundleEncoderDescriptor>(
+    UnpackedPtr<RenderBundleEncoderDescriptor>::PtrType chain) {
+    UnpackedPtr<RenderBundleEncoderDescriptor> result(chain);
+    for (UnpackedPtr<RenderBundleEncoderDescriptor>::ChainType next = chain->nextInChain;
+         next != nullptr;
+         next = next->nextInChain) {
+        bool duplicate = false;
+        switch (next->sType) {
+            case STypeFor<RenderBundleEncoderResourceTable>: {
+                using ExtPtrType =
+                    detail::PtrTypeFor<UnpackedPtr<RenderBundleEncoderDescriptor>, RenderBundleEncoderResourceTable>::Type;
+                auto& member = std::get<ExtPtrType>(result.mUnpacked);
+                if (member != nullptr) {
+                    duplicate = true;
+                } else {
+                    member = static_cast<ExtPtrType>(next);
+                    result.mBitset.set(
+                        detail::UnpackedPtrIndexOf<UnpackedPtr<RenderBundleEncoderDescriptor>, ExtPtrType>
+                    );
+                }
+                break;
+            }
+            default: {
+                using Unpacker =
+                    AdditionalExtensionUnpacker<
+                        RenderBundleEncoderDescriptor,
+                        UnpackedPtr<RenderBundleEncoderDescriptor>,
+                        detail::AdditionalExtensions<RenderBundleEncoderDescriptor>::List>;
+                if (!Unpacker::Unpack(result.mUnpacked,
+                                      result.mBitset,
+                                      next,
+                                      &duplicate)) {
+                    if (next->sType == wgpu::SType::DawnInjectedInvalidSType) {
+                        // TODO(crbug.com/399470698): Need to reinterpret cast to base C type
+                        // for now because in/out typing are differentiated in C++ bindings.
+                        auto* ext = reinterpret_cast<const WGPUDawnInjectedInvalidSType*>(next);
+                        return DAWN_VALIDATION_ERROR(
+                            "Unexpected chained struct of type %s found on %s chain.",
+                            wgpu::SType(ext->invalidSType), "RenderBundleEncoderDescriptor"
+                        );
+                    } else {
+                        return DAWN_VALIDATION_ERROR(
+                            "Unexpected chained struct of type %s found on %s chain.",
+                            next->sType, "RenderBundleEncoderDescriptor"
+                        );
+                    }
+                }
+                break;
+            }
+        }
+        if (duplicate) {
+            return DAWN_VALIDATION_ERROR(
+                "Duplicate chained struct of type %s found on %s chain.",
+                next->sType, "RenderBundleEncoderDescriptor"
+            );
+        }
+    }
+    return result;
+}
+template <>
+UnpackedPtr<RenderPassColorAttachment> Unpack<RenderPassColorAttachment>(UnpackedPtr<RenderPassColorAttachment>::PtrType chain) {
     UnpackedPtr<RenderPassColorAttachment> result(chain);
-    for (typename UnpackedPtr<RenderPassColorAttachment>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPassColorAttachment>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -3118,9 +3142,9 @@ UnpackedPtr<RenderPassColorAttachment> Unpack<RenderPassColorAttachment>(typenam
 }
 template <>
 ResultOrError<UnpackedPtr<RenderPassColorAttachment>> ValidateAndUnpack<RenderPassColorAttachment>(
-    typename UnpackedPtr<RenderPassColorAttachment>::PtrType chain) {
+    UnpackedPtr<RenderPassColorAttachment>::PtrType chain) {
     UnpackedPtr<RenderPassColorAttachment> result(chain);
-    for (typename UnpackedPtr<RenderPassColorAttachment>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPassColorAttachment>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -3163,9 +3187,9 @@ ResultOrError<UnpackedPtr<RenderPassColorAttachment>> ValidateAndUnpack<RenderPa
     return result;
 }
 template <>
-UnpackedPtr<RenderPassStorageAttachment> Unpack<RenderPassStorageAttachment>(typename UnpackedPtr<RenderPassStorageAttachment>::PtrType chain) {
+UnpackedPtr<RenderPassStorageAttachment> Unpack<RenderPassStorageAttachment>(UnpackedPtr<RenderPassStorageAttachment>::PtrType chain) {
     UnpackedPtr<RenderPassStorageAttachment> result(chain);
-    for (typename UnpackedPtr<RenderPassStorageAttachment>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPassStorageAttachment>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -3184,9 +3208,9 @@ UnpackedPtr<RenderPassStorageAttachment> Unpack<RenderPassStorageAttachment>(typ
 }
 template <>
 ResultOrError<UnpackedPtr<RenderPassStorageAttachment>> ValidateAndUnpack<RenderPassStorageAttachment>(
-    typename UnpackedPtr<RenderPassStorageAttachment>::PtrType chain) {
+    UnpackedPtr<RenderPassStorageAttachment>::PtrType chain) {
     UnpackedPtr<RenderPassStorageAttachment> result(chain);
-    for (typename UnpackedPtr<RenderPassStorageAttachment>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPassStorageAttachment>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -3229,15 +3253,15 @@ ResultOrError<UnpackedPtr<RenderPassStorageAttachment>> ValidateAndUnpack<Render
     return result;
 }
 template <>
-UnpackedPtr<RequestAdapterOptions> Unpack<RequestAdapterOptions>(typename UnpackedPtr<RequestAdapterOptions>::PtrType chain) {
+UnpackedPtr<RequestAdapterOptions> Unpack<RequestAdapterOptions>(UnpackedPtr<RequestAdapterOptions>::PtrType chain) {
     UnpackedPtr<RequestAdapterOptions> result(chain);
-    for (typename UnpackedPtr<RequestAdapterOptions>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RequestAdapterOptions>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<RequestAdapterWebXROptions>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, RequestAdapterWebXROptions>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, RequestAdapterWebXROptions>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3247,7 +3271,7 @@ UnpackedPtr<RequestAdapterOptions> Unpack<RequestAdapterOptions>(typename Unpack
             }
             case STypeFor<RequestAdapterWebGPUBackendOptions>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, RequestAdapterWebGPUBackendOptions>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, RequestAdapterWebGPUBackendOptions>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3257,7 +3281,7 @@ UnpackedPtr<RequestAdapterOptions> Unpack<RequestAdapterOptions>(typename Unpack
             }
             case STypeFor<DawnTogglesDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, DawnTogglesDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, DawnTogglesDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3280,16 +3304,16 @@ UnpackedPtr<RequestAdapterOptions> Unpack<RequestAdapterOptions>(typename Unpack
 }
 template <>
 ResultOrError<UnpackedPtr<RequestAdapterOptions>> ValidateAndUnpack<RequestAdapterOptions>(
-    typename UnpackedPtr<RequestAdapterOptions>::PtrType chain) {
+    UnpackedPtr<RequestAdapterOptions>::PtrType chain) {
     UnpackedPtr<RequestAdapterOptions> result(chain);
-    for (typename UnpackedPtr<RequestAdapterOptions>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RequestAdapterOptions>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<RequestAdapterWebXROptions>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, RequestAdapterWebXROptions>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, RequestAdapterWebXROptions>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3303,7 +3327,7 @@ ResultOrError<UnpackedPtr<RequestAdapterOptions>> ValidateAndUnpack<RequestAdapt
             }
             case STypeFor<RequestAdapterWebGPUBackendOptions>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, RequestAdapterWebGPUBackendOptions>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, RequestAdapterWebGPUBackendOptions>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3317,7 +3341,7 @@ ResultOrError<UnpackedPtr<RequestAdapterOptions>> ValidateAndUnpack<RequestAdapt
             }
             case STypeFor<DawnTogglesDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, DawnTogglesDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RequestAdapterOptions>, DawnTogglesDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3367,15 +3391,15 @@ ResultOrError<UnpackedPtr<RequestAdapterOptions>> ValidateAndUnpack<RequestAdapt
     return result;
 }
 template <>
-UnpackedPtr<SamplerDescriptor> Unpack<SamplerDescriptor>(typename UnpackedPtr<SamplerDescriptor>::PtrType chain) {
+UnpackedPtr<SamplerDescriptor> Unpack<SamplerDescriptor>(UnpackedPtr<SamplerDescriptor>::PtrType chain) {
     UnpackedPtr<SamplerDescriptor> result(chain);
-    for (typename UnpackedPtr<SamplerDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SamplerDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<YCbCrVkDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SamplerDescriptor>, YCbCrVkDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SamplerDescriptor>, YCbCrVkDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3398,16 +3422,16 @@ UnpackedPtr<SamplerDescriptor> Unpack<SamplerDescriptor>(typename UnpackedPtr<Sa
 }
 template <>
 ResultOrError<UnpackedPtr<SamplerDescriptor>> ValidateAndUnpack<SamplerDescriptor>(
-    typename UnpackedPtr<SamplerDescriptor>::PtrType chain) {
+    UnpackedPtr<SamplerDescriptor>::PtrType chain) {
     UnpackedPtr<SamplerDescriptor> result(chain);
-    for (typename UnpackedPtr<SamplerDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SamplerDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<YCbCrVkDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SamplerDescriptor>, YCbCrVkDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SamplerDescriptor>, YCbCrVkDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3457,15 +3481,15 @@ ResultOrError<UnpackedPtr<SamplerDescriptor>> ValidateAndUnpack<SamplerDescripto
     return result;
 }
 template <>
-UnpackedPtr<ShaderModuleDescriptor> Unpack<ShaderModuleDescriptor>(typename UnpackedPtr<ShaderModuleDescriptor>::PtrType chain) {
+UnpackedPtr<ShaderModuleDescriptor> Unpack<ShaderModuleDescriptor>(UnpackedPtr<ShaderModuleDescriptor>::PtrType chain) {
     UnpackedPtr<ShaderModuleDescriptor> result(chain);
-    for (typename UnpackedPtr<ShaderModuleDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ShaderModuleDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<ShaderSourceSPIRV>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderSourceSPIRV>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderSourceSPIRV>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3475,7 +3499,7 @@ UnpackedPtr<ShaderModuleDescriptor> Unpack<ShaderModuleDescriptor>(typename Unpa
             }
             case STypeFor<ShaderSourceWGSL>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderSourceWGSL>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderSourceWGSL>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3485,7 +3509,7 @@ UnpackedPtr<ShaderModuleDescriptor> Unpack<ShaderModuleDescriptor>(typename Unpa
             }
             case STypeFor<DawnShaderModuleSPIRVOptionsDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, DawnShaderModuleSPIRVOptionsDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, DawnShaderModuleSPIRVOptionsDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3495,7 +3519,7 @@ UnpackedPtr<ShaderModuleDescriptor> Unpack<ShaderModuleDescriptor>(typename Unpa
             }
             case STypeFor<ShaderModuleCompilationOptions>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderModuleCompilationOptions>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderModuleCompilationOptions>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3518,16 +3542,16 @@ UnpackedPtr<ShaderModuleDescriptor> Unpack<ShaderModuleDescriptor>(typename Unpa
 }
 template <>
 ResultOrError<UnpackedPtr<ShaderModuleDescriptor>> ValidateAndUnpack<ShaderModuleDescriptor>(
-    typename UnpackedPtr<ShaderModuleDescriptor>::PtrType chain) {
+    UnpackedPtr<ShaderModuleDescriptor>::PtrType chain) {
     UnpackedPtr<ShaderModuleDescriptor> result(chain);
-    for (typename UnpackedPtr<ShaderModuleDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ShaderModuleDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<ShaderSourceSPIRV>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderSourceSPIRV>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderSourceSPIRV>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3541,7 +3565,7 @@ ResultOrError<UnpackedPtr<ShaderModuleDescriptor>> ValidateAndUnpack<ShaderModul
             }
             case STypeFor<ShaderSourceWGSL>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderSourceWGSL>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderSourceWGSL>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3555,7 +3579,7 @@ ResultOrError<UnpackedPtr<ShaderModuleDescriptor>> ValidateAndUnpack<ShaderModul
             }
             case STypeFor<DawnShaderModuleSPIRVOptionsDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, DawnShaderModuleSPIRVOptionsDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, DawnShaderModuleSPIRVOptionsDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3569,7 +3593,7 @@ ResultOrError<UnpackedPtr<ShaderModuleDescriptor>> ValidateAndUnpack<ShaderModul
             }
             case STypeFor<ShaderModuleCompilationOptions>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderModuleCompilationOptions>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ShaderModuleDescriptor>, ShaderModuleCompilationOptions>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3619,15 +3643,15 @@ ResultOrError<UnpackedPtr<ShaderModuleDescriptor>> ValidateAndUnpack<ShaderModul
     return result;
 }
 template <>
-UnpackedPtr<SharedBufferMemoryDescriptor> Unpack<SharedBufferMemoryDescriptor>(typename UnpackedPtr<SharedBufferMemoryDescriptor>::PtrType chain) {
+UnpackedPtr<SharedBufferMemoryDescriptor> Unpack<SharedBufferMemoryDescriptor>(UnpackedPtr<SharedBufferMemoryDescriptor>::PtrType chain) {
     UnpackedPtr<SharedBufferMemoryDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedBufferMemoryDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
-            case STypeFor<SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor>: {
+            case STypeFor<SharedBufferMemoryFromWindowsHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedBufferMemoryDescriptor>, SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedBufferMemoryDescriptor>, SharedBufferMemoryFromWindowsHandleDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3650,16 +3674,16 @@ UnpackedPtr<SharedBufferMemoryDescriptor> Unpack<SharedBufferMemoryDescriptor>(t
 }
 template <>
 ResultOrError<UnpackedPtr<SharedBufferMemoryDescriptor>> ValidateAndUnpack<SharedBufferMemoryDescriptor>(
-    typename UnpackedPtr<SharedBufferMemoryDescriptor>::PtrType chain) {
+    UnpackedPtr<SharedBufferMemoryDescriptor>::PtrType chain) {
     UnpackedPtr<SharedBufferMemoryDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedBufferMemoryDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedBufferMemoryDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
-            case STypeFor<SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor>: {
+            case STypeFor<SharedBufferMemoryFromWindowsHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedBufferMemoryDescriptor>, SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedBufferMemoryDescriptor>, SharedBufferMemoryFromWindowsHandleDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3709,15 +3733,15 @@ ResultOrError<UnpackedPtr<SharedBufferMemoryDescriptor>> ValidateAndUnpack<Share
     return result;
 }
 template <>
-UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(typename UnpackedPtr<SharedFenceDescriptor>::PtrType chain) {
+UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(UnpackedPtr<SharedFenceDescriptor>::PtrType chain) {
     UnpackedPtr<SharedFenceDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedFenceDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedFenceDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<SharedFenceVkSemaphoreOpaqueFDDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceVkSemaphoreOpaqueFDDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceVkSemaphoreOpaqueFDDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3727,7 +3751,7 @@ UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(typename Unpack
             }
             case STypeFor<SharedFenceSyncFDDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceSyncFDDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceSyncFDDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3737,7 +3761,7 @@ UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(typename Unpack
             }
             case STypeFor<SharedFenceVkSemaphoreZirconHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceVkSemaphoreZirconHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceVkSemaphoreZirconHandleDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3747,7 +3771,7 @@ UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(typename Unpack
             }
             case STypeFor<SharedFenceDXGISharedHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceDXGISharedHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceDXGISharedHandleDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3757,7 +3781,7 @@ UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(typename Unpack
             }
             case STypeFor<SharedFenceMTLSharedEventDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceMTLSharedEventDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceMTLSharedEventDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3767,7 +3791,7 @@ UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(typename Unpack
             }
             case STypeFor<SharedFenceEGLSyncDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceEGLSyncDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceEGLSyncDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3790,16 +3814,16 @@ UnpackedPtr<SharedFenceDescriptor> Unpack<SharedFenceDescriptor>(typename Unpack
 }
 template <>
 ResultOrError<UnpackedPtr<SharedFenceDescriptor>> ValidateAndUnpack<SharedFenceDescriptor>(
-    typename UnpackedPtr<SharedFenceDescriptor>::PtrType chain) {
+    UnpackedPtr<SharedFenceDescriptor>::PtrType chain) {
     UnpackedPtr<SharedFenceDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedFenceDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedFenceDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<SharedFenceVkSemaphoreOpaqueFDDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceVkSemaphoreOpaqueFDDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceVkSemaphoreOpaqueFDDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3813,7 +3837,7 @@ ResultOrError<UnpackedPtr<SharedFenceDescriptor>> ValidateAndUnpack<SharedFenceD
             }
             case STypeFor<SharedFenceSyncFDDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceSyncFDDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceSyncFDDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3827,7 +3851,7 @@ ResultOrError<UnpackedPtr<SharedFenceDescriptor>> ValidateAndUnpack<SharedFenceD
             }
             case STypeFor<SharedFenceVkSemaphoreZirconHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceVkSemaphoreZirconHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceVkSemaphoreZirconHandleDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3841,7 +3865,7 @@ ResultOrError<UnpackedPtr<SharedFenceDescriptor>> ValidateAndUnpack<SharedFenceD
             }
             case STypeFor<SharedFenceDXGISharedHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceDXGISharedHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceDXGISharedHandleDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3855,7 +3879,7 @@ ResultOrError<UnpackedPtr<SharedFenceDescriptor>> ValidateAndUnpack<SharedFenceD
             }
             case STypeFor<SharedFenceMTLSharedEventDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceMTLSharedEventDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceMTLSharedEventDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3869,7 +3893,7 @@ ResultOrError<UnpackedPtr<SharedFenceDescriptor>> ValidateAndUnpack<SharedFenceD
             }
             case STypeFor<SharedFenceEGLSyncDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceEGLSyncDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceDescriptor>, SharedFenceEGLSyncDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -3919,15 +3943,15 @@ ResultOrError<UnpackedPtr<SharedFenceDescriptor>> ValidateAndUnpack<SharedFenceD
     return result;
 }
 template <>
-UnpackedPtr<SharedFenceExportInfo> Unpack<SharedFenceExportInfo>(typename UnpackedPtr<SharedFenceExportInfo>::PtrType chain) {
+UnpackedPtr<SharedFenceExportInfo> Unpack<SharedFenceExportInfo>(UnpackedPtr<SharedFenceExportInfo>::PtrType chain) {
     UnpackedPtr<SharedFenceExportInfo> result(chain);
-    for (typename UnpackedPtr<SharedFenceExportInfo>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedFenceExportInfo>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<SharedFenceVkSemaphoreOpaqueFDExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceVkSemaphoreOpaqueFDExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceVkSemaphoreOpaqueFDExportInfo>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3937,7 +3961,7 @@ UnpackedPtr<SharedFenceExportInfo> Unpack<SharedFenceExportInfo>(typename Unpack
             }
             case STypeFor<SharedFenceSyncFDExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceSyncFDExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceSyncFDExportInfo>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3947,7 +3971,7 @@ UnpackedPtr<SharedFenceExportInfo> Unpack<SharedFenceExportInfo>(typename Unpack
             }
             case STypeFor<SharedFenceVkSemaphoreZirconHandleExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceVkSemaphoreZirconHandleExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceVkSemaphoreZirconHandleExportInfo>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3957,7 +3981,7 @@ UnpackedPtr<SharedFenceExportInfo> Unpack<SharedFenceExportInfo>(typename Unpack
             }
             case STypeFor<SharedFenceDXGISharedHandleExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceDXGISharedHandleExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceDXGISharedHandleExportInfo>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3967,7 +3991,7 @@ UnpackedPtr<SharedFenceExportInfo> Unpack<SharedFenceExportInfo>(typename Unpack
             }
             case STypeFor<SharedFenceMTLSharedEventExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceMTLSharedEventExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceMTLSharedEventExportInfo>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -3977,7 +4001,7 @@ UnpackedPtr<SharedFenceExportInfo> Unpack<SharedFenceExportInfo>(typename Unpack
             }
             case STypeFor<SharedFenceEGLSyncExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceEGLSyncExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceEGLSyncExportInfo>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4000,16 +4024,16 @@ UnpackedPtr<SharedFenceExportInfo> Unpack<SharedFenceExportInfo>(typename Unpack
 }
 template <>
 ResultOrError<UnpackedPtr<SharedFenceExportInfo>> ValidateAndUnpack<SharedFenceExportInfo>(
-    typename UnpackedPtr<SharedFenceExportInfo>::PtrType chain) {
+    UnpackedPtr<SharedFenceExportInfo>::PtrType chain) {
     UnpackedPtr<SharedFenceExportInfo> result(chain);
-    for (typename UnpackedPtr<SharedFenceExportInfo>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedFenceExportInfo>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<SharedFenceVkSemaphoreOpaqueFDExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceVkSemaphoreOpaqueFDExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceVkSemaphoreOpaqueFDExportInfo>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4023,7 +4047,7 @@ ResultOrError<UnpackedPtr<SharedFenceExportInfo>> ValidateAndUnpack<SharedFenceE
             }
             case STypeFor<SharedFenceSyncFDExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceSyncFDExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceSyncFDExportInfo>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4037,7 +4061,7 @@ ResultOrError<UnpackedPtr<SharedFenceExportInfo>> ValidateAndUnpack<SharedFenceE
             }
             case STypeFor<SharedFenceVkSemaphoreZirconHandleExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceVkSemaphoreZirconHandleExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceVkSemaphoreZirconHandleExportInfo>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4051,7 +4075,7 @@ ResultOrError<UnpackedPtr<SharedFenceExportInfo>> ValidateAndUnpack<SharedFenceE
             }
             case STypeFor<SharedFenceDXGISharedHandleExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceDXGISharedHandleExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceDXGISharedHandleExportInfo>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4065,7 +4089,7 @@ ResultOrError<UnpackedPtr<SharedFenceExportInfo>> ValidateAndUnpack<SharedFenceE
             }
             case STypeFor<SharedFenceMTLSharedEventExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceMTLSharedEventExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceMTLSharedEventExportInfo>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4079,7 +4103,7 @@ ResultOrError<UnpackedPtr<SharedFenceExportInfo>> ValidateAndUnpack<SharedFenceE
             }
             case STypeFor<SharedFenceEGLSyncExportInfo>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceEGLSyncExportInfo>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedFenceExportInfo>, SharedFenceEGLSyncExportInfo>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4129,15 +4153,15 @@ ResultOrError<UnpackedPtr<SharedFenceExportInfo>> ValidateAndUnpack<SharedFenceE
     return result;
 }
 template <>
-UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor> Unpack<SharedTextureMemoryBeginAccessDescriptor>(typename UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>::PtrType chain) {
+UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor> Unpack<SharedTextureMemoryBeginAccessDescriptor>(UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>::PtrType chain) {
     UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<SharedTextureMemoryVkImageLayoutBeginState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryVkImageLayoutBeginState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryVkImageLayoutBeginState>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4147,7 +4171,7 @@ UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor> Unpack<SharedTextureMemory
             }
             case STypeFor<SharedTextureMemoryD3DSwapchainBeginState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryD3DSwapchainBeginState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryD3DSwapchainBeginState>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4157,7 +4181,7 @@ UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor> Unpack<SharedTextureMemory
             }
             case STypeFor<SharedTextureMemoryD3D11BeginState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryD3D11BeginState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryD3D11BeginState>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4180,16 +4204,16 @@ UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor> Unpack<SharedTextureMemory
 }
 template <>
 ResultOrError<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>> ValidateAndUnpack<SharedTextureMemoryBeginAccessDescriptor>(
-    typename UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>::PtrType chain) {
+    UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>::PtrType chain) {
     UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<SharedTextureMemoryVkImageLayoutBeginState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryVkImageLayoutBeginState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryVkImageLayoutBeginState>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4203,7 +4227,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>> ValidateAnd
             }
             case STypeFor<SharedTextureMemoryD3DSwapchainBeginState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryD3DSwapchainBeginState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryD3DSwapchainBeginState>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4217,7 +4241,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>> ValidateAnd
             }
             case STypeFor<SharedTextureMemoryD3D11BeginState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryD3D11BeginState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>, SharedTextureMemoryD3D11BeginState>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4267,15 +4291,15 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryBeginAccessDescriptor>> ValidateAnd
     return result;
 }
 template <>
-UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<SurfaceDescriptor>::PtrType chain) {
+UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(UnpackedPtr<SurfaceDescriptor>::PtrType chain) {
     UnpackedPtr<SurfaceDescriptor> result(chain);
-    for (typename UnpackedPtr<SurfaceDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SurfaceDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<SurfaceSourceAndroidNativeWindow>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceAndroidNativeWindow>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceAndroidNativeWindow>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4285,7 +4309,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceSourceMetalLayer>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceMetalLayer>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceMetalLayer>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4295,7 +4319,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceSourceWindowsHWND>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceWindowsHWND>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceWindowsHWND>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4305,7 +4329,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceSourceXCBWindow>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceXCBWindow>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceXCBWindow>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4315,7 +4339,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceSourceXlibWindow>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceXlibWindow>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceXlibWindow>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4325,7 +4349,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceSourceWaylandSurface>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceWaylandSurface>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceWaylandSurface>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4335,7 +4359,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceDescriptorFromWindowsCoreWindow>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsCoreWindow>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsCoreWindow>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4345,7 +4369,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceDescriptorFromWindowsUWPSwapChainPanel>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsUWPSwapChainPanel>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsUWPSwapChainPanel>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4355,7 +4379,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceDescriptorFromWindowsWinUISwapChainPanel>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsWinUISwapChainPanel>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsWinUISwapChainPanel>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4365,7 +4389,7 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
             }
             case STypeFor<SurfaceColorManagement>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceColorManagement>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceColorManagement>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4388,16 +4412,16 @@ UnpackedPtr<SurfaceDescriptor> Unpack<SurfaceDescriptor>(typename UnpackedPtr<Su
 }
 template <>
 ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescriptor>(
-    typename UnpackedPtr<SurfaceDescriptor>::PtrType chain) {
+    UnpackedPtr<SurfaceDescriptor>::PtrType chain) {
     UnpackedPtr<SurfaceDescriptor> result(chain);
-    for (typename UnpackedPtr<SurfaceDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SurfaceDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<SurfaceSourceAndroidNativeWindow>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceAndroidNativeWindow>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceAndroidNativeWindow>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4411,7 +4435,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceSourceMetalLayer>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceMetalLayer>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceMetalLayer>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4425,7 +4449,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceSourceWindowsHWND>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceWindowsHWND>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceWindowsHWND>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4439,7 +4463,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceSourceXCBWindow>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceXCBWindow>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceXCBWindow>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4453,7 +4477,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceSourceXlibWindow>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceXlibWindow>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceXlibWindow>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4467,7 +4491,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceSourceWaylandSurface>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceWaylandSurface>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceSourceWaylandSurface>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4481,7 +4505,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceDescriptorFromWindowsCoreWindow>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsCoreWindow>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsCoreWindow>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4495,7 +4519,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceDescriptorFromWindowsUWPSwapChainPanel>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsUWPSwapChainPanel>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsUWPSwapChainPanel>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4509,7 +4533,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceDescriptorFromWindowsWinUISwapChainPanel>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsWinUISwapChainPanel>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceDescriptorFromWindowsWinUISwapChainPanel>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4523,7 +4547,7 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
             }
             case STypeFor<SurfaceColorManagement>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceColorManagement>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SurfaceDescriptor>, SurfaceColorManagement>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4573,15 +4597,15 @@ ResultOrError<UnpackedPtr<SurfaceDescriptor>> ValidateAndUnpack<SurfaceDescripto
     return result;
 }
 template <>
-UnpackedPtr<TextureDescriptor> Unpack<TextureDescriptor>(typename UnpackedPtr<TextureDescriptor>::PtrType chain) {
+UnpackedPtr<TextureDescriptor> Unpack<TextureDescriptor>(UnpackedPtr<TextureDescriptor>::PtrType chain) {
     UnpackedPtr<TextureDescriptor> result(chain);
-    for (typename UnpackedPtr<TextureDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<TextureDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<TextureBindingViewDimension>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, TextureBindingViewDimension>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, TextureBindingViewDimension>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4591,7 +4615,7 @@ UnpackedPtr<TextureDescriptor> Unpack<TextureDescriptor>(typename UnpackedPtr<Te
             }
             case STypeFor<DawnTextureInternalUsageDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, DawnTextureInternalUsageDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, DawnTextureInternalUsageDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4614,16 +4638,16 @@ UnpackedPtr<TextureDescriptor> Unpack<TextureDescriptor>(typename UnpackedPtr<Te
 }
 template <>
 ResultOrError<UnpackedPtr<TextureDescriptor>> ValidateAndUnpack<TextureDescriptor>(
-    typename UnpackedPtr<TextureDescriptor>::PtrType chain) {
+    UnpackedPtr<TextureDescriptor>::PtrType chain) {
     UnpackedPtr<TextureDescriptor> result(chain);
-    for (typename UnpackedPtr<TextureDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<TextureDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<TextureBindingViewDimension>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, TextureBindingViewDimension>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, TextureBindingViewDimension>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4637,7 +4661,7 @@ ResultOrError<UnpackedPtr<TextureDescriptor>> ValidateAndUnpack<TextureDescripto
             }
             case STypeFor<DawnTextureInternalUsageDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, DawnTextureInternalUsageDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<TextureDescriptor>, DawnTextureInternalUsageDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4687,9 +4711,9 @@ ResultOrError<UnpackedPtr<TextureDescriptor>> ValidateAndUnpack<TextureDescripto
     return result;
 }
 template <>
-UnpackedPtr<VertexBufferLayout> Unpack<VertexBufferLayout>(typename UnpackedPtr<VertexBufferLayout>::PtrType chain) {
+UnpackedPtr<VertexBufferLayout> Unpack<VertexBufferLayout>(UnpackedPtr<VertexBufferLayout>::PtrType chain) {
     UnpackedPtr<VertexBufferLayout> result(chain);
-    for (typename UnpackedPtr<VertexBufferLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<VertexBufferLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -4708,9 +4732,9 @@ UnpackedPtr<VertexBufferLayout> Unpack<VertexBufferLayout>(typename UnpackedPtr<
 }
 template <>
 ResultOrError<UnpackedPtr<VertexBufferLayout>> ValidateAndUnpack<VertexBufferLayout>(
-    typename UnpackedPtr<VertexBufferLayout>::PtrType chain) {
+    UnpackedPtr<VertexBufferLayout>::PtrType chain) {
     UnpackedPtr<VertexBufferLayout> result(chain);
-    for (typename UnpackedPtr<VertexBufferLayout>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<VertexBufferLayout>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -4753,15 +4777,15 @@ ResultOrError<UnpackedPtr<VertexBufferLayout>> ValidateAndUnpack<VertexBufferLay
     return result;
 }
 template <>
-UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::PtrType chain) {
+UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(UnpackedPtr<AdapterInfo>::PtrType chain) {
     UnpackedPtr<AdapterInfo> result(chain);
-    for (typename UnpackedPtr<AdapterInfo>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<AdapterInfo>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<DawnAdapterPropertiesPowerPreference>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, DawnAdapterPropertiesPowerPreference>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, DawnAdapterPropertiesPowerPreference>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4771,7 +4795,7 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
             }
             case STypeFor<AdapterPropertiesMemoryHeaps>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesMemoryHeaps>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesMemoryHeaps>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4781,7 +4805,7 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
             }
             case STypeFor<AdapterPropertiesD3D>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesD3D>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesD3D>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4791,7 +4815,7 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
             }
             case STypeFor<AdapterPropertiesVk>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesVk>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesVk>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4801,7 +4825,7 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
             }
             case STypeFor<AdapterPropertiesDrm>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesDrm>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesDrm>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4811,7 +4835,7 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
             }
             case STypeFor<AdapterPropertiesWGPU>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesWGPU>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesWGPU>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4821,17 +4845,7 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
             }
             case STypeFor<AdapterPropertiesSubgroupMatrixConfigs>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesSubgroupMatrixConfigs>::Type;
-                std::get<ExtPtrType>(result.mUnpacked) =
-                    static_cast<ExtPtrType>(next);
-                result.mBitset.set(
-                    detail::UnpackedPtrIndexOf<UnpackedPtr<AdapterInfo>, ExtPtrType>
-                );
-                break;
-            }
-            case STypeFor<AdapterPropertiesExplicitComputeSubgroupSizeConfigs>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesExplicitComputeSubgroupSizeConfigs>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesSubgroupMatrixConfigs>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -4854,16 +4868,16 @@ UnpackedPtr<AdapterInfo> Unpack<AdapterInfo>(typename UnpackedPtr<AdapterInfo>::
 }
 template <>
 ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
-    typename UnpackedPtr<AdapterInfo>::PtrType chain) {
+    UnpackedPtr<AdapterInfo>::PtrType chain) {
     UnpackedPtr<AdapterInfo> result(chain);
-    for (typename UnpackedPtr<AdapterInfo>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<AdapterInfo>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<DawnAdapterPropertiesPowerPreference>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, DawnAdapterPropertiesPowerPreference>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, DawnAdapterPropertiesPowerPreference>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4877,7 +4891,7 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
             }
             case STypeFor<AdapterPropertiesMemoryHeaps>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesMemoryHeaps>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesMemoryHeaps>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4891,7 +4905,7 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
             }
             case STypeFor<AdapterPropertiesD3D>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesD3D>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesD3D>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4905,7 +4919,7 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
             }
             case STypeFor<AdapterPropertiesVk>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesVk>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesVk>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4919,7 +4933,7 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
             }
             case STypeFor<AdapterPropertiesDrm>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesDrm>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesDrm>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4933,7 +4947,7 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
             }
             case STypeFor<AdapterPropertiesWGPU>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesWGPU>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesWGPU>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -4947,21 +4961,7 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
             }
             case STypeFor<AdapterPropertiesSubgroupMatrixConfigs>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesSubgroupMatrixConfigs>::Type;
-                auto& member = std::get<ExtPtrType>(result.mUnpacked);
-                if (member != nullptr) {
-                    duplicate = true;
-                } else {
-                    member = static_cast<ExtPtrType>(next);
-                    result.mBitset.set(
-                        detail::UnpackedPtrIndexOf<UnpackedPtr<AdapterInfo>, ExtPtrType>
-                    );
-                }
-                break;
-            }
-            case STypeFor<AdapterPropertiesExplicitComputeSubgroupSizeConfigs>: {
-                using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesExplicitComputeSubgroupSizeConfigs>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<AdapterInfo>, AdapterPropertiesSubgroupMatrixConfigs>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5011,9 +5011,9 @@ ResultOrError<UnpackedPtr<AdapterInfo>> ValidateAndUnpack<AdapterInfo>(
     return result;
 }
 template <>
-UnpackedPtr<BindGroupDescriptor> Unpack<BindGroupDescriptor>(typename UnpackedPtr<BindGroupDescriptor>::PtrType chain) {
+UnpackedPtr<BindGroupDescriptor> Unpack<BindGroupDescriptor>(UnpackedPtr<BindGroupDescriptor>::PtrType chain) {
     UnpackedPtr<BindGroupDescriptor> result(chain);
-    for (typename UnpackedPtr<BindGroupDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindGroupDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -5032,9 +5032,9 @@ UnpackedPtr<BindGroupDescriptor> Unpack<BindGroupDescriptor>(typename UnpackedPt
 }
 template <>
 ResultOrError<UnpackedPtr<BindGroupDescriptor>> ValidateAndUnpack<BindGroupDescriptor>(
-    typename UnpackedPtr<BindGroupDescriptor>::PtrType chain) {
+    UnpackedPtr<BindGroupDescriptor>::PtrType chain) {
     UnpackedPtr<BindGroupDescriptor> result(chain);
-    for (typename UnpackedPtr<BindGroupDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindGroupDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -5077,9 +5077,9 @@ ResultOrError<UnpackedPtr<BindGroupDescriptor>> ValidateAndUnpack<BindGroupDescr
     return result;
 }
 template <>
-UnpackedPtr<BindGroupLayoutDescriptor> Unpack<BindGroupLayoutDescriptor>(typename UnpackedPtr<BindGroupLayoutDescriptor>::PtrType chain) {
+UnpackedPtr<BindGroupLayoutDescriptor> Unpack<BindGroupLayoutDescriptor>(UnpackedPtr<BindGroupLayoutDescriptor>::PtrType chain) {
     UnpackedPtr<BindGroupLayoutDescriptor> result(chain);
-    for (typename UnpackedPtr<BindGroupLayoutDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindGroupLayoutDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -5098,9 +5098,9 @@ UnpackedPtr<BindGroupLayoutDescriptor> Unpack<BindGroupLayoutDescriptor>(typenam
 }
 template <>
 ResultOrError<UnpackedPtr<BindGroupLayoutDescriptor>> ValidateAndUnpack<BindGroupLayoutDescriptor>(
-    typename UnpackedPtr<BindGroupLayoutDescriptor>::PtrType chain) {
+    UnpackedPtr<BindGroupLayoutDescriptor>::PtrType chain) {
     UnpackedPtr<BindGroupLayoutDescriptor> result(chain);
-    for (typename UnpackedPtr<BindGroupLayoutDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<BindGroupLayoutDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -5143,15 +5143,15 @@ ResultOrError<UnpackedPtr<BindGroupLayoutDescriptor>> ValidateAndUnpack<BindGrou
     return result;
 }
 template <>
-UnpackedPtr<ColorTargetState> Unpack<ColorTargetState>(typename UnpackedPtr<ColorTargetState>::PtrType chain) {
+UnpackedPtr<ColorTargetState> Unpack<ColorTargetState>(UnpackedPtr<ColorTargetState>::PtrType chain) {
     UnpackedPtr<ColorTargetState> result(chain);
-    for (typename UnpackedPtr<ColorTargetState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ColorTargetState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<ColorTargetStateExpandResolveTextureDawn>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ColorTargetState>, ColorTargetStateExpandResolveTextureDawn>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ColorTargetState>, ColorTargetStateExpandResolveTextureDawn>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5174,16 +5174,16 @@ UnpackedPtr<ColorTargetState> Unpack<ColorTargetState>(typename UnpackedPtr<Colo
 }
 template <>
 ResultOrError<UnpackedPtr<ColorTargetState>> ValidateAndUnpack<ColorTargetState>(
-    typename UnpackedPtr<ColorTargetState>::PtrType chain) {
+    UnpackedPtr<ColorTargetState>::PtrType chain) {
     UnpackedPtr<ColorTargetState> result(chain);
-    for (typename UnpackedPtr<ColorTargetState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ColorTargetState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<ColorTargetStateExpandResolveTextureDawn>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<ColorTargetState>, ColorTargetStateExpandResolveTextureDawn>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<ColorTargetState>, ColorTargetStateExpandResolveTextureDawn>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5233,9 +5233,9 @@ ResultOrError<UnpackedPtr<ColorTargetState>> ValidateAndUnpack<ColorTargetState>
     return result;
 }
 template <>
-UnpackedPtr<CompilationInfo> Unpack<CompilationInfo>(typename UnpackedPtr<CompilationInfo>::PtrType chain) {
+UnpackedPtr<CompilationInfo> Unpack<CompilationInfo>(UnpackedPtr<CompilationInfo>::PtrType chain) {
     UnpackedPtr<CompilationInfo> result(chain);
-    for (typename UnpackedPtr<CompilationInfo>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CompilationInfo>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -5254,9 +5254,9 @@ UnpackedPtr<CompilationInfo> Unpack<CompilationInfo>(typename UnpackedPtr<Compil
 }
 template <>
 ResultOrError<UnpackedPtr<CompilationInfo>> ValidateAndUnpack<CompilationInfo>(
-    typename UnpackedPtr<CompilationInfo>::PtrType chain) {
+    UnpackedPtr<CompilationInfo>::PtrType chain) {
     UnpackedPtr<CompilationInfo> result(chain);
-    for (typename UnpackedPtr<CompilationInfo>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<CompilationInfo>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -5299,9 +5299,9 @@ ResultOrError<UnpackedPtr<CompilationInfo>> ValidateAndUnpack<CompilationInfo>(
     return result;
 }
 template <>
-UnpackedPtr<ComputePipelineDescriptor> Unpack<ComputePipelineDescriptor>(typename UnpackedPtr<ComputePipelineDescriptor>::PtrType chain) {
+UnpackedPtr<ComputePipelineDescriptor> Unpack<ComputePipelineDescriptor>(UnpackedPtr<ComputePipelineDescriptor>::PtrType chain) {
     UnpackedPtr<ComputePipelineDescriptor> result(chain);
-    for (typename UnpackedPtr<ComputePipelineDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ComputePipelineDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -5320,9 +5320,9 @@ UnpackedPtr<ComputePipelineDescriptor> Unpack<ComputePipelineDescriptor>(typenam
 }
 template <>
 ResultOrError<UnpackedPtr<ComputePipelineDescriptor>> ValidateAndUnpack<ComputePipelineDescriptor>(
-    typename UnpackedPtr<ComputePipelineDescriptor>::PtrType chain) {
+    UnpackedPtr<ComputePipelineDescriptor>::PtrType chain) {
     UnpackedPtr<ComputePipelineDescriptor> result(chain);
-    for (typename UnpackedPtr<ComputePipelineDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<ComputePipelineDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -5365,15 +5365,15 @@ ResultOrError<UnpackedPtr<ComputePipelineDescriptor>> ValidateAndUnpack<ComputeP
     return result;
 }
 template <>
-UnpackedPtr<DawnFormatCapabilities> Unpack<DawnFormatCapabilities>(typename UnpackedPtr<DawnFormatCapabilities>::PtrType chain) {
+UnpackedPtr<DawnFormatCapabilities> Unpack<DawnFormatCapabilities>(UnpackedPtr<DawnFormatCapabilities>::PtrType chain) {
     UnpackedPtr<DawnFormatCapabilities> result(chain);
-    for (typename UnpackedPtr<DawnFormatCapabilities>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<DawnFormatCapabilities>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<DawnDrmFormatCapabilities>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DawnFormatCapabilities>, DawnDrmFormatCapabilities>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DawnFormatCapabilities>, DawnDrmFormatCapabilities>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5396,16 +5396,16 @@ UnpackedPtr<DawnFormatCapabilities> Unpack<DawnFormatCapabilities>(typename Unpa
 }
 template <>
 ResultOrError<UnpackedPtr<DawnFormatCapabilities>> ValidateAndUnpack<DawnFormatCapabilities>(
-    typename UnpackedPtr<DawnFormatCapabilities>::PtrType chain) {
+    UnpackedPtr<DawnFormatCapabilities>::PtrType chain) {
     UnpackedPtr<DawnFormatCapabilities> result(chain);
-    for (typename UnpackedPtr<DawnFormatCapabilities>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<DawnFormatCapabilities>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<DawnDrmFormatCapabilities>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DawnFormatCapabilities>, DawnDrmFormatCapabilities>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DawnFormatCapabilities>, DawnDrmFormatCapabilities>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5455,15 +5455,15 @@ ResultOrError<UnpackedPtr<DawnFormatCapabilities>> ValidateAndUnpack<DawnFormatC
     return result;
 }
 template <>
-UnpackedPtr<DeviceDescriptor> Unpack<DeviceDescriptor>(typename UnpackedPtr<DeviceDescriptor>::PtrType chain) {
+UnpackedPtr<DeviceDescriptor> Unpack<DeviceDescriptor>(UnpackedPtr<DeviceDescriptor>::PtrType chain) {
     UnpackedPtr<DeviceDescriptor> result(chain);
-    for (typename UnpackedPtr<DeviceDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<DeviceDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<DawnConsumeAdapterDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnConsumeAdapterDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnConsumeAdapterDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5473,7 +5473,7 @@ UnpackedPtr<DeviceDescriptor> Unpack<DeviceDescriptor>(typename UnpackedPtr<Devi
             }
             case STypeFor<DawnTogglesDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnTogglesDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnTogglesDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5483,7 +5483,7 @@ UnpackedPtr<DeviceDescriptor> Unpack<DeviceDescriptor>(typename UnpackedPtr<Devi
             }
             case STypeFor<DawnCacheDeviceDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnCacheDeviceDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnCacheDeviceDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5493,7 +5493,7 @@ UnpackedPtr<DeviceDescriptor> Unpack<DeviceDescriptor>(typename UnpackedPtr<Devi
             }
             case STypeFor<DawnDeviceAllocatorControl>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnDeviceAllocatorControl>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnDeviceAllocatorControl>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5503,7 +5503,7 @@ UnpackedPtr<DeviceDescriptor> Unpack<DeviceDescriptor>(typename UnpackedPtr<Devi
             }
             case STypeFor<DawnFakeDeviceInitializeErrorForTesting>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnFakeDeviceInitializeErrorForTesting>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnFakeDeviceInitializeErrorForTesting>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5526,16 +5526,16 @@ UnpackedPtr<DeviceDescriptor> Unpack<DeviceDescriptor>(typename UnpackedPtr<Devi
 }
 template <>
 ResultOrError<UnpackedPtr<DeviceDescriptor>> ValidateAndUnpack<DeviceDescriptor>(
-    typename UnpackedPtr<DeviceDescriptor>::PtrType chain) {
+    UnpackedPtr<DeviceDescriptor>::PtrType chain) {
     UnpackedPtr<DeviceDescriptor> result(chain);
-    for (typename UnpackedPtr<DeviceDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<DeviceDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<DawnConsumeAdapterDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnConsumeAdapterDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnConsumeAdapterDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5549,7 +5549,7 @@ ResultOrError<UnpackedPtr<DeviceDescriptor>> ValidateAndUnpack<DeviceDescriptor>
             }
             case STypeFor<DawnTogglesDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnTogglesDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnTogglesDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5563,7 +5563,7 @@ ResultOrError<UnpackedPtr<DeviceDescriptor>> ValidateAndUnpack<DeviceDescriptor>
             }
             case STypeFor<DawnCacheDeviceDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnCacheDeviceDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnCacheDeviceDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5577,7 +5577,7 @@ ResultOrError<UnpackedPtr<DeviceDescriptor>> ValidateAndUnpack<DeviceDescriptor>
             }
             case STypeFor<DawnDeviceAllocatorControl>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnDeviceAllocatorControl>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnDeviceAllocatorControl>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5591,7 +5591,7 @@ ResultOrError<UnpackedPtr<DeviceDescriptor>> ValidateAndUnpack<DeviceDescriptor>
             }
             case STypeFor<DawnFakeDeviceInitializeErrorForTesting>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnFakeDeviceInitializeErrorForTesting>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<DeviceDescriptor>, DawnFakeDeviceInitializeErrorForTesting>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5641,15 +5641,15 @@ ResultOrError<UnpackedPtr<DeviceDescriptor>> ValidateAndUnpack<DeviceDescriptor>
     return result;
 }
 template <>
-UnpackedPtr<PipelineLayoutDescriptor> Unpack<PipelineLayoutDescriptor>(typename UnpackedPtr<PipelineLayoutDescriptor>::PtrType chain) {
+UnpackedPtr<PipelineLayoutDescriptor> Unpack<PipelineLayoutDescriptor>(UnpackedPtr<PipelineLayoutDescriptor>::PtrType chain) {
     UnpackedPtr<PipelineLayoutDescriptor> result(chain);
-    for (typename UnpackedPtr<PipelineLayoutDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<PipelineLayoutDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<PipelineLayoutResourceTable>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutResourceTable>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutResourceTable>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5659,7 +5659,7 @@ UnpackedPtr<PipelineLayoutDescriptor> Unpack<PipelineLayoutDescriptor>(typename 
             }
             case STypeFor<PipelineLayoutPixelLocalStorage>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutPixelLocalStorage>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutPixelLocalStorage>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5682,16 +5682,16 @@ UnpackedPtr<PipelineLayoutDescriptor> Unpack<PipelineLayoutDescriptor>(typename 
 }
 template <>
 ResultOrError<UnpackedPtr<PipelineLayoutDescriptor>> ValidateAndUnpack<PipelineLayoutDescriptor>(
-    typename UnpackedPtr<PipelineLayoutDescriptor>::PtrType chain) {
+    UnpackedPtr<PipelineLayoutDescriptor>::PtrType chain) {
     UnpackedPtr<PipelineLayoutDescriptor> result(chain);
-    for (typename UnpackedPtr<PipelineLayoutDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<PipelineLayoutDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<PipelineLayoutResourceTable>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutResourceTable>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutResourceTable>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5705,7 +5705,7 @@ ResultOrError<UnpackedPtr<PipelineLayoutDescriptor>> ValidateAndUnpack<PipelineL
             }
             case STypeFor<PipelineLayoutPixelLocalStorage>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutPixelLocalStorage>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<PipelineLayoutDescriptor>, PipelineLayoutPixelLocalStorage>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5755,15 +5755,15 @@ ResultOrError<UnpackedPtr<PipelineLayoutDescriptor>> ValidateAndUnpack<PipelineL
     return result;
 }
 template <>
-UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>(typename UnpackedPtr<SharedTextureMemoryDescriptor>::PtrType chain) {
+UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>(UnpackedPtr<SharedTextureMemoryDescriptor>::PtrType chain) {
     UnpackedPtr<SharedTextureMemoryDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedTextureMemoryDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedTextureMemoryDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<SharedTextureMemoryVkDedicatedAllocationDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryVkDedicatedAllocationDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryVkDedicatedAllocationDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5773,7 +5773,7 @@ UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>
             }
             case STypeFor<SharedTextureMemoryAHardwareBufferDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryAHardwareBufferDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryAHardwareBufferDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5783,7 +5783,7 @@ UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>
             }
             case STypeFor<SharedTextureMemoryDmaBufDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryDmaBufDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryDmaBufDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5793,7 +5793,7 @@ UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>
             }
             case STypeFor<SharedTextureMemoryOpaqueFDDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryOpaqueFDDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryOpaqueFDDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5803,7 +5803,7 @@ UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>
             }
             case STypeFor<SharedTextureMemoryZirconHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryZirconHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryZirconHandleDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5813,7 +5813,7 @@ UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>
             }
             case STypeFor<SharedTextureMemoryDXGISharedHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryDXGISharedHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryDXGISharedHandleDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5823,7 +5823,7 @@ UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>
             }
             case STypeFor<SharedTextureMemoryIOSurfaceDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryIOSurfaceDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryIOSurfaceDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5833,7 +5833,7 @@ UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>
             }
             case STypeFor<SharedTextureMemoryEGLImageDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryEGLImageDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryEGLImageDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -5856,16 +5856,16 @@ UnpackedPtr<SharedTextureMemoryDescriptor> Unpack<SharedTextureMemoryDescriptor>
 }
 template <>
 ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<SharedTextureMemoryDescriptor>(
-    typename UnpackedPtr<SharedTextureMemoryDescriptor>::PtrType chain) {
+    UnpackedPtr<SharedTextureMemoryDescriptor>::PtrType chain) {
     UnpackedPtr<SharedTextureMemoryDescriptor> result(chain);
-    for (typename UnpackedPtr<SharedTextureMemoryDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedTextureMemoryDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<SharedTextureMemoryVkDedicatedAllocationDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryVkDedicatedAllocationDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryVkDedicatedAllocationDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5879,7 +5879,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<Shar
             }
             case STypeFor<SharedTextureMemoryAHardwareBufferDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryAHardwareBufferDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryAHardwareBufferDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5893,7 +5893,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<Shar
             }
             case STypeFor<SharedTextureMemoryDmaBufDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryDmaBufDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryDmaBufDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5907,7 +5907,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<Shar
             }
             case STypeFor<SharedTextureMemoryOpaqueFDDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryOpaqueFDDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryOpaqueFDDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5921,7 +5921,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<Shar
             }
             case STypeFor<SharedTextureMemoryZirconHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryZirconHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryZirconHandleDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5935,7 +5935,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<Shar
             }
             case STypeFor<SharedTextureMemoryDXGISharedHandleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryDXGISharedHandleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryDXGISharedHandleDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5949,7 +5949,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<Shar
             }
             case STypeFor<SharedTextureMemoryIOSurfaceDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryIOSurfaceDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryIOSurfaceDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -5963,7 +5963,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<Shar
             }
             case STypeFor<SharedTextureMemoryEGLImageDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryEGLImageDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryDescriptor>, SharedTextureMemoryEGLImageDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6013,15 +6013,15 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryDescriptor>> ValidateAndUnpack<Shar
     return result;
 }
 template <>
-UnpackedPtr<SharedTextureMemoryEndAccessState> Unpack<SharedTextureMemoryEndAccessState>(typename UnpackedPtr<SharedTextureMemoryEndAccessState>::PtrType chain) {
+UnpackedPtr<SharedTextureMemoryEndAccessState> Unpack<SharedTextureMemoryEndAccessState>(UnpackedPtr<SharedTextureMemoryEndAccessState>::PtrType chain) {
     UnpackedPtr<SharedTextureMemoryEndAccessState> result(chain);
-    for (typename UnpackedPtr<SharedTextureMemoryEndAccessState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedTextureMemoryEndAccessState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<SharedTextureMemoryMetalEndAccessState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryEndAccessState>, SharedTextureMemoryMetalEndAccessState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryEndAccessState>, SharedTextureMemoryMetalEndAccessState>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6031,7 +6031,7 @@ UnpackedPtr<SharedTextureMemoryEndAccessState> Unpack<SharedTextureMemoryEndAcce
             }
             case STypeFor<SharedTextureMemoryVkImageLayoutEndState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryEndAccessState>, SharedTextureMemoryVkImageLayoutEndState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryEndAccessState>, SharedTextureMemoryVkImageLayoutEndState>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6054,16 +6054,16 @@ UnpackedPtr<SharedTextureMemoryEndAccessState> Unpack<SharedTextureMemoryEndAcce
 }
 template <>
 ResultOrError<UnpackedPtr<SharedTextureMemoryEndAccessState>> ValidateAndUnpack<SharedTextureMemoryEndAccessState>(
-    typename UnpackedPtr<SharedTextureMemoryEndAccessState>::PtrType chain) {
+    UnpackedPtr<SharedTextureMemoryEndAccessState>::PtrType chain) {
     UnpackedPtr<SharedTextureMemoryEndAccessState> result(chain);
-    for (typename UnpackedPtr<SharedTextureMemoryEndAccessState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedTextureMemoryEndAccessState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<SharedTextureMemoryMetalEndAccessState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryEndAccessState>, SharedTextureMemoryMetalEndAccessState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryEndAccessState>, SharedTextureMemoryMetalEndAccessState>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6077,7 +6077,7 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryEndAccessState>> ValidateAndUnpack<
             }
             case STypeFor<SharedTextureMemoryVkImageLayoutEndState>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryEndAccessState>, SharedTextureMemoryVkImageLayoutEndState>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryEndAccessState>, SharedTextureMemoryVkImageLayoutEndState>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6127,15 +6127,15 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryEndAccessState>> ValidateAndUnpack<
     return result;
 }
 template <>
-UnpackedPtr<SharedTextureMemoryProperties> Unpack<SharedTextureMemoryProperties>(typename UnpackedPtr<SharedTextureMemoryProperties>::PtrType chain) {
+UnpackedPtr<SharedTextureMemoryProperties> Unpack<SharedTextureMemoryProperties>(UnpackedPtr<SharedTextureMemoryProperties>::PtrType chain) {
     UnpackedPtr<SharedTextureMemoryProperties> result(chain);
-    for (typename UnpackedPtr<SharedTextureMemoryProperties>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedTextureMemoryProperties>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<SharedTextureMemoryAHardwareBufferProperties>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryProperties>, SharedTextureMemoryAHardwareBufferProperties>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryProperties>, SharedTextureMemoryAHardwareBufferProperties>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6158,16 +6158,16 @@ UnpackedPtr<SharedTextureMemoryProperties> Unpack<SharedTextureMemoryProperties>
 }
 template <>
 ResultOrError<UnpackedPtr<SharedTextureMemoryProperties>> ValidateAndUnpack<SharedTextureMemoryProperties>(
-    typename UnpackedPtr<SharedTextureMemoryProperties>::PtrType chain) {
+    UnpackedPtr<SharedTextureMemoryProperties>::PtrType chain) {
     UnpackedPtr<SharedTextureMemoryProperties> result(chain);
-    for (typename UnpackedPtr<SharedTextureMemoryProperties>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<SharedTextureMemoryProperties>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<SharedTextureMemoryAHardwareBufferProperties>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryProperties>, SharedTextureMemoryAHardwareBufferProperties>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<SharedTextureMemoryProperties>, SharedTextureMemoryAHardwareBufferProperties>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6217,15 +6217,15 @@ ResultOrError<UnpackedPtr<SharedTextureMemoryProperties>> ValidateAndUnpack<Shar
     return result;
 }
 template <>
-UnpackedPtr<TextureViewDescriptor> Unpack<TextureViewDescriptor>(typename UnpackedPtr<TextureViewDescriptor>::PtrType chain) {
+UnpackedPtr<TextureViewDescriptor> Unpack<TextureViewDescriptor>(UnpackedPtr<TextureViewDescriptor>::PtrType chain) {
     UnpackedPtr<TextureViewDescriptor> result(chain);
-    for (typename UnpackedPtr<TextureViewDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<TextureViewDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<TextureComponentSwizzleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureViewDescriptor>, TextureComponentSwizzleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<TextureViewDescriptor>, TextureComponentSwizzleDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6235,7 +6235,7 @@ UnpackedPtr<TextureViewDescriptor> Unpack<TextureViewDescriptor>(typename Unpack
             }
             case STypeFor<YCbCrVkDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureViewDescriptor>, YCbCrVkDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<TextureViewDescriptor>, YCbCrVkDescriptor>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6258,16 +6258,16 @@ UnpackedPtr<TextureViewDescriptor> Unpack<TextureViewDescriptor>(typename Unpack
 }
 template <>
 ResultOrError<UnpackedPtr<TextureViewDescriptor>> ValidateAndUnpack<TextureViewDescriptor>(
-    typename UnpackedPtr<TextureViewDescriptor>::PtrType chain) {
+    UnpackedPtr<TextureViewDescriptor>::PtrType chain) {
     UnpackedPtr<TextureViewDescriptor> result(chain);
-    for (typename UnpackedPtr<TextureViewDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<TextureViewDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<TextureComponentSwizzleDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureViewDescriptor>, TextureComponentSwizzleDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<TextureViewDescriptor>, TextureComponentSwizzleDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6281,7 +6281,7 @@ ResultOrError<UnpackedPtr<TextureViewDescriptor>> ValidateAndUnpack<TextureViewD
             }
             case STypeFor<YCbCrVkDescriptor>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<TextureViewDescriptor>, YCbCrVkDescriptor>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<TextureViewDescriptor>, YCbCrVkDescriptor>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6331,9 +6331,9 @@ ResultOrError<UnpackedPtr<TextureViewDescriptor>> ValidateAndUnpack<TextureViewD
     return result;
 }
 template <>
-UnpackedPtr<VertexState> Unpack<VertexState>(typename UnpackedPtr<VertexState>::PtrType chain) {
+UnpackedPtr<VertexState> Unpack<VertexState>(UnpackedPtr<VertexState>::PtrType chain) {
     UnpackedPtr<VertexState> result(chain);
-    for (typename UnpackedPtr<VertexState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<VertexState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -6352,9 +6352,9 @@ UnpackedPtr<VertexState> Unpack<VertexState>(typename UnpackedPtr<VertexState>::
 }
 template <>
 ResultOrError<UnpackedPtr<VertexState>> ValidateAndUnpack<VertexState>(
-    typename UnpackedPtr<VertexState>::PtrType chain) {
+    UnpackedPtr<VertexState>::PtrType chain) {
     UnpackedPtr<VertexState> result(chain);
-    for (typename UnpackedPtr<VertexState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<VertexState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -6397,9 +6397,9 @@ ResultOrError<UnpackedPtr<VertexState>> ValidateAndUnpack<VertexState>(
     return result;
 }
 template <>
-UnpackedPtr<FragmentState> Unpack<FragmentState>(typename UnpackedPtr<FragmentState>::PtrType chain) {
+UnpackedPtr<FragmentState> Unpack<FragmentState>(UnpackedPtr<FragmentState>::PtrType chain) {
     UnpackedPtr<FragmentState> result(chain);
-    for (typename UnpackedPtr<FragmentState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<FragmentState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -6418,9 +6418,9 @@ UnpackedPtr<FragmentState> Unpack<FragmentState>(typename UnpackedPtr<FragmentSt
 }
 template <>
 ResultOrError<UnpackedPtr<FragmentState>> ValidateAndUnpack<FragmentState>(
-    typename UnpackedPtr<FragmentState>::PtrType chain) {
+    UnpackedPtr<FragmentState>::PtrType chain) {
     UnpackedPtr<FragmentState> result(chain);
-    for (typename UnpackedPtr<FragmentState>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<FragmentState>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
@@ -6463,15 +6463,15 @@ ResultOrError<UnpackedPtr<FragmentState>> ValidateAndUnpack<FragmentState>(
     return result;
 }
 template <>
-UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(typename UnpackedPtr<RenderPassDescriptor>::PtrType chain) {
+UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(UnpackedPtr<RenderPassDescriptor>::PtrType chain) {
     UnpackedPtr<RenderPassDescriptor> result(chain);
-    for (typename UnpackedPtr<RenderPassDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPassDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
             case STypeFor<DawnRenderPassSampleCount>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, DawnRenderPassSampleCount>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, DawnRenderPassSampleCount>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6481,7 +6481,7 @@ UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(typename Unpacked
             }
             case STypeFor<RenderPassMaxDrawCount>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassMaxDrawCount>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassMaxDrawCount>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6491,7 +6491,7 @@ UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(typename Unpacked
             }
             case STypeFor<RenderPassRenderAreaRect>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassRenderAreaRect>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassRenderAreaRect>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6501,7 +6501,7 @@ UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(typename Unpacked
             }
             case STypeFor<RenderPassDescriptorResolveRect>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassDescriptorResolveRect>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassDescriptorResolveRect>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6511,7 +6511,7 @@ UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(typename Unpacked
             }
             case STypeFor<RenderPassPixelLocalStorage>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassPixelLocalStorage>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassPixelLocalStorage>::Type;
                 std::get<ExtPtrType>(result.mUnpacked) =
                     static_cast<ExtPtrType>(next);
                 result.mBitset.set(
@@ -6534,16 +6534,16 @@ UnpackedPtr<RenderPassDescriptor> Unpack<RenderPassDescriptor>(typename Unpacked
 }
 template <>
 ResultOrError<UnpackedPtr<RenderPassDescriptor>> ValidateAndUnpack<RenderPassDescriptor>(
-    typename UnpackedPtr<RenderPassDescriptor>::PtrType chain) {
+    UnpackedPtr<RenderPassDescriptor>::PtrType chain) {
     UnpackedPtr<RenderPassDescriptor> result(chain);
-    for (typename UnpackedPtr<RenderPassDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPassDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;
         switch (next->sType) {
             case STypeFor<DawnRenderPassSampleCount>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, DawnRenderPassSampleCount>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, DawnRenderPassSampleCount>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6557,7 +6557,7 @@ ResultOrError<UnpackedPtr<RenderPassDescriptor>> ValidateAndUnpack<RenderPassDes
             }
             case STypeFor<RenderPassMaxDrawCount>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassMaxDrawCount>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassMaxDrawCount>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6571,7 +6571,7 @@ ResultOrError<UnpackedPtr<RenderPassDescriptor>> ValidateAndUnpack<RenderPassDes
             }
             case STypeFor<RenderPassRenderAreaRect>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassRenderAreaRect>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassRenderAreaRect>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6585,7 +6585,7 @@ ResultOrError<UnpackedPtr<RenderPassDescriptor>> ValidateAndUnpack<RenderPassDes
             }
             case STypeFor<RenderPassDescriptorResolveRect>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassDescriptorResolveRect>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassDescriptorResolveRect>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6599,7 +6599,7 @@ ResultOrError<UnpackedPtr<RenderPassDescriptor>> ValidateAndUnpack<RenderPassDes
             }
             case STypeFor<RenderPassPixelLocalStorage>: {
                 using ExtPtrType =
-                    typename detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassPixelLocalStorage>::Type;
+                    detail::PtrTypeFor<UnpackedPtr<RenderPassDescriptor>, RenderPassPixelLocalStorage>::Type;
                 auto& member = std::get<ExtPtrType>(result.mUnpacked);
                 if (member != nullptr) {
                     duplicate = true;
@@ -6649,9 +6649,9 @@ ResultOrError<UnpackedPtr<RenderPassDescriptor>> ValidateAndUnpack<RenderPassDes
     return result;
 }
 template <>
-UnpackedPtr<RenderPipelineDescriptor> Unpack<RenderPipelineDescriptor>(typename UnpackedPtr<RenderPipelineDescriptor>::PtrType chain) {
+UnpackedPtr<RenderPipelineDescriptor> Unpack<RenderPipelineDescriptor>(UnpackedPtr<RenderPipelineDescriptor>::PtrType chain) {
     UnpackedPtr<RenderPipelineDescriptor> result(chain);
-    for (typename UnpackedPtr<RenderPipelineDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPipelineDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         switch (next->sType) {
@@ -6670,9 +6670,9 @@ UnpackedPtr<RenderPipelineDescriptor> Unpack<RenderPipelineDescriptor>(typename 
 }
 template <>
 ResultOrError<UnpackedPtr<RenderPipelineDescriptor>> ValidateAndUnpack<RenderPipelineDescriptor>(
-    typename UnpackedPtr<RenderPipelineDescriptor>::PtrType chain) {
+    UnpackedPtr<RenderPipelineDescriptor>::PtrType chain) {
     UnpackedPtr<RenderPipelineDescriptor> result(chain);
-    for (typename UnpackedPtr<RenderPipelineDescriptor>::ChainType next = chain->nextInChain;
+    for (UnpackedPtr<RenderPipelineDescriptor>::ChainType next = chain->nextInChain;
          next != nullptr;
          next = next->nextInChain) {
         bool duplicate = false;

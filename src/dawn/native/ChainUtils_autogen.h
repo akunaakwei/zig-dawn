@@ -31,9 +31,9 @@
 #include <tuple>
 
 #include "absl/strings/str_format.h"
-#include "dawn/native/dawn_platform.h"
-#include "dawn/native/Error.h"
 #include "dawn/native/wgpu_structs_autogen.h"
+#include "src/dawn/native/dawn_platform.h"
+#include "src/dawn/native/Error.h"
 
 namespace dawn::native {
 namespace detail {
@@ -290,17 +290,17 @@ template <>
 constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesWGPU> =
     wgpu::SType::AdapterPropertiesWGPU;
 template <>
-constexpr inline wgpu::SType STypeForImpl<SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor> =
-    wgpu::SType::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor;
+constexpr inline wgpu::SType STypeForImpl<SharedBufferMemoryFromWindowsHandleDescriptor> =
+    wgpu::SType::SharedBufferMemoryFromWindowsHandleDescriptor;
 template <>
 constexpr inline wgpu::SType STypeForImpl<PipelineLayoutResourceTable> =
     wgpu::SType::PipelineLayoutResourceTable;
 template <>
-constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesExplicitComputeSubgroupSizeConfigs> =
-    wgpu::SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs;
-template <>
 constexpr inline wgpu::SType STypeForImpl<AdapterPropertiesDrm> =
     wgpu::SType::AdapterPropertiesDrm;
+template <>
+constexpr inline wgpu::SType STypeForImpl<RenderBundleEncoderResourceTable> =
+    wgpu::SType::RenderBundleEncoderResourceTable;
 
 template <typename Arg, typename... Rest>
 std::string STypesToString() {
@@ -339,7 +339,7 @@ constexpr inline wgpu::SType STypeFor<const T*> = detail::STypeForImpl<T>;
 }  // namespace dawn::native
 
 // Include specializations before declaring types for ordering purposes.
-#include "dawn/native/ChainUtilsImpl.inl"
+#include "src/dawn/native/ChainUtilsImpl.inl"
 
 namespace dawn::native {
 namespace detail {
@@ -478,15 +478,6 @@ struct UnpackedPtrTypeFor<RenderBundleDescriptor> {
 };
 template <>
 constexpr inline Extensibility ExtensibilityFor<RenderBundleDescriptor> = Extensibility::In;
-
-template <>
-struct UnpackedPtrTypeFor<RenderBundleEncoderDescriptor> {
-    using Type = UnpackedPtrChain<
-        AdditionalExtensions<RenderBundleEncoderDescriptor>::List
-    >::Type;
-};
-template <>
-constexpr inline Extensibility ExtensibilityFor<RenderBundleEncoderDescriptor> = Extensibility::In;
 
 template <>
 struct UnpackedPtrTypeFor<RenderPassDepthStencilAttachment> {
@@ -730,6 +721,16 @@ template <>
 constexpr inline Extensibility ExtensibilityFor<Limits> = Extensibility::Out;
 
 template <>
+struct UnpackedPtrTypeFor<RenderBundleEncoderDescriptor> {
+    using Type = UnpackedPtrChain<
+        AdditionalExtensions<RenderBundleEncoderDescriptor>::List
+        , const RenderBundleEncoderResourceTable*
+    >::Type;
+};
+template <>
+constexpr inline Extensibility ExtensibilityFor<RenderBundleEncoderDescriptor> = Extensibility::In;
+
+template <>
 struct UnpackedPtrTypeFor<RenderPassColorAttachment> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<RenderPassColorAttachment>::List
@@ -786,7 +787,7 @@ template <>
 struct UnpackedPtrTypeFor<SharedBufferMemoryDescriptor> {
     using Type = UnpackedPtrChain<
         AdditionalExtensions<SharedBufferMemoryDescriptor>::List
-        , const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor*
+        , const SharedBufferMemoryFromWindowsHandleDescriptor*
     >::Type;
 };
 template <>
@@ -884,7 +885,6 @@ struct UnpackedPtrTypeFor<AdapterInfo> {
         , AdapterPropertiesDrm*
         , AdapterPropertiesWGPU*
         , AdapterPropertiesSubgroupMatrixConfigs*
-        , AdapterPropertiesExplicitComputeSubgroupSizeConfigs*
     >::Type;
 };
 template <>

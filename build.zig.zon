@@ -5,8 +5,8 @@
     .minimum_zig_version = "0.16.0",
     .dependencies = .{
         .dawn = .{
-            .url = "https://github.com/google/dawn/archive/refs/tags/v20260410.140140.tar.gz",
-            .hash = "N-V-__8AABXJ8RBF6jdJiyL5g3-Aa1zmQA0LQ1A2pSTHUKY0",
+            .url = "https://github.com/google/dawn/archive/refs/tags/v20260810.185610.tar.gz",
+            .hash = "N-V-__8AAJxFIBHF27Ok71wl8fMCG_aM3MOTc7OZLxS5q7jL",
         },
         .spirv_headers = .{
             .url = "https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-1.4.341.0.tar.gz",

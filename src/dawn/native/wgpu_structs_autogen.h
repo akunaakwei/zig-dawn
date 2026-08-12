@@ -4,7 +4,9 @@
 
 #include "absl/strings/string_view.h"
 #include "dawn/webgpu_cpp.h"
-#include "dawn/native/Forward.h"
+#include "src/dawn/native/Forward.h"
+#include "src/dawn/native/IntegerTypes.h"
+#include "src/utils/span.h"
 
 #include <cmath>
 #include <optional>
@@ -23,20 +25,17 @@ namespace dawn::native {
 
         inline constexpr StringView() noexcept = default;
 
-// NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-inline constexpr StringView(const std::string_view& sv) noexcept {
+explicit(false) inline constexpr StringView(const std::string_view& sv) noexcept {
     this->data = sv.data();
     this->length = sv.length();
 }
 
-// NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-inline constexpr StringView(const char* s) {
+explicit(false) inline constexpr StringView(const char* s) {
     this->data = s;
     this->length = WGPU_STRLEN;  // use strlen
 }
 
-// NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-inline constexpr StringView(WGPUStringView s) {
+explicit(false) inline constexpr StringView(WGPUStringView s) {
     this->data = s.data;
     this->length = s.length;
 }
@@ -46,14 +45,12 @@ inline constexpr StringView(const char* data, size_t length) {
     this->length = length;
 }
 
-// NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-inline constexpr StringView(std::nullptr_t) {
+explicit(false) inline constexpr StringView(std::nullptr_t) {
     this->data = nullptr;
     this->length = WGPU_STRLEN;
 }
 
-// NOLINTNEXTLINE(runtime/explicit) allow implicit construction
-inline constexpr StringView(std::nullopt_t) {
+explicit(false) inline constexpr StringView(std::nullopt_t) {
     this->data = nullptr;
     this->length = WGPU_STRLEN;
 }
@@ -62,7 +59,7 @@ bool IsUndefined() const {
     return this->data == nullptr && this->length == wgpu::kStrlen;
 }
 
-// NOLINTNEXTLINE(runtime/explicit) allow implicit conversion
+// NOLINTNEXTLINE(google-explicit-constructor)
 operator std::string_view() const {
     if (this->length == wgpu::kStrlen) {
         if (IsUndefined()) {
@@ -91,7 +88,7 @@ explicit operator View() const {
         bool operator==(const StringView& rhs) const;
 
         #ifndef ABSL_USES_STD_STRING_VIEW
-        // NOLINTNEXTLINE(runtime/explicit) allow implicit conversion
+        // NOLINTNEXTLINE(google-explicit-constructor)
         operator absl::string_view() const {
             if (this->length == wgpu::kStrlen) {
                 if (IsUndefined()) {
@@ -104,11 +101,16 @@ explicit operator View() const {
         #endif
     };
 
+    // NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
+
     struct AdapterPropertiesD3D : ChainedStructOut {
         AdapterPropertiesD3D() {
             sType = wgpu::SType::AdapterPropertiesD3D;
         }
-        alignas(wgpu::AdapterPropertiesD3D::kFirstMemberAlignment) uint32_t shaderModel;
+        alignas(wgpu::AdapterPropertiesD3D::kFirstMemberAlignment)
+
+
+        uint32_t shaderModel ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -120,12 +122,25 @@ explicit operator View() const {
         AdapterPropertiesDrm() {
             sType = wgpu::SType::AdapterPropertiesDrm;
         }
-        alignas(wgpu::AdapterPropertiesDrm::kFirstMemberAlignment) wgpu::Bool hasPrimary = false;
-        wgpu::Bool hasRender = false;
-        uint64_t primaryMajor = 0;
-        uint64_t primaryMinor = 0;
-        uint64_t renderMajor = 0;
-        uint64_t renderMinor = 0;
+        alignas(wgpu::AdapterPropertiesDrm::kFirstMemberAlignment)
+
+
+        wgpu::Bool hasPrimary  = false;
+
+
+        wgpu::Bool hasRender  = false;
+
+
+        uint64_t primaryMajor  = 0;
+
+
+        uint64_t primaryMinor  = 0;
+
+
+        uint64_t renderMajor  = 0;
+
+
+        uint64_t renderMinor  = 0;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -133,25 +148,14 @@ explicit operator View() const {
 
     };
 
-    struct AdapterPropertiesExplicitComputeSubgroupSizeConfigs : ChainedStructOut {
-        AdapterPropertiesExplicitComputeSubgroupSizeConfigs() {
-            sType = wgpu::SType::AdapterPropertiesExplicitComputeSubgroupSizeConfigs;
-        }
-        alignas(wgpu::AdapterPropertiesExplicitComputeSubgroupSizeConfigs::kFirstMemberAlignment) uint32_t minExplicitComputeSubgroupSize;
-        uint32_t maxExplicitComputeSubgroupSize;
-        uint32_t maxComputeWorkgroupSubgroups;
-
-        // Equality operators, mostly for testing. Note that this tests
-        // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const AdapterPropertiesExplicitComputeSubgroupSizeConfigs& rhs) const;
-
-    };
-
     struct AdapterPropertiesVk : ChainedStructOut {
         AdapterPropertiesVk() {
             sType = wgpu::SType::AdapterPropertiesVk;
         }
-        alignas(wgpu::AdapterPropertiesVk::kFirstMemberAlignment) uint32_t driverVersion;
+        alignas(wgpu::AdapterPropertiesVk::kFirstMemberAlignment)
+
+
+        uint32_t driverVersion ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -163,7 +167,10 @@ explicit operator View() const {
         AdapterPropertiesWGPU() {
             sType = wgpu::SType::AdapterPropertiesWGPU;
         }
-        alignas(wgpu::AdapterPropertiesWGPU::kFirstMemberAlignment) wgpu::BackendType backendType = wgpu::BackendType::Undefined;
+        alignas(wgpu::AdapterPropertiesWGPU::kFirstMemberAlignment)
+
+
+        wgpu::BackendType backendType  = wgpu::BackendType::Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -173,11 +180,21 @@ explicit operator View() const {
 
     struct BindingResource {
         ChainedStruct const * nextInChain = nullptr;
-        BufferBase* buffer = nullptr;
-        uint64_t offset = 0;
-        uint64_t size = wgpu::kWholeSize;
-        SamplerBase* sampler = nullptr;
-        TextureViewBase* textureView = nullptr;
+
+
+        BufferBase* buffer  = nullptr;
+
+
+        uint64_t offset  = 0;
+
+
+        uint64_t size  = wgpu::kWholeSize;
+
+
+        SamplerBase* sampler  = nullptr;
+
+
+        TextureViewBase* textureView  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -186,9 +203,15 @@ explicit operator View() const {
     };
 
     struct BlendComponent {
-        wgpu::BlendOperation operation = wgpu::BlendOperation::Add;
-        wgpu::BlendFactor srcFactor = wgpu::BlendFactor::One;
-        wgpu::BlendFactor dstFactor = wgpu::BlendFactor::Zero;
+
+
+        wgpu::BlendOperation operation  = wgpu::BlendOperation::Add;
+
+
+        wgpu::BlendFactor srcFactor  = wgpu::BlendFactor::One;
+
+
+        wgpu::BlendFactor dstFactor  = wgpu::BlendFactor::Zero;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -204,9 +227,15 @@ explicit operator View() const {
 
     struct BufferBindingLayout {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::BufferBindingType type = wgpu::BufferBindingType::Uniform;
-        wgpu::Bool hasDynamicOffset = false;
-        uint64_t minBindingSize = 0;
+
+
+        wgpu::BufferBindingType type  = wgpu::BufferBindingType::Uniform;
+
+
+        wgpu::Bool hasDynamicOffset  = false;
+
+
+        uint64_t minBindingSize  = 0;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -224,9 +253,16 @@ explicit operator View() const {
         BufferHostMappedPointer() {
             sType = wgpu::SType::BufferHostMappedPointer;
         }
-        alignas(wgpu::BufferHostMappedPointer::kFirstMemberAlignment) void * pointer;
-        WGPUCallback disposeCallback;
-        void * userdata;
+        alignas(wgpu::BufferHostMappedPointer::kFirstMemberAlignment)
+
+
+        void * pointer ;
+
+
+        WGPUCallback disposeCallback ;
+
+
+        void * userdata ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -235,10 +271,18 @@ explicit operator View() const {
     };
 
     struct Color {
-        double r;
-        double g;
-        double b;
-        double a;
+
+
+        double r ;
+
+
+        double g ;
+
+
+        double b ;
+
+
+        double a ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -248,10 +292,21 @@ explicit operator View() const {
 
     struct ColorSpaceDawn {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::ColorSpacePrimariesDawn primaries = {};
-        wgpu::ColorSpaceTransferDawn transfer = {};
-        wgpu::ColorSpaceYCbCrRangeDawn yCbCrRange = {};
-        wgpu::ColorSpaceYCbCrMatrixDawn yCbCrMatrix = {};
+
+
+        wgpu::ColorSpacePrimariesDawn primaries  = {};
+
+
+        wgpu::ColorSpaceTransferDawn transfer  = wgpu::ColorSpaceTransferDawn::Identity;
+
+
+        wgpu::ColorSpaceYCbCrRangeDawn yCbCrRange  = wgpu::ColorSpaceYCbCrRangeDawn::Identity;
+
+
+        wgpu::ColorSpaceYCbCrMatrixDawn yCbCrMatrix  = wgpu::ColorSpaceYCbCrMatrixDawn::Identity;
+
+
+        float hdrReferenceWhiteLuminance  = 0;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -263,7 +318,10 @@ explicit operator View() const {
         ColorTargetStateExpandResolveTextureDawn() {
             sType = wgpu::SType::ColorTargetStateExpandResolveTextureDawn;
         }
-        alignas(wgpu::ColorTargetStateExpandResolveTextureDawn::kFirstMemberAlignment) wgpu::Bool enabled = false;
+        alignas(wgpu::ColorTargetStateExpandResolveTextureDawn::kFirstMemberAlignment)
+
+
+        wgpu::Bool enabled  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -273,7 +331,9 @@ explicit operator View() const {
 
     struct CommandBufferDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -285,10 +345,19 @@ explicit operator View() const {
         CompatibilityModeLimits() {
             sType = wgpu::SType::CompatibilityModeLimits;
         }
-        alignas(wgpu::CompatibilityModeLimits::kFirstMemberAlignment) uint32_t maxStorageBuffersInVertexStage = wgpu::kLimitU32Undefined;
-        uint32_t maxStorageTexturesInVertexStage = wgpu::kLimitU32Undefined;
-        uint32_t maxStorageBuffersInFragmentStage = wgpu::kLimitU32Undefined;
-        uint32_t maxStorageTexturesInFragmentStage = wgpu::kLimitU32Undefined;
+        alignas(wgpu::CompatibilityModeLimits::kFirstMemberAlignment)
+
+
+        uint32_t maxStorageBuffersInVertexStage  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxStorageTexturesInVertexStage  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxStorageBuffersInFragmentStage  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxStorageTexturesInFragmentStage  = wgpu::kLimitU32Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -298,8 +367,12 @@ explicit operator View() const {
 
     struct ConstantEntry {
         ChainedStruct const * nextInChain = nullptr;
-        StringView key;
-        double value;
+
+
+        StringView key ;
+
+
+        double value ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -309,14 +382,30 @@ explicit operator View() const {
 
     struct CopyTextureForBrowserOptions {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::Bool flipY = false;
-        wgpu::Bool needsColorSpaceConversion = false;
-        wgpu::AlphaMode srcAlphaMode = wgpu::AlphaMode::Unpremultiplied;
-        float const * srcTransferFunctionParameters = nullptr;
-        float const * conversionMatrix = nullptr;
-        float const * dstTransferFunctionParameters = nullptr;
-        wgpu::AlphaMode dstAlphaMode = wgpu::AlphaMode::Unpremultiplied;
-        wgpu::Bool internalUsage = false;
+
+
+        wgpu::Bool flipY  = false;
+
+
+        wgpu::Bool needsColorSpaceConversion  = false;
+
+
+        wgpu::AlphaMode srcAlphaMode  = wgpu::AlphaMode::Unpremultiplied;
+
+
+        float const * srcTransferFunctionParameters  = nullptr;
+
+
+        float const * conversionMatrix  = nullptr;
+
+
+        float const * dstTransferFunctionParameters  = nullptr;
+
+
+        wgpu::AlphaMode dstAlphaMode  = wgpu::AlphaMode::Unpremultiplied;
+
+
+        wgpu::Bool internalUsage  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -328,7 +417,10 @@ explicit operator View() const {
         DawnAdapterPropertiesPowerPreference() {
             sType = wgpu::SType::DawnAdapterPropertiesPowerPreference;
         }
-        alignas(wgpu::DawnAdapterPropertiesPowerPreference::kFirstMemberAlignment) wgpu::PowerPreference powerPreference = wgpu::PowerPreference::Undefined;
+        alignas(wgpu::DawnAdapterPropertiesPowerPreference::kFirstMemberAlignment)
+
+
+        wgpu::PowerPreference powerPreference  = wgpu::PowerPreference::Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -340,7 +432,10 @@ explicit operator View() const {
         DawnBufferDescriptorErrorInfoFromWireClient() {
             sType = wgpu::SType::DawnBufferDescriptorErrorInfoFromWireClient;
         }
-        alignas(wgpu::DawnBufferDescriptorErrorInfoFromWireClient::kFirstMemberAlignment) wgpu::Bool outOfMemory = false;
+        alignas(wgpu::DawnBufferDescriptorErrorInfoFromWireClient::kFirstMemberAlignment)
+
+
+        wgpu::Bool outOfMemory  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -352,10 +447,16 @@ explicit operator View() const {
         DawnCacheDeviceDescriptor() {
             sType = wgpu::SType::DawnCacheDeviceDescriptor;
         }
-        alignas(wgpu::DawnCacheDeviceDescriptor::kFirstMemberAlignment) StringView isolationKey;
-        WGPUDawnLoadCacheDataFunction loadDataFunction = nullptr;
-        WGPUDawnStoreCacheDataFunction storeDataFunction = nullptr;
-        void * functionUserdata = nullptr;
+        alignas(wgpu::DawnCacheDeviceDescriptor::kFirstMemberAlignment)
+
+
+        StringView isolationKey ;
+
+
+        WGPUDawnLoadCacheDataCallbackInfo dawnLoadCacheDataCallbackInfo  = WGPU_DAWN_LOAD_CACHE_DATA_CALLBACK_INFO_INIT;
+
+
+        WGPUDawnStoreCacheDataCallbackInfo dawnStoreCacheDataCallbackInfo  = WGPU_DAWN_STORE_CACHE_DATA_CALLBACK_INFO_INIT;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -367,9 +468,16 @@ explicit operator View() const {
         DawnCompilationMessageUtf16() {
             sType = wgpu::SType::DawnCompilationMessageUtf16;
         }
-        alignas(wgpu::DawnCompilationMessageUtf16::kFirstMemberAlignment) uint64_t linePos;
-        uint64_t offset;
-        uint64_t length;
+        alignas(wgpu::DawnCompilationMessageUtf16::kFirstMemberAlignment)
+
+
+        uint64_t linePos ;
+
+
+        uint64_t offset ;
+
+
+        uint64_t length ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -381,7 +489,10 @@ explicit operator View() const {
         DawnConsumeAdapterDescriptor() {
             sType = wgpu::SType::DawnConsumeAdapterDescriptor;
         }
-        alignas(wgpu::DawnConsumeAdapterDescriptor::kFirstMemberAlignment) wgpu::Bool consumeAdapter = false;
+        alignas(wgpu::DawnConsumeAdapterDescriptor::kFirstMemberAlignment)
+
+
+        wgpu::Bool consumeAdapter  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -393,7 +504,10 @@ explicit operator View() const {
         DawnDeviceAllocatorControl() {
             sType = wgpu::SType::DawnDeviceAllocatorControl;
         }
-        alignas(wgpu::DawnDeviceAllocatorControl::kFirstMemberAlignment) size_t allocatorHeapBlockSize = 0;
+        alignas(wgpu::DawnDeviceAllocatorControl::kFirstMemberAlignment)
+
+
+        size_t allocatorHeapBlockSize  = 0;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -402,8 +516,12 @@ explicit operator View() const {
     };
 
     struct DawnDrmFormatProperties {
-        uint64_t modifier;
-        uint32_t modifierPlaneCount;
+
+
+        uint64_t modifier ;
+
+
+        uint32_t modifierPlaneCount ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -415,7 +533,10 @@ explicit operator View() const {
         DawnEncoderInternalUsageDescriptor() {
             sType = wgpu::SType::DawnEncoderInternalUsageDescriptor;
         }
-        alignas(wgpu::DawnEncoderInternalUsageDescriptor::kFirstMemberAlignment) wgpu::Bool useInternalUsages = false;
+        alignas(wgpu::DawnEncoderInternalUsageDescriptor::kFirstMemberAlignment)
+
+
+        wgpu::Bool useInternalUsages  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -427,9 +548,16 @@ explicit operator View() const {
         DawnFakeBufferOOMForTesting() {
             sType = wgpu::SType::DawnFakeBufferOOMForTesting;
         }
-        alignas(wgpu::DawnFakeBufferOOMForTesting::kFirstMemberAlignment) wgpu::Bool fakeOOMAtWireClientMap;
-        wgpu::Bool fakeOOMAtNativeMap;
-        wgpu::Bool fakeOOMAtDevice;
+        alignas(wgpu::DawnFakeBufferOOMForTesting::kFirstMemberAlignment)
+
+
+        wgpu::Bool fakeOOMAtWireClientMap ;
+
+
+        wgpu::Bool fakeOOMAtNativeMap ;
+
+
+        wgpu::Bool fakeOOMAtDevice ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -452,7 +580,10 @@ explicit operator View() const {
         DawnHostMappedPointerLimits() {
             sType = wgpu::SType::DawnHostMappedPointerLimits;
         }
-        alignas(wgpu::DawnHostMappedPointerLimits::kFirstMemberAlignment) uint32_t hostMappedPointerAlignment = wgpu::kLimitU32Undefined;
+        alignas(wgpu::DawnHostMappedPointerLimits::kFirstMemberAlignment)
+
+
+        uint32_t hostMappedPointerAlignment  = wgpu::kLimitU32Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -464,7 +595,10 @@ explicit operator View() const {
         DawnInjectedInvalidSType() {
             sType = wgpu::SType::DawnInjectedInvalidSType;
         }
-        alignas(wgpu::DawnInjectedInvalidSType::kFirstMemberAlignment) wgpu::SType invalidSType = {};
+        alignas(wgpu::DawnInjectedInvalidSType::kFirstMemberAlignment)
+
+
+        wgpu::SType invalidSType  = {};
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -476,7 +610,10 @@ explicit operator View() const {
         DawnRenderPassSampleCount() {
             sType = wgpu::SType::DawnRenderPassSampleCount;
         }
-        alignas(wgpu::DawnRenderPassSampleCount::kFirstMemberAlignment) uint32_t sampleCount = 1;
+        alignas(wgpu::DawnRenderPassSampleCount::kFirstMemberAlignment)
+
+
+        uint32_t sampleCount  = 1;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -488,7 +625,10 @@ explicit operator View() const {
         DawnShaderModuleSPIRVOptionsDescriptor() {
             sType = wgpu::SType::DawnShaderModuleSPIRVOptionsDescriptor;
         }
-        alignas(wgpu::DawnShaderModuleSPIRVOptionsDescriptor::kFirstMemberAlignment) wgpu::Bool allowNonUniformDerivatives = false;
+        alignas(wgpu::DawnShaderModuleSPIRVOptionsDescriptor::kFirstMemberAlignment)
+
+
+        wgpu::Bool allowNonUniformDerivatives  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -500,7 +640,10 @@ explicit operator View() const {
         DawnTexelCopyBufferRowAlignmentLimits() {
             sType = wgpu::SType::DawnTexelCopyBufferRowAlignmentLimits;
         }
-        alignas(wgpu::DawnTexelCopyBufferRowAlignmentLimits::kFirstMemberAlignment) uint32_t minTexelCopyBufferRowAlignment = wgpu::kLimitU32Undefined;
+        alignas(wgpu::DawnTexelCopyBufferRowAlignmentLimits::kFirstMemberAlignment)
+
+
+        uint32_t minTexelCopyBufferRowAlignment  = wgpu::kLimitU32Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -512,7 +655,10 @@ explicit operator View() const {
         DawnTextureInternalUsageDescriptor() {
             sType = wgpu::SType::DawnTextureInternalUsageDescriptor;
         }
-        alignas(wgpu::DawnTextureInternalUsageDescriptor::kFirstMemberAlignment) wgpu::TextureUsage internalUsage = wgpu::TextureUsage::None;
+        alignas(wgpu::DawnTextureInternalUsageDescriptor::kFirstMemberAlignment)
+
+
+        wgpu::TextureUsage internalUsage  = wgpu::TextureUsage::None;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -524,10 +670,19 @@ explicit operator View() const {
         DawnTogglesDescriptor() {
             sType = wgpu::SType::DawnTogglesDescriptor;
         }
-        alignas(wgpu::DawnTogglesDescriptor::kFirstMemberAlignment) size_t enabledToggleCount = 0;
-        const char* const * enabledToggles = nullptr;
-        size_t disabledToggleCount = 0;
-        const char* const * disabledToggles = nullptr;
+        alignas(wgpu::DawnTogglesDescriptor::kFirstMemberAlignment)
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<const char* const *>> enabledToggles;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<const char* const *>> disabledToggles;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -539,8 +694,13 @@ explicit operator View() const {
         DawnWGSLBlocklist() {
             sType = wgpu::SType::DawnWGSLBlocklist;
         }
-        alignas(wgpu::DawnWGSLBlocklist::kFirstMemberAlignment) size_t blocklistedFeatureCount = 0;
-        const char* const * blocklistedFeatures = nullptr;
+        alignas(wgpu::DawnWGSLBlocklist::kFirstMemberAlignment)
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<const char* const *>> blocklistedFeatures;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -552,9 +712,16 @@ explicit operator View() const {
         DawnWireWGSLControl() {
             sType = wgpu::SType::DawnWireWGSLControl;
         }
-        alignas(wgpu::DawnWireWGSLControl::kFirstMemberAlignment) wgpu::Bool enableExperimental = false;
-        wgpu::Bool enableUnsafe = false;
-        wgpu::Bool enableTesting = false;
+        alignas(wgpu::DawnWireWGSLControl::kFirstMemberAlignment)
+
+
+        wgpu::Bool enableExperimental  = false;
+
+
+        wgpu::Bool enableUnsafe  = false;
+
+
+        wgpu::Bool enableTesting  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -563,8 +730,12 @@ explicit operator View() const {
     };
 
     struct Extent2D {
-        uint32_t width;
-        uint32_t height;
+
+
+        uint32_t width ;
+
+
+        uint32_t height ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -573,9 +744,15 @@ explicit operator View() const {
     };
 
     struct Extent3D {
-        uint32_t width;
-        uint32_t height = 1;
-        uint32_t depthOrArrayLayers = 1;
+
+
+        uint32_t width ;
+
+
+        uint32_t height  = 1;
+
+
+        uint32_t depthOrArrayLayers  = 1;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -587,7 +764,10 @@ explicit operator View() const {
         ExternalTextureBindingEntry() {
             sType = wgpu::SType::ExternalTextureBindingEntry;
         }
-        alignas(wgpu::ExternalTextureBindingEntry::kFirstMemberAlignment) ExternalTextureBase* externalTexture;
+        alignas(wgpu::ExternalTextureBindingEntry::kFirstMemberAlignment)
+
+
+        ExternalTextureBase* externalTexture ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -607,7 +787,9 @@ explicit operator View() const {
     };
 
     struct Future {
-        uint64_t id;
+
+
+        uint64_t id ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -617,7 +799,9 @@ explicit operator View() const {
 
     struct InstanceLimits {
         ChainedStructOut * nextInChain = nullptr;
-        size_t timedWaitAnyMaxCount = 0;
+
+
+        size_t timedWaitAnyMaxCount  = 0;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -626,8 +810,12 @@ explicit operator View() const {
     };
 
     struct MemoryHeapInfo {
-        wgpu::HeapProperty properties = wgpu::HeapProperty::None;
-        uint64_t size;
+
+
+        wgpu::HeapProperty properties  = wgpu::HeapProperty::None;
+
+
+        uint64_t size ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -637,9 +825,15 @@ explicit operator View() const {
 
     struct MultisampleState {
         ChainedStruct const * nextInChain = nullptr;
-        uint32_t count = 1;
-        uint32_t mask = 0xFFFFFFFF;
-        wgpu::Bool alphaToCoverageEnabled = false;
+
+
+        uint32_t count  = 1;
+
+
+        uint32_t mask  = 0xFFFFFFFF;
+
+
+        wgpu::Bool alphaToCoverageEnabled  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -648,8 +842,12 @@ explicit operator View() const {
     };
 
     struct Origin2D {
-        uint32_t x = 0;
-        uint32_t y = 0;
+
+
+        uint32_t x  = 0;
+
+
+        uint32_t y  = 0;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -658,9 +856,15 @@ explicit operator View() const {
     };
 
     struct Origin3D {
-        uint32_t x = 0;
-        uint32_t y = 0;
-        uint32_t z = 0;
+
+
+        uint32_t x  = 0;
+
+
+        uint32_t y  = 0;
+
+
+        uint32_t z  = 0;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -670,9 +874,15 @@ explicit operator View() const {
 
     struct PassTimestampWrites {
         ChainedStruct const * nextInChain = nullptr;
-        QuerySetBase* querySet;
-        uint32_t beginningOfPassWriteIndex = wgpu::kQuerySetIndexUndefined;
-        uint32_t endOfPassWriteIndex = wgpu::kQuerySetIndexUndefined;
+
+
+        QuerySetBase* querySet ;
+
+
+        uint32_t beginningOfPassWriteIndex  = wgpu::kQuerySetIndexUndefined;
+
+
+        uint32_t endOfPassWriteIndex  = wgpu::kQuerySetIndexUndefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -684,7 +894,10 @@ explicit operator View() const {
         PipelineLayoutResourceTable() {
             sType = wgpu::SType::PipelineLayoutResourceTable;
         }
-        alignas(wgpu::PipelineLayoutResourceTable::kFirstMemberAlignment) wgpu::Bool usesResourceTable = false;
+        alignas(wgpu::PipelineLayoutResourceTable::kFirstMemberAlignment)
+
+
+        wgpu::Bool usesResourceTable  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -694,8 +907,12 @@ explicit operator View() const {
 
     struct PipelineLayoutStorageAttachment {
         ChainedStruct const * nextInChain = nullptr;
-        uint64_t offset = 0;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
+
+
+        uint64_t offset  = 0;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -705,11 +922,21 @@ explicit operator View() const {
 
     struct PrimitiveState {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::PrimitiveTopology topology = wgpu::PrimitiveTopology::TriangleList;
-        wgpu::IndexFormat stripIndexFormat = wgpu::IndexFormat::Undefined;
-        wgpu::FrontFace frontFace = wgpu::FrontFace::CCW;
-        wgpu::CullMode cullMode = wgpu::CullMode::None;
-        wgpu::Bool unclippedDepth = false;
+
+
+        wgpu::PrimitiveTopology topology  = wgpu::PrimitiveTopology::TriangleList;
+
+
+        wgpu::IndexFormat stripIndexFormat  = wgpu::IndexFormat::Undefined;
+
+
+        wgpu::FrontFace frontFace  = wgpu::FrontFace::CCW;
+
+
+        wgpu::CullMode cullMode  = wgpu::CullMode::None;
+
+
+        wgpu::Bool unclippedDepth  = false;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -725,9 +952,15 @@ explicit operator View() const {
 
     struct QuerySetDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        wgpu::QueryType type = {};
-        uint32_t count;
+
+
+        StringView label ;
+
+
+        wgpu::QueryType type  = {};
+
+
+        uint32_t count ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -737,7 +970,9 @@ explicit operator View() const {
 
     struct QueueDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -747,7 +982,9 @@ explicit operator View() const {
 
     struct RenderBundleDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -755,33 +992,50 @@ explicit operator View() const {
 
     };
 
-    struct RenderBundleEncoderDescriptor {
-        ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        size_t colorFormatCount;
-        wgpu::TextureFormat const * colorFormats = nullptr;
-        wgpu::TextureFormat depthStencilFormat = wgpu::TextureFormat::Undefined;
-        uint32_t sampleCount = 1;
-        wgpu::Bool depthReadOnly = false;
-        wgpu::Bool stencilReadOnly = false;
+    struct RenderBundleEncoderResourceTable : ChainedStruct {
+        RenderBundleEncoderResourceTable() {
+            sType = wgpu::SType::RenderBundleEncoderResourceTable;
+        }
+        alignas(wgpu::RenderBundleEncoderResourceTable::kFirstMemberAlignment)
+
+
+        wgpu::Bool usesResourceTable  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const RenderBundleEncoderDescriptor& rhs) const;
+        bool operator==(const RenderBundleEncoderResourceTable& rhs) const;
 
     };
 
     struct RenderPassDepthStencilAttachment {
         ChainedStruct const * nextInChain = nullptr;
-        TextureViewBase* view;
-        wgpu::LoadOp depthLoadOp = wgpu::LoadOp::Undefined;
-        wgpu::StoreOp depthStoreOp = wgpu::StoreOp::Undefined;
-        float depthClearValue = wgpu::kDepthClearValueUndefined;
-        wgpu::Bool depthReadOnly = false;
-        wgpu::LoadOp stencilLoadOp = wgpu::LoadOp::Undefined;
-        wgpu::StoreOp stencilStoreOp = wgpu::StoreOp::Undefined;
-        uint32_t stencilClearValue = 0;
-        wgpu::Bool stencilReadOnly = false;
+
+
+        TextureViewBase* view ;
+
+
+        wgpu::LoadOp depthLoadOp  = wgpu::LoadOp::Undefined;
+
+
+        wgpu::StoreOp depthStoreOp  = wgpu::StoreOp::Undefined;
+
+
+        float depthClearValue  = wgpu::kDepthClearValueUndefined;
+
+
+        wgpu::Bool depthReadOnly  = false;
+
+
+        wgpu::LoadOp stencilLoadOp  = wgpu::LoadOp::Undefined;
+
+
+        wgpu::StoreOp stencilStoreOp  = wgpu::StoreOp::Undefined;
+
+
+        uint32_t stencilClearValue  = 0;
+
+
+        wgpu::Bool stencilReadOnly  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -793,12 +1047,25 @@ explicit operator View() const {
         RenderPassDescriptorResolveRect() {
             sType = wgpu::SType::RenderPassDescriptorResolveRect;
         }
-        alignas(wgpu::RenderPassDescriptorResolveRect::kFirstMemberAlignment) uint32_t colorOffsetX;
-        uint32_t colorOffsetY;
-        uint32_t resolveOffsetX;
-        uint32_t resolveOffsetY;
-        uint32_t width;
-        uint32_t height;
+        alignas(wgpu::RenderPassDescriptorResolveRect::kFirstMemberAlignment)
+
+
+        uint32_t colorOffsetX ;
+
+
+        uint32_t colorOffsetY ;
+
+
+        uint32_t resolveOffsetX ;
+
+
+        uint32_t resolveOffsetY ;
+
+
+        uint32_t width ;
+
+
+        uint32_t height ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -810,7 +1077,10 @@ explicit operator View() const {
         RenderPassMaxDrawCount() {
             sType = wgpu::SType::RenderPassMaxDrawCount;
         }
-        alignas(wgpu::RenderPassMaxDrawCount::kFirstMemberAlignment) uint64_t maxDrawCount = 50000000;
+        alignas(wgpu::RenderPassMaxDrawCount::kFirstMemberAlignment)
+
+
+        uint64_t maxDrawCount  = 50000000;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -833,7 +1103,10 @@ explicit operator View() const {
         RequestAdapterWebXROptions() {
             sType = wgpu::SType::RequestAdapterWebXROptions;
         }
-        alignas(wgpu::RequestAdapterWebXROptions::kFirstMemberAlignment) wgpu::Bool xrCompatible;
+        alignas(wgpu::RequestAdapterWebXROptions::kFirstMemberAlignment)
+
+
+        wgpu::Bool xrCompatible ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -843,8 +1116,12 @@ explicit operator View() const {
 
     struct ResourceTableDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        uint32_t size;
+
+
+        StringView label ;
+
+
+        uint32_t size ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -854,7 +1131,9 @@ explicit operator View() const {
 
     struct SamplerBindingLayout {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::SamplerBindingType type = wgpu::SamplerBindingType::Filtering;
+
+
+        wgpu::SamplerBindingType type  = wgpu::SamplerBindingType::Filtering;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -872,7 +1151,10 @@ explicit operator View() const {
         ShaderModuleCompilationOptions() {
             sType = wgpu::SType::ShaderModuleCompilationOptions;
         }
-        alignas(wgpu::ShaderModuleCompilationOptions::kFirstMemberAlignment) wgpu::Bool strictMath;
+        alignas(wgpu::ShaderModuleCompilationOptions::kFirstMemberAlignment)
+
+
+        wgpu::Bool strictMath ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -884,8 +1166,13 @@ explicit operator View() const {
         ShaderSourceSPIRV() {
             sType = wgpu::SType::ShaderSourceSPIRV;
         }
-        alignas(wgpu::ShaderSourceSPIRV::kFirstMemberAlignment) uint32_t codeSize;
-        uint32_t const * code = nullptr;
+        alignas(wgpu::ShaderSourceSPIRV::kFirstMemberAlignment)
+
+
+        uint32_t codeSize ;
+
+
+        uint32_t const * code  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -897,7 +1184,10 @@ explicit operator View() const {
         ShaderSourceWGSL() {
             sType = wgpu::SType::ShaderSourceWGSL;
         }
-        alignas(wgpu::ShaderSourceWGSL::kFirstMemberAlignment) StringView code;
+        alignas(wgpu::ShaderSourceWGSL::kFirstMemberAlignment)
+
+
+        StringView code ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -907,27 +1197,25 @@ explicit operator View() const {
 
     struct SharedBufferMemoryBeginAccessDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::Bool initialized;
-        size_t fenceCount = 0;
-        SharedFenceBase* const * fences = nullptr;
-        uint64_t const * signaledValues = nullptr;
+
+
+        wgpu::Bool initialized ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<SharedFenceBase* const *>> fences;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<uint64_t const *>> signaledValues;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
         bool operator==(const SharedBufferMemoryBeginAccessDescriptor& rhs) const;
-
-    };
-
-    struct SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor : ChainedStruct {
-        SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor() {
-            sType = wgpu::SType::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor;
-        }
-        alignas(wgpu::SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor::kFirstMemberAlignment) void * handle;
-        uint64_t size;
-
-        // Equality operators, mostly for testing. Note that this tests
-        // strict pointer-pointer equality if the struct contains member pointers.
-        bool operator==(const SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor& rhs) const;
 
     };
 
@@ -940,10 +1228,21 @@ explicit operator View() const {
         SharedBufferMemoryEndAccessState& operator=(SharedBufferMemoryEndAccessState&&);
 
         ChainedStructOut * nextInChain = nullptr;
-        wgpu::Bool initialized;
-        size_t fenceCount = 0;
-        SharedFenceBase* const * fences = nullptr;
-        uint64_t const * signaledValues = nullptr;
+
+
+        wgpu::Bool initialized ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<SharedFenceBase* const *>> fences;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<uint64_t const *>> signaledValues;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -953,10 +1252,32 @@ explicit operator View() const {
         inline void FreeMembers();
     };
 
+    struct SharedBufferMemoryFromWindowsHandleDescriptor : ChainedStruct {
+        SharedBufferMemoryFromWindowsHandleDescriptor() {
+            sType = wgpu::SType::SharedBufferMemoryFromWindowsHandleDescriptor;
+        }
+        alignas(wgpu::SharedBufferMemoryFromWindowsHandleDescriptor::kFirstMemberAlignment)
+
+
+        void * handle ;
+
+
+        uint64_t size ;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const SharedBufferMemoryFromWindowsHandleDescriptor& rhs) const;
+
+    };
+
     struct SharedBufferMemoryProperties {
         ChainedStructOut * nextInChain = nullptr;
-        wgpu::BufferUsage usage = wgpu::BufferUsage::None;
-        uint64_t size;
+
+
+        wgpu::BufferUsage usage  = wgpu::BufferUsage::None;
+
+
+        uint64_t size ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -968,7 +1289,10 @@ explicit operator View() const {
         SharedFenceDXGISharedHandleDescriptor() {
             sType = wgpu::SType::SharedFenceDXGISharedHandleDescriptor;
         }
-        alignas(wgpu::SharedFenceDXGISharedHandleDescriptor::kFirstMemberAlignment) void * handle;
+        alignas(wgpu::SharedFenceDXGISharedHandleDescriptor::kFirstMemberAlignment)
+
+
+        void * handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -980,7 +1304,10 @@ explicit operator View() const {
         SharedFenceDXGISharedHandleExportInfo() {
             sType = wgpu::SType::SharedFenceDXGISharedHandleExportInfo;
         }
-        alignas(wgpu::SharedFenceDXGISharedHandleExportInfo::kFirstMemberAlignment) void * handle;
+        alignas(wgpu::SharedFenceDXGISharedHandleExportInfo::kFirstMemberAlignment)
+
+
+        void * handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -992,7 +1319,10 @@ explicit operator View() const {
         SharedFenceEGLSyncDescriptor() {
             sType = wgpu::SType::SharedFenceEGLSyncDescriptor;
         }
-        alignas(wgpu::SharedFenceEGLSyncDescriptor::kFirstMemberAlignment) void * sync;
+        alignas(wgpu::SharedFenceEGLSyncDescriptor::kFirstMemberAlignment)
+
+
+        void * sync ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1004,7 +1334,10 @@ explicit operator View() const {
         SharedFenceEGLSyncExportInfo() {
             sType = wgpu::SType::SharedFenceEGLSyncExportInfo;
         }
-        alignas(wgpu::SharedFenceEGLSyncExportInfo::kFirstMemberAlignment) void * sync;
+        alignas(wgpu::SharedFenceEGLSyncExportInfo::kFirstMemberAlignment)
+
+
+        void * sync ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1016,7 +1349,10 @@ explicit operator View() const {
         SharedFenceMTLSharedEventDescriptor() {
             sType = wgpu::SType::SharedFenceMTLSharedEventDescriptor;
         }
-        alignas(wgpu::SharedFenceMTLSharedEventDescriptor::kFirstMemberAlignment) void * sharedEvent;
+        alignas(wgpu::SharedFenceMTLSharedEventDescriptor::kFirstMemberAlignment)
+
+
+        void * sharedEvent ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1028,7 +1364,10 @@ explicit operator View() const {
         SharedFenceMTLSharedEventExportInfo() {
             sType = wgpu::SType::SharedFenceMTLSharedEventExportInfo;
         }
-        alignas(wgpu::SharedFenceMTLSharedEventExportInfo::kFirstMemberAlignment) void * sharedEvent;
+        alignas(wgpu::SharedFenceMTLSharedEventExportInfo::kFirstMemberAlignment)
+
+
+        void * sharedEvent ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1040,7 +1379,10 @@ explicit operator View() const {
         SharedFenceSyncFDDescriptor() {
             sType = wgpu::SType::SharedFenceSyncFDDescriptor;
         }
-        alignas(wgpu::SharedFenceSyncFDDescriptor::kFirstMemberAlignment) int handle;
+        alignas(wgpu::SharedFenceSyncFDDescriptor::kFirstMemberAlignment)
+
+
+        int handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1052,7 +1394,10 @@ explicit operator View() const {
         SharedFenceSyncFDExportInfo() {
             sType = wgpu::SType::SharedFenceSyncFDExportInfo;
         }
-        alignas(wgpu::SharedFenceSyncFDExportInfo::kFirstMemberAlignment) int handle;
+        alignas(wgpu::SharedFenceSyncFDExportInfo::kFirstMemberAlignment)
+
+
+        int handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1064,7 +1409,10 @@ explicit operator View() const {
         SharedFenceVkSemaphoreOpaqueFDDescriptor() {
             sType = wgpu::SType::SharedFenceVkSemaphoreOpaqueFDDescriptor;
         }
-        alignas(wgpu::SharedFenceVkSemaphoreOpaqueFDDescriptor::kFirstMemberAlignment) int handle;
+        alignas(wgpu::SharedFenceVkSemaphoreOpaqueFDDescriptor::kFirstMemberAlignment)
+
+
+        int handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1076,7 +1424,10 @@ explicit operator View() const {
         SharedFenceVkSemaphoreOpaqueFDExportInfo() {
             sType = wgpu::SType::SharedFenceVkSemaphoreOpaqueFDExportInfo;
         }
-        alignas(wgpu::SharedFenceVkSemaphoreOpaqueFDExportInfo::kFirstMemberAlignment) int handle;
+        alignas(wgpu::SharedFenceVkSemaphoreOpaqueFDExportInfo::kFirstMemberAlignment)
+
+
+        int handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1088,7 +1439,10 @@ explicit operator View() const {
         SharedFenceVkSemaphoreZirconHandleDescriptor() {
             sType = wgpu::SType::SharedFenceVkSemaphoreZirconHandleDescriptor;
         }
-        alignas(wgpu::SharedFenceVkSemaphoreZirconHandleDescriptor::kFirstMemberAlignment) uint32_t handle;
+        alignas(wgpu::SharedFenceVkSemaphoreZirconHandleDescriptor::kFirstMemberAlignment)
+
+
+        uint32_t handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1100,7 +1454,10 @@ explicit operator View() const {
         SharedFenceVkSemaphoreZirconHandleExportInfo() {
             sType = wgpu::SType::SharedFenceVkSemaphoreZirconHandleExportInfo;
         }
-        alignas(wgpu::SharedFenceVkSemaphoreZirconHandleExportInfo::kFirstMemberAlignment) uint32_t handle;
+        alignas(wgpu::SharedFenceVkSemaphoreZirconHandleExportInfo::kFirstMemberAlignment)
+
+
+        uint32_t handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1112,7 +1469,10 @@ explicit operator View() const {
         SharedTextureMemoryAHardwareBufferDescriptor() {
             sType = wgpu::SType::SharedTextureMemoryAHardwareBufferDescriptor;
         }
-        alignas(wgpu::SharedTextureMemoryAHardwareBufferDescriptor::kFirstMemberAlignment) void * handle;
+        alignas(wgpu::SharedTextureMemoryAHardwareBufferDescriptor::kFirstMemberAlignment)
+
+
+        void * handle ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1124,7 +1484,10 @@ explicit operator View() const {
         SharedTextureMemoryD3D11BeginState() {
             sType = wgpu::SType::SharedTextureMemoryD3D11BeginState;
         }
-        alignas(wgpu::SharedTextureMemoryD3D11BeginState::kFirstMemberAlignment) wgpu::Bool requiresEndAccessFence = true;
+        alignas(wgpu::SharedTextureMemoryD3D11BeginState::kFirstMemberAlignment)
+
+
+        wgpu::Bool requiresEndAccessFence  = true;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1136,7 +1499,10 @@ explicit operator View() const {
         SharedTextureMemoryD3DSwapchainBeginState() {
             sType = wgpu::SType::SharedTextureMemoryD3DSwapchainBeginState;
         }
-        alignas(wgpu::SharedTextureMemoryD3DSwapchainBeginState::kFirstMemberAlignment) wgpu::Bool isSwapchain = false;
+        alignas(wgpu::SharedTextureMemoryD3DSwapchainBeginState::kFirstMemberAlignment)
+
+
+        wgpu::Bool isSwapchain  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1145,9 +1511,15 @@ explicit operator View() const {
     };
 
     struct SharedTextureMemoryDmaBufPlane {
-        int fd;
-        uint64_t offset;
-        uint32_t stride;
+
+
+        int fd ;
+
+
+        uint64_t offset ;
+
+
+        uint32_t stride ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1159,8 +1531,13 @@ explicit operator View() const {
         SharedTextureMemoryDXGISharedHandleDescriptor() {
             sType = wgpu::SType::SharedTextureMemoryDXGISharedHandleDescriptor;
         }
-        alignas(wgpu::SharedTextureMemoryDXGISharedHandleDescriptor::kFirstMemberAlignment) void * handle;
-        wgpu::Bool useKeyedMutex;
+        alignas(wgpu::SharedTextureMemoryDXGISharedHandleDescriptor::kFirstMemberAlignment)
+
+
+        void * handle ;
+
+
+        wgpu::Bool useKeyedMutex ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1172,7 +1549,10 @@ explicit operator View() const {
         SharedTextureMemoryEGLImageDescriptor() {
             sType = wgpu::SType::SharedTextureMemoryEGLImageDescriptor;
         }
-        alignas(wgpu::SharedTextureMemoryEGLImageDescriptor::kFirstMemberAlignment) void * image;
+        alignas(wgpu::SharedTextureMemoryEGLImageDescriptor::kFirstMemberAlignment)
+
+
+        void * image ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1184,8 +1564,13 @@ explicit operator View() const {
         SharedTextureMemoryIOSurfaceDescriptor() {
             sType = wgpu::SType::SharedTextureMemoryIOSurfaceDescriptor;
         }
-        alignas(wgpu::SharedTextureMemoryIOSurfaceDescriptor::kFirstMemberAlignment) void * ioSurface;
-        wgpu::Bool allowStorageBinding = true;
+        alignas(wgpu::SharedTextureMemoryIOSurfaceDescriptor::kFirstMemberAlignment)
+
+
+        void * ioSurface ;
+
+
+        wgpu::Bool allowStorageBinding  = true;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1197,11 +1582,22 @@ explicit operator View() const {
         SharedTextureMemoryOpaqueFDDescriptor() {
             sType = wgpu::SType::SharedTextureMemoryOpaqueFDDescriptor;
         }
-        alignas(wgpu::SharedTextureMemoryOpaqueFDDescriptor::kFirstMemberAlignment) void const * vkImageCreateInfo;
-        int memoryFD;
-        uint32_t memoryTypeIndex;
-        uint64_t allocationSize;
-        wgpu::Bool dedicatedAllocation;
+        alignas(wgpu::SharedTextureMemoryOpaqueFDDescriptor::kFirstMemberAlignment)
+
+
+        void const * vkImageCreateInfo ;
+
+
+        int memoryFD ;
+
+
+        uint32_t memoryTypeIndex ;
+
+
+        uint64_t allocationSize ;
+
+
+        wgpu::Bool dedicatedAllocation ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1213,7 +1609,10 @@ explicit operator View() const {
         SharedTextureMemoryVkDedicatedAllocationDescriptor() {
             sType = wgpu::SType::SharedTextureMemoryVkDedicatedAllocationDescriptor;
         }
-        alignas(wgpu::SharedTextureMemoryVkDedicatedAllocationDescriptor::kFirstMemberAlignment) wgpu::Bool dedicatedAllocation;
+        alignas(wgpu::SharedTextureMemoryVkDedicatedAllocationDescriptor::kFirstMemberAlignment)
+
+
+        wgpu::Bool dedicatedAllocation ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1225,8 +1624,13 @@ explicit operator View() const {
         SharedTextureMemoryVkImageLayoutBeginState() {
             sType = wgpu::SType::SharedTextureMemoryVkImageLayoutBeginState;
         }
-        alignas(wgpu::SharedTextureMemoryVkImageLayoutBeginState::kFirstMemberAlignment) int32_t oldLayout;
-        int32_t newLayout;
+        alignas(wgpu::SharedTextureMemoryVkImageLayoutBeginState::kFirstMemberAlignment)
+
+
+        int32_t oldLayout ;
+
+
+        int32_t newLayout ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1238,8 +1642,13 @@ explicit operator View() const {
         SharedTextureMemoryVkImageLayoutEndState() {
             sType = wgpu::SType::SharedTextureMemoryVkImageLayoutEndState;
         }
-        alignas(wgpu::SharedTextureMemoryVkImageLayoutEndState::kFirstMemberAlignment) int32_t oldLayout;
-        int32_t newLayout;
+        alignas(wgpu::SharedTextureMemoryVkImageLayoutEndState::kFirstMemberAlignment)
+
+
+        int32_t oldLayout ;
+
+
+        int32_t newLayout ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1251,8 +1660,13 @@ explicit operator View() const {
         SharedTextureMemoryZirconHandleDescriptor() {
             sType = wgpu::SType::SharedTextureMemoryZirconHandleDescriptor;
         }
-        alignas(wgpu::SharedTextureMemoryZirconHandleDescriptor::kFirstMemberAlignment) uint32_t memoryFD;
-        uint64_t allocationSize;
+        alignas(wgpu::SharedTextureMemoryZirconHandleDescriptor::kFirstMemberAlignment)
+
+
+        uint32_t memoryFD ;
+
+
+        uint64_t allocationSize ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1264,8 +1678,13 @@ explicit operator View() const {
         StaticSamplerBindingLayout() {
             sType = wgpu::SType::StaticSamplerBindingLayout;
         }
-        alignas(wgpu::StaticSamplerBindingLayout::kFirstMemberAlignment) SamplerBase* sampler;
-        uint32_t sampledTextureBinding = wgpu::kLimitU32Undefined;
+        alignas(wgpu::StaticSamplerBindingLayout::kFirstMemberAlignment)
+
+
+        SamplerBase* sampler ;
+
+
+        uint32_t sampledTextureBinding  = wgpu::kLimitU32Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1274,10 +1693,18 @@ explicit operator View() const {
     };
 
     struct StencilFaceState {
-        wgpu::CompareFunction compare = wgpu::CompareFunction::Always;
-        wgpu::StencilOperation failOp = wgpu::StencilOperation::Keep;
-        wgpu::StencilOperation depthFailOp = wgpu::StencilOperation::Keep;
-        wgpu::StencilOperation passOp = wgpu::StencilOperation::Keep;
+
+
+        wgpu::CompareFunction compare  = wgpu::CompareFunction::Always;
+
+
+        wgpu::StencilOperation failOp  = wgpu::StencilOperation::Keep;
+
+
+        wgpu::StencilOperation depthFailOp  = wgpu::StencilOperation::Keep;
+
+
+        wgpu::StencilOperation passOp  = wgpu::StencilOperation::Keep;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1293,9 +1720,15 @@ explicit operator View() const {
 
     struct StorageTextureBindingLayout {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::StorageTextureAccess access = wgpu::StorageTextureAccess::WriteOnly;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
-        wgpu::TextureViewDimension viewDimension = wgpu::TextureViewDimension::e2D;
+
+
+        wgpu::StorageTextureAccess access  = wgpu::StorageTextureAccess::WriteOnly;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
+
+
+        wgpu::TextureViewDimension viewDimension  = wgpu::TextureViewDimension::e2D;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1310,11 +1743,21 @@ explicit operator View() const {
     };
 
     struct SubgroupMatrixConfig {
-        wgpu::SubgroupMatrixComponentType componentType = {};
-        wgpu::SubgroupMatrixComponentType resultComponentType = {};
-        uint32_t M;
-        uint32_t N;
-        uint32_t K;
+
+
+        wgpu::SubgroupMatrixComponentType componentType  = {};
+
+
+        wgpu::SubgroupMatrixComponentType resultComponentType  = {};
+
+
+        uint32_t M ;
+
+
+        uint32_t N ;
+
+
+        uint32_t K ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1330,8 +1773,12 @@ explicit operator View() const {
         SupportedFeatures(SupportedFeatures&&);
         SupportedFeatures& operator=(SupportedFeatures&&);
 
-        size_t featureCount;
-        wgpu::FeatureName const * features = nullptr;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::FeatureName const *>> features;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1349,8 +1796,12 @@ explicit operator View() const {
         SupportedInstanceFeatures(SupportedInstanceFeatures&&);
         SupportedInstanceFeatures& operator=(SupportedInstanceFeatures&&);
 
-        size_t featureCount;
-        wgpu::InstanceFeatureName const * features = nullptr;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::InstanceFeatureName const *>> features;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1368,8 +1819,12 @@ explicit operator View() const {
         SupportedWGSLLanguageFeatures(SupportedWGSLLanguageFeatures&&);
         SupportedWGSLLanguageFeatures& operator=(SupportedWGSLLanguageFeatures&&);
 
-        size_t featureCount;
-        wgpu::WGSLLanguageFeatureName const * features = nullptr;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::WGSLLanguageFeatureName const *>> features;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1388,13 +1843,27 @@ explicit operator View() const {
         SurfaceCapabilities& operator=(SurfaceCapabilities&&);
 
         ChainedStructOut * nextInChain = nullptr;
-        wgpu::TextureUsage usages = wgpu::TextureUsage::None;
-        size_t formatCount;
-        wgpu::TextureFormat const * formats = nullptr;
-        size_t presentModeCount;
-        wgpu::PresentMode const * presentModes = nullptr;
-        size_t alphaModeCount;
-        wgpu::CompositeAlphaMode const * alphaModes = nullptr;
+
+
+        wgpu::TextureUsage usages  = wgpu::TextureUsage::None;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::TextureFormat const *>> formats;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::PresentMode const *>> presentModes;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::CompositeAlphaMode const *>> alphaModes;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1408,8 +1877,13 @@ explicit operator View() const {
         SurfaceColorManagement() {
             sType = wgpu::SType::SurfaceColorManagement;
         }
-        alignas(wgpu::SurfaceColorManagement::kFirstMemberAlignment) wgpu::PredefinedColorSpace colorSpace = {};
-        wgpu::ToneMappingMode toneMappingMode = {};
+        alignas(wgpu::SurfaceColorManagement::kFirstMemberAlignment)
+
+
+        wgpu::PredefinedColorSpace colorSpace  = {};
+
+
+        wgpu::ToneMappingMode toneMappingMode  = {};
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1419,15 +1893,33 @@ explicit operator View() const {
 
     struct SurfaceConfiguration {
         ChainedStruct const * nextInChain = nullptr;
-        DeviceBase* device;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
-        wgpu::TextureUsage usage = wgpu::TextureUsage::RenderAttachment;
-        uint32_t width;
-        uint32_t height;
-        size_t viewFormatCount = 0;
-        wgpu::TextureFormat const * viewFormats = nullptr;
-        wgpu::CompositeAlphaMode alphaMode = wgpu::CompositeAlphaMode::Auto;
-        wgpu::PresentMode presentMode = wgpu::PresentMode::Fifo;
+
+
+        DeviceBase* device ;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
+
+
+        wgpu::TextureUsage usage  = wgpu::TextureUsage::RenderAttachment;
+
+
+        uint32_t width ;
+
+
+        uint32_t height ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::TextureFormat const *>> viewFormats;
+
+
+        wgpu::CompositeAlphaMode alphaMode  = wgpu::CompositeAlphaMode::Auto;
+
+
+        wgpu::PresentMode presentMode  = wgpu::PresentMode::Fifo;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1445,7 +1937,10 @@ explicit operator View() const {
         SurfaceDescriptorFromWindowsCoreWindow() {
             sType = wgpu::SType::SurfaceDescriptorFromWindowsCoreWindow;
         }
-        alignas(wgpu::SurfaceDescriptorFromWindowsCoreWindow::kFirstMemberAlignment) void * coreWindow = nullptr;
+        alignas(wgpu::SurfaceDescriptorFromWindowsCoreWindow::kFirstMemberAlignment)
+
+
+        void * coreWindow  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1457,7 +1952,10 @@ explicit operator View() const {
         SurfaceDescriptorFromWindowsUWPSwapChainPanel() {
             sType = wgpu::SType::SurfaceDescriptorFromWindowsUWPSwapChainPanel;
         }
-        alignas(wgpu::SurfaceDescriptorFromWindowsUWPSwapChainPanel::kFirstMemberAlignment) void * swapChainPanel = nullptr;
+        alignas(wgpu::SurfaceDescriptorFromWindowsUWPSwapChainPanel::kFirstMemberAlignment)
+
+
+        void * swapChainPanel  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1469,7 +1967,10 @@ explicit operator View() const {
         SurfaceDescriptorFromWindowsWinUISwapChainPanel() {
             sType = wgpu::SType::SurfaceDescriptorFromWindowsWinUISwapChainPanel;
         }
-        alignas(wgpu::SurfaceDescriptorFromWindowsWinUISwapChainPanel::kFirstMemberAlignment) void * swapChainPanel = nullptr;
+        alignas(wgpu::SurfaceDescriptorFromWindowsWinUISwapChainPanel::kFirstMemberAlignment)
+
+
+        void * swapChainPanel  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1481,7 +1982,10 @@ explicit operator View() const {
         SurfaceSourceAndroidNativeWindow() {
             sType = wgpu::SType::SurfaceSourceAndroidNativeWindow;
         }
-        alignas(wgpu::SurfaceSourceAndroidNativeWindow::kFirstMemberAlignment) void * window;
+        alignas(wgpu::SurfaceSourceAndroidNativeWindow::kFirstMemberAlignment)
+
+
+        void * window ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1493,7 +1997,10 @@ explicit operator View() const {
         SurfaceSourceMetalLayer() {
             sType = wgpu::SType::SurfaceSourceMetalLayer;
         }
-        alignas(wgpu::SurfaceSourceMetalLayer::kFirstMemberAlignment) void * layer = nullptr;
+        alignas(wgpu::SurfaceSourceMetalLayer::kFirstMemberAlignment)
+
+
+        void * layer  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1505,8 +2012,13 @@ explicit operator View() const {
         SurfaceSourceWaylandSurface() {
             sType = wgpu::SType::SurfaceSourceWaylandSurface;
         }
-        alignas(wgpu::SurfaceSourceWaylandSurface::kFirstMemberAlignment) void * display = nullptr;
-        void * surface = nullptr;
+        alignas(wgpu::SurfaceSourceWaylandSurface::kFirstMemberAlignment)
+
+
+        void * display  = nullptr;
+
+
+        void * surface  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1518,8 +2030,13 @@ explicit operator View() const {
         SurfaceSourceWindowsHWND() {
             sType = wgpu::SType::SurfaceSourceWindowsHWND;
         }
-        alignas(wgpu::SurfaceSourceWindowsHWND::kFirstMemberAlignment) void * hinstance = nullptr;
-        void * hwnd = nullptr;
+        alignas(wgpu::SurfaceSourceWindowsHWND::kFirstMemberAlignment)
+
+
+        void * hinstance  = nullptr;
+
+
+        void * hwnd  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1531,8 +2048,13 @@ explicit operator View() const {
         SurfaceSourceXCBWindow() {
             sType = wgpu::SType::SurfaceSourceXCBWindow;
         }
-        alignas(wgpu::SurfaceSourceXCBWindow::kFirstMemberAlignment) void * connection = nullptr;
-        uint32_t window;
+        alignas(wgpu::SurfaceSourceXCBWindow::kFirstMemberAlignment)
+
+
+        void * connection  = nullptr;
+
+
+        uint32_t window ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1544,8 +2066,13 @@ explicit operator View() const {
         SurfaceSourceXlibWindow() {
             sType = wgpu::SType::SurfaceSourceXlibWindow;
         }
-        alignas(wgpu::SurfaceSourceXlibWindow::kFirstMemberAlignment) void * display = nullptr;
-        uint64_t window;
+        alignas(wgpu::SurfaceSourceXlibWindow::kFirstMemberAlignment)
+
+
+        void * display  = nullptr;
+
+
+        uint64_t window ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1555,8 +2082,12 @@ explicit operator View() const {
 
     struct SurfaceTexture {
         ChainedStructOut * nextInChain = nullptr;
-        TextureBase* texture;
-        wgpu::SurfaceGetCurrentTextureStatus status = {};
+
+
+        TextureBase* texture ;
+
+
+        wgpu::SurfaceGetCurrentTextureStatus status  = {};
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1568,7 +2099,10 @@ explicit operator View() const {
         TexelBufferBindingEntry() {
             sType = wgpu::SType::TexelBufferBindingEntry;
         }
-        alignas(wgpu::TexelBufferBindingEntry::kFirstMemberAlignment) TexelBufferViewBase* texelBufferView;
+        alignas(wgpu::TexelBufferBindingEntry::kFirstMemberAlignment)
+
+
+        TexelBufferViewBase* texelBufferView ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1580,8 +2114,13 @@ explicit operator View() const {
         TexelBufferBindingLayout() {
             sType = wgpu::SType::TexelBufferBindingLayout;
         }
-        alignas(wgpu::TexelBufferBindingLayout::kFirstMemberAlignment) wgpu::TexelBufferAccess access = wgpu::TexelBufferAccess::ReadWrite;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
+        alignas(wgpu::TexelBufferBindingLayout::kFirstMemberAlignment)
+
+
+        wgpu::TexelBufferAccess access  = wgpu::TexelBufferAccess::ReadWrite;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1597,10 +2136,18 @@ explicit operator View() const {
 
     struct TexelBufferViewDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
-        uint64_t offset = 0;
-        uint64_t size = wgpu::kWholeSize;
+
+
+        StringView label ;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
+
+
+        uint64_t offset  = 0;
+
+
+        uint64_t size  = wgpu::kWholeSize;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1609,9 +2156,15 @@ explicit operator View() const {
     };
 
     struct TexelCopyBufferLayout {
-        uint64_t offset = 0;
-        uint32_t bytesPerRow = wgpu::kCopyStrideUndefined;
-        uint32_t rowsPerImage = wgpu::kCopyStrideUndefined;
+
+
+        uint64_t offset  = 0;
+
+
+        uint32_t bytesPerRow  = wgpu::kCopyStrideUndefined;
+
+
+        uint32_t rowsPerImage  = wgpu::kCopyStrideUndefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1621,9 +2174,15 @@ explicit operator View() const {
 
     struct TextureBindingLayout {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::TextureSampleType sampleType = wgpu::TextureSampleType::Float;
-        wgpu::TextureViewDimension viewDimension = wgpu::TextureViewDimension::e2D;
-        wgpu::Bool multisampled = false;
+
+
+        wgpu::TextureSampleType sampleType  = wgpu::TextureSampleType::Float;
+
+
+        wgpu::TextureViewDimension viewDimension  = wgpu::TextureViewDimension::e2D;
+
+
+        wgpu::Bool multisampled  = false;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1641,7 +2200,10 @@ explicit operator View() const {
         TextureBindingViewDimension() {
             sType = wgpu::SType::TextureBindingViewDimension;
         }
-        alignas(wgpu::TextureBindingViewDimension::kFirstMemberAlignment) wgpu::TextureViewDimension textureBindingViewDimension = wgpu::TextureViewDimension::Undefined;
+        alignas(wgpu::TextureBindingViewDimension::kFirstMemberAlignment)
+
+
+        wgpu::TextureViewDimension textureBindingViewDimension  = wgpu::TextureViewDimension::Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1650,10 +2212,18 @@ explicit operator View() const {
     };
 
     struct TextureComponentSwizzle {
-        wgpu::ComponentSwizzle r = wgpu::ComponentSwizzle::R;
-        wgpu::ComponentSwizzle g = wgpu::ComponentSwizzle::G;
-        wgpu::ComponentSwizzle b = wgpu::ComponentSwizzle::B;
-        wgpu::ComponentSwizzle a = wgpu::ComponentSwizzle::A;
+
+
+        wgpu::ComponentSwizzle r  = wgpu::ComponentSwizzle::R;
+
+
+        wgpu::ComponentSwizzle g  = wgpu::ComponentSwizzle::G;
+
+
+        wgpu::ComponentSwizzle b  = wgpu::ComponentSwizzle::B;
+
+
+        wgpu::ComponentSwizzle a  = wgpu::ComponentSwizzle::A;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1669,9 +2239,15 @@ explicit operator View() const {
 
     struct VertexAttribute {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::VertexFormat format = {};
-        uint64_t offset;
-        uint32_t shaderLocation;
+
+
+        wgpu::VertexFormat format  = {};
+
+
+        uint64_t offset ;
+
+
+        uint32_t shaderLocation ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1683,18 +2259,43 @@ explicit operator View() const {
         YCbCrVkDescriptor() {
             sType = wgpu::SType::YCbCrVkDescriptor;
         }
-        alignas(wgpu::YCbCrVkDescriptor::kFirstMemberAlignment) uint32_t vkFormat = 0;
-        uint32_t vkYCbCrModel = 0;
-        uint32_t vkYCbCrRange = 0;
-        uint32_t vkComponentSwizzleRed = 0;
-        uint32_t vkComponentSwizzleGreen = 0;
-        uint32_t vkComponentSwizzleBlue = 0;
-        uint32_t vkComponentSwizzleAlpha = 0;
-        uint32_t vkXChromaOffset = 0;
-        uint32_t vkYChromaOffset = 0;
-        wgpu::FilterMode vkChromaFilter = wgpu::FilterMode::Nearest;
-        wgpu::Bool forceExplicitReconstruction = false;
-        uint64_t externalFormat = 0;
+        alignas(wgpu::YCbCrVkDescriptor::kFirstMemberAlignment)
+
+
+        uint32_t vkFormat  = 0;
+
+
+        uint32_t vkYCbCrModel  = 0;
+
+
+        uint32_t vkYCbCrRange  = 0;
+
+
+        uint32_t vkComponentSwizzleRed  = 0;
+
+
+        uint32_t vkComponentSwizzleGreen  = 0;
+
+
+        uint32_t vkComponentSwizzleBlue  = 0;
+
+
+        uint32_t vkComponentSwizzleAlpha  = 0;
+
+
+        uint32_t vkXChromaOffset  = 0;
+
+
+        uint32_t vkYChromaOffset  = 0;
+
+
+        wgpu::FilterMode vkChromaFilter  = wgpu::FilterMode::Nearest;
+
+
+        wgpu::Bool forceExplicitReconstruction  = false;
+
+
+        uint64_t externalFormat  = 0;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1718,8 +2319,13 @@ explicit operator View() const {
         AdapterPropertiesMemoryHeaps(AdapterPropertiesMemoryHeaps&&);
         AdapterPropertiesMemoryHeaps& operator=(AdapterPropertiesMemoryHeaps&&);
 
-        alignas(wgpu::AdapterPropertiesMemoryHeaps::kFirstMemberAlignment) size_t heapCount;
-        MemoryHeapInfo const * heapInfo = nullptr;
+        alignas(wgpu::AdapterPropertiesMemoryHeaps::kFirstMemberAlignment)
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<MemoryHeapInfo const *>> heapInfo;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1739,8 +2345,13 @@ explicit operator View() const {
         AdapterPropertiesSubgroupMatrixConfigs(AdapterPropertiesSubgroupMatrixConfigs&&);
         AdapterPropertiesSubgroupMatrixConfigs& operator=(AdapterPropertiesSubgroupMatrixConfigs&&);
 
-        alignas(wgpu::AdapterPropertiesSubgroupMatrixConfigs::kFirstMemberAlignment) size_t configCount;
-        SubgroupMatrixConfig const * configs = nullptr;
+        alignas(wgpu::AdapterPropertiesSubgroupMatrixConfigs::kFirstMemberAlignment)
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<SubgroupMatrixConfig const *>> configs;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1751,7 +2362,9 @@ explicit operator View() const {
     };
 
     struct AHardwareBufferProperties {
-        YCbCrVkDescriptor yCbCrInfo;
+
+
+        YCbCrVkDescriptor yCbCrInfo ;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1767,12 +2380,24 @@ explicit operator View() const {
 
     struct BindGroupEntry {
         ChainedStruct const * nextInChain = nullptr;
-        uint32_t binding;
-        BufferBase* buffer = nullptr;
-        uint64_t offset = 0;
-        uint64_t size = wgpu::kWholeSize;
-        SamplerBase* sampler = nullptr;
-        TextureViewBase* textureView = nullptr;
+
+
+        uint32_t binding ;
+
+
+        BufferBase* buffer  = nullptr;
+
+
+        uint64_t offset  = 0;
+
+
+        uint64_t size  = wgpu::kWholeSize;
+
+
+        SamplerBase* sampler  = nullptr;
+
+
+        TextureViewBase* textureView  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1782,13 +2407,27 @@ explicit operator View() const {
 
     struct BindGroupLayoutEntry {
         ChainedStruct const * nextInChain = nullptr;
-        uint32_t binding;
-        wgpu::ShaderStage visibility = wgpu::ShaderStage::None;
-        uint32_t bindingArraySize = 0;
-        BufferBindingLayout buffer = { nullptr, wgpu::BufferBindingType::BindingNotUsed, false, 0 };
-        SamplerBindingLayout sampler = { nullptr, wgpu::SamplerBindingType::BindingNotUsed };
-        TextureBindingLayout texture = { nullptr, wgpu::TextureSampleType::BindingNotUsed, wgpu::TextureViewDimension::e2D, false };
-        StorageTextureBindingLayout storageTexture = { nullptr, wgpu::StorageTextureAccess::BindingNotUsed, wgpu::TextureFormat::Undefined, wgpu::TextureViewDimension::e2D };
+
+
+        uint32_t binding ;
+
+
+        wgpu::ShaderStage visibility  = wgpu::ShaderStage::None;
+
+
+        uint32_t bindingArraySize  = 0;
+
+
+        BufferBindingLayout buffer  = { nullptr, wgpu::BufferBindingType::BindingNotUsed, false, 0 };
+
+
+        SamplerBindingLayout sampler  = { nullptr, wgpu::SamplerBindingType::BindingNotUsed };
+
+
+        TextureBindingLayout texture  = { nullptr, wgpu::TextureSampleType::BindingNotUsed, wgpu::TextureViewDimension::e2D, false };
+
+
+        StorageTextureBindingLayout storageTexture  = { nullptr, wgpu::StorageTextureAccess::BindingNotUsed, wgpu::TextureFormat::Undefined, wgpu::TextureViewDimension::e2D };
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1803,8 +2442,12 @@ explicit operator View() const {
     };
 
     struct BlendState {
-        BlendComponent color;
-        BlendComponent alpha;
+
+
+        BlendComponent color ;
+
+
+        BlendComponent alpha ;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1820,10 +2463,18 @@ explicit operator View() const {
 
     struct BufferDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        wgpu::BufferUsage usage = wgpu::BufferUsage::None;
-        uint64_t size;
-        wgpu::Bool mappedAtCreation = false;
+
+
+        StringView label ;
+
+
+        wgpu::BufferUsage usage  = wgpu::BufferUsage::None;
+
+
+        uint64_t size ;
+
+
+        wgpu::Bool mappedAtCreation  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1833,7 +2484,9 @@ explicit operator View() const {
 
     struct CommandEncoderDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1843,12 +2496,24 @@ explicit operator View() const {
 
     struct CompilationMessage {
         ChainedStruct const * nextInChain = nullptr;
-        StringView message;
-        wgpu::CompilationMessageType type = {};
-        uint64_t lineNum;
-        uint64_t linePos;
-        uint64_t offset;
-        uint64_t length;
+
+
+        StringView message ;
+
+
+        wgpu::CompilationMessageType type  = {};
+
+
+        uint64_t lineNum ;
+
+
+        uint64_t linePos ;
+
+
+        uint64_t offset ;
+
+
+        uint64_t length ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1858,8 +2523,12 @@ explicit operator View() const {
 
     struct ComputePassDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        PassTimestampWrites const * timestampWrites = nullptr;
+
+
+        StringView label ;
+
+
+        PassTimestampWrites const * timestampWrites  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1869,10 +2538,18 @@ explicit operator View() const {
 
     struct ComputeState {
         ChainedStruct const * nextInChain = nullptr;
-        ShaderModuleBase* module;
-        StringView entryPoint;
-        size_t constantCount = 0;
-        ConstantEntry const * constants = nullptr;
+
+
+        ShaderModuleBase* module ;
+
+
+        StringView entryPoint ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<ConstantEntry const *>> constants;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1890,8 +2567,13 @@ explicit operator View() const {
         DawnDrmFormatCapabilities(DawnDrmFormatCapabilities&&);
         DawnDrmFormatCapabilities& operator=(DawnDrmFormatCapabilities&&);
 
-        alignas(wgpu::DawnDrmFormatCapabilities::kFirstMemberAlignment) size_t propertiesCount;
-        DawnDrmFormatProperties const * properties = nullptr;
+        alignas(wgpu::DawnDrmFormatCapabilities::kFirstMemberAlignment)
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<DawnDrmFormatProperties const *>> properties;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1903,16 +2585,36 @@ explicit operator View() const {
 
     struct DepthStencilState {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
-        wgpu::OptionalBool depthWriteEnabled = wgpu::OptionalBool::Undefined;
-        wgpu::CompareFunction depthCompare = wgpu::CompareFunction::Undefined;
-        StencilFaceState stencilFront;
-        StencilFaceState stencilBack;
-        uint32_t stencilReadMask = 0xFFFFFFFF;
-        uint32_t stencilWriteMask = 0xFFFFFFFF;
-        int32_t depthBias = 0;
-        float depthBiasSlopeScale = 0.f;
-        float depthBiasClamp = 0.f;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
+
+
+        wgpu::OptionalBool depthWriteEnabled  = wgpu::OptionalBool::Undefined;
+
+
+        wgpu::CompareFunction depthCompare  = wgpu::CompareFunction::Undefined;
+
+
+        StencilFaceState stencilFront ;
+
+
+        StencilFaceState stencilBack ;
+
+
+        uint32_t stencilReadMask  = 0xFFFFFFFF;
+
+
+        uint32_t stencilWriteMask  = 0xFFFFFFFF;
+
+
+        int32_t depthBias  = 0;
+
+
+        float depthBiasSlopeScale  = 0.f;
+
+
+        float depthBiasClamp  = 0.f;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -1928,19 +2630,45 @@ explicit operator View() const {
 
     struct ExternalTextureDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        TextureViewBase* plane0;
-        TextureViewBase* plane1 = nullptr;
-        Origin2D cropOrigin;
-        Extent2D cropSize;
-        Extent2D apparentSize;
-        wgpu::Bool doYuvToRgbConversionOnly = false;
-        float const * yuvToRgbConversionMatrix = nullptr;
-        float const * srcTransferFunctionParameters = nullptr;
-        float const * dstTransferFunctionParameters = nullptr;
-        float const * gamutConversionMatrix = nullptr;
-        wgpu::Bool mirrored = false;
-        wgpu::ExternalTextureRotation rotation = wgpu::ExternalTextureRotation::Rotate0Degrees;
+
+
+        StringView label ;
+
+
+        TextureViewBase* plane0 ;
+
+
+        TextureViewBase* plane1  = nullptr;
+
+
+        Origin2D cropOrigin ;
+
+
+        Extent2D cropSize ;
+
+
+        Extent2D apparentSize ;
+
+
+        wgpu::Bool doYuvToRgbConversionOnly  = false;
+
+
+        float const * yuvToRgbConversionMatrix  = nullptr;
+
+
+        float const * srcTransferFunctionParameters  = nullptr;
+
+
+        float const * dstTransferFunctionParameters  = nullptr;
+
+
+        float const * gamutConversionMatrix  = nullptr;
+
+
+        wgpu::Bool mirrored  = false;
+
+
+        wgpu::ExternalTextureRotation rotation  = wgpu::ExternalTextureRotation::Rotate0Degrees;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1949,8 +2677,12 @@ explicit operator View() const {
     };
 
     struct FutureWaitInfo {
-        Future future;
-        wgpu::Bool completed = false;
+
+
+        Future future ;
+
+
+        wgpu::Bool completed  = false;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1960,9 +2692,15 @@ explicit operator View() const {
 
     struct ImageCopyExternalTexture {
         ChainedStruct const * nextInChain = nullptr;
-        ExternalTextureBase* externalTexture;
-        Origin3D origin;
-        Extent2D naturalSize;
+
+
+        ExternalTextureBase* externalTexture ;
+
+
+        Origin3D origin ;
+
+
+        Extent2D naturalSize ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1972,9 +2710,15 @@ explicit operator View() const {
 
     struct InstanceDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        size_t requiredFeatureCount = 0;
-        wgpu::InstanceFeatureName const * requiredFeatures = nullptr;
-        InstanceLimits const * requiredLimits = nullptr;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::InstanceFeatureName const *>> requiredFeatures;
+
+
+        InstanceLimits const * requiredLimits  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -1984,38 +2728,102 @@ explicit operator View() const {
 
     struct Limits {
         ChainedStructOut * nextInChain = nullptr;
-        uint32_t maxTextureDimension1D = wgpu::kLimitU32Undefined;
-        uint32_t maxTextureDimension2D = wgpu::kLimitU32Undefined;
-        uint32_t maxTextureDimension3D = wgpu::kLimitU32Undefined;
-        uint32_t maxTextureArrayLayers = wgpu::kLimitU32Undefined;
-        uint32_t maxBindGroups = wgpu::kLimitU32Undefined;
-        uint32_t maxBindGroupsPlusVertexBuffers = wgpu::kLimitU32Undefined;
-        uint32_t maxBindingsPerBindGroup = wgpu::kLimitU32Undefined;
-        uint32_t maxDynamicUniformBuffersPerPipelineLayout = wgpu::kLimitU32Undefined;
-        uint32_t maxDynamicStorageBuffersPerPipelineLayout = wgpu::kLimitU32Undefined;
-        uint32_t maxSampledTexturesPerShaderStage = wgpu::kLimitU32Undefined;
-        uint32_t maxSamplersPerShaderStage = wgpu::kLimitU32Undefined;
-        uint32_t maxStorageBuffersPerShaderStage = wgpu::kLimitU32Undefined;
-        uint32_t maxStorageTexturesPerShaderStage = wgpu::kLimitU32Undefined;
-        uint32_t maxUniformBuffersPerShaderStage = wgpu::kLimitU32Undefined;
-        uint64_t maxUniformBufferBindingSize = wgpu::kLimitU64Undefined;
-        uint64_t maxStorageBufferBindingSize = wgpu::kLimitU64Undefined;
-        uint32_t minUniformBufferOffsetAlignment = wgpu::kLimitU32Undefined;
-        uint32_t minStorageBufferOffsetAlignment = wgpu::kLimitU32Undefined;
-        uint32_t maxVertexBuffers = wgpu::kLimitU32Undefined;
-        uint64_t maxBufferSize = wgpu::kLimitU64Undefined;
-        uint32_t maxVertexAttributes = wgpu::kLimitU32Undefined;
-        uint32_t maxVertexBufferArrayStride = wgpu::kLimitU32Undefined;
-        uint32_t maxInterStageShaderVariables = wgpu::kLimitU32Undefined;
-        uint32_t maxColorAttachments = wgpu::kLimitU32Undefined;
-        uint32_t maxColorAttachmentBytesPerSample = wgpu::kLimitU32Undefined;
-        uint32_t maxComputeWorkgroupStorageSize = wgpu::kLimitU32Undefined;
-        uint32_t maxComputeInvocationsPerWorkgroup = wgpu::kLimitU32Undefined;
-        uint32_t maxComputeWorkgroupSizeX = wgpu::kLimitU32Undefined;
-        uint32_t maxComputeWorkgroupSizeY = wgpu::kLimitU32Undefined;
-        uint32_t maxComputeWorkgroupSizeZ = wgpu::kLimitU32Undefined;
-        uint32_t maxComputeWorkgroupsPerDimension = wgpu::kLimitU32Undefined;
-        uint32_t maxImmediateSize = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxTextureDimension1D  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxTextureDimension2D  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxTextureDimension3D  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxTextureArrayLayers  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxBindGroups  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxBindGroupsPlusVertexBuffers  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxBindingsPerBindGroup  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxDynamicUniformBuffersPerPipelineLayout  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxDynamicStorageBuffersPerPipelineLayout  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxSampledTexturesPerShaderStage  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxSamplersPerShaderStage  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxStorageBuffersPerShaderStage  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxStorageTexturesPerShaderStage  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxUniformBuffersPerShaderStage  = wgpu::kLimitU32Undefined;
+
+
+        uint64_t maxUniformBufferBindingSize  = wgpu::kLimitU64Undefined;
+
+
+        uint64_t maxStorageBufferBindingSize  = wgpu::kLimitU64Undefined;
+
+
+        uint32_t minUniformBufferOffsetAlignment  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t minStorageBufferOffsetAlignment  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxVertexBuffers  = wgpu::kLimitU32Undefined;
+
+
+        uint64_t maxBufferSize  = wgpu::kLimitU64Undefined;
+
+
+        uint32_t maxVertexAttributes  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxVertexBufferArrayStride  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxInterStageShaderVariables  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxColorAttachments  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxColorAttachmentBytesPerSample  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxComputeWorkgroupStorageSize  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxComputeInvocationsPerWorkgroup  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxComputeWorkgroupSizeX  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxComputeWorkgroupSizeY  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxComputeWorkgroupSizeZ  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxComputeWorkgroupsPerDimension  = wgpu::kLimitU32Undefined;
+
+
+        uint32_t maxImmediateSize  = wgpu::kLimitU32Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2027,9 +2835,16 @@ explicit operator View() const {
         PipelineLayoutPixelLocalStorage() {
             sType = wgpu::SType::PipelineLayoutPixelLocalStorage;
         }
-        alignas(wgpu::PipelineLayoutPixelLocalStorage::kFirstMemberAlignment) uint64_t totalPixelLocalStorageSize;
-        size_t storageAttachmentCount = 0;
-        PipelineLayoutStorageAttachment const * storageAttachments = nullptr;
+        alignas(wgpu::PipelineLayoutPixelLocalStorage::kFirstMemberAlignment)
+
+
+        uint64_t totalPixelLocalStorageSize ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<PipelineLayoutStorageAttachment const *>> storageAttachments;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2037,14 +2852,56 @@ explicit operator View() const {
 
     };
 
+    struct RenderBundleEncoderDescriptor {
+        ChainedStruct const * nextInChain = nullptr;
+
+
+        StringView label ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<ColorAttachmentIndex, std::remove_pointer_t<wgpu::TextureFormat const *>> colorFormats;
+
+
+        wgpu::TextureFormat depthStencilFormat  = wgpu::TextureFormat::Undefined;
+
+
+        uint32_t sampleCount  = 1;
+
+
+        wgpu::Bool depthReadOnly  = false;
+
+
+        wgpu::Bool stencilReadOnly  = false;
+
+        // Equality operators, mostly for testing. Note that this tests
+        // strict pointer-pointer equality if the struct contains member pointers.
+        bool operator==(const RenderBundleEncoderDescriptor& rhs) const;
+
+    };
+
     struct RenderPassColorAttachment {
         ChainedStruct const * nextInChain = nullptr;
-        TextureViewBase* view = nullptr;
-        uint32_t depthSlice = wgpu::kDepthSliceUndefined;
-        TextureViewBase* resolveTarget = nullptr;
-        wgpu::LoadOp loadOp = wgpu::LoadOp::Undefined;
-        wgpu::StoreOp storeOp = wgpu::StoreOp::Undefined;
-        Color clearValue;
+
+
+        TextureViewBase* view  = nullptr;
+
+
+        uint32_t depthSlice  = wgpu::kDepthSliceUndefined;
+
+
+        TextureViewBase* resolveTarget  = nullptr;
+
+
+        wgpu::LoadOp loadOp  = wgpu::LoadOp::Undefined;
+
+
+        wgpu::StoreOp storeOp  = wgpu::StoreOp::Undefined;
+
+
+        Color clearValue ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2056,8 +2913,13 @@ explicit operator View() const {
         RenderPassRenderAreaRect() {
             sType = wgpu::SType::RenderPassRenderAreaRect;
         }
-        alignas(wgpu::RenderPassRenderAreaRect::kFirstMemberAlignment) Origin2D origin;
-        Extent2D size;
+        alignas(wgpu::RenderPassRenderAreaRect::kFirstMemberAlignment)
+
+
+        Origin2D origin ;
+
+
+        Extent2D size ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2067,11 +2929,21 @@ explicit operator View() const {
 
     struct RenderPassStorageAttachment {
         ChainedStruct const * nextInChain = nullptr;
-        uint64_t offset = 0;
-        TextureViewBase* storage;
-        wgpu::LoadOp loadOp = wgpu::LoadOp::Undefined;
-        wgpu::StoreOp storeOp = wgpu::StoreOp::Undefined;
-        Color clearValue;
+
+
+        uint64_t offset  = 0;
+
+
+        TextureViewBase* storage ;
+
+
+        wgpu::LoadOp loadOp  = wgpu::LoadOp::Undefined;
+
+
+        wgpu::StoreOp storeOp  = wgpu::StoreOp::Undefined;
+
+
+        Color clearValue ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2081,11 +2953,21 @@ explicit operator View() const {
 
     struct RequestAdapterOptions {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::FeatureLevel featureLevel = wgpu::FeatureLevel::Core;
-        wgpu::PowerPreference powerPreference = wgpu::PowerPreference::Undefined;
-        wgpu::Bool forceFallbackAdapter = false;
-        wgpu::BackendType backendType = wgpu::BackendType::Undefined;
-        SurfaceBase* compatibleSurface = nullptr;
+
+
+        wgpu::FeatureLevel featureLevel  = wgpu::FeatureLevel::Core;
+
+
+        wgpu::PowerPreference powerPreference  = wgpu::PowerPreference::Undefined;
+
+
+        wgpu::Bool forceFallbackAdapter  = false;
+
+
+        wgpu::BackendType backendType  = wgpu::BackendType::Undefined;
+
+
+        SurfaceBase* compatibleSurface  = nullptr;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -2101,17 +2983,39 @@ explicit operator View() const {
 
     struct SamplerDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        wgpu::AddressMode addressModeU = wgpu::AddressMode::ClampToEdge;
-        wgpu::AddressMode addressModeV = wgpu::AddressMode::ClampToEdge;
-        wgpu::AddressMode addressModeW = wgpu::AddressMode::ClampToEdge;
-        wgpu::FilterMode magFilter = wgpu::FilterMode::Nearest;
-        wgpu::FilterMode minFilter = wgpu::FilterMode::Nearest;
-        wgpu::MipmapFilterMode mipmapFilter = wgpu::MipmapFilterMode::Nearest;
-        float lodMinClamp = 0.f;
-        float lodMaxClamp = 32.f;
-        wgpu::CompareFunction compare = wgpu::CompareFunction::Undefined;
-        uint16_t maxAnisotropy = 1;
+
+
+        StringView label ;
+
+
+        wgpu::AddressMode addressModeU  = wgpu::AddressMode::ClampToEdge;
+
+
+        wgpu::AddressMode addressModeV  = wgpu::AddressMode::ClampToEdge;
+
+
+        wgpu::AddressMode addressModeW  = wgpu::AddressMode::ClampToEdge;
+
+
+        wgpu::FilterMode magFilter  = wgpu::FilterMode::Nearest;
+
+
+        wgpu::FilterMode minFilter  = wgpu::FilterMode::Nearest;
+
+
+        wgpu::MipmapFilterMode mipmapFilter  = wgpu::MipmapFilterMode::Nearest;
+
+
+        float lodMinClamp  = 0.f;
+
+
+        float lodMaxClamp  = 32.f;
+
+
+        wgpu::CompareFunction compare  = wgpu::CompareFunction::Undefined;
+
+
+        uint16_t maxAnisotropy  = 1;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -2127,7 +3031,9 @@ explicit operator View() const {
 
     struct ShaderModuleDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2137,7 +3043,9 @@ explicit operator View() const {
 
     struct SharedBufferMemoryDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2147,7 +3055,9 @@ explicit operator View() const {
 
     struct SharedFenceDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2157,7 +3067,9 @@ explicit operator View() const {
 
     struct SharedFenceExportInfo {
         ChainedStructOut * nextInChain = nullptr;
-        wgpu::SharedFenceType type = {};
+
+
+        wgpu::SharedFenceType type  = {};
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2169,7 +3081,10 @@ explicit operator View() const {
         SharedTextureMemoryAHardwareBufferProperties() {
             sType = wgpu::SType::SharedTextureMemoryAHardwareBufferProperties;
         }
-        alignas(wgpu::SharedTextureMemoryAHardwareBufferProperties::kFirstMemberAlignment) YCbCrVkDescriptor yCbCrInfo;
+        alignas(wgpu::SharedTextureMemoryAHardwareBufferProperties::kFirstMemberAlignment)
+
+
+        YCbCrVkDescriptor yCbCrInfo ;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -2185,11 +3100,24 @@ explicit operator View() const {
 
     struct SharedTextureMemoryBeginAccessDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::Bool concurrentRead;
-        wgpu::Bool initialized;
-        size_t fenceCount;
-        SharedFenceBase* const * fences = nullptr;
-        uint64_t const * signaledValues = nullptr;
+
+
+        wgpu::Bool concurrentRead ;
+
+
+        wgpu::Bool initialized ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<SharedFenceBase* const *>> fences;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<uint64_t const *>> signaledValues;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2201,11 +3129,22 @@ explicit operator View() const {
         SharedTextureMemoryDmaBufDescriptor() {
             sType = wgpu::SType::SharedTextureMemoryDmaBufDescriptor;
         }
-        alignas(wgpu::SharedTextureMemoryDmaBufDescriptor::kFirstMemberAlignment) Extent3D size;
-        uint32_t drmFormat;
-        uint64_t drmModifier;
-        size_t planeCount;
-        SharedTextureMemoryDmaBufPlane const * planes = nullptr;
+        alignas(wgpu::SharedTextureMemoryDmaBufDescriptor::kFirstMemberAlignment)
+
+
+        Extent3D size ;
+
+
+        uint32_t drmFormat ;
+
+
+        uint64_t drmModifier ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<SharedTextureMemoryDmaBufPlane const *>> planes;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2217,7 +3156,10 @@ explicit operator View() const {
         SharedTextureMemoryMetalEndAccessState() {
             sType = wgpu::SType::SharedTextureMemoryMetalEndAccessState;
         }
-        alignas(wgpu::SharedTextureMemoryMetalEndAccessState::kFirstMemberAlignment) Future commandsScheduledFuture;
+        alignas(wgpu::SharedTextureMemoryMetalEndAccessState::kFirstMemberAlignment)
+
+
+        Future commandsScheduledFuture ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2227,7 +3169,9 @@ explicit operator View() const {
 
     struct SurfaceDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2236,8 +3180,12 @@ explicit operator View() const {
     };
 
     struct TexelCopyBufferInfo {
-        TexelCopyBufferLayout layout;
-        BufferBase* buffer;
+
+
+        TexelCopyBufferLayout layout ;
+
+
+        BufferBase* buffer ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2246,10 +3194,18 @@ explicit operator View() const {
     };
 
     struct TexelCopyTextureInfo {
-        TextureBase* texture;
-        uint32_t mipLevel = 0;
-        Origin3D origin;
-        wgpu::TextureAspect aspect = wgpu::TextureAspect::All;
+
+
+        TextureBase* texture ;
+
+
+        uint32_t mipLevel  = 0;
+
+
+        Origin3D origin ;
+
+
+        wgpu::TextureAspect aspect  = wgpu::TextureAspect::All;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -2267,7 +3223,10 @@ explicit operator View() const {
         TextureComponentSwizzleDescriptor() {
             sType = wgpu::SType::TextureComponentSwizzleDescriptor;
         }
-        alignas(wgpu::TextureComponentSwizzleDescriptor::kFirstMemberAlignment) TextureComponentSwizzle swizzle;
+        alignas(wgpu::TextureComponentSwizzleDescriptor::kFirstMemberAlignment)
+
+
+        TextureComponentSwizzle swizzle ;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -2283,15 +3242,33 @@ explicit operator View() const {
 
     struct TextureDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        wgpu::TextureUsage usage = wgpu::TextureUsage::None;
-        wgpu::TextureDimension dimension = wgpu::TextureDimension::e2D;
-        Extent3D size;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
-        uint32_t mipLevelCount = 1;
-        uint32_t sampleCount = 1;
-        size_t viewFormatCount = 0;
-        wgpu::TextureFormat const * viewFormats = nullptr;
+
+
+        StringView label ;
+
+
+        wgpu::TextureUsage usage  = wgpu::TextureUsage::None;
+
+
+        wgpu::TextureDimension dimension  = wgpu::TextureDimension::e2D;
+
+
+        Extent3D size ;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
+
+
+        uint32_t mipLevelCount  = 1;
+
+
+        uint32_t sampleCount  = 1;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::TextureFormat const *>> viewFormats;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -2307,10 +3284,18 @@ explicit operator View() const {
 
     struct VertexBufferLayout {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::VertexStepMode stepMode = wgpu::VertexStepMode::Undefined;
-        uint64_t arrayStride;
-        size_t attributeCount;
-        VertexAttribute const * attributes = nullptr;
+
+
+        wgpu::VertexStepMode stepMode  = wgpu::VertexStepMode::Undefined;
+
+
+        uint64_t arrayStride ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<VertexAttribute const *>> attributes;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2327,16 +3312,36 @@ explicit operator View() const {
         AdapterInfo& operator=(AdapterInfo&&);
 
         ChainedStructOut * nextInChain = nullptr;
-        StringView vendor;
-        StringView architecture;
-        StringView device;
-        StringView description;
-        wgpu::BackendType backendType = wgpu::BackendType::Undefined;
-        wgpu::AdapterType adapterType = {};
-        uint32_t vendorID;
-        uint32_t deviceID;
-        uint32_t subgroupMinSize;
-        uint32_t subgroupMaxSize;
+
+
+        StringView vendor ;
+
+
+        StringView architecture ;
+
+
+        StringView device ;
+
+
+        StringView description ;
+
+
+        wgpu::BackendType backendType  = wgpu::BackendType::Undefined;
+
+
+        wgpu::AdapterType adapterType  = {};
+
+
+        uint32_t vendorID ;
+
+
+        uint32_t deviceID ;
+
+
+        uint32_t subgroupMinSize ;
+
+
+        uint32_t subgroupMaxSize ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2348,10 +3353,18 @@ explicit operator View() const {
 
     struct BindGroupDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        BindGroupLayoutBase* layout;
-        size_t entryCount = 0;
-        BindGroupEntry const * entries = nullptr;
+
+
+        StringView label ;
+
+
+        BindGroupLayoutBase* layout ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<BindGroupEntry const *>> entries;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2361,9 +3374,15 @@ explicit operator View() const {
 
     struct BindGroupLayoutDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        size_t entryCount = 0;
-        BindGroupLayoutEntry const * entries = nullptr;
+
+
+        StringView label ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<BindGroupLayoutEntry const *>> entries;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2373,9 +3392,15 @@ explicit operator View() const {
 
     struct ColorTargetState {
         ChainedStruct const * nextInChain = nullptr;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
-        BlendState const * blend = nullptr;
-        wgpu::ColorWriteMask writeMask = wgpu::ColorWriteMask::All;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
+
+
+        BlendState const * blend  = nullptr;
+
+
+        wgpu::ColorWriteMask writeMask  = wgpu::ColorWriteMask::All;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2385,8 +3410,12 @@ explicit operator View() const {
 
     struct CompilationInfo {
         ChainedStruct const * nextInChain = nullptr;
-        size_t messageCount;
-        CompilationMessage const * messages = nullptr;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<CompilationMessage const *>> messages;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2396,9 +3425,15 @@ explicit operator View() const {
 
     struct ComputePipelineDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        PipelineLayoutBase* layout = nullptr;
-        ComputeState compute;
+
+
+        StringView label ;
+
+
+        PipelineLayoutBase* layout  = nullptr;
+
+
+        ComputeState compute ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2417,13 +3452,27 @@ explicit operator View() const {
 
     struct DeviceDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        size_t requiredFeatureCount = 0;
-        wgpu::FeatureName const * requiredFeatures = nullptr;
-        Limits const * requiredLimits = nullptr;
-        QueueDescriptor defaultQueue;
-        WGPUDeviceLostCallbackInfo deviceLostCallbackInfo = WGPU_DEVICE_LOST_CALLBACK_INFO_INIT;
-        WGPUUncapturedErrorCallbackInfo uncapturedErrorCallbackInfo = WGPU_UNCAPTURED_ERROR_CALLBACK_INFO_INIT;
+
+
+        StringView label ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<wgpu::FeatureName const *>> requiredFeatures;
+
+
+        Limits const * requiredLimits  = nullptr;
+
+
+        QueueDescriptor defaultQueue ;
+
+
+        WGPUDeviceLostCallbackInfo deviceLostCallbackInfo  = WGPU_DEVICE_LOST_CALLBACK_INFO_INIT;
+
+
+        WGPUUncapturedErrorCallbackInfo uncapturedErrorCallbackInfo  = WGPU_UNCAPTURED_ERROR_CALLBACK_INFO_INIT;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2433,10 +3482,18 @@ explicit operator View() const {
 
     struct PipelineLayoutDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        size_t bindGroupLayoutCount;
-        BindGroupLayoutBase* const * bindGroupLayouts = nullptr;
-        uint32_t immediateSize = 0;
+
+
+        StringView label ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<BindGroupIndex, std::remove_pointer_t<BindGroupLayoutBase* const *>> bindGroupLayouts;
+
+
+        uint32_t immediateSize  = 0;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2448,9 +3505,16 @@ explicit operator View() const {
         RenderPassPixelLocalStorage() {
             sType = wgpu::SType::RenderPassPixelLocalStorage;
         }
-        alignas(wgpu::RenderPassPixelLocalStorage::kFirstMemberAlignment) uint64_t totalPixelLocalStorageSize;
-        size_t storageAttachmentCount = 0;
-        RenderPassStorageAttachment const * storageAttachments = nullptr;
+        alignas(wgpu::RenderPassPixelLocalStorage::kFirstMemberAlignment)
+
+
+        uint64_t totalPixelLocalStorageSize ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<RenderPassStorageAttachment const *>> storageAttachments;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2460,7 +3524,9 @@ explicit operator View() const {
 
     struct SharedTextureMemoryDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
+
+
+        StringView label ;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2477,10 +3543,21 @@ explicit operator View() const {
         SharedTextureMemoryEndAccessState& operator=(SharedTextureMemoryEndAccessState&&);
 
         ChainedStructOut * nextInChain = nullptr;
-        wgpu::Bool initialized;
-        size_t fenceCount;
-        SharedFenceBase* const * fences = nullptr;
-        uint64_t const * signaledValues = nullptr;
+
+
+        wgpu::Bool initialized ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<SharedFenceBase* const *>> fences;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<uint64_t const *>> signaledValues;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2492,9 +3569,15 @@ explicit operator View() const {
 
     struct SharedTextureMemoryProperties {
         ChainedStructOut * nextInChain = nullptr;
-        wgpu::TextureUsage usage = wgpu::TextureUsage::None;
-        Extent3D size;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
+
+
+        wgpu::TextureUsage usage  = wgpu::TextureUsage::None;
+
+
+        Extent3D size ;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2504,15 +3587,33 @@ explicit operator View() const {
 
     struct TextureViewDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        wgpu::TextureFormat format = wgpu::TextureFormat::Undefined;
-        wgpu::TextureViewDimension dimension = wgpu::TextureViewDimension::Undefined;
-        uint32_t baseMipLevel = 0;
-        uint32_t mipLevelCount = wgpu::kMipLevelCountUndefined;
-        uint32_t baseArrayLayer = 0;
-        uint32_t arrayLayerCount = wgpu::kArrayLayerCountUndefined;
-        wgpu::TextureAspect aspect = wgpu::TextureAspect::All;
-        wgpu::TextureUsage usage = wgpu::TextureUsage::None;
+
+
+        StringView label ;
+
+
+        wgpu::TextureFormat format  = wgpu::TextureFormat::Undefined;
+
+
+        wgpu::TextureViewDimension dimension  = wgpu::TextureViewDimension::Undefined;
+
+
+        uint32_t baseMipLevel  = 0;
+
+
+        uint32_t mipLevelCount  = wgpu::kMipLevelCountUndefined;
+
+
+        uint32_t baseArrayLayer  = 0;
+
+
+        uint32_t arrayLayerCount  = wgpu::kArrayLayerCountUndefined;
+
+
+        wgpu::TextureAspect aspect  = wgpu::TextureAspect::All;
+
+
+        wgpu::TextureUsage usage  = wgpu::TextureUsage::None;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -2528,12 +3629,24 @@ explicit operator View() const {
 
     struct VertexState {
         ChainedStruct const * nextInChain = nullptr;
-        ShaderModuleBase* module;
-        StringView entryPoint;
-        size_t constantCount = 0;
-        ConstantEntry const * constants = nullptr;
-        size_t bufferCount = 0;
-        VertexBufferLayout const * buffers = nullptr;
+
+
+        ShaderModuleBase* module ;
+
+
+        StringView entryPoint ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<ConstantEntry const *>> constants;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<VertexBufferSlot, std::remove_pointer_t<VertexBufferLayout const *>> buffers;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2543,12 +3656,24 @@ explicit operator View() const {
 
     struct FragmentState {
         ChainedStruct const * nextInChain = nullptr;
-        ShaderModuleBase* module;
-        StringView entryPoint;
-        size_t constantCount = 0;
-        ConstantEntry const * constants = nullptr;
-        size_t targetCount;
-        ColorTargetState const * targets = nullptr;
+
+
+        ShaderModuleBase* module ;
+
+
+        StringView entryPoint ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<size_t, std::remove_pointer_t<ConstantEntry const *>> constants;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<ColorAttachmentIndex, std::remove_pointer_t<ColorTargetState const *>> targets;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2558,12 +3683,24 @@ explicit operator View() const {
 
     struct RenderPassDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        size_t colorAttachmentCount;
-        RenderPassColorAttachment const * colorAttachments = nullptr;
-        RenderPassDepthStencilAttachment const * depthStencilAttachment = nullptr;
-        QuerySetBase* occlusionQuerySet = nullptr;
-        PassTimestampWrites const * timestampWrites = nullptr;
+
+
+        StringView label ;
+
+
+
+
+        // TODO(https://crbug.com/524405497): Support fixed-length spans.
+        ityp::span<ColorAttachmentIndex, std::remove_pointer_t<RenderPassColorAttachment const *>> colorAttachments;
+
+
+        RenderPassDepthStencilAttachment const * depthStencilAttachment  = nullptr;
+
+
+        QuerySetBase* occlusionQuerySet  = nullptr;
+
+
+        PassTimestampWrites const * timestampWrites  = nullptr;
 
         // Equality operators, mostly for testing. Note that this tests
         // strict pointer-pointer equality if the struct contains member pointers.
@@ -2573,13 +3710,27 @@ explicit operator View() const {
 
     struct RenderPipelineDescriptor {
         ChainedStruct const * nextInChain = nullptr;
-        StringView label;
-        PipelineLayoutBase* layout = nullptr;
-        VertexState vertex;
-        PrimitiveState primitive;
-        DepthStencilState const * depthStencil = nullptr;
-        MultisampleState multisample;
-        FragmentState const * fragment = nullptr;
+
+
+        StringView label ;
+
+
+        PipelineLayoutBase* layout  = nullptr;
+
+
+        VertexState vertex ;
+
+
+        PrimitiveState primitive ;
+
+
+        DepthStencilState const * depthStencil  = nullptr;
+
+
+        MultisampleState multisample ;
+
+
+        FragmentState const * fragment  = nullptr;
 
         // This method makes a copy of the struct, then, for any enum members with trivial
         // defaulting (where something like "Undefined" is replaced with a default), applies
@@ -2593,6 +3744,7 @@ explicit operator View() const {
 
     };
 
+    // NOLINTEND(bugprone-invalid-enum-default-initialization)
 
 
     // SharedBufferMemoryEndAccessState
