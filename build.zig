@@ -1007,6 +1007,7 @@ pub fn build(b: *std.Build) void {
         },
         .flags = &flags,
     });
+    dawn_glfw_mod.addCMacro("WGPU_GLFW_IMPLEMENTATION", "1");
     const dawn_glfw = b.addLibrary(.{
         .name = "dawn_glfw",
         .root_module = dawn_glfw_mod,
@@ -1026,6 +1027,7 @@ pub fn build(b: *std.Build) void {
     sample_utils_mod.addIncludePath(dawn_dep.path("src/dawn/partition_alloc"));
     sample_utils_mod.addIncludePath(b.path("include"));
     sample_utils_mod.addIncludePath(b.path("src"));
+    sample_utils_mod.addCMacro("DAWN_SUPPORTS_GLFW_FOR_WINDOWING", "1");
     sample_utils_mod.addCSourceFiles(.{
         .root = dawn_dep.path("src/dawn/samples"),
         .files = &.{"SampleUtils.cpp"},
@@ -1051,6 +1053,7 @@ pub fn build(b: *std.Build) void {
     hello_triangle_mod.addIncludePath(dawn_dep.path("src/dawn/partition_alloc"));
     hello_triangle_mod.addIncludePath(b.path("include"));
     hello_triangle_mod.addIncludePath(b.path("src"));
+    hello_triangle_mod.addCMacro("DAWN_SUPPORTS_GLFW_FOR_WINDOWING", "1");
     hello_triangle_mod.addCSourceFiles(.{
         .root = dawn_dep.path("src/dawn/samples"),
         .files = &.{"HelloTriangle.cpp"},
