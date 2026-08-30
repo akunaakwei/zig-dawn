@@ -376,7 +376,7 @@ pub fn build(b: *std.Build) void {
         tint_spirv_mod.addIncludePath(spirv_headers_dep.path("include"));
     }
     if (maybe_spirv_tools_dep) |spirv_tools_dep| {
-        tint_spirv_mod.addIncludePath(spirv_tools_dep.namedLazyPath("root"));
+        tint_spirv_mod.addIncludePath(spirv_tools_dep.builder.dependency("spirv_tools", .{}).path("."));
         tint_spirv_mod.linkLibrary(spirv_tools_dep.artifact("spvtools"));
     }
     tint_spirv_mod.addCSourceFiles(.{
