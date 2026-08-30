@@ -783,11 +783,6 @@ pub fn build(b: *std.Build) void {
     }
 
     native_mod.addCSourceFiles(.{
-        .root = dawn_dep.path("src/dawn/native"),
-        .files = &.{"DawnNative.cpp"},
-        .flags = &flags,
-    });
-    native_mod.addCSourceFiles(.{
         .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
         .files = &dawn_sources,
         .flags = &flags,
