@@ -29,8 +29,8 @@
             .lazy = true,
         },
         .abseil = .{
-            .url = "https://github.com/akunaakwei/zig-abseil/archive/e741311c8743fce74142dd61cf9ac79d6b251eff.tar.gz",
-            .hash = "abseil-0.0.0-IbFgeKslAAA7XplCOJgfmugSI5dI3Io0H5hSXg_-EoYt",
+            .url = "https://github.com/akunaakwei/zig-abseil/archive/7dc7c0582f1eb90ab004e2915af346bb01c024b4.tar.gz",
+            .hash = "abseil-0.0.0-IbFgeJImAAB8mp5No1vKgReD0i-kFyZ06Tsh4JX3E4uI",
         },
         .glfw = .{
             .url = "https://codeberg.org/Games-by-Mason/glfw_zig/archive/398e67ad42750ae16e4d11d4abb1e7455c0d0139.tar.gz",
