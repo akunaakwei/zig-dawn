@@ -5,6 +5,8 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     const linkage = b.option(std.builtin.LinkMode, "linkage", "Linkage type for the library") orelse .static;
+    const pic = b.option(bool, "pic", "Enable PIC") orelse (if (linkage == .dynamic) true else null);
+
     const dawn_enable_d3d11 = b.option(bool, "DAWN_ENABLE_D3D11", "Enable compilation of the D3D11 backend") orelse false;
     const dawn_enable_d3d12 = b.option(bool, "DAWN_ENABLE_D3D12", "Enable compilation of the D3D12 backend") orelse false;
     const dawn_enable_d3d = dawn_enable_d3d11 or dawn_enable_d3d12;
@@ -36,6 +38,7 @@ pub fn build(b: *std.Build) void {
     const abseil_dep = b.dependency("abseil", .{
         .target = target,
         .optimize = optimize,
+        .pic = pic,
     });
     const abseil = abseil_dep.artifact("abseil");
 
@@ -43,11 +46,13 @@ pub fn build(b: *std.Build) void {
     const maybe_spirv_tools_dep = if (dawn_enable_vulkan) b.lazyDependency("spirv_tools", .{
         .target = target,
         .optimize = optimize,
+        .pic = pic,
     }) else null;
     const maybe_vulkan_headers_dep = if (dawn_enable_vulkan) b.lazyDependency("vulkan_headers", .{}) else null;
     const maybe_vulkan_utility_dep = if (dawn_enable_vulkan) b.lazyDependency("vulkan_utility", .{
         .target = target,
         .optimize = optimize,
+        .pic = pic,
     }) else null;
 
     const flags = .{
@@ -82,6 +87,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     tint_utils_mod.linkLibrary(abseil);
     tint_utils_mod.addIncludePath(dawn_dep.path("."));
@@ -221,6 +227,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     tint_core_mod.linkLibrary(tint_utils);
     tint_core_mod.addIncludePath(dawn_dep.path("."));
@@ -263,6 +270,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     tint_wgsl_mod.linkLibrary(tint_utils);
     tint_wgsl_mod.addIncludePath(dawn_dep.path("."));
@@ -329,6 +337,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     tint_hlsl_mod.linkLibrary(tint_utils);
     tint_hlsl_mod.addIncludePath(dawn_dep.path("."));
@@ -369,6 +378,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     tint_spirv_mod.linkLibrary(tint_utils);
     tint_spirv_mod.addIncludePath(dawn_dep.path("."));
@@ -376,7 +386,7 @@ pub fn build(b: *std.Build) void {
         tint_spirv_mod.addIncludePath(spirv_headers_dep.path("include"));
     }
     if (maybe_spirv_tools_dep) |spirv_tools_dep| {
-        tint_spirv_mod.addIncludePath(spirv_tools_dep.builder.dependency("spirv_tools", .{}).path("."));
+        tint_spirv_mod.addIncludePath(spirv_tools_dep.namedLazyPath("root"));
         tint_spirv_mod.linkLibrary(spirv_tools_dep.artifact("spvtools"));
     }
     tint_spirv_mod.addCSourceFiles(.{
@@ -429,6 +439,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     tint_null_mod.linkLibrary(tint_utils);
     tint_null_mod.addIncludePath(dawn_dep.path("."));
@@ -446,6 +457,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     tint_api_mod.linkLibrary(tint_utils);
     tint_api_mod.addIncludePath(dawn_dep.path("."));
@@ -473,6 +485,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     tint_exe_mod.linkLibrary(tint_utils);
     tint_exe_mod.linkLibrary(tint_api);
@@ -502,6 +515,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     dawn_common_mod.linkLibrary(abseil);
     dawn_common_mod.addIncludePath(dawn_dep.path("."));
@@ -552,6 +566,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     wgpu_utils_mod.linkLibrary(abseil);
     wgpu_utils_mod.linkLibrary(dawn_common);
@@ -582,6 +597,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     platform_mod.linkLibrary(dawn_common);
     platform_mod.addIncludePath(dawn_dep.path("."));
@@ -604,6 +620,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     native_utils_mod.linkLibrary(abseil);
     native_utils_mod.addIncludePath(dawn_dep.path("."));
@@ -626,6 +643,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     system_utils_mod.linkLibrary(abseil);
     system_utils_mod.addIncludePath(dawn_dep.path("."));
@@ -693,6 +711,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     proc_mod.addIncludePath(dawn_dep.path("."));
     proc_mod.addIncludePath(dawn_dep.path("include"));
@@ -717,6 +736,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     utils_mod.addIncludePath(dawn_dep.path("."));
     utils_mod.addIncludePath(dawn_dep.path("include"));
@@ -741,6 +761,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     native_mod.linkLibrary(abseil);
     native_mod.linkLibrary(tint_core);
@@ -959,6 +980,7 @@ pub fn build(b: *std.Build) void {
 
     const webgpu_mod = b.allocator.create(std.Build.Module) catch @panic("OOM");
     webgpu_mod.init(b, .{ .existing = native_mod });
+    webgpu_mod.pic = pic;
     const webgpu = b.addLibrary(.{
         .name = "webgpu_dawn",
         .root_module = webgpu_mod,
@@ -989,6 +1011,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     dawn_glfw_mod.linkLibrary(glfw);
     dawn_glfw_mod.addIncludePath(dawn_dep.path("include"));
@@ -1012,6 +1035,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     sample_utils_mod.linkLibrary(glfw);
     sample_utils_mod.linkLibrary(dawn_glfw);
@@ -1037,6 +1061,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libcpp = true,
+        .pic = pic,
     });
     hello_triangle_mod.linkLibrary(sample_utils);
     hello_triangle_mod.linkLibrary(native);

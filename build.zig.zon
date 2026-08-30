@@ -14,8 +14,8 @@
             .lazy = true,
         },
         .spirv_tools = .{
-            .url = "https://github.com/akunaakwei/zig-spirv-tools/archive/4bb64ddcb7dd6d26c7e46cbdd8a6bc43a48f2003.tar.gz",
-            .hash = "spirv_tools-20.26.1-lHQC6E_pDADcuBVFTKN2k5yeP-_RjKg7mYCA4gcEP1e_",
+            .url = "https://github.com/akunaakwei/zig-spirv-tools/archive/4f82b29c4ab56536b60cae2377b4b479f8631017.tar.gz",
+            .hash = "spirv_tools-20.26.1-lHQC6MnpDACpgy-WgtPwRgSPydA1hUADAi57Uhbnq3S4",
             .lazy = true,
         },
         .vulkan_headers = .{
@@ -24,13 +24,13 @@
             .lazy = true,
         },
         .vulkan_utility = .{
-            .url = "https://github.com/akunaakwei/zig-vulkan-utility-libraries/archive/c85c3f3cb2782332fe00bd5a71fb09991fa4f3dd.tar.gz",
-            .hash = "vulkan_utility_libraries-0.0.0-z4P-ycoZAADFIiX9tAAdnqvWbnC_UTIvdrOhob2RffNK",
+            .url = "https://github.com/akunaakwei/zig-vulkan-utility-libraries/archive/74dbf349b5f9c7e0f0bfbb67c0ef87fc67d15d60.tar.gz",
+            .hash = "vulkan_utility_libraries-0.0.0-z4P-yVgaAACueq7IBHp-RITUfUwGaQWqzBjF0HSGD4mg",
             .lazy = true,
         },
         .abseil = .{
-            .url = "https://github.com/akunaakwei/zig-abseil/archive/7dc7c0582f1eb90ab004e2915af346bb01c024b4.tar.gz",
-            .hash = "abseil-0.0.0-IbFgeJImAAB8mp5No1vKgReD0i-kFyZ06Tsh4JX3E4uI",
+            .url = "https://github.com/akunaakwei/zig-abseil/archive/e86bbe15bdaa839841ba75e47abf50d696cd0f40.tar.gz",
+            .hash = "abseil-0.0.0-IbFgeAwnAABH7Q2ofbBADB7Vp7_oSvLwJVKTwcnE0uKo",
         },
         .glfw = .{
             .url = "https://codeberg.org/Games-by-Mason/glfw_zig/archive/398e67ad42750ae16e4d11d4abb1e7455c0d0139.tar.gz",
