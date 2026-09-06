@@ -17,7 +17,7 @@ pub fn build(b: *std.Build) void {
     const dawn_enable_opengles = b.option(bool, "DAWN_ENABLE_OPENGLES", "Enable compilation of the OpenGL ES backend") orelse false;
     const dawn_enable_opengl = dawn_enable_desktop_gl or dawn_enable_opengles;
     const dawn_enable_vulkan = b.option(bool, "DAWN_ENABLE_VULKAN", "Enable compilation of the VULKAN backend") orelse false;
-    const dawn_enable_spriv_validation = b.option(bool, "DAWN_ENABLE_SPIRV_VALIDATION", "Enable validation of the SPIR-V") orelse false;
+    const dawn_enable_spirv_validation = b.option(bool, "DAWN_ENABLE_SPIRV_VALIDATION", "Enable validation of the SPIR-V") orelse false;
     const dawn_force_system_component_load = b.option(bool, "DAWN_FORCE_SYSTEM_COMPONENT_LOAD", "Force system component fallback") orelse false;
     const dawn_use_x11 = b.option(bool, "DAWN_USE_X11", "Enable support for X11 surface") orelse false;
     const dawn_use_wayland = b.option(bool, "DAWN_USE_WAYLAND", "Enable support for Wayland surface") orelse false;
@@ -911,14 +911,6 @@ pub fn build(b: *std.Build) void {
         });
     }
 
-    if ((dawn_enable_opengl or dawn_enable_vulkan) and dawn_enable_spriv_validation) {
-        native_mod.addCSourceFiles(.{
-            .root = dawn_dep.path("src/dawn/native"),
-            .files = &.{"SpirvValidation.cpp"},
-            .flags = &flags,
-        });
-    }
-
     if (dawn_enable_opengl) {
         native_mod.addCSourceFiles(.{
             .root = dawn_dep.path(b.pathJoin(&.{ "src", "dawn", "native" })),
@@ -943,6 +935,14 @@ pub fn build(b: *std.Build) void {
             .files = &.{"vulkan/VulkanBackend.cpp"},
             .flags = &flags,
         });
+
+        if (dawn_enable_spirv_validation) {
+            native_mod.addCSourceFiles(.{
+                .root = dawn_dep.path("src/dawn/native"),
+                .files = &.{"SpirvValidation.cpp"},
+                .flags = &flags,
+            });
+        }
 
         if (target.result.os.tag == .linux or target.result.abi.isAndroid()) {
             native_mod.addCSourceFiles(.{
