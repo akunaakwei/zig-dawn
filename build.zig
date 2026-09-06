@@ -976,6 +976,7 @@ pub fn build(b: *std.Build) void {
         .root_module = native_mod,
     });
     native.installHeadersDirectory(b.path("include"), ".", .{});
+    native.installHeadersDirectory(dawn_dep.path("include"), ".", .{});
     // b.installArtifact(native);
 
     const webgpu_mod = b.allocator.create(std.Build.Module) catch @panic("OOM");
@@ -998,6 +999,7 @@ pub fn build(b: *std.Build) void {
         });
     }
     webgpu.installHeadersDirectory(b.path("include"), ".", .{});
+    webgpu.installHeadersDirectory(dawn_dep.path("include"), ".", .{});
     webgpu.installHeader(b.path("webgpu-headers/webgpu.h"), "webgpu/webgpu.h");
     b.installArtifact(webgpu);
 
