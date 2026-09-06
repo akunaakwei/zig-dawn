@@ -992,12 +992,12 @@ pub fn build(b: *std.Build) void {
     if (linkage == .dynamic) {
         webgpu_mod.addCMacro("DAWN_NATIVE_SHARED_LIBRARY", "1");
         webgpu_mod.addCMacro("WGPU_SHARED_LIBRARY", "1");
-        webgpu_mod.addCSourceFiles(.{
-            .root = b.path("src/dawn/native"),
-            .files = &.{"webgpu_dawn_native_proc.cpp"},
-            .flags = &flags,
-        });
     }
+    webgpu_mod.addCSourceFiles(.{
+        .root = b.path("src/dawn/native"),
+        .files = &.{"webgpu_dawn_native_proc.cpp"},
+        .flags = &flags,
+    });
     webgpu.installHeadersDirectory(b.path("include"), ".", .{});
     webgpu.installHeadersDirectory(dawn_dep.path("include"), ".", .{});
     webgpu.installHeader(b.path("webgpu-headers/webgpu.h"), "webgpu/webgpu.h");
