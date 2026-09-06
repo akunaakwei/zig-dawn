@@ -1,6 +1,6 @@
 .{
     .name = .dawn,
-    .version = "0.0.0",
+    .version = "20260810.185610.0",
     .fingerprint = 0x1661bd31d230feb6, // Changing this has security and trust implications.
     .minimum_zig_version = "0.16.0",
     .dependencies = .{
